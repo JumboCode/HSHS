@@ -1,0 +1,3 @@
+rootProject.name = 'HSHSmobile'
+
+include ':app'
