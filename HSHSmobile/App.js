@@ -3,6 +3,7 @@ import {Provider} from 'react-redux';
 import {store} from './src/redux/store.js';
 import GuestList from './src/GuestList';
 import Info from './src/Info';
+<<<<<<< HEAD
 import GuestListProfile from './src/GuestListProfile';
 import CRUDnote from './src/CRUDnote';
 import GuestListNew from './src/GuestListNew';
@@ -30,6 +31,7 @@ class App {
       console.error(error);
     });
   }
+
 
   _populateIcons = function () {
     return new Promise(function (resolve, reject) {
@@ -88,6 +90,7 @@ class App {
                 icon: checkinIcon
             },
             {
+<<<<<<< HEAD
                 label: 'guests',
                 screen: 'GuestList',
                 title: 'Guests',
