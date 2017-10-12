@@ -14,7 +14,17 @@ export default class NewGuest extends Component<{}> {
         super(props);
 
         // How should we store this input?
+<<<<<<< HEAD
         this.state = {name: '', birthdate: '', hometown: '', other: ''};
+=======
+        this.state = {name: 'example', birthdate: 'example', hometown: 'example', other: 'example'};
+
+        this._jsonOutput = this._jsonOutput.bind(this);
+    }
+
+    _jsonOutput() {
+        return JSON.stringify(this.state);
+>>>>>>> Initial TextInput commit
     }
 
     render () {
@@ -39,7 +49,11 @@ export default class NewGuest extends Component<{}> {
                 />
                 <Button
                   style={{height: 50}}
+<<<<<<< HEAD
                   onPress={() => { Alert.alert("hello");}}
+=======
+                  onPress={() => { Alert.alert(this._jsonOutput());}}
+>>>>>>> Initial TextInput commit
                   title="Submit"
                 />
             </View>
