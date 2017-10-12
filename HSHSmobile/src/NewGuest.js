@@ -45,7 +45,11 @@ export default class NewGuest extends Component<{}> {
                 />
                 <Button
                   style={{height: 50}}
+<<<<<<< HEAD
                   onPress={() => { Alert.alert(this._jsonOutput());}}
+=======
+                  onPress={() => { Alert.alert("hello");}}
+>>>>>>> 893885d7d4a240eef0e461b16834ae2627ba79aa
                   title="Submit"
                 />
             </View>
