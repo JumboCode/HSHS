@@ -14,12 +14,14 @@ export default () => {
             {
                 label: 'Guests',
                 screen: 'GuestList',
-                title: 'Guests'
+                title: 'Guests',
+                icon: require('./meme_icon.png')
             },
             {
                 label: 'Info',
                 screen: 'Info',
-                title: 'Info'
+                title: 'Info',
+                icon: require('./meme_icon.png')
             },
             {
                 label: 'Add Guest',
