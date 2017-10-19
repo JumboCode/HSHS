@@ -14,17 +14,8 @@ export default class NewGuest extends Component<{}> {
         super(props);
 
         // How should we store this input?
-<<<<<<< HEAD
         this.state = {name: '', birthdate: '', hometown: '', other: ''};
-=======
-        this.state = {name: 'example', birthdate: 'example', hometown: 'example', other: 'example'};
 
-        this._jsonOutput = this._jsonOutput.bind(this);
-    }
-
-    _jsonOutput() {
-        return JSON.stringify(this.state);
->>>>>>> Initial TextInput commit
     }
 
     render () {
@@ -33,27 +24,34 @@ export default class NewGuest extends Component<{}> {
                 <TextInput
                   style={{height: 40}}
                   placeholder="Type your name here!"
-                  //onSubmitEditing={(text) => {}
+                  onChangeText=  {(text) => this.setState(prevState =>
+                                                    {prevState.name = text})
+                                 }
                 />
                 <TextInput
                   style={{height: 40}}
                   placeholder="Type your birthdate here!"
+                  onChangeText=  {(text) => this.setState(prevState =>
+                                                        {prevState.birthdate = text})
+                                 }
                 />
                 <TextInput
                   style={{height: 40}}
                   placeholder="Type your hometown here!"
+                  onChangeText=  {(text) => this.setState(prevState =>
+                                                        {prevState.hometown = text})
+                                 }
                 />
                 <TextInput
                   style={{height: 40}}
                   placeholder="Type anything else!"
+                  onChangeText=  {(text) => this.setState(prevState =>
+                                                        {prevState.other = text})
+                                 }
                 />
                 <Button
                   style={{height: 50}}
-<<<<<<< HEAD
-                  onPress={() => { Alert.alert("hello");}}
-=======
                   onPress={() => { Alert.alert(this._jsonOutput());}}
->>>>>>> Initial TextInput commit
                   title="Submit"
                 />
             </View>
