@@ -11,10 +11,8 @@ import { List, ListItem, SearchBar } from "react-native-elements";
 
 export default class GuestList extends Component {
     constructor(props) {
-        var ageRef = database.ref('dummy_branch/person1/age');
-        ageRef.on('value', function(snapshot) {
-            console.log(snapshot.val());
-
+        database.ref('Guests/').on('value', (snapshot) => {
+            console.log(snapshot.val())
         });
         super(props);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
