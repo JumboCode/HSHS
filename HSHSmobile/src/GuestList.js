@@ -67,6 +67,7 @@ class GuestList extends Component {
                     backButtonHidden: false, // hide the back button altogether (optional)
                     navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
                     navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
+
                 })
             }
         }
