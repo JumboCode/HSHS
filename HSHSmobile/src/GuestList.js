@@ -47,7 +47,7 @@ export default class GuestList extends Component<{}> {
             if (event.id == 'add_guest') { // this is the same id field from the static navigatorButtons definition
                 console.log("add_guest clicked");
                 this.props.navigator.push({
-                    screen: 'Info', // unique ID registered with Navigation.registerScreen
+                    screen: 'NewGuest', // unique ID registered with Navigation.registerScreen
                         passProps: {}, // Object that will be passed as props to the pushed screen (optional)
                         animated: true, // does the push have transition animation or does it happen immediately (optional)
                         animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)

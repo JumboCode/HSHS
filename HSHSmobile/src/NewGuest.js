@@ -15,7 +15,6 @@ export default class NewGuest extends Component<{}> {
 
         // How should we store this input?
         this.state = {name: 'example', birthdate: 'example', hometown: 'example', other: 'example'};
-
         this._jsonOutput = this._jsonOutput.bind(this);
     }
 
@@ -56,7 +55,12 @@ export default class NewGuest extends Component<{}> {
                 />
                 <Button
                   style={{height: 50}}
-                  onPress={() => { Alert.alert(this._jsonOutput());}}
+                  onPress={() => { //Alert.alert(this._jsonOutput());
+                      console.log(this._jsonOutput());
+                      this.props.navigator.pop({
+                                                animated: true, // does the pop have transition animation or does it happen immediately (optional)
+                                                animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
+                                                }); }}
                   title="Submit"
                 />
             </View>
