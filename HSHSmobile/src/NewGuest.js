@@ -29,27 +29,34 @@ export default class NewGuest extends Component<{}> {
                 <TextInput
                   style={{height: 40}}
                   placeholder="Type your name here!"
-                  //onSubmitEditing={(text) => {}
+                  onChangeText=  {(text) => this.setState(prevState =>
+                                                    {prevState.name = text})
+                                 }
                 />
                 <TextInput
                   style={{height: 40}}
                   placeholder="Type your birthdate here!"
+                  onChangeText=  {(text) => this.setState(prevState =>
+                                                        {prevState.birthdate = text})
+                                 }
                 />
                 <TextInput
                   style={{height: 40}}
                   placeholder="Type your hometown here!"
+                  onChangeText=  {(text) => this.setState(prevState =>
+                                                        {prevState.hometown = text})
+                                 }
                 />
                 <TextInput
                   style={{height: 40}}
                   placeholder="Type anything else!"
+                  onChangeText=  {(text) => this.setState(prevState =>
+                                                        {prevState.other = text})
+                                 }
                 />
                 <Button
                   style={{height: 50}}
-<<<<<<< HEAD
                   onPress={() => { Alert.alert(this._jsonOutput());}}
-=======
-                  onPress={() => { Alert.alert("hello");}}
->>>>>>> 893885d7d4a240eef0e461b16834ae2627ba79aa
                   title="Submit"
                 />
             </View>
