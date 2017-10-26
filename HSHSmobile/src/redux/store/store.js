@@ -1,3 +1,4 @@
+<<<<<<< c0d22032d398db94e40c500d080619c90335e525
 import { createStore, compose } from 'redux'
 import rootReducer from './reducers'
 import { reduxFirebase } from 'react-redux-firebase'
@@ -22,4 +23,28 @@ if (module.hot) {
     })
   }
   return store
+=======
+import { createStore, compose, applyMiddleware } from 'redux'
+import { reducer } from '../reducers/reducers.js'
+import { reduxFirebase } from 'react-redux-firebase'
+
+let finalCreateStore = compose(
+  applyMiddleware()
+)(createStore)
+
+const initialState = { test: "blah" }
+
+const store = createStore(reducer, initialState);
+
+console.log(store);
+
+export default store;
+
+/*export function configureStore() {
+  return finalCreateStore(reducer, initialState)
+>>>>>>> store is undefined
 }
+
+const store = configureStore();*/
+
+
