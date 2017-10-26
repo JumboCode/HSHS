@@ -60,6 +60,7 @@ export default class GuestList extends Component {
         }
     }
 
+<<<<<<< c0d22032d398db94e40c500d080619c90335e525
     viewInfoScreen = () => {
         this.props.navigator.push({
             screen: 'Info', // unique ID registered with Navigation.registerScreen
@@ -88,6 +89,27 @@ export default class GuestList extends Component {
 
     componentDidMount() {
         this.makeRemoteRequest();
+=======
+export default class GuestList extends Component<{}> {
+
+    constructor(props) {
+        super(props);
+        this.state = { email: 'Email Address' , password: ''};
+
+        store.subscribe(() => {
+            const state = store.getState();
+        }
+      // When state will be updated(in our case, when items will be fetched),
+      // we will update local component state and force component to rerender
+      // with new data.
+
+      /*this.setState({
+        test: store.getState().test;
+      });*/
+    //});
+
+        //test: store.getState().test};
+>>>>>>> store is undefined
     }
 
     makeRemoteRequest = () => {
@@ -155,6 +177,7 @@ export default class GuestList extends Component {
         if (!this.state.loading) return null;
 
         return (
+<<<<<<< c0d22032d398db94e40c500d080619c90335e525
             <View
                 style={{
                     paddingVertical: 20,
@@ -163,6 +186,12 @@ export default class GuestList extends Component {
                 }}
             >
                 <ActivityIndicator animating size="large" />
+=======
+            <View style={styles.container}>
+                <Text style={styles.welcome}>
+                    this should say blah: {this.state.test}
+                </Text>
+>>>>>>> store is undefined
             </View>
         );
     };
