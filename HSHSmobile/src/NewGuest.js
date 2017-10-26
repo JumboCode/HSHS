@@ -6,7 +6,8 @@ import {
     TextInput,
     View,
     Button,
-    Alert
+    Alert,
+    Picker
 } from 'react-native';
 
 export default class NewGuest extends Component<{}> {
@@ -16,6 +17,7 @@ export default class NewGuest extends Component<{}> {
         // How should we store this input?
         this.state = {name: '', birthdate: '', hometown: '', other: ''};
 
+
     }
 
     render () {
@@ -24,12 +26,10 @@ export default class NewGuest extends Component<{}> {
                 <TextInput
                   style={{height: 40}}
                   placeholder="Type your name here!"
-                  onChangeText=  {(text) => this.setState(prevState =>
-                                                    {prevState.name = text})
+                  onChangeText=  {(text) => this.setState({name: text})
                                  }
                 />
                 <TextInput
-                  style={{height: 40}}
                   placeholder="Type your birthdate here!"
                   onChangeText=  {(text) => this.setState(prevState =>
                                                         {prevState.birthdate = text})
@@ -37,18 +37,19 @@ export default class NewGuest extends Component<{}> {
                 />
                 <TextInput
                   style={{height: 40}}
-                  placeholder="Type your hometown here!"
-                  onChangeText=  {(text) => this.setState(prevState =>
-                                                        {prevState.hometown = text})
-                                 }
-                />
-                <TextInput
-                  style={{height: 40}}
                   placeholder="Type anything else!"
-                  onChangeText=  {(text) => this.setState(prevState =>
-                                                        {prevState.other = text})
-                                 }
+                  onChangeText=  {(text) => this.setState({other: text})}
                 />
+                <Picker
+                  selectedValue={(this.state && this.state.gender) || 'm'}
+                  onValueChange={(value) => {
+                    this.setState({gender: value});
+                  }}>
+                  <Picker.Item label={'Male'} value={'m'} />
+                  <Picker.Item label={'Female'} value={'f'} />
+                  <Picker.Item label={'Non-Binary'} value={'nb'} />
+                  <Picker.Item label={'Other'} value={'o'} />
+                </Picker>
                 <Button
                   style={{height: 50}}
                   onPress={() => { //Alert.alert(this._jsonOutput());
