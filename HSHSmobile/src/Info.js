@@ -24,13 +24,11 @@ export default class Info extends Component<{}> {
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome}>
-                    Wesadd
+                    photo
                 </Text>
                 <Text style={styles.instructions}>
-                    To get started, edit App.js
-                </Text>
-                <Text style={styles.instructions}>
-                    {instructions}
+                    NAME 
+                    lmao
                 </Text>
             </View>
         );
@@ -39,8 +37,10 @@ export default class Info extends Component<{}> {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: 'center',
+        justifyContent: "flex-start",
+        flexDirection: "row",
+        flexWrap: "wrap",
+        marginTop: 10,
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
     },
@@ -52,6 +52,6 @@ const styles = StyleSheet.create({
     instructions: {
         textAlign: 'center',
         color: '#333333',
-        marginBottom: 5,
+        margin: 10,
     },
 });
