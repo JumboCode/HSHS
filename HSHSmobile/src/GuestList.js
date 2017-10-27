@@ -1,9 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
 import {
     Platform,
@@ -15,17 +9,11 @@ import {
 } from 'react-native';
 import { List, ListItem, SearchBar } from "react-native-elements";
 
-const instructions = Platform.select({
-    ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-    android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
-
 export default class GuestList extends Component<{}> {
     constructor(props) {
         super(props);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+        this.viewGuestProfileScreen = this.viewGuestProfileScreen.bind(this);
 
         this.state = {
             loading: false,
@@ -56,18 +44,36 @@ export default class GuestList extends Component<{}> {
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
         if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
             if (event.id == 'add_guest') { // this is the same id field from the static navigatorButtons definition
-                console.log("add_guest clicked");
-                this.props.navigator.push({
-                    screen: 'Info', // unique ID registered with Navigation.registerScreen
-                        passProps: {}, // Object that will be passed as props to the pushed screen (optional)
-                        animated: true, // does the push have transition animation or does it happen immediately (optional)
-                        animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
-                        backButtonHidden: false, // hide the back button altogether (optional)
-                        navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
-                        navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
-                })
+                this.viewInfoScreen();
             }
         }
+    }
+
+    viewInfoScreen = () => {
+        this.props.navigator.push({
+            screen: 'Info', // unique ID registered with Navigation.registerScreen
+            passProps: {}, // Object that will be passed as props to the pushed screen (optional)
+            animated: true, // does the push have transition animation or does it happen immediately (optional)
+            animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
+            backButtonHidden: false, // hide the back button altogether (optional)
+            navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
+            navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
+        })
+    }
+
+    viewGuestProfileScreen = (guest) => {
+        this.props.navigator.push({
+            screen: 'GuestProfile', // unique ID registered with Navigation.registerScreen
+            passProps: {
+                id: guest.id,
+                name: guest.name.first + ' ' + guest.name.last
+            }, // Object that will be passed as props to the pushed screen (optional)
+            animated: true, // does the push have transition animation or does it happen immediately (optional)
+            animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
+            backButtonHidden: false, // hide the back button altogether (optional)
+            navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
+            navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
+        })
     }
 
     componentDidMount() {
@@ -76,7 +82,7 @@ export default class GuestList extends Component<{}> {
 
     makeRemoteRequest = () => {
         const { page, seed } = this.state;
-        const url = `https://randomuser.me/api/?seed=${seed}&page=${page}&results=20`;
+        const url = `https://randomuser.me/api/?seed=${seed}&page=${page}&results=10`;
         this.setState({ loading: true });
 
         fetch(url)
@@ -142,7 +148,7 @@ export default class GuestList extends Component<{}> {
             <View
                 style={{
                     paddingVertical: 20,
-                    borderTopWidth: 1,
+                    borderTopWidth: 0,
                     borderColor: "#CED0CE"
                 }}
             >
@@ -153,7 +159,7 @@ export default class GuestList extends Component<{}> {
 
     render() {
         return (
-            <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
+            <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0, marginTop: 0 }}>
                 <FlatList
                     data={this.state.data}
                     renderItem={({ item }) => (
@@ -161,8 +167,10 @@ export default class GuestList extends Component<{}> {
                             roundAvatar
                             title={`${item.name.first} ${item.name.last}`}
                             subtitle={item.email}
+                            subtitleStyle={{textAlign: 'right'}}
                             avatar={{ uri: item.picture.thumbnail }}
                             containerStyle={{ borderBottomWidth: 0 }}
+                            onPress={() => this.viewGuestProfileScreen(item)}
                         />
                     )}
                     keyExtractor={item => item.email}
@@ -195,5 +203,5 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#333333',
         marginBottom: 5,
-    },
+    }
 });
