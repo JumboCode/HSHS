@@ -65,7 +65,7 @@ export default class GuestList extends Component<{}> {
         this.props.navigator.push({
             screen: 'GuestProfile', // unique ID registered with Navigation.registerScreen
             passProps: {
-                id: guest.id,
+                id: 0,
                 name: guest.name.first + ' ' + guest.name.last
             }, // Object that will be passed as props to the pushed screen (optional)
             animated: true, // does the push have transition animation or does it happen immediately (optional)
