@@ -40,7 +40,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         textAlign: 'center',
         color: '#333333',
-        marginBottom: 5
-        margin: 10,
+        marginBottom: 5,
     },
 });
