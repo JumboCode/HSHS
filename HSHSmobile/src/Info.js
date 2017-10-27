@@ -13,22 +13,16 @@ import {
 } from 'react-native';
 
 const instructions = Platform.select({
-    ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-    android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
+    ios: 'please make me an ios screen!',
+    android: 'please make me an android screen!'
 });
 
 export default class Info extends Component<{}> {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.welcome}>
-                    photo
-                </Text>
                 <Text style={styles.instructions}>
-                    NAME 
-                    lmao
+                    {instructions}
                 </Text>
             </View>
         );
@@ -37,21 +31,16 @@ export default class Info extends Component<{}> {
 
 const styles = StyleSheet.create({
     container: {
-        justifyContent: "flex-start",
-        flexDirection: "row",
-        flexWrap: "wrap",
-        marginTop: 10,
+        flex: 1,
+        justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
     },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
-    },
     instructions: {
+        fontSize: 18,
         textAlign: 'center',
         color: '#333333',
+        marginBottom: 5
         margin: 10,
     },
 });
