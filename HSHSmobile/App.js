@@ -1,5 +1,6 @@
 import {Navigation} from 'react-native-navigation';
-
+import {Provider} from 'react-redux';
+import {store} from './src/redux/store.js';
 import GuestList from './src/GuestList';
 import Info from './src/Info';
 import GuestProfile from './src/GuestProfile';
@@ -10,7 +11,6 @@ export default  () => {
     return new App()
 };
 
-const {Navigation} = require('react-native-navigation');
 const Icon = require('react-native-vector-icons/Ionicons');
 
 var homeIcon // ios-home-outline
@@ -56,11 +56,11 @@ class App {
 
     startApp() {
     // this will start our app
-    Navigation.registerComponent('GuestList', () => GuestList);
-    Navigation.registerComponent('GuestProfile', () => GuestProfile);
-    Navigation.registerComponent('Info', () => Info);
-    Navigation.registerComponent('CRUDnote', () => CRUDnote);
-    Navigation.registerComponent('NewGuest', () => NewGuest);
+    Navigation.registerComponent('GuestList', () => GuestList, store, Provider);
+    Navigation.registerComponent('GuestProfile', () => GuestProfile, store, Provider);
+    Navigation.registerComponent('Info', () => Info, store, Provider);
+    Navigation.registerComponent('CRUDnote', () => CRUDnote, store, Provider);
+    Navigation.registerComponent('NewGuest', () => NewGuest, store, Provider);
 
     // TODO: make the tabs link to real pages
     Navigation.startTabBasedApp({
