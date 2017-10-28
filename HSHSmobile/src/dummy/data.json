@@ -1,30 +1,30 @@
 {
   "guests": [{
-    "id": 1,
+    "id": 0,
     "receptive": 5,
     "last_interacted": 1509142676,
     "notes": ["Needs blanket", "Needs medication for cold"],
     "description": "Blonde, 6', Blue eyes, 30"
   }, {
-    "id": 2,
+    "id": 1,
     "receptive": 4,
     "last_interacted": 1447276291,
     "notes": ["Needs treatment for strep throat"],
     "description": "Brunette, 5'8\", Black eyes, 18"
   }, {
-    "id": 3,
+    "id": 2,
     "receptive": 5,
     "last_interacted": 1481490691,
     "notes": ["Has wound on face, needs attention", "Needs a blanket"],
     "description": "Brunette, 5'4\", Right eye black and left eye green, 23"
   }, {
-    "id": 4,
+    "id": 3,
     "receptive": 3,
     "last_interacted": 1507756291,
     "notes": [],
     "description": "Blonde, 5'8\", Black eyes, 50"
   }, {
-    "id": 5,
+    "id": 4,
     "receptive": 4,
     "last_interacted": 1415740291,
     "notes": ["Needs blanket"],
