@@ -7,22 +7,26 @@
 
 import React, { Component } from 'react';
 import {
-    Platform,
     StyleSheet,
     Text,
     View,
     Image
 } from 'react-native';
+import nodeEmoji from 'node-emoji';
 import data from './dummy/data.json';
 
+const Timestamp = require('react-timestamp');
+
 export default class Info extends Component {
+    id_to_emoji = [":smirk:", ":slightly_smiling_face:", ":grinning:", ":smiley:", ":smile:"];
+
     // convert string to int and map it to an index from our dummy data
     get_name_int = (name) => {
         val = 0;
         for(let i = 0; i < name.length; i++) {
             val += name.charCodeAt(i);
         }
-        return val % 5;
+        return val % 4;
     };
 
     // gets dummy values from data.json
@@ -32,6 +36,11 @@ export default class Info extends Component {
 
     // stores dummy values from data.json
     profile_data = this.get_data();
+
+    // gets emoji from receptive value
+    get_receptive = () => {
+        return(nodeEmoji.get(this.id_to_emoji[this.profile_data.id]));
+    };
 
     // renders name on profile page
     render_name = () => {
@@ -46,7 +55,25 @@ export default class Info extends Component {
     render_receptive = () => {
         return (
             <Text>
-                receptive // add function that returns emoji based on number on profile
+                Receptive: {this.get_receptive()}
+            </Text>
+        );
+    };
+
+    // renders last interacted
+    render_interacted = () => {
+        return (
+            <Text>
+                Last Interacted: <Timestamp time={this.profile_data.last_interacted} component={Text}/>
+            </Text>
+        );
+    };
+
+    // render description
+    render_description = () => {
+        return (
+            <Text>
+                {this.profile_data.description}
             </Text>
         );
     };
@@ -62,12 +89,8 @@ export default class Info extends Component {
                     <View style={styles.profile_info}>
                         {this.render_name()}
                         {this.render_receptive()}
-                        <Text>
-                            Last Interacted:
-                        </Text>
-                        <Text>
-                            Description
-                        </Text>
+                        {this.render_interacted()}
+                        {this.render_description()}
                     </View>
                 </View>
             </View>
@@ -95,14 +118,15 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         flexDirection: 'column',
         paddingLeft: 10,
-        width: 225,
     },
     profile_image: {
-        height: 80,
-        width: 80,
+        height: 70,
+        width: 70,
         borderWidth: 1,
         borderColor: 'black',
-        borderRadius: 40,
+        borderRadius: 35,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     instructions: {
         textAlign: 'center',
