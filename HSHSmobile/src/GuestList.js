@@ -8,10 +8,25 @@ import {
     ActivityIndicator
 } from 'react-native';
 import { List, ListItem, SearchBar } from "react-native-elements";
+import {connect} from 'react-redux';
+import {getGuests} from './redux/actions.js';
 
 const Icon = require('react-native-vector-icons/Ionicons');
 
-export default class GuestList extends Component {
+function mapStateToProps(state, ownProps) {
+    return {
+        guests: state.guests,
+        loading: state.loading
+    };
+}
+
+function mapDispatchToProps(dispath, ownProps) {
+    return {
+        getGuests: getGuests
+    };
+}
+
+class GuestList extends Component {
     constructor(props) {
         super(props);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
@@ -114,7 +129,12 @@ export default class GuestList extends Component {
             .catch(error => {
                 this.setState({ error, loading: false });
             });
+        this.props.getGuests();
     };
+
+    componentWillUpdate(nextProps, nextState) {
+        console.log(this.props.guests);
+    }
 
     handleRefresh = () => {
         this.setState(
@@ -221,3 +241,5 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     }
 });
+
+export default connect(mapStateToProps, mapDispatchToProps)(GuestList);
