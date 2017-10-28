@@ -1,5 +1,5 @@
 import * as firebase from "firebase";
-import config from '../config'
+import config from '../config';
 
 firebase.initializeApp({
   apiKey: config.FIREBASE_API_KEY,
@@ -8,10 +8,4 @@ firebase.initializeApp({
   storageBucket: config.FIREBASE_STORAGE_BUCKET
 });
 
-export const database = firebase.database().ref('tentative_schema');
-
-export function syncFirebase(store) {
-	database.on('value', (snapshot) => {
-		// store.dispatch();
-	})
-}
+export default firebase;
