@@ -13,17 +13,44 @@ import {
     View,
     Image
 } from 'react-native';
-
-const instructions = Platform.select({
-    ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-    android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
-
-
+import data from './dummy/data.json';
 
 export default class Info extends Component {
+    // convert string to int and map it to an index from our dummy data
+    get_name_int = (name) => {
+        val = 0;
+        for(let i = 0; i < name.length; i++) {
+            val += name.charCodeAt(i);
+        }
+        return val % 5;
+    };
+
+    // gets dummy values from data.json
+    get_data = () => {
+        return(data.guests[this.get_name_int(this.props.name)]);
+    };
+
+    // stores dummy values from data.json
+    profile_data = this.get_data();
+
+    // renders name on profile page
+    render_name = () => {
+        return (
+            <Text style={styles.name}>
+                {this.props.name}
+            </Text>
+        );
+    };
+
+    // renders receptive value (emoji?)
+    render_receptive = () => {
+        return (
+            <Text>
+                receptive // add function that returns emoji based on number on profile
+            </Text>
+        );
+    };
+
     render() {
         return (
             <View style={styles.container}>
@@ -33,12 +60,8 @@ export default class Info extends Component {
                         source={require("./dummy/default.jpg")}
                     />
                     <View style={styles.profile_info}>
-                        <Text style={styles.name}>
-                            profile.props.name?
-                        </Text>
-                        <Text>
-                            receptive // add function that returns emoji based on number on profile
-                        </Text>
+                        {this.render_name()}
+                        {this.render_receptive()}
                         <Text>
                             Last Interacted:
                         </Text>

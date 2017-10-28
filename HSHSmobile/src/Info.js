@@ -17,7 +17,7 @@ const instructions = Platform.select({
     android: 'please make me an android screen!'
 });
 
-export default class Info extends Component<{}> {
+export default class Info extends Component {
     render() {
         return (
             <View style={styles.container}>
