@@ -26,19 +26,17 @@ if (module.hot) {
 =======
 import { createStore, compose, applyMiddleware } from 'redux'
 import { reducer } from '../reducers/reducers.js'
-import { reduxFirebase } from 'react-redux-firebase'
+// import { reduxFirebase } from 'react-redux-firebase'
 
 let finalCreateStore = compose(
   applyMiddleware()
-)(createStore)
+)(createStore);
 
-const initialState = { test: "blah" }
+const initialState = { test: "blah" };
 
-const store = createStore(reducer, initialState);
+export const store = createStore(reducer, initialState);
 
 console.log(store);
-
-export default store;
 
 /*export function configureStore() {
   return finalCreateStore(reducer, initialState)
