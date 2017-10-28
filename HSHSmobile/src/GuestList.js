@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import { List, ListItem, SearchBar } from "react-native-elements";
 
+const Icon = require('react-native-vector-icons/Ionicons');
+
 export default class GuestList extends Component {
     constructor(props) {
         super(props);
@@ -84,6 +86,13 @@ export default class GuestList extends Component {
     };
 
     componentDidMount() {
+        Icon.getImageSource('ios-person-add', 36).then((add) => {
+            this.props.navigator.setButtons({
+                rightButtons: [
+                    { id: 'add_guest', icon: add },
+                ]
+            });
+        });
         this.makeRemoteRequest();
     }
 

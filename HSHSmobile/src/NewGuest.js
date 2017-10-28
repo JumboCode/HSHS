@@ -11,7 +11,7 @@ import {
 
 export default class NewGuest extends Component<{}> {
     constructor(props) {
-        super(props);
+        super(props); 
 
         // How should we store this input?
         this.state = {name: 'example', birthdate: 'example', hometown: 'example', other: 'example'};

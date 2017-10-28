@@ -16,6 +16,7 @@ var todolistIcon // ios-paper-outline
 var checkinIcon // ios-list-outline
 var guestsIcon // ios-people-outline
 var rescourcesIcon // ios-help-circle-outline
+var addIcon // ios-add-circle-outline
 
 class App {
   constructor() {
@@ -36,7 +37,8 @@ class App {
             Icon.getImageSource('ios-list-outline', 30),
             Icon.getImageSource('ios-paper-outline', 30),
             Icon.getImageSource('ios-people-outline', 30),
-            Icon.getImageSource('ios-help-circle-outline', 30)
+            Icon.getImageSource('ios-help-circle-outline', 30),
+            Icon.getImageSource('ios-add-circle-outline', 30)
         ]
       ).then((values) => {
         homeIcon = values[0];
@@ -44,6 +46,7 @@ class App {
         checkinIcon = values[2];
         guestsIcon = values[3];
         rescourcesIcon = values[4];
+        addIcon = values[5];
         resolve(true);
       }).catch((error) => {
         console.log(error);
@@ -86,7 +89,7 @@ class App {
                 label: 'guests',
                 screen: 'GuestList',
                 title: 'Guests',
-                icon: guestsIcon
+                icon: guestsIcon,
             },
             {
                 label: 'rescources',
