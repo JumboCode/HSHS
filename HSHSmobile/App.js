@@ -1,5 +1,6 @@
+import {Navigation} from 'react-native-navigation';
+
 import GuestList from './src/GuestList';
-<<<<<<< c0d22032d398db94e40c500d080619c90335e525
 import Info from './src/Info';
 import GuestProfile from './src/GuestProfile';
 import CRUDnote from './src/CRUDnote';
@@ -20,24 +21,6 @@ var rescourcesIcon // ios-help-circle-outline
 
 class App {
   constructor() {
-=======
-
-import Info from './src/Info';
-import React from 'react'; 
-//import { render } from 'react-dom'; 
-import { Provider } from 'react-redux'; 
-//import App from './containers/App'; 
-import { configureStore } from './src/redux/store/store.js'
-
-console.log(configureStore);
-//const store = configureStore(); 
-
-/*render( 
-  <Provider store={store}> 
-        <GuestList /> 
-  </Provider>
-);*/
->>>>>>> store is undefined
 
     this._populateIcons().then(() => {
       // Start app only if all icons are loaded
@@ -71,12 +54,8 @@ console.log(configureStore);
     });
   };
 
-<<<<<<< c0d22032d398db94e40c500d080619c90335e525
     startApp() {
     // this will start our app
-=======
-export default () => {
->>>>>>> store is undefined
     Navigation.registerComponent('GuestList', () => GuestList);
     Navigation.registerComponent('GuestProfile', () => GuestProfile);
     Navigation.registerComponent('Info', () => Info);
