@@ -13,7 +13,7 @@ import {getGuests} from './redux/actions.js';
 
 function mapStateToProps(state, ownProps) {
     return {
-        guests: state.guests,
+        data: state.guests,
         loading: state.loading
     };
 }
@@ -31,8 +31,6 @@ class GuestList extends Component {
         this.viewGuestProfileScreen = this.viewGuestProfileScreen.bind(this);
 
         this.state = {
-            loading: false,
-            data: [],
             page: 1,
             seed: 1,
             error: null,
@@ -100,14 +98,6 @@ class GuestList extends Component {
 
     componentDidMount() {
         this.makeRemoteRequest();
-      // with new data.
-
-      /*this.setState({
-        test: store.getState().test;
-      });*/
-    //});
-
-        //test: store.getState().test};
     }
 
     makeRemoteRequest = () => {
@@ -193,6 +183,7 @@ class GuestList extends Component {
     };
 
     render() {
+        console.log(this.state.data);
         return (
             <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0, marginTop: 0 }}>
                 <FlatList
