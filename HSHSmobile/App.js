@@ -1,6 +1,7 @@
 import GuestList from './src/GuestList';
 import Info from './src/Info';
 import GuestProfile from './src/GuestProfile';
+import CRUDnote from './src/CRUDnote';
 
 export default  () => {
     return new App()
@@ -55,6 +56,7 @@ class App {
     Navigation.registerComponent('GuestList', () => GuestList);
     Navigation.registerComponent('GuestProfile', () => GuestProfile);
     Navigation.registerComponent('Info', () => Info);
+    Navigation.registerComponent('CRUDnote', () => CRUDnote);
 
     // TODO: make the tabs link to real pages
     Navigation.startTabBasedApp({

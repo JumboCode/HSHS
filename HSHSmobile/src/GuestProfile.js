@@ -13,17 +13,25 @@ import {
     Image,
     FlatList,
 } from 'react-native';
+import { List, ListItem } from "react-native-elements";
 import nodeEmoji from 'node-emoji';
 import data from './dummy/data.json';
 
 const Timestamp = require('react-timestamp');
 
-export default class Info extends Component {
+export default class GuestProfile extends Component {
+    constructor(props) {
+        super(props);
+        // this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+        this.view_crud_note_page = this.view_crud_note_page.bind(this);
+    };
+
+    // matching receptivity to emojis {0-4} where 4 is the best and 0 is the worst
     id_to_emoji = [":smirk:", ":slightly_smiling_face:", ":grinning:", ":smiley:", ":smile:"];
 
     /********************** Helper functions section **********************/
 
-        // convert string to int and map it to an index from our dummy data
+    // convert string to int and map it to an index from our dummy data
     get_name_int = (name) => {
         val = 0;
         for(let i = 0; i < name.length; i++) {
@@ -45,20 +53,20 @@ export default class Info extends Component {
         return(nodeEmoji.get(this.id_to_emoji[this.profile_data.receptive]));
     };
 
-    // get notes view template set up
-    get_notes = (note_list) => {
-        if(note_list) {
-            return (
-                <View style={styles.note_section}>
-                    <Text style={styles.notes}>
-                        Notes:
-                    </Text>
-                    {note_list}
-                </View>
-            );
-        }
+    //
+    view_crud_note_page = () => {
+      this.props.navigator.push({
+          screen: 'CRUDnote', // unique ID registered with Navigation.registerScreen
+          passProps: {
+              name: this.props.name
+          }, // Object that will be passed as props to the pushed screen (optional)
+          animated: true, // does the push have transition animation or does it happen immediately (optional)
+          animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
+          backButtonHidden: false, // hide the back button altogether (optional)
+          navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
+          navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
+      });
     };
-
     /********************** Render functions section **********************/
 
     // renders name on profile page
@@ -100,9 +108,26 @@ export default class Info extends Component {
     // render notes
     render_notes = () => {
         let note_list = this.profile_data.notes;
-        note_list = note_list.map((type) => <Text>{type}</Text>);
-
-        return (this.get_notes(note_list));
+        if(note_list) {
+            return (
+                <View style={styles.note_section}>
+                    <Text style={styles.notes}>
+                        Notes:
+                    </Text>
+                    <FlatList
+                        data={note_list}
+                        renderItem={({ item }) => (
+                            <ListItem
+                                title={item.note}
+                                onPress={() => this.view_crud_note_page()}
+                            />
+                        )}
+                        style={styles.note}
+                        keyExtractor={item => item.note}
+                    />
+                </View>
+            );
+        }
     };
 
     /********************** Setup screen **********************/
@@ -150,6 +175,10 @@ const styles = StyleSheet.create({
         alignItems: "flex-start",
         margin: 10,
         padding: 10,
+    },
+    note: {
+        flex: 1,
+        flexDirection: 'row',
     },
     notes: {
         fontSize: 22,
