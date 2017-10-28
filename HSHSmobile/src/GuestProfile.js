@@ -10,7 +10,8 @@ import {
     StyleSheet,
     Text,
     View,
-    Image
+    Image,
+    FlatList,
 } from 'react-native';
 import nodeEmoji from 'node-emoji';
 import data from './dummy/data.json';
@@ -20,7 +21,9 @@ const Timestamp = require('react-timestamp');
 export default class Info extends Component {
     id_to_emoji = [":smirk:", ":slightly_smiling_face:", ":grinning:", ":smiley:", ":smile:"];
 
-    // convert string to int and map it to an index from our dummy data
+    /********************** Helper functions section **********************/
+
+        // convert string to int and map it to an index from our dummy data
     get_name_int = (name) => {
         val = 0;
         for(let i = 0; i < name.length; i++) {
@@ -39,8 +42,24 @@ export default class Info extends Component {
 
     // gets emoji from receptive value
     get_receptive = () => {
-        return(nodeEmoji.get(this.id_to_emoji[this.profile_data.id]));
+        return(nodeEmoji.get(this.id_to_emoji[this.profile_data.receptive]));
     };
+
+    // get notes view template set up
+    get_notes = (note_list) => {
+        if(note_list) {
+            return (
+                <View style={styles.note_section}>
+                    <Text style={styles.notes}>
+                        Notes:
+                    </Text>
+                    {note_list}
+                </View>
+            );
+        }
+    };
+
+    /********************** Render functions section **********************/
 
     // renders name on profile page
     render_name = () => {
@@ -78,6 +97,16 @@ export default class Info extends Component {
         );
     };
 
+    // render notes
+    render_notes = () => {
+        let note_list = this.profile_data.notes;
+        note_list = note_list.map((type) => <Text>{type}</Text>);
+
+        return (this.get_notes(note_list));
+    };
+
+    /********************** Setup screen **********************/
+
     render() {
         return (
             <View style={styles.container}>
@@ -93,6 +122,7 @@ export default class Info extends Component {
                         {this.render_description()}
                     </View>
                 </View>
+                {this.render_notes()}
             </View>
         );
     }
@@ -101,32 +131,48 @@ export default class Info extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        flexDirection: 'column',
         backgroundColor: '#F5FCFF',
     },
     top: {
-        flex: 2,
-        justifyContent: "flex-start",
+        flex: 1,
+        justifyContent: "center",
         flexDirection: "row",
-        flexWrap: "wrap",
+        flexWrap: "nowrap",
+        padding: 20,
+        borderWidth: 1,
+        borderColor: 'black',
+    },
+    note_section: {
+        flex: 5,
+        flexDirection: "column",
+        justifyContent: "flex-start",
+        alignItems: "flex-start",
         margin: 10,
         padding: 10,
+    },
+    notes: {
+        fontSize: 22,
     },
     name: {
         fontSize: 22,
     },
-    profile_info: {
-        justifyContent: 'flex-start',
-        flexDirection: 'column',
-        paddingLeft: 10,
-    },
     profile_image: {
+        flex: 0.55,
+        justifyContent: 'center',
+        alignItems: 'center',
         height: 70,
         width: 70,
         borderWidth: 1,
         borderColor: 'black',
         borderRadius: 35,
-        justifyContent: 'center',
-        alignItems: 'center',
+    },
+    profile_info: {
+        flex: 2,
+        justifyContent: 'flex-start',
+        alignItems: 'baseline',
+        flexDirection: 'column',
+        paddingLeft: 10,
     },
     instructions: {
         textAlign: 'center',
