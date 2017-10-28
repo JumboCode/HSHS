@@ -44,7 +44,15 @@ export default class GuestList extends Component {
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
         if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
             if (event.id == 'add_guest') { // this is the same id field from the static navigatorButtons definition
-                this.viewInfoScreen();
+                this.props.navigator.push({
+                    screen: 'NewGuest', // unique ID registered with Navigation.registerScreen
+                    passProps: {}, // Object that will be passed as props to the pushed screen (optional)
+                    animated: true, // does the push have transition animation or does it happen immediately (optional)
+                    animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
+                    backButtonHidden: false, // hide the back button altogether (optional)
+                    navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
+                    navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
+                })
             }
         }
     }
@@ -59,7 +67,7 @@ export default class GuestList extends Component {
             navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
             navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
         })
-    }
+    };
 
     viewGuestProfileScreen = (guest) => {
         this.props.navigator.push({
@@ -73,7 +81,7 @@ export default class GuestList extends Component {
             navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
             navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
         })
-    }
+    };
 
     componentDidMount() {
         this.makeRemoteRequest();
