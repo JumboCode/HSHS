@@ -1,5 +1,3 @@
-<<<<<<< 6a58d935c2a01e1557be760e1a668bd5e359c167
-=======
 import firebase from "../firebase";
 // import thunk from 'redux-thunk';
 
@@ -15,7 +13,7 @@ export const getInfoSuccess = (data) => ({
 
 export const getInfo = () => {
 	return (dispatch) => {
-		dispatch(getMuralsStart());
+		dispatch(getInfoStart());
 
 		firebase.database()
 				.ref('')
@@ -27,23 +25,29 @@ export const getInfo = () => {
 	}
 }
 
-// let actions = {
-//     getInfo: () => {
-//         return {
-//             type: GET_INFO
-//             info: firebase.database()
-//        					  .ref('tentative_schema/test')
-//        					  .on('value', (snapshot) => {
+export const getGuestsStart = () => ({
+	type: 'GET_GUESTS_START'
 
-//                 snapshot.val()
-//             })
-//         }
-//     }
+});
 
-//     // TODO: more actions go here
-// }
+export const getGuestsSuccess = (data) => ({
+	type: 'GET_GUESTS_SUCCESS',
+	payload: data
+});
 
-// export default actions
+<<<<<<< 78682541aa032cdf660f951b9e71249d4cebf8c8
+=======
+export const getGuests = () => {
+	return (dispatch) => {
+		dispatch(getGuestsStart());
+>>>>>>> Added getGuests action +reducer
 
->>>>>>> Firebase info in action
-
+		firebase.database()
+				.ref('Demo/Guests')
+				.on('value', (snapshot) => {
+					setTimeout(() => {
+						dispatch(getGuestsSuccess(snapshot.val()));
+					}, 0);
+				});
+	}
+}
