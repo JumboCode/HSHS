@@ -33,7 +33,8 @@ export default class NewGuest extends Component<{}> {
                                  }
                 />
                 <TextInput
-                  placeholder="Type your birthdate here!"
+                  placeholder="Approximate Age"
+                  keyboardType='numeric'
                   onChangeText=  {(text) => this.setState(prevState =>
                                                         {prevState.birthdate = text})
                                  }
