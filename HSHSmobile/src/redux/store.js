@@ -6,6 +6,6 @@ import {createLogger} from 'redux-logger';
 const logger = createLogger({collapsed: true});
 let middleware = [thunk, logger];
 
-const initialState = { test: "blah" };
+const initialState = { test: "blah", guests: []};
 
 export const store = createStore(reducer, initialState, applyMiddleware(...middleware));

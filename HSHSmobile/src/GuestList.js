@@ -15,7 +15,7 @@ const Icon = require('react-native-vector-icons/Ionicons');
 
 function mapStateToProps(state, ownProps) {
     return {
-        guests: state.guests,
+        data: state.guests,
         loading: state.loading
     };
 }
@@ -33,8 +33,6 @@ class GuestList extends Component {
         this.viewGuestProfileScreen = this.viewGuestProfileScreen.bind(this);
 
         this.state = {
-            loading: false,
-            data: [],
             page: 1,
             seed: 1,
             error: null,
@@ -194,6 +192,7 @@ class GuestList extends Component {
     };
 
     render() {
+        console.log(this.state.data);
         return (
             <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0, marginTop: 0 }}>
                 <FlatList
