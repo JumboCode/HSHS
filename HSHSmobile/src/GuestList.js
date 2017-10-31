@@ -88,7 +88,7 @@ class GuestList extends Component {
         this.props.navigator.push({
             screen: 'GuestProfile', // unique ID registered with Navigation.registerScreen
             passProps: {
-                name: guest.name.first + ' ' + guest.name.last
+                name: guest.name
             }, // Object that will be passed as props to the pushed screen (optional)
             animated: true, // does the push have transition animation or does it happen immediately (optional)
             animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
@@ -110,29 +110,29 @@ class GuestList extends Component {
     }
 
     makeRemoteRequest = () => {
-        const { page, seed } = this.state;
-        const url = `https://randomuser.me/api/?seed=${seed}&page=${page}&results=10`;
-        this.setState({ loading: true });
+        // const { page, seed } = this.state;
+        // const url = `https://randomuser.me/api/?seed=${seed}&page=${page}&results=10`;
+        // this.setState({ loading: true });
 
-        fetch(url)
-            .then(res => res.json())
-            .then(res => {
-                this.setState({
-                    data: page === 1 ? res.results : [...this.state.data, ...res.results],
-                    error: res.error || null,
-                    loading: false,
-                    refreshing: false
-                });
-            })
-            .catch(error => {
-                this.setState({ error, loading: false });
-            });
+        // fetch(url)
+        //     .then(res => res.json())
+        //     .then(res => {
+        //         this.setState({
+        //             data: page === 1 ? res.results : [...this.state.data, ...res.results],
+        //             error: res.error || null,
+        //             loading: false,
+        //             refreshing: false
+        //         });
+        //     })
+        //     .catch(error => {
+        //         this.setState({ error, loading: false });
+        //     });
         this.props.getGuests();
     };
 
     componentWillUpdate(nextProps, nextState) {
-        console.log(this.props.guests);
-    }
+        console.log(this.props.data);
+    };
 
     handleRefresh = () => {
         this.setState(
@@ -192,23 +192,23 @@ class GuestList extends Component {
     };
 
     render() {
-        console.log(this.state.data);
+        console.log(this.props.data);
         return (
             <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0, marginTop: 0 }}>
                 <FlatList
-                    data={this.state.data}
+                    data={this.props.data}
                     renderItem={({ item }) => (
                         <ListItem
                             roundAvatar
-                            title={`${item.name.first} ${item.name.last}`}
-                            subtitle={item.email}
+                            title={`${item.name}`}
+                            subtitle={item.lastInteractionTimestamp}
                             subtitleStyle={{textAlign: 'right'}}
-                            avatar={{ uri: item.picture.thumbnail }}
+                            // avatar={{ uri: item.picture.thumbnail }}
                             containerStyle={{ borderBottomWidth: 0 }}
                             onPress={() => this.viewGuestProfileScreen(item)}
                         />
                     )}
-                    keyExtractor={item => item.email}
+                    // keyExtractor={item => item.email}
                     ItemSeparatorComponent={this.renderSeparator}
                     ListHeaderComponent={this.renderHeader}
                     ListFooterComponent={this.renderFooter}

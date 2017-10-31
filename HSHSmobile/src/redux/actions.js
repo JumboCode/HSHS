@@ -14,7 +14,7 @@ export const getGuestsSuccess = (data) => ({
 export const getGuests = () => {
 		store.dispatch(getGuestsStart());
 		firebase.database()
-				.ref('Demo/Guests')
+				.ref('demo/guests')
 				.on('value', (snapshot) => {
 					setTimeout(() => {
 						store.dispatch(getGuestsSuccess(snapshot.val()));
