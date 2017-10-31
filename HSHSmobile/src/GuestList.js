@@ -208,7 +208,7 @@ class GuestList extends Component {
                             onPress={() => this.viewGuestProfileScreen(item)}
                         />
                     )}
-                    // keyExtractor={item => item.email}
+                    keyExtractor={item => item.id}
                     ItemSeparatorComponent={this.renderSeparator}
                     ListHeaderComponent={this.renderHeader}
                     ListFooterComponent={this.renderFooter}
