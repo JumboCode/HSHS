@@ -3,9 +3,9 @@ import {Provider} from 'react-redux';
 import {store} from './src/redux/store.js';
 import GuestList from './src/GuestList';
 import Info from './src/Info';
-import GuestProfile from './src/GuestProfile';
+import GuestListProfile from './src/GuestListProfile';
 import CRUDnote from './src/CRUDnote';
-import NewGuest from './src/NewGuest';
+import GuestListNew from './src/GuestListNew';
 
 export default  () => {
     return new App()
@@ -18,6 +18,7 @@ var todolistIcon // ios-paper-outline
 var checkinIcon // ios-list-outline
 var guestsIcon // ios-people-outline
 var rescourcesIcon // ios-help-circle-outline
+var addIcon // ios-add-circle-outline
 
 class App {
   constructor() {
@@ -38,7 +39,8 @@ class App {
             Icon.getImageSource('ios-list-outline', 30),
             Icon.getImageSource('ios-paper-outline', 30),
             Icon.getImageSource('ios-people-outline', 30),
-            Icon.getImageSource('ios-help-circle-outline', 30)
+            Icon.getImageSource('ios-help-circle-outline', 30),
+            Icon.getImageSource('ios-add-circle-outline', 30)
         ]
       ).then((values) => {
         homeIcon = values[0];
@@ -46,6 +48,7 @@ class App {
         checkinIcon = values[2];
         guestsIcon = values[3];
         rescourcesIcon = values[4];
+        addIcon = values[5];
         resolve(true);
       }).catch((error) => {
         console.log(error);
@@ -57,10 +60,10 @@ class App {
     startApp() {
     // this will start our app
     Navigation.registerComponent('GuestList', () => GuestList, store, Provider);
-    Navigation.registerComponent('GuestProfile', () => GuestProfile, store, Provider);
+    Navigation.registerComponent('GuestListProfile', () => GuestListProfile, store, Provider);
     Navigation.registerComponent('Info', () => Info, store, Provider);
     Navigation.registerComponent('CRUDnote', () => CRUDnote, store, Provider);
-    Navigation.registerComponent('NewGuest', () => NewGuest, store, Provider);
+    Navigation.registerComponent('GuestListNew', () => GuestListNew, store, Provider);
 
     // TODO: make the tabs link to real pages
     Navigation.startTabBasedApp({
@@ -88,7 +91,7 @@ class App {
                 label: 'guests',
                 screen: 'GuestList',
                 title: 'Guests',
-                icon: guestsIcon
+                icon: guestsIcon,
             },
             {
                 label: 'rescources',

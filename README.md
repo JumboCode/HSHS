@@ -5,8 +5,10 @@ Harvard Square Homeless Shelter
 Project Lead: Tommy Tang
 
 ## How to run the app:
-1. Follow the instruction to install react-native
+1. cd HSHSmobile
 
-2. npm install
+2. Follow the instruction to install react-native
 
-3. react-native run-ios / react-native run-android
+3. npm install
+
+4. react-native run-ios / react-native run-android
