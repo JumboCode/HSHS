@@ -9,8 +9,23 @@ import {
     Alert,
     Picker
 } from 'react-native';
+import {connect} from 'react-redux';
+import {addNewGuest} from './redux/actions.js';
 
-export default class NewGuest extends Component<{}> {
+function mapStateToProps(state, ownProps) {
+    return {
+        data: state.guest_info,
+        loading: state.loading
+    };
+}
+
+function mapDispatchToProps(dispath, ownProps) {
+    return {
+        addNewGuest: addNewGuest
+    };
+}
+
+export class NewGuest extends Component<{}> {
     constructor(props) {
         super(props); 
 
@@ -35,8 +50,7 @@ export default class NewGuest extends Component<{}> {
                 <TextInput
                     placeholder="Approximate Age"
                     keyboardType='numeric'
-                    onChangeText=  {(text) => this.setState(prevState =>
-                    {prevState.birthdate = text})
+                    onChangeText=  {(text) => this.setState({birthdate: text})
                     }
                 />
                 <TextInput
@@ -58,6 +72,7 @@ export default class NewGuest extends Component<{}> {
                     style={{height: 50}}
                     onPress={() => { //Alert.alert(this._jsonOutput());
                         console.log(this._jsonOutput());
+                        this.props.addNewGuest(this.state.name, this.state.birthdate, this.state.gender, this.state.other);
                         this.props.navigator.pop({
                             animated: true, // does the pop have transition animation or does it happen immediately (optional)
                             animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
@@ -70,3 +85,4 @@ export default class NewGuest extends Component<{}> {
 
 
 }
+export default connect(mapStateToProps, mapDispatchToProps)(NewGuest);

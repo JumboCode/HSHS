@@ -30,11 +30,12 @@ export const addNewGuestSuccess = () => ({
 	type: 'ADD_NEW_GUEST_SUCCESS'
 })
 
-export const addNewGuest = (name, age, gender, notes) => {
-	firebase.database().ref('demo/guests' + userId).set({
+export const addNewGuest = (name, birthdate, gender, other) => {
+	store.dispatch(addNewGuestStart);
+	firebase.database().ref('demo/guests').push().set({
     		name: name,
-    		age: age,
+    		birthdate: birthdate,
     		gender : gender, 
-    		notes: notes
+    		other: other
   });
 }
