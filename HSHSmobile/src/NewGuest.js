@@ -15,9 +15,13 @@ export default class NewGuest extends Component<{}> {
         super(props);
 
         // How should we store this input?
-        this.state = {name: '', birthdate: '', hometown: '', other: ''};
 
+        this.state = {name: '', birthdate: '', gender: '', other: ''};
+        this._jsonOutput = this._jsonOutput.bind(this);
+    }
 
+    _jsonOutput() {
+        return JSON.stringify(this.state);
     }
 
     render () {
@@ -30,7 +34,8 @@ export default class NewGuest extends Component<{}> {
                                  }
                 />
                 <TextInput
-                  placeholder="Type your birthdate here!"
+                  placeholder="Approximate Age"
+                  keyboardType='numeric'
                   onChangeText=  {(text) => this.setState(prevState =>
                                                         {prevState.birthdate = text})
                                  }
