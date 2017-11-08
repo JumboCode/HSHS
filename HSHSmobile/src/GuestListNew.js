@@ -10,6 +10,8 @@ import {
     Picker,
     TouchableOpacity
 } from 'react-native';
+import {connect} from 'react-redux';
+import {addNewGuest} from './redux/actions.js';
 
 import { FormLabel, FormInput } from 'react-native-elements'
 import ModalDropdown from 'react-native-modal-dropdown';
@@ -27,6 +29,19 @@ const hair_colors = [
   'BLONDE','BROWN','BLACK','GRAY','WHITE','BALD',
 ];
 
+
+function mapStateToProps(state, ownProps) {
+    return {
+        data: state.guest_info,
+        loading: state.loading
+    };
+}
+
+function mapDispatchToProps(dispath, ownProps) {
+    return {
+        addNewGuest: addNewGuest
+    };
+}
 
 export default class NewGuest extends Component<{}> {
     constructor(props) {
@@ -67,8 +82,10 @@ export default class NewGuest extends Component<{}> {
                 </ModalDropdown>
                 <Button
                     style={{height: 50}}
-                    onPress={() => {
-                        console.log(JSON.stringify(this.formInput));
+                    onPress={() => { //Alert.alert(this._jsonOutput());
+                        console.log(this._jsonOutput());
+                        //this.props.addNewGuest(this.state.name, this.state.birthdate, this.state.gender, this.state.other);
+                        this.props.addNewGuest('Vincent', 'OLD', 'Male', 'Yellow', true, 'test', 'test', 'test');
                         this.props.navigator.pop({
                             animated: true, // does the pop have transition animation or does it happen immediately (optional)
                             animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
