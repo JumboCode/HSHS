@@ -86,7 +86,7 @@ class GuestList extends Component {
 
     viewGuestProfileScreen = (guest) => {
         this.props.navigator.push({
-            screen: 'GuestProfile', // unique ID registered with Navigation.registerScreen
+            screen: 'GuestListProfile', // unique ID registered with Navigation.registerScreen
             passProps: {
                 name: guest.name
             }, // Object that will be passed as props to the pushed screen (optional)
@@ -110,23 +110,6 @@ class GuestList extends Component {
     }
 
     makeRemoteRequest = () => {
-        // const { page, seed } = this.state;
-        // const url = `https://randomuser.me/api/?seed=${seed}&page=${page}&results=10`;
-        // this.setState({ loading: true });
-
-        // fetch(url)
-        //     .then(res => res.json())
-        //     .then(res => {
-        //         this.setState({
-        //             data: page === 1 ? res.results : [...this.state.data, ...res.results],
-        //             error: res.error || null,
-        //             loading: false,
-        //             refreshing: false
-        //         });
-        //     })
-        //     .catch(error => {
-        //         this.setState({ error, loading: false });
-        //     });
         this.props.getGuests();
     };
 
