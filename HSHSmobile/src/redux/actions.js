@@ -14,7 +14,7 @@ export const getGuestsSuccess = (data) => ({
 export const getGuests = () => {
 		store.dispatch(getGuestsStart());
 		firebase.database()
-				.ref('demo/guests')
+				.ref('guests')
 				.on('value', (snapshot) => {
 					setTimeout(() => {
 						store.dispatch(getGuestsSuccess(snapshot.val()));
@@ -30,12 +30,16 @@ export const addNewGuestSuccess = () => ({
 	type: 'ADD_NEW_GUEST_SUCCESS'
 })
 
-export const addNewGuest = (name, birthdate, gender, other) => {
+export const addNewGuest = (name, age, gender, hairColor, tattoo, description, interactions, actionItems) => {
 	store.dispatch(addNewGuestStart);
-	firebase.database().ref('demo/guests').push().set({
+	firebase.database().ref('guests').push().set({
     		name: name,
-    		birthdate: birthdate,
+    		age: age,
     		gender : gender, 
-    		other: other
+    		hairColor: hairColor,
+                tattoo: tattoo,
+                description: description,
+                interactions: interactions,
+                actionItems: actionItems
   });
 }
