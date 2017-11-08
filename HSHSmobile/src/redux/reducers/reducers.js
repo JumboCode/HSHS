@@ -19,6 +19,18 @@ export function reducer(state, action) {
                 loaded: true,
                 guests: action.payload
             });
+            
+        case 'GET_INTERACTIONS_START':
+            return Object.assign({}, state, {
+                loading: true
+            });
+
+        case 'GET_INTERACTIONS_SUCCESS':
+            return Object.assign({}, state, {
+                loading: false,
+                loaded: true,
+                interactions: action.payload
+            });
         case 'ADD_GUEST_START':
             return Object.assign({}, state, {
                 adding: true

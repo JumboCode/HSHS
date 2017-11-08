@@ -3,7 +3,6 @@ import {store} from './store.js';
 
 export const getGuestsStart = () => ({
 	type: 'GET_GUESTS_START'
-
 });
 
 export const getGuestsSuccess = (data) => ({
@@ -21,6 +20,26 @@ export const getGuests = () => {
 					}, 0);
 				});
 }
+
+export const getInteractionsStart = () => ({
+	type: 'GET_INTERACTIONS_START'
+});
+
+export const getInteractionsSuccess = () => ({
+	type: 'GET_INTERACTIONS_SUCCESS',
+	payload: data
+});
+
+export const getInteractions = () => {
+	store.dispatch(getInteractionsStart());
+	firebase.database()
+			.ref('interactions')
+			.on('value', snapshot => {
+				setTimeout(() => {
+					store.dispatch(getInteractionsSuccess(snapshot.val()));
+				}, 0);
+			})
+};
 
 export const addNewGuestStart = () => ({
 	type: 'ADD_NEW_GUEST_START'
