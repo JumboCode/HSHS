@@ -10,33 +10,32 @@ import {
     Picker
 } from 'react-native';
 
+import { FormLabel, FormInput } from 'react-native-elements'
+
+
 export default class NewGuest extends Component<{}> {
     constructor(props) {
         super(props);
 
-        // How should we store this input?
-        this.state = {name: '', birthdate: '', gender: '', other: ''};
-        this._jsonOutput = this._jsonOutput.bind(this);
-    }
-
-    _jsonOutput() {
-        return JSON.stringify(this.state);
+        this.state = {}
+        this.formInput = {name: '', description: '', initialNote: '', receptiveness: ''}
     }
 
     render () {
         return (
             <View style={{flex: 1, flexDirection: 'column', padding: 10}}>
-                <TextInput
-                    style={{height: 40}}
-                    placeholder="Type your name here!"
-                    onChangeText=  {(text) => this.setState({name: text})
-                    }
+                <FormLabel>Name</FormLabel>
+                <FormInput
+                    ref= {input => this.input = input}
+                    multiline = {true}
+                    numberOfLines = {4}
+                    onChangeText= {(text) => this.formInput.name = text}
                 />
+            </View>
+            /*
                 <TextInput
-                    placeholder="Approximate Age"
-                    keyboardType='numeric'
-                    onChangeText=  {(text) => this.setState(prevState =>
-                    {prevState.birthdate = text})
+                    placeholder="Description"
+                    onChangeText=  {(text) => this.formInput.description = text;
                     }
                 />
                 <TextInput
@@ -65,6 +64,7 @@ export default class NewGuest extends Component<{}> {
                     title="Submit"
                 />
             </View>
+            */
         );
     }
 
