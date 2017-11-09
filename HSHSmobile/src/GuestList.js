@@ -14,8 +14,9 @@ import {getGuests} from './redux/actions.js';
 const Icon = require('react-native-vector-icons/Ionicons');
 
 function mapStateToProps(state, ownProps) {
+    var guests = guestObjectToArray(state.guests);
     return {
-        data: state.guests,
+        data: guests,
         loading: state.loading
     };
 }
@@ -26,11 +27,31 @@ function mapDispatchToProps(dispath, ownProps) {
     };
 }
 
+function guestObjectToArray(IdsToGuests) {
+    var guestList = []
+    for (var Id in IdsToGuests) {
+        guestList.push({
+            "Id" : Id,
+            "name" : IdsToGuests[Id].name,
+            "lastInteractionTimestamp" : daysSinceInteraction(IdsToGuests[Id].interactions),
+        });
+    }
+    return guestList;
+}
+
+function daysSinceInteraction(interactions) {
+    if (interactions == null) {
+        return "No recorded interactions ";
+    } else {
+        return "X days since last interaction ";
+    }
+}
+
 class GuestList extends Component {
     constructor(props) {
         super(props);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
-        this.viewGuestProfileScreen = this.viewGuestProfileScreen.bind(this);
+        this.Screen_GuestListProfile = this.Screen_GuestListProfile.bind(this);
 
         this.state = {
             page: 1,
@@ -38,7 +59,7 @@ class GuestList extends Component {
             error: null,
             refreshing: false
         };
-    }
+    };
 
     static navigatorButtons = {
         rightButtons: [
@@ -59,20 +80,24 @@ class GuestList extends Component {
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
         if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
             if (event.id == 'add_guest') { // this is the same id field from the static navigatorButtons definition
-                this.props.navigator.push({
-                    screen: 'GuestListNew', // unique ID registered with Navigation.registerScreen
-                    passProps: {}, // Object that will be passed as props to the pushed screen (optional)
-                    animated: true, // does the push have transition animation or does it happen immediately (optional)
-                    animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
-                    backButtonHidden: false, // hide the back button altogether (optional)
-                    navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
-                    navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
-                })
+                this.Screen_GuestListNew();
             }
         }
-    }
+    };
 
-    viewInfoScreen = () => {
+    Screen_GuestListNew = () => {
+        this.props.navigator.push({
+            screen: 'GuestListNew', // unique ID registered with Navigation.registerScreen
+            passProps: {}, // Object that will be passed as props to the pushed screen (optional)
+            animated: true, // does the push have transition animation or does it happen immediately (optional)
+            animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
+            backButtonHidden: false, // hide the back button altogether (optional)
+            navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
+            navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
+        })
+    };
+
+    Screen_Temporary = () => {
         this.props.navigator.push({
             screen: 'Info', // unique ID registered with Navigation.registerScreen
             passProps: {}, // Object that will be passed as props to the pushed screen (optional)
@@ -84,11 +109,12 @@ class GuestList extends Component {
         })
     };
 
-    viewGuestProfileScreen = (guest) => {
+    Screen_GuestListProfile = (guest) => {
         this.props.navigator.push({
             screen: 'GuestListProfile', // unique ID registered with Navigation.registerScreen
             passProps: {
-                name: guest.name
+                Id: guest.Id,
+                name: "Hey I left this variable so stuff dosn't break but please don't use it!"
             }, // Object that will be passed as props to the pushed screen (optional)
             animated: true, // does the push have transition animation or does it happen immediately (optional)
             animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
@@ -107,7 +133,7 @@ class GuestList extends Component {
             });
         });
         this.makeRemoteRequest();
-    }
+    };
 
     makeRemoteRequest = () => {
         this.props.getGuests();
@@ -155,7 +181,8 @@ class GuestList extends Component {
     };
 
     renderHeader = () => {
-        return <SearchBar placeholder="Type Here..." lightTheme round />;
+        return null;
+        //return <SearchBar placeholder="Type Here..." lightTheme round />;
     };
 
     renderFooter = () => {
@@ -179,26 +206,25 @@ class GuestList extends Component {
         return (
             <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0, marginTop: 0 }}>
                 <FlatList
-                    data={this.props.data}
+                    data = {this.props.data}
                     renderItem={({ item }) => (
                         <ListItem
-                            roundAvatar
-                            title={`${item.name}`}
-                            subtitle={item.lastInteractionTimestamp}
-                            subtitleStyle={{textAlign: 'right'}}
+                            title = {`${item.name}`}
+                            subtitle = {item.lastInteractionTimestamp}
+                            subtitleStyle = {{textAlign: 'right'}}
                             // avatar={{ uri: item.picture.thumbnail }}
-                            containerStyle={{ borderBottomWidth: 0 }}
-                            onPress={() => this.viewGuestProfileScreen(item)}
+                            containerStyle = {{ borderBottomWidth: 0 }}
+                            onPress = {() => this.Screen_GuestListProfile(item)}
                         />
                     )}
-                    keyExtractor={item => item.id}
-                    ItemSeparatorComponent={this.renderSeparator}
-                    ListHeaderComponent={this.renderHeader}
-                    ListFooterComponent={this.renderFooter}
-                    onRefresh={this.handleRefresh}
-                    refreshing={this.state.refreshing}
-                    onEndReached={this.handleLoadMore}
-                    onEndReachedThreshold={50}
+                    keyExtractor = {item => item.Id}
+                    ItemSeparatorComponent = {this.renderSeparator}
+                    ListHeaderComponent = {this.renderHeader}
+                    ListFooterComponent = {this.renderFooter}
+                    onRefresh = {this.handleRefresh}
+                    refreshing = {this.state.refreshing}
+                    onEndReached = {this.handleLoadMore}
+                    onEndReachedThreshold = {50}
                 />
             </List>
         );
