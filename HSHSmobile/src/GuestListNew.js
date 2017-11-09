@@ -1,3 +1,8 @@
+/*
+ * 
+ *
+ *
+ */
 import React, { Component } from 'react';
 import {
     Platform,
@@ -16,6 +21,7 @@ import {addNewGuest} from './redux/actions.js';
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
 import ModalDropdown from 'react-native-modal-dropdown';
 
+// Dropdown fields
 const age_list = [
   'OLD', 'MIDDLE', 'YOUNG'
 ];
@@ -29,7 +35,7 @@ const hair_colors = [
   'BLONDE','BROWN','BLACK','GRAY','WHITE','BALD',
 ];
 
-
+// Redux functions
 function mapStateToProps(state, ownProps) {
     return {
         data: state.guest_info,
@@ -43,6 +49,13 @@ function mapDispatchToProps(dispath, ownProps) {
     };
 }
 
+/*
+ * FormInputField: props- label string
+ *                        error string empty when no error
+ * Defines a Form Field that allows for validation errors to be set by the
+ * parent. In this case, error is a prop set to the parent's state.nameError
+ * On form submit, the validation fn changes the state if its not properly set.
+ */
 class FormInputField extends Component {
   error() {
     if (this.props.error) {
@@ -62,6 +75,13 @@ class FormInputField extends Component {
   }
 }
 
+/*
+ * NewGuest: props- none i think
+ * Represents the complete view containing a form to input new guests
+ * formInput is a dictionary containing information about the guest
+ * For new form validation, add a [field]Error entry to the state and update
+ * it in register() if the current formInput entry is not up to par.
+ */
 class NewGuest extends Component<{}> {
     constructor(props) {
         super(props);
@@ -69,6 +89,7 @@ class NewGuest extends Component<{}> {
                         isTattooed: '', age: '', actionItems: [], interactions: []}
         this.state = { nameError: ''}
     }
+
 
     register(form) {
       const nameError = (form.name == '' ? 'Required Field' : '')
@@ -131,6 +152,13 @@ export default connect(
   mapDispatchToProps
 )(NewGuest)
 
+
+
+
+/*
+ * Code in development to create a form field that uses a Picker. Currently
+ * doesn't work on iOS. Working on it. -Chase 11/8/17
+ */
 export class PickerField extends Component<{}> {
     constructor(props){
         super(props)
