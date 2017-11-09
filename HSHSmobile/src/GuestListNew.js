@@ -10,8 +10,8 @@ import {
     Picker,
     TouchableOpacity
 } from 'react-native';
-import {connect} from 'react-redux';
-import {addNewGuest} from './redux/actions.js';
+//import {connect} from 'react-redux';
+//import {addNewGuest} from './redux/actions.js';
 
 import { FormLabel, FormInput } from 'react-native-elements'
 import ModalDropdown from 'react-native-modal-dropdown';
@@ -30,18 +30,18 @@ const hair_colors = [
 ];
 
 
-function mapStateToProps(state, ownProps) {
-    return {
-        data: state.guest_info,
-        loading: state.loading
-    };
-}
-
-function mapDispatchToProps(dispath, ownProps) {
-    return {
-        addNewGuest: addNewGuest
-    };
-}
+// function mapStateToProps(state, ownProps) {
+//     return {
+//         data: state.guest_info,
+//         loading: state.loading
+//     };
+// }
+//
+// function mapDispatchToProps(dispath, ownProps) {
+//     return {
+//         addNewGuest: addNewGuest
+//     };
+// }
 
 export default class NewGuest extends Component<{}> {
     constructor(props) {
@@ -78,14 +78,18 @@ export default class NewGuest extends Component<{}> {
                     onSelect={(index, value) => this.formInput.age = value}>
                 </ModalDropdown>
                 <ModalDropdown options={tattoos}
-                    onSelect={(index, value) => this.formInput.isTattooed = value}>
+                    onSelect={(index, value) => this.formInput.isTattooed =
+                                      (value == 'true' ? true : false)}>
                 </ModalDropdown>
                 <Button
                     style={{height: 50}}
                     onPress={() => { //Alert.alert(this._jsonOutput());
                         console.log(this._jsonOutput());
+                        let form = this.formInput;
                         //this.props.addNewGuest(this.state.name, this.state.birthdate, this.state.gender, this.state.other);
-                        this.props.addNewGuest('Vincent', 'OLD', 'Male', 'Yellow', true, 'test', 'test', 'test');
+                        this.props.addNewGuest(form.name, form.age, form.gender,
+                                                form.hairColor, form.isTattooed,
+                                                form.description, [], []);
                         this.props.navigator.pop({
                             animated: true, // does the pop have transition animation or does it happen immediately (optional)
                             animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
@@ -93,6 +97,36 @@ export default class NewGuest extends Component<{}> {
                     title="Submit"
                 />
             </View>
+        );
+    }
+}
+
+export class PickerField extends Component<{}> {
+    constructor(props){
+        super(props)
+        this.state = {modalVisible: false}
+    }
+
+    render() {
+        return(
+          <View>
+          <TouchableOpacity
+            onPress={test => {
+              alarm("help");
+            }}
+          >
+            <FormLabel>Test</FormLabel>
+            <FormInput
+              placeholder="Select Test"
+              editable={false}
+              onChangeText={test => {
+                this.setState({ test });
+              }}
+              value={this.props.value}
+            />
+          </TouchableOpacity>
+
+          </View>
         );
     }
 }
