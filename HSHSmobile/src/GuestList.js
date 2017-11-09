@@ -14,7 +14,7 @@ import {getGuests, getInteractions} from './redux/actions.js';
 const Icon = require('react-native-vector-icons/Ionicons');
 
 function mapStateToProps(state, ownProps) {
-    var guests = guestObjectToArray(state.guests);
+    var guests = guestObjectToArray(state.guests, state.interactions);
     return {
         guests: guests,
         loading: state.loading,
@@ -30,29 +30,37 @@ function mapDispatchToProps(dispath, ownProps) {
 }
  
 //TODO sort by name
-function guestObjectToArray(IdsToGuests) {
+function guestObjectToArray(IdsToGuests, IdsToInteractions) {
     var guestList = []
     for (var Id in IdsToGuests) {
         guestList.push({
             "Id" : Id,
             "name" : IdsToGuests[Id].name,
-            "lastInteractionTimestamp" : daysSinceInteraction(IdsToGuests[Id].interactions),
+            "lastInteractionTimestamp" : daysSinceInteraction(IdsToGuests[Id].interactions, IdsToInteractions),
         });
     }
 
     return guestList;
 }
 
-function daysSinceInteraction(interactionIds) {
+function daysSinceInteraction(interactionIds, IdsToInteractions) {
     if (interactionIds == null) {
         return "No recorded interactions ";
     } else {
         if (interactionIds[0] != null){
-            console.log(this.props);
-        };
-        return "last interaction: ";
+            return "last interaction: " + IdsToInteractions[interactionIds[0]].timestamp;
+        } else {
+            return "No interactions have timestamps";
+        }
     }
 }
+
+time_diff = (iso_timestamp) => {
+        var d1 = new Date(iso_timestamp),
+            d2 = new Date();
+        var diff = d2 - d1;
+        return Math.floor(diff / 60e3 / 1440) + ' days ago';
+    }
 
 class GuestList extends Component {
     constructor(props) {
