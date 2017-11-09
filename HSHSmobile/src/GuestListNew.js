@@ -10,8 +10,8 @@ import {
     Picker,
     TouchableOpacity
 } from 'react-native';
-//import {connect} from 'react-redux';
-//import {addNewGuest} from './redux/actions.js';
+import {connect} from 'react-redux';
+import {addNewGuest} from './redux/actions.js';
 
 import { FormLabel, FormInput } from 'react-native-elements'
 import ModalDropdown from 'react-native-modal-dropdown';
@@ -30,20 +30,21 @@ const hair_colors = [
 ];
 
 
-// function mapStateToProps(state, ownProps) {
-//     return {
-//         data: state.guest_info,
-//         loading: state.loading
-//     };
-// }
-//
-// function mapDispatchToProps(dispath, ownProps) {
-//     return {
-//         addNewGuest: addNewGuest
-//     };
-// }
+function mapStateToProps(state, ownProps) {
+    return {
+        data: state.guest_info,
+        loading: state.loading
+    };
+}
 
-export default class NewGuest extends Component<{}> {
+function mapDispatchToProps(dispath, ownProps) {
+    return {
+        addNewGuest: addNewGuest
+    };
+}
+
+
+class NewGuest extends Component<{}> {
     constructor(props) {
         super(props);
 
@@ -81,10 +82,10 @@ export default class NewGuest extends Component<{}> {
                     onSelect={(index, value) => this.formInput.isTattooed =
                                       (value == 'true' ? true : false)}>
                 </ModalDropdown>
+                <PickerField />
                 <Button
                     style={{height: 50}}
                     onPress={() => { //Alert.alert(this._jsonOutput());
-                        console.log(this._jsonOutput());
                         let form = this.formInput;
                         //this.props.addNewGuest(this.state.name, this.state.birthdate, this.state.gender, this.state.other);
                         this.props.addNewGuest(form.name, form.age, form.gender,
@@ -101,6 +102,11 @@ export default class NewGuest extends Component<{}> {
     }
 }
 
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NewGuest)
+
 export class PickerField extends Component<{}> {
     constructor(props){
         super(props)
@@ -112,7 +118,7 @@ export class PickerField extends Component<{}> {
           <View>
           <TouchableOpacity
             onPress={test => {
-              alarm("help");
+              console.log("help");
             }}
           >
             <FormLabel>Test</FormLabel>
