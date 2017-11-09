@@ -13,7 +13,7 @@ import {
 import {connect} from 'react-redux';
 import {addNewGuest} from './redux/actions.js';
 
-import { FormLabel, FormInput } from 'react-native-elements'
+import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
 import ModalDropdown from 'react-native-modal-dropdown';
 
 const age_list = [
@@ -43,23 +43,57 @@ function mapDispatchToProps(dispath, ownProps) {
     };
 }
 
+class FormInputField extends Component {
+  error() {
+    if (this.props.error) {
+      return <FormValidationMessage>{this.props.error}</FormValidationMessage>
+    }
+    return null
+  }
+
+  render() {
+    return (
+      <View>
+        <FormLabel>{this.props.label}</FormLabel>
+        <FormInput />
+        {this.error()}
+      </View>
+    );
+  }
+}
 
 class NewGuest extends Component<{}> {
     constructor(props) {
         super(props);
-
-        this.state = {}
         this.formInput = {name: '', description: '', gender: '', hairColor: '',
                         isTattooed: '', age: '', actionItems: [], interactions: []}
+        this.state = { nameError: ''}
+    }
+
+    register(form) {
+      const nameError = (form.name == '' ? 'Required Field' : '')
+
+      this.setState({nameError: nameError})
+
+      if (!nameError) {
+        this.props.addNewGuest(form.name, form.age, form.gender,
+                                form.hairColor, form.isTattooed,
+                                form.description, [], []);
+        this.props.navigator.pop({
+            animated: true, // does the pop have transition animation or does it happen immediately (optional)
+            animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
+        });
+      }
     }
 
     render () {
         return (
             <View style={{flex: 1, flexDirection: 'column', padding: 10}}>
-                <FormLabel>Name</FormLabel>
-                <FormInput
+                <FormInputField
+                    label={'Name'}
                     ref= {input => this.input = input}
                     onChangeText= {(text) => this.formInput.name = text}
+                    error={this.state.nameError}
                 />
                 <FormLabel>Description</FormLabel>
                 <FormInput
@@ -82,19 +116,9 @@ class NewGuest extends Component<{}> {
                     onSelect={(index, value) => this.formInput.isTattooed =
                                       (value == 'true' ? true : false)}>
                 </ModalDropdown>
-                <PickerField />
                 <Button
                     style={{height: 50}}
-                    onPress={() => { //Alert.alert(this._jsonOutput());
-                        let form = this.formInput;
-                        //this.props.addNewGuest(this.state.name, this.state.birthdate, this.state.gender, this.state.other);
-                        this.props.addNewGuest(form.name, form.age, form.gender,
-                                                form.hairColor, form.isTattooed,
-                                                form.description, [], []);
-                        this.props.navigator.pop({
-                            animated: true, // does the pop have transition animation or does it happen immediately (optional)
-                            animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
-                        }); }}
+                    onPress={() => this.register(this.formInput)}
                     title="Submit"
                 />
             </View>
