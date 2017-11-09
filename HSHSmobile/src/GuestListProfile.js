@@ -15,15 +15,26 @@ import {
 } from 'react-native';
 import { List, ListItem } from "react-native-elements";
 import nodeEmoji from 'node-emoji';
+import {connect} from 'react-redux';
+
 import data from './dummy/data.json';
 
 const Timestamp = require('react-timestamp');
 
-export default class GuestProfile extends Component {
+function mapStateToProps(state, ownProps) {
+    return {
+        guest: state.guests[ownProps.Id],
+        loading: state.loading
+    };
+}
+
+
+class GuestProfile extends Component {
     constructor(props) {
         super(props);
         // this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.view_crud_note_page = this.view_crud_note_page.bind(this);
+        alert(JSON.stringify(this.props.guest));
     };
 
     // matching receptivity to emojis {0-4} where 4 is the best and 0 is the worst
@@ -73,7 +84,53 @@ export default class GuestProfile extends Component {
     render_name = () => {
         return (
             <Text style={styles.name}>
-                {this.props.name}
+                {this.props.guest.name}
+            </Text>
+        );
+    };
+
+    // renders age on profile page
+    render_age = () => {
+        return (
+            <Text>
+                {this.props.guest.age}
+            </Text>
+        );
+    };
+
+    // renders description on profile page
+    render_description = () => {
+        return (
+            <Text>
+                {this.props.guest.description}
+            </Text>
+        );
+    };
+
+
+    // renders gender on profile page
+    render_gender = () => {
+        return (
+            <Text style>
+                {this.props.guest.gender}
+            </Text>
+        );
+    };
+
+    // renders gender on profile page
+    render_hairColor = () => {
+        return (
+            <Text style>
+                {this.props.guest.hairColor}
+            </Text>
+        );
+    };
+
+    // renders gender on profile page
+    render_tattoo = () => {
+        return (
+            <Text style>
+                {this.props.guest.tattoo}
             </Text>
         );
     };
@@ -142,6 +199,11 @@ export default class GuestProfile extends Component {
                     />
                     <View style={styles.profile_info}>
                         {this.render_name()}
+                        {this.render_age()}
+                        {this.render_gender()}
+                        {this.render_hairColor()}
+                        {this.render_description()}
+                        {this.render_tattoo()}
                         {this.render_receptive()}
                         {this.render_interacted()}
                         {this.render_description()}
@@ -209,3 +271,5 @@ const styles = StyleSheet.create({
         margin: 10,
     },
 });
+
+export default connect(mapStateToProps)(GuestProfile);
