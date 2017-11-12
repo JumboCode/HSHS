@@ -11,16 +11,18 @@ Tommy Tang  <br />
 Vincent Tran <br />
 Jacob Jaffe  <br />
 Ana Arsovska  <br />
-Phil Wang  <br /> 
+Phil Wang  <br />
 Chase Troxell <br />
-Dani Kupfer <br /> 
-Suneeth Keerthy  <br /> 
-Julia Grace  <br /> 
-Jenna Kubiak  <br /> 
+Dani Kupfer <br />
+Suneeth Keerthy  <br />
+Julia Grace  <br />
+Jenna Kubiak  <br />
 Pulkit Jain  <br />
 Dennis Kim  <br />
 Simon Chen
 
+## Technology Stack
+We chose to use react-native for frontend and firebase for backend
 
 ## How to run the app:
 1. cd HSHSmobile
@@ -30,3 +32,7 @@ Simon Chen
 3. npm install
 
 4. react-native run-ios / react-native run-android
+
+## React Native Installation
+Click the link below, and follow the instructions within "Building Projects with Native Code" <br />
+https://facebook.github.io/react-native/docs/getting-started.html
