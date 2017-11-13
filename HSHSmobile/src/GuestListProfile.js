@@ -24,7 +24,8 @@ const Timestamp = require('react-timestamp');
 function mapStateToProps(state, ownProps) {
     return {
         guest: state.guests[ownProps.Id],
-        loading: state.loading
+        loading: state.loading,
+        testing: state
     };
 }
 
@@ -34,30 +35,13 @@ class GuestProfile extends Component {
         super(props);
         // this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.view_crud_note_page = this.view_crud_note_page.bind(this);
-        alert(JSON.stringify(this.props.guest));
+        console.log(this.props.testing);
     };
 
     // matching receptivity to emojis {0-4} where 4 is the best and 0 is the worst
     id_to_emoji = [":smirk:", ":slightly_smiling_face:", ":grinning:", ":smiley:", ":smile:"];
 
     /********************** Helper functions section **********************/
-
-    // convert string to int and map it to an index from our dummy data
-    get_name_int = (name) => {
-        val = 0;
-        for(let i = 0; i < name.length; i++) {
-            val += name.charCodeAt(i);
-        }
-        return val % 4;
-    };
-
-    // gets dummy values from data.json
-    get_data = () => {
-        return(data.guests[this.get_name_int(this.props.name)]);
-    };
-
-    // stores dummy values from data.json
-    profile_data = this.get_data();
 
     // gets emoji from receptive value
     get_receptive = () => {
@@ -111,7 +95,7 @@ class GuestProfile extends Component {
     // renders gender on profile page
     render_gender = () => {
         return (
-            <Text style>
+            <Text>
                 {this.props.guest.gender}
             </Text>
         );
@@ -120,7 +104,7 @@ class GuestProfile extends Component {
     // renders gender on profile page
     render_hairColor = () => {
         return (
-            <Text style>
+            <Text>
                 {this.props.guest.hairColor}
             </Text>
         );
@@ -129,7 +113,7 @@ class GuestProfile extends Component {
     // renders gender on profile page
     render_tattoo = () => {
         return (
-            <Text style>
+            <Text>
                 {this.props.guest.tattoo}
             </Text>
         );
@@ -139,7 +123,7 @@ class GuestProfile extends Component {
     render_receptive = () => {
         return (
             <Text>
-                Receptive: {this.get_receptive()}
+                Receptive: {this.props.guest.get_receptive()}
             </Text>
         );
     };
@@ -148,7 +132,7 @@ class GuestProfile extends Component {
     render_interacted = () => {
         return (
             <Text>
-                Last Interacted: <Timestamp time={this.profile_data.last_interacted} component={Text}/>
+                Last Interacted: <Timestamp time={this.props.guest.last_interacted} component={Text}/>
             </Text>
         );
     };
@@ -157,7 +141,7 @@ class GuestProfile extends Component {
     render_description = () => {
         return (
             <Text>
-                {this.profile_data.description}
+                {this.props.guest.description}
             </Text>
         );
     };
@@ -204,12 +188,11 @@ class GuestProfile extends Component {
                         {this.render_hairColor()}
                         {this.render_description()}
                         {this.render_tattoo()}
-                        {this.render_receptive()}
+                        {/*{this.render_receptive()}*/}
                         {this.render_interacted()}
-                        {this.render_description()}
                     </View>
                 </View>
-                {this.render_notes()}
+                {/*{this.render_notes()}*/}
             </View>
         );
     }
