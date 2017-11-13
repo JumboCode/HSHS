@@ -9,43 +9,58 @@ import {
 } from 'react-native';
 import { List, ListItem, SearchBar } from "react-native-elements";
 import {connect} from 'react-redux';
-import {getGuests} from './redux/actions.js';
+import {getGuests, getInteractions} from './redux/actions.js';
 
 const Icon = require('react-native-vector-icons/Ionicons');
 
 function mapStateToProps(state, ownProps) {
-    var guests = guestObjectToArray(state.guests);
+    var guests = guestObjectToArray(state.guests, state.interactions);
     return {
-        data: guests,
-        loading: state.loading
+        guests: guests,
+        loading: state.loading,
+        interactions: state.interactions
     };
 }
 
 function mapDispatchToProps(dispath, ownProps) {
     return {
-        getGuests: getGuests
+        getGuests: getGuests,
+        getInteractions: getInteractions
     };
 }
-
-function guestObjectToArray(IdsToGuests) {
+ 
+//TODO sort by name
+function guestObjectToArray(IdsToGuests, IdsToInteractions) {
     var guestList = []
     for (var Id in IdsToGuests) {
         guestList.push({
             "Id" : Id,
             "name" : IdsToGuests[Id].name,
-            "lastInteractionTimestamp" : daysSinceInteraction(IdsToGuests[Id].interactions),
+            "lastInteractionTimestamp" : daysSinceInteraction(IdsToGuests[Id].interactions, IdsToInteractions),
         });
     }
+
     return guestList;
 }
 
-function daysSinceInteraction(interactions) {
-    if (interactions == null) {
+function daysSinceInteraction(interactionIds, IdsToInteractions) {
+    if (interactionIds == null) {
         return "No recorded interactions ";
     } else {
-        return "X days since last interaction ";
+        if (interactionIds[0] != null){
+            return "last interaction: " + IdsToInteractions[interactionIds[0]].timestamp;
+        } else {
+            return "No interactions have timestamps";
+        }
     }
 }
+
+time_diff = (iso_timestamp) => {
+        var d1 = new Date(iso_timestamp),
+            d2 = new Date();
+        var diff = d2 - d1;
+        return Math.floor(diff / 60e3 / 1440) + ' days ago';
+    }
 
 class GuestList extends Component {
     constructor(props) {
@@ -136,11 +151,12 @@ class GuestList extends Component {
     };
 
     makeRemoteRequest = () => {
+        this.props.getInteractions();
         this.props.getGuests();
     };
 
     componentWillUpdate(nextProps, nextState) {
-        console.log(this.props.data);
+        console.log(this.props.guests);
     };
 
     handleRefresh = () => {
@@ -202,11 +218,11 @@ class GuestList extends Component {
     };
 
     render() {
-        console.log(this.props.data);
+        console.log(this.props.guests);
         return (
             <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0, marginTop: 0 }}>
                 <FlatList
-                    data = {this.props.data}
+                    data = {this.props.guests}
                     renderItem={({ item }) => (
                         <ListItem
                             title = {`${item.name}`}

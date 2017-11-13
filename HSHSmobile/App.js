@@ -31,6 +31,7 @@ class App {
     });
   }
 
+
   _populateIcons = function () {
     return new Promise(function (resolve, reject) {
       Promise.all(

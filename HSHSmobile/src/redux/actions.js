@@ -3,7 +3,6 @@ import {store} from './store.js';
 
 export const getGuestsStart = () => ({
 	type: 'GET_GUESTS_START'
-
 });
 
 export const getGuestsSuccess = (data) => ({
@@ -20,4 +19,46 @@ export const getGuests = () => {
 						store.dispatch(getGuestsSuccess(snapshot.val()));
 					}, 0);
 				});
+}
+
+export const getInteractionsStart = () => ({
+	type: 'GET_INTERACTIONS_START'
+});
+
+export const getInteractionsSuccess = (data) => ({
+	type: 'GET_INTERACTIONS_SUCCESS',
+	payload: data
+});
+
+export const getInteractions = () => {
+	store.dispatch(getInteractionsStart());
+	firebase.database()
+			.ref('interactions')
+			.on('value', snapshot => {
+				setTimeout(() => {
+					store.dispatch(getInteractionsSuccess(snapshot.val()));
+				}, 0);
+			})
+};
+
+export const addNewGuestStart = () => ({
+	type: 'ADD_NEW_GUEST_START'
+});
+
+export const addNewGuestSuccess = () => ({
+	type: 'ADD_NEW_GUEST_SUCCESS'
+})
+
+export const addNewGuest = (name, age, gender, hairColor, tattoo, description, interactions, actionItems) => {
+	store.dispatch(addNewGuestStart);
+	firebase.database().ref('guests').push().set({
+    		name: name,
+    		age: age,
+    		gender : gender, 
+    		hairColor: hairColor,
+            tattoo: tattoo,
+            description: description,
+            interactions: interactions,
+            actionItems: actionItems
+  });
 }
