@@ -16,7 +16,8 @@ import {
     TouchableOpacity,
     Modal,
     TouchableWithoutFeedback,
-    TouchableHighlight
+    TouchableHighlight,
+    ScrollView
 } from 'react-native';
 import {connect} from 'react-redux';
 import {addNewGuest} from './redux/actions.js';
@@ -166,7 +167,7 @@ class NewGuest extends Component<{}> {
 
     render () {
         return (
-            <View style={{flex: 1, flexDirection: 'column', padding: 10}}>
+            <ScrollView style={{flex: 1, flexDirection: 'column', padding: 10}}>
                 <FormInputField
                     label={'Name'}
                     ref= {input => this.input = input}
@@ -209,7 +210,7 @@ class NewGuest extends Component<{}> {
                     onPress={() => this.register(this.formInput)}
                     title="Submit"
                 />
-            </View>
+            </ScrollView>
         );
     }
 }
@@ -270,6 +271,8 @@ export class PickerFormField extends Component<{}> {
     render() {
       if (Platform.OS === "android") {
         return (
+          <View>
+          <FormLabel>{this.props.label}</FormLabel>
           <Picker
             selectedValue={this.props.value || (this.state && this.state.pickerVal)}
             onValueChange={(val) => {this.setState({pickerVal: val});
@@ -279,6 +282,7 @@ export class PickerFormField extends Component<{}> {
               <Picker.Item key={index} label={i.label} value={i.value} />
             ))}
           </Picker>
+          </View>
         );
       } else {
         const selectedItem = this.props.items.find(
