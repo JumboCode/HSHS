@@ -46,7 +46,11 @@ function guestObjectToArray(IdsToGuests, IdsToInteractions) {
 function daysSinceInteraction(interactionIds, IdsToInteractions) {
     if (interactionIds == null) {
         return "No recorded interactions ";
-    } else {
+    } else if (typeof(interactionIds) !== 'object') {
+        // TODO : we shouldn't ever need this, but branches not synced have caused issues with types not matching
+        return "ERROR: INTERACTIONS ARE IMPROPPER TYPE: " + typeof(interactionIds);
+    }
+    else {
         if (interactionIds[0] != null){
             return "last interaction: " + IdsToInteractions[interactionIds[0]].timestamp;
         } else {
