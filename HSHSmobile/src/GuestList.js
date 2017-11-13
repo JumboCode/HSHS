@@ -23,7 +23,6 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispath, ownProps) {
     return {
-        getGuests: getGuests
     };
 }
 
@@ -132,11 +131,6 @@ class GuestList extends Component {
                 ]
             });
         });
-        this.makeRemoteRequest();
-    };
-
-    makeRemoteRequest = () => {
-        this.props.getGuests();
     };
 
     componentWillUpdate(nextProps, nextState) {
@@ -151,7 +145,6 @@ class GuestList extends Component {
                 refreshing: true
             },
             () => {
-                this.makeRemoteRequest();
             }
         );
     };
@@ -162,7 +155,6 @@ class GuestList extends Component {
                 page: this.state.page + 1
             },
             () => {
-                this.makeRemoteRequest();
             }
         );
     };

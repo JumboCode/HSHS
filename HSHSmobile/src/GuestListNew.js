@@ -73,7 +73,7 @@ export class NewGuest extends Component<{}> {
                     onPress={() => { //Alert.alert(this._jsonOutput());
                         console.log(this._jsonOutput());
                         //this.props.addNewGuest(this.state.name, this.state.birthdate, this.state.gender, this.state.other);
-                        this.props.addNewGuest('Vincent', 'OLD', 'Male', 'Yellow', true, 'test', 'test', 'test');
+                        this.props.addNewGuest(this.state.name, 'OLD', this.state.gender, 'Yellow', true, 'test', 'test', 'test');
                         this.props.navigator.pop({
                             animated: true, // does the pop have transition animation or does it happen immediately (optional)
                             animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)

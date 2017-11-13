@@ -2,6 +2,7 @@ import {Navigation} from 'react-native-navigation';
 import {Provider} from 'react-redux';
 import {store} from './src/redux/store.js';
 import GuestList from './src/GuestList';
+import Dashboard from './src/Dashboard';
 import Info from './src/Info';
 import GuestListProfile from './src/GuestListProfile';
 import CRUDnote from './src/CRUDnote';
@@ -59,6 +60,7 @@ class App {
 
     startApp() {
     // this will start our app
+    Navigation.registerComponent('Dashboard', () => Dashboard, store, Provider);
     Navigation.registerComponent('GuestList', () => GuestList, store, Provider);
     Navigation.registerComponent('GuestListProfile', () => GuestListProfile, store, Provider);
     Navigation.registerComponent('Info', () => Info, store, Provider);
@@ -70,7 +72,7 @@ class App {
         tabs: [
             {
                 label:'dashboard',
-                screen: 'Info',
+                screen: 'Dashboard',
                 title: 'Dashboard',
                 icon: homeIcon
 
