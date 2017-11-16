@@ -9,42 +9,19 @@ import {
 } from 'react-native';
 import { List, ListItem, SearchBar } from "react-native-elements";
 import {connect} from 'react-redux';
-import {getGuests} from './redux/actions.js';
+import {getGuests, getInteractions} from './redux/actions.js';
 
 const Icon = require('react-native-vector-icons/Ionicons');
 
 function mapStateToProps(state, ownProps) {
-    var guests = guestObjectToArray(state.guests);
-    return {
-        data: guests,
-        loading: state.loading
-    };
+    return {};
 }
 
 function mapDispatchToProps(dispath, ownProps) {
     return {
-        getGuests: getGuests
+        getGuests: getGuests,
+        getInteractions: getInteractions
     };
-}
-
-function guestObjectToArray(IdsToGuests) {
-    var guestList = []
-    for (var Id in IdsToGuests) {
-        guestList.push({
-            "Id" : Id,
-            "name" : IdsToGuests[Id].name,
-            "lastInteractionTimestamp" : daysSinceInteraction(IdsToGuests[Id].interactions),
-        });
-    }
-    return guestList;
-}
-
-function daysSinceInteraction(interactions) {
-    if (interactions == null) {
-        return "No recorded interactions ";
-    } else {
-        return "X days since last interaction ";
-    }
 }
 
 class Dashboard extends Component {
@@ -70,11 +47,12 @@ class Dashboard extends Component {
     };
 
     makeRemoteRequest = () => {
+        this.props.getInteractions();
         this.props.getGuests();
     };
 
     componentWillUpdate(nextProps, nextState) {
-        console.log(this.props.data);
+        console.log(this.props.guests);
     };
 
     handleRefresh = () => {
