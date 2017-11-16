@@ -86,12 +86,7 @@ class GuestList extends Component {
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.Screen_GuestListProfile = this.Screen_GuestListProfile.bind(this);
 
-        this.state = {
-            page: 1,
-            seed: 1,
-            error: null,
-            refreshing: false
-        };
+        this.props.loading = true;
     };
 
     static navigatorButtons = {
@@ -177,30 +172,6 @@ class GuestList extends Component {
         console.log(this.props.guests);
     };
 
-    handleRefresh = () => {
-        this.setState(
-            {
-                page: 1,
-                seed: this.state.seed + 1,
-                refreshing: true
-            },
-            () => {
-                this.makeRemoteRequest();
-            }
-        );
-    };
-
-    handleLoadMore = () => {
-        this.setState(
-            {
-                page: this.state.page + 1
-            },
-            () => {
-                this.makeRemoteRequest();
-            }
-        );
-    };
-
     renderSeparator = () => {
         return (
             <View
@@ -219,9 +190,7 @@ class GuestList extends Component {
         //return <SearchBar placeholder="Type Here..." lightTheme round />;
     };
 
-    renderFooter = () => {
-        if (!this.state.loading) return null;
-
+    renderLoading = () => {
         return (
             <View
                 style={{
@@ -236,7 +205,9 @@ class GuestList extends Component {
     };
 
     render() {
-        console.log(this.props.guests);
+        if (this.props.loading == true) {
+            return this.renderLoading();
+        }
         return (
             <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0, marginTop: 0 }}>
                 <FlatList
@@ -255,6 +226,7 @@ class GuestList extends Component {
                     ItemSeparatorComponent = {this.renderSeparator}
                     ListHeaderComponent = {this.renderHeader}
                     ListFooterComponent = {this.renderFooter}
+                    refreshing = {this.props.refreshing}
                     onEndReached = {this.handleLoadMore}
                     onEndReachedThreshold = {50}
                 />
