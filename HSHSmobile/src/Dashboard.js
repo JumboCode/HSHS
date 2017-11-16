@@ -5,11 +5,14 @@ import {
     Text,
     View,
     FlatList,
-    ActivityIndicator
+    ActivityIndicator,
+    Dimensions,
+    Button
 } from 'react-native';
 import { List, ListItem, SearchBar } from "react-native-elements";
 import {connect} from 'react-redux';
 import {getGuests} from './redux/actions.js';
+import MapView from 'react-native-maps';
 
 const Icon = require('react-native-vector-icons/Ionicons');
 
@@ -138,9 +141,49 @@ class Dashboard extends Component {
     render() {
         console.log(this.props.data);
         return (
-            <Text>
-                Dashboard
-             </Text>
+<View>
+      <MapView
+        style={{height: Dimensions.get('window').height*0.4, width: Dimensions.get('window').width, margin: 0}}
+    initialRegion={{
+      latitude: 42.405804,
+      longitude: -71.11956,
+      latitudeDelta: 0.02,
+      longitudeDelta: 0.01,
+    }}>
+    </MapView>
+    <View style={{flexDirection: 'row', alignSelf: 'center'}}>
+        <Button
+  title="Add New Note"
+  color="#841584"
+  accessibilityLabel="Learn more about this purple button"
+/>
+<Button
+  title="Add Action Item"
+  color="#841584"
+  accessibilityLabel="Learn more about this purple button"
+/>
+    </View>
+    <View style={{flexDirection: 'column', alignItems: 'center'}}>
+        <Text>
+            Lottery Status: Number not given out
+        </Text>
+        <View style={{flexDirection: 'row'}}>
+            <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
+            <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
+            <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
+        </View>
+        <View style={{flexDirection: 'row'}}>
+            <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
+            <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
+            <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
+        </View>
+            <Button
+                title="Call on Lottery"
+                color="#841584"
+                accessibilityLabel="Learn more about this purple button"
+            />
+    </View>
+    </View>
         );
     }
 }
