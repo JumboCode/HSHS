@@ -255,8 +255,6 @@ class GuestList extends Component {
                     ItemSeparatorComponent = {this.renderSeparator}
                     ListHeaderComponent = {this.renderHeader}
                     ListFooterComponent = {this.renderFooter}
-                    onRefresh = {this.handleRefresh}
-                    refreshing = {this.state.refreshing}
                     onEndReached = {this.handleLoadMore}
                     onEndReachedThreshold = {50}
                 />
