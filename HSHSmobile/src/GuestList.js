@@ -39,7 +39,6 @@ function guestObjectToArray(IdsToGuests, IdsToInteractions) {
             "lastInteractionString" : computeTimeStampString(IdsToGuests[Id].interactions, IdsToInteractions)
         });
     }
-
     return guestList;
 }
 
