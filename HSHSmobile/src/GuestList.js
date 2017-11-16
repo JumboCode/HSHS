@@ -39,13 +39,32 @@ function guestObjectToArray(IdsToGuests, IdsToInteractions) {
             "lastInteractionString" : computeTimeStampString(IdsToGuests[Id].interactions, IdsToInteractions)
         });
     }
+
+    guestList.sort((a, b) => {
+        var nameA = a.name.toUpperCase(); // ignore upper and lowercase
+        var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+        if (nameA < nameB) {
+            return -1;
+        }
+        if (nameA > nameB) {
+            return 1;
+        }
+
+        // names must be equal
+        return 0;
+    });
+
     return guestList;
 }
 
 function computeTimeStampString(interactionIds, IdsToInteractions) {
     if (interactionIds == null) {
-        return "No recorded interactions";
-    } else {
+        return "No recorded interactions ";
+    } else if (typeof(interactionIds) !== 'object') {
+        // TODO : we shouldn't ever need this, but branches not synced have caused issues with types not matching
+        return "ERROR: INTERACTIONS ARE IMPROPPER TYPE: " + typeof(interactionIds);
+    }
+    else {
         if (interactionIds[0] != null){
                 var days = time_diff(IdsToInteractions[interactionIds[0]].timestamp);
             return "last interaction: " + days + ' days ago';
