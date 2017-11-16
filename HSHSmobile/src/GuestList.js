@@ -36,7 +36,7 @@ function guestObjectToArray(IdsToGuests, IdsToInteractions) {
         guestList.push({
             "Id" : Id,
             "name" : IdsToGuests[Id].name,
-            "lastInteractionTimestamp" : daysSinceInteraction(IdsToGuests[Id].interactions, IdsToInteractions),
+            "lastInteractionString" : computeTimeStampString(IdsToGuests[Id].interactions, IdsToInteractions)
         });
     }
 
@@ -57,7 +57,7 @@ function guestObjectToArray(IdsToGuests, IdsToInteractions) {
     return guestList;
 }
 
-function daysSinceInteraction(interactionIds, IdsToInteractions) {
+function computeTimeStampString(interactionIds, IdsToInteractions) {
     if (interactionIds == null) {
         return "No recorded interactions ";
     } else if (typeof(interactionIds) !== 'object') {
@@ -66,19 +66,19 @@ function daysSinceInteraction(interactionIds, IdsToInteractions) {
     }
     else {
         if (interactionIds[0] != null){
-            return "last interaction: " + IdsToInteractions[interactionIds[0]].timestamp;
+                var days = time_diff(IdsToInteractions[interactionIds[0]].timestamp);
+            return "last interaction: " + days + ' days ago';
         } else {
             return "No interactions have timestamps";
         }
     }
 }
 
-time_diff = (iso_timestamp) => {
-        var d1 = new Date(iso_timestamp),
-            d2 = new Date();
-        var diff = d2 - d1;
-        return Math.floor(diff / 60e3 / 1440) + ' days ago';
-    }
+time_diff = (utc_timestamp) => {
+        var d1 = new Date(utc_timestamp),
+                d2 = new Date();
+        return diff = d2.getUTCDay() - d1.getUTCDay();
+}
 
 class GuestList extends Component {
     constructor(props) {
@@ -215,7 +215,7 @@ class GuestList extends Component {
                     renderItem={({ item }) => (
                         <ListItem
                             title = {`${item.name}`}
-                            subtitle = {item.lastInteractionTimestamp}
+                            subtitle = {item.lastInteractionString}
                             subtitleStyle = {{textAlign: 'right'}}
                             // avatar={{ uri: item.picture.thumbnail }}
                             containerStyle = {{ borderBottomWidth: 0 }}
