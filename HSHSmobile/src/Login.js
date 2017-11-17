@@ -31,9 +31,6 @@ var guestsIcon // ios-people-outline
 var rescourcesIcon // ios-help-circle-outline
 var addIcon // ios-add-circle-outline
 
-var mailIcon
-var lockIcon
-
 export default class Login extends Component {
     constructor(props) {
         super(props);
@@ -68,8 +65,6 @@ export default class Login extends Component {
                 Icons.getImageSource('ios-people-outline', 30),
                 Icons.getImageSource('ios-help-circle-outline', 30),
                 Icons.getImageSource('ios-add-circle-outline', 30),
-                Icons.getImageSource('ios-mail-outline', 30),
-                Icons.getImageSource('ios-lock-outline', 30),
             ]
           ).then((values) => {
             homeIcon = values[0];
@@ -78,8 +73,6 @@ export default class Login extends Component {
             guestsIcon = values[3];
             rescourcesIcon = values[4];
             addIcon = values[5];
-            mailIcon = values[6];
-            lockIcon = values[7];
             resolve(true);
           }).catch((error) => {
             console.log(error);
@@ -142,7 +135,8 @@ export default class Login extends Component {
             <Text style = {styles.title}> Harvard Square </Text>
             <Text style = {styles.title}> Homeless Shelter </Text>
             <Text style = {styles.title}> Volunteer App </Text>
-
+            <View style = {styles.space}></View>
+            <View style = {styles.space}></View>
             <View style = {styles.row} >
                 <Icon style = {styles.icon} 
                       name="ios-mail-outline" 
@@ -152,24 +146,30 @@ export default class Login extends Component {
                 <TextInput 
                     style={styles.textInput} 
                     placeholder='Username' 
-                    inlineImageLeft='ios-person-add'
+                    placeholderTextColor = "#FFFFFF"
                 />
             </View>
             <View style = {styles.row} >
-            <Icon style = {styles.icon}
-                    name="ios-lock-outline"
-                    size={25} color="#FFFFFF" />
-            <TextInput style={styles.textInput} placeholder='Password' />
+                <Icon style = {styles.icon}
+                        name="ios-lock-outline"
+                        size={25} color="#FFFFFF" />
+                <TextInput style={styles.textInput} 
+                        placeholder='Password'
+                        secureTextEntry = {true} 
+                        placeholderTextColor = "#FFFFFF"/>
             </View>
+            <View style = {styles.space}></View>
+            <View style = {styles.space}></View>
             <View style = {styles.login}>
                  <Button
                   onPress={this.authenticate}
-                  title="Login"
+                  title="Log in"
                   color="#FFFFFF"
                   accessibilityLabel="Learn more about this purple button"
                 />
             </View>
-           <Text onPress={this.forgotPassword} style = {styles.forgotPassword}> 
+            <View style = {styles.space}></View>
+            <Text onPress={this.forgotPassword} style = {styles.forgotPassword}> 
                   Forgot your password?
             </Text>
             </View>
@@ -186,15 +186,22 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: "row",
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderBottomColor: 'white',
+        borderBottomWidth: 1,
+        paddingTop: 15,
+        paddingBottom: 7
     },
     login : {
         //flex: 1,
-        width: 275,
+        width: 260,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#556A5B',
     },
     title : {
+        paddingTop: 2,
         justifyContent: 'center',
         alignItems: 'center',
         fontSize: 25,
@@ -209,11 +216,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         color: "#FFFFFF",
         height: 30,
-        width: 300,
+        width: 275,
         fontSize: 15,
         backgroundColor: '#770B16',
     },
     icon: {
-        paddingRight: 10
+        paddingRight: 10,
+
+    },
+    space: {
+        height: 15
     }
 });
