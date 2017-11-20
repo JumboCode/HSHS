@@ -34,7 +34,7 @@ var addIcon // ios-add-circle-outline
 export default class Login extends Component {
     constructor(props) {
         super(props);
-        this.state = { text: 'Useless Placeholder' };
+        this.state = { username: '', password: ''};
     }
 
     openApp () {
@@ -48,6 +48,7 @@ export default class Login extends Component {
     };
 
     authenticate = () => {
+        //console.log(this.state.username + " " + this.state.password);
         this.openApp();
     };
 
@@ -147,16 +148,19 @@ export default class Login extends Component {
                     style={styles.textInput} 
                     placeholder='Username' 
                     placeholderTextColor = "#FFFFFF"
+                    onChangeText= {(text) => this.state.username = text}
                 />
             </View>
             <View style = {styles.row} >
                 <Icon style = {styles.icon}
-                        name="ios-lock-outline"
-                        size={25} color="#FFFFFF" />
+                    name="ios-lock-outline"
+                    size={25} color="#FFFFFF" />
                 <TextInput style={styles.textInput} 
-                        placeholder='Password'
-                        secureTextEntry = {true} 
-                        placeholderTextColor = "#FFFFFF"/>
+                    placeholder='Password'
+                    secureTextEntry = {true} 
+                    placeholderTextColor = "#FFFFFF"
+                    onChangeText= {(text) => this.state.password = text}
+                />
             </View>
             <View style = {styles.space}></View>
             <View style = {styles.space}></View>
@@ -222,7 +226,7 @@ const styles = StyleSheet.create({
     },
     icon: {
         paddingRight: 10,
-
+        paddingLeft: 7
     },
     space: {
         height: 15
