@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import { List, ListItem, SearchBar } from "react-native-elements";
 import {connect} from 'react-redux';
-import {getGuests, getInteractions} from './redux/actions.js';
 
 const Icon = require('react-native-vector-icons/Ionicons');
 
@@ -24,8 +23,6 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispath, ownProps) {
     return {
-        getGuests: getGuests,
-        getInteractions: getInteractions
     };
 }
  
@@ -160,12 +157,6 @@ class GuestList extends Component {
                 ]
             });
         });
-        this.makeRemoteRequest();
-    };
-
-    makeRemoteRequest = () => {
-        this.props.getInteractions();
-        this.props.getGuests();
     };
 
     componentWillUpdate(nextProps, nextState) {
