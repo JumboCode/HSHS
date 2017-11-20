@@ -20,7 +20,7 @@ import {
     ScrollView
 } from 'react-native';
 import {connect} from 'react-redux';
-import {addNewGuest} from './redux/actions.js';
+import {addNewGuest} from '../../redux/actions.js';
 
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
 import ModalDropdown from 'react-native-modal-dropdown';

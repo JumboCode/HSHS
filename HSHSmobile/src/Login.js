@@ -14,11 +14,12 @@ import {
 } from 'react-native';
 import { List, ListItem, SearchBar } from "react-native-elements";
 
-import GuestList from './GuestList';
-import Dashboard from './Dashboard';
-import Info from './Info';
-import GuestListNew from './GuestListNew';
-import GuestListProfile from './GuestListProfile';
+import GuestList from './tabs/GuestList/GuestList';
+import Dashboard from './tabs/Dashboard/Dashboard';
+import Info from './dummy/BoilerPlate/TemporaryTab';
+import GuestListNew from './tabs/GuestList/GuestListNew';
+import GuestListProfile from './tabs/GuestList/GuestListProfile';
+import TodoList from './tabs/TodoList/TodoList';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -90,6 +91,7 @@ export default class Login extends Component {
         Navigation.registerComponent('Info', () => Info, store, Provider);
         Navigation.registerComponent('CRUDnote', () => CRUDnote, store, Provider);
         Navigation.registerComponent('GuestListNew', () => GuestListNew, store, Provider);
+        Navigation.registerComponent('TodoList', () => TodoList, store, Provider);
 
         // TODO: make the tabs link to real pages
         Navigation.startTabBasedApp({
@@ -103,7 +105,7 @@ export default class Login extends Component {
                 },
                 {
                     label: 'todo_list',
-                    screen: 'Info',
+                    screen: 'TodoList',
                     title: 'Todo List',
                     icon: todolistIcon
                 },

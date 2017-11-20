@@ -17,7 +17,7 @@ import { List, ListItem } from "react-native-elements";
 import nodeEmoji from 'node-emoji';
 import {connect} from 'react-redux';
 
-import data from './dummy/data.json';
+import data from '../../dummy/data.json';
 
 const Timestamp = require('react-timestamp');
 
@@ -179,7 +179,7 @@ class GuestProfile extends Component {
                 <View style={styles.top}>
                     <Image
                         style={styles.profile_image}
-                        source={require("./dummy/default.jpg")}
+                        source={require("./../../dummy/default.jpg")}
                     />
                     <View style={styles.profile_info}>
                         {this.render_name()}
