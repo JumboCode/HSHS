@@ -131,11 +131,13 @@ class Dashboard extends Component {
     </MapView>
     <View style={{flexDirection: 'row', alignSelf: 'center'}}>
         <Button
+        onPress={() => {}}
   title="Add New Note"
   color="#841584"
   accessibilityLabel="Learn more about this purple button"
 />
 <Button
+  onPress={() => {}}
   title="Add Action Item"
   color="#841584"
   accessibilityLabel="Learn more about this purple button"
@@ -156,6 +158,7 @@ class Dashboard extends Component {
             <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
         </View>
             <Button
+                onPress={() => {}}
                 title="Call on Lottery"
                 color="#841584"
                 accessibilityLabel="Learn more about this purple button"
