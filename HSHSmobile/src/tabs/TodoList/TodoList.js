@@ -12,7 +12,7 @@ import {
     View
 } from 'react-native';
 
-export default class Info extends Component {
+export default class TodoList extends Component {
     render() {
         return (
             <View style={styles.container}>
