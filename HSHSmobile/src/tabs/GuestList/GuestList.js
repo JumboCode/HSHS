@@ -122,18 +122,6 @@ class GuestList extends Component {
         })
     };
 
-    Screen_Temporary = () => {
-        this.props.navigator.push({
-            screen: 'Info', // unique ID registered with Navigation.registerScreen
-            passProps: {}, // Object that will be passed as props to the pushed screen (optional)
-            animated: true, // does the push have transition animation or does it happen immediately (optional)
-            animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
-            backButtonHidden: false, // hide the back button altogether (optional)
-            navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
-            navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
-        })
-    };
-
     Screen_GuestListProfile = (guest) => {
         this.props.navigator.push({
             screen: 'GuestListProfile', // unique ID registered with Navigation.registerScreen
