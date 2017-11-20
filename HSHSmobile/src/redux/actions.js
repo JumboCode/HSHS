@@ -25,7 +25,7 @@ export const getInteractionsStart = () => ({
 	type: 'GET_INTERACTIONS_START'
 });
 
-export const getInteractionsSuccess = () => ({
+export const getInteractionsSuccess = (data) => ({
 	type: 'GET_INTERACTIONS_SUCCESS',
 	payload: data
 });
@@ -56,9 +56,9 @@ export const addNewGuest = (name, age, gender, hairColor, tattoo, description, i
     		age: age,
     		gender : gender, 
     		hairColor: hairColor,
-                tattoo: tattoo,
-                description: description,
-                interactions: interactions,
-                actionItems: actionItems
+            tattoo: tattoo,
+            description: description,
+            interactions: interactions,
+            actionItems: actionItems
   });
 }

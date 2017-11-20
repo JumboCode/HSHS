@@ -9,15 +9,15 @@ import {
 } from 'react-native';
 import { List, ListItem, SearchBar } from "react-native-elements";
 import {connect} from 'react-redux';
-import {getGuests} from './redux/actions.js';
 
 const Icon = require('react-native-vector-icons/Ionicons');
 
 function mapStateToProps(state, ownProps) {
-    var guests = guestObjectToArray(state.guests);
+    var guests = guestObjectToArray(state.guests, state.interactions);
     return {
-        data: guests,
-        loading: state.loading
+        guests: guests,
+        loading: state.loading,
+        interactions: state.interactions
     };
 }
 
@@ -25,25 +25,56 @@ function mapDispatchToProps(dispath, ownProps) {
     return {
     };
 }
-
-function guestObjectToArray(IdsToGuests) {
+ 
+//TODO sort by name
+function guestObjectToArray(IdsToGuests, IdsToInteractions) {
     var guestList = []
     for (var Id in IdsToGuests) {
         guestList.push({
             "Id" : Id,
             "name" : IdsToGuests[Id].name,
-            "lastInteractionTimestamp" : daysSinceInteraction(IdsToGuests[Id].interactions),
+            "lastInteractionString" : computeTimeStampString(IdsToGuests[Id].interactions, IdsToInteractions)
         });
     }
+
+    guestList.sort((a, b) => {
+        var nameA = a.name.toUpperCase(); // ignore upper and lowercase
+        var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+        if (nameA < nameB) {
+            return -1;
+        }
+        if (nameA > nameB) {
+            return 1;
+        }
+
+        // names must be equal
+        return 0;
+    });
+
     return guestList;
 }
 
-function daysSinceInteraction(interactions) {
-    if (interactions == null) {
+function computeTimeStampString(interactionIds, IdsToInteractions) {
+    if (interactionIds == null) {
         return "No recorded interactions ";
-    } else {
-        return "X days since last interaction ";
+    } else if (typeof(interactionIds) !== 'object') {
+        // TODO : we shouldn't ever need this, but branches not synced have caused issues with types not matching
+        return "ERROR: INTERACTIONS ARE IMPROPPER TYPE: " + typeof(interactionIds);
     }
+    else {
+        if (interactionIds[0] != null){
+                var days = time_diff(IdsToInteractions[interactionIds[0]].timestamp);
+            return "last interaction: " + days + ' days ago';
+        } else {
+            return "No interactions have timestamps";
+        }
+    }
+}
+
+time_diff = (utc_timestamp) => {
+        var d1 = new Date(utc_timestamp),
+                d2 = new Date();
+        return diff = d2.getUTCDay() - d1.getUTCDay();
 }
 
 class GuestList extends Component {
@@ -134,7 +165,7 @@ class GuestList extends Component {
     };
 
     componentWillUpdate(nextProps, nextState) {
-        console.log(this.props.data);
+        console.log(this.props.guests);
     };
 
     handleRefresh = () => {
@@ -194,15 +225,15 @@ class GuestList extends Component {
     };
 
     render() {
-        console.log(this.props.data);
+        console.log(this.props.guests);
         return (
             <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0, marginTop: 0 }}>
                 <FlatList
-                    data = {this.props.data}
+                    data = {this.props.guests}
                     renderItem={({ item }) => (
                         <ListItem
                             title = {`${item.name}`}
-                            subtitle = {item.lastInteractionTimestamp}
+                            subtitle = {item.lastInteractionString}
                             subtitleStyle = {{textAlign: 'right'}}
                             // avatar={{ uri: item.picture.thumbnail }}
                             containerStyle = {{ borderBottomWidth: 0 }}

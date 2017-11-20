@@ -15,38 +15,33 @@ import {
 } from 'react-native';
 import { List, ListItem } from "react-native-elements";
 import nodeEmoji from 'node-emoji';
+import {connect} from 'react-redux';
+
 import data from './dummy/data.json';
 
 const Timestamp = require('react-timestamp');
 
-export default class GuestProfile extends Component {
+function mapStateToProps(state, ownProps) {
+    return {
+        guest: state.guests[ownProps.Id],
+        loading: state.loading,
+        testing: state
+    };
+}
+
+
+class GuestProfile extends Component {
     constructor(props) {
         super(props);
         // this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.view_crud_note_page = this.view_crud_note_page.bind(this);
+        console.log(this.props.testing);
     };
 
     // matching receptivity to emojis {0-4} where 4 is the best and 0 is the worst
     id_to_emoji = [":smirk:", ":slightly_smiling_face:", ":grinning:", ":smiley:", ":smile:"];
 
     /********************** Helper functions section **********************/
-
-    // convert string to int and map it to an index from our dummy data
-    get_name_int = (name) => {
-        val = 0;
-        for(let i = 0; i < name.length; i++) {
-            val += name.charCodeAt(i);
-        }
-        return val % 4;
-    };
-
-    // gets dummy values from data.json
-    get_data = () => {
-        return(data.guests[this.get_name_int(this.props.name)]);
-    };
-
-    // stores dummy values from data.json
-    profile_data = this.get_data();
 
     // gets emoji from receptive value
     get_receptive = () => {
@@ -73,7 +68,53 @@ export default class GuestProfile extends Component {
     render_name = () => {
         return (
             <Text style={styles.name}>
-                {this.props.name}
+                {this.props.guest.name}
+            </Text>
+        );
+    };
+
+    // renders age on profile page
+    render_age = () => {
+        return (
+            <Text>
+                {this.props.guest.age}
+            </Text>
+        );
+    };
+
+    // renders description on profile page
+    render_description = () => {
+        return (
+            <Text>
+                {this.props.guest.description}
+            </Text>
+        );
+    };
+
+
+    // renders gender on profile page
+    render_gender = () => {
+        return (
+            <Text>
+                {this.props.guest.gender}
+            </Text>
+        );
+    };
+
+    // renders gender on profile page
+    render_hairColor = () => {
+        return (
+            <Text>
+                {this.props.guest.hairColor}
+            </Text>
+        );
+    };
+
+    // renders gender on profile page
+    render_tattoo = () => {
+        return (
+            <Text>
+                {this.props.guest.tattoo}
             </Text>
         );
     };
@@ -82,7 +123,7 @@ export default class GuestProfile extends Component {
     render_receptive = () => {
         return (
             <Text>
-                Receptive: {this.get_receptive()}
+                Receptive: {this.props.guest.get_receptive()}
             </Text>
         );
     };
@@ -91,7 +132,7 @@ export default class GuestProfile extends Component {
     render_interacted = () => {
         return (
             <Text>
-                Last Interacted: <Timestamp time={this.profile_data.last_interacted} component={Text}/>
+                Last Interacted: <Timestamp time={this.props.guest.last_interacted} component={Text}/>
             </Text>
         );
     };
@@ -100,7 +141,7 @@ export default class GuestProfile extends Component {
     render_description = () => {
         return (
             <Text>
-                {this.profile_data.description}
+                {this.props.guest.description}
             </Text>
         );
     };
@@ -142,12 +183,16 @@ export default class GuestProfile extends Component {
                     />
                     <View style={styles.profile_info}>
                         {this.render_name()}
-                        {this.render_receptive()}
-                        {this.render_interacted()}
+                        {this.render_age()}
+                        {this.render_gender()}
+                        {this.render_hairColor()}
                         {this.render_description()}
+                        {this.render_tattoo()}
+                        {/*{this.render_receptive()}*/}
+                        {this.render_interacted()}
                     </View>
                 </View>
-                {this.render_notes()}
+                {/*{this.render_notes()}*/}
             </View>
         );
     }
@@ -209,3 +254,5 @@ const styles = StyleSheet.create({
         margin: 10,
     },
 });
+
+export default connect(mapStateToProps)(GuestProfile);
