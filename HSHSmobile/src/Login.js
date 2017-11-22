@@ -106,7 +106,7 @@ export default class Login extends Component {
                 {
                     label: 'todo_list',
                     screen: 'TodoList',
-                    title: 'Todo List',
+                    title: 'Action Items',
                     icon: todolistIcon
                 },
                 {

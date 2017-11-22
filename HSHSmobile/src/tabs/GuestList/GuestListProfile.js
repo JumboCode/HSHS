@@ -17,8 +17,6 @@ import { List, ListItem } from "react-native-elements";
 import nodeEmoji from 'node-emoji';
 import {connect} from 'react-redux';
 
-import data from '../../dummy/data.json';
-
 const Timestamp = require('react-timestamp');
 
 function mapStateToProps(state, ownProps) {
