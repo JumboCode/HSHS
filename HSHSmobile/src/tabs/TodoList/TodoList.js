@@ -18,7 +18,7 @@ const IonIcon = require('react-native-vector-icons/Ionicons');
 
 function mapStateToProps(state, ownProps) {
     return {
-        actionItems: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+        actionItems: getRandomActionItems(),
         guests: [],
         loading: state.loading,
         interactions: state.interactions
@@ -117,7 +117,7 @@ class TodoList extends Component {
                     renderItem={({ item }) => (
 
                         // TODO: populate colors by tags
-                        <View style={{backgroundColor: getRandomColor()}}>
+                        <View style={{backgroundColor: item.color}}>
                             <ListItem
                                 title = {"title"}
                                 titleStyle = {{marginLeft: 0}}
@@ -129,7 +129,7 @@ class TodoList extends Component {
                                                     name='person' />
                                             </View>
                                             <View style={{flex:3}}>
-                                                <Text numberOfLines={1}>{getRandomGuests()}</Text>
+                                                <Text numberOfLines={1}>{item.guests}</Text>
                                             </View>
                                         </View>
                                         <View style={{flex: 2, flexDirection: 'row'}}>
@@ -138,7 +138,7 @@ class TodoList extends Component {
                                                     name='local-pizza' />
                                             </View>
                                             <View style={{flex:3}}>
-                                                <Text numberOfLines={1}>{getRandomLocation()}</Text>
+                                                <Text numberOfLines={1}>{item.location}</Text>
                                             </View>
                                         </View>
                                     </View>
@@ -149,7 +149,7 @@ class TodoList extends Component {
                             />
                         </View>
                     )}
-                    //keyExtractor = {item => item.Id}
+                    keyExtractor = {item => item.id}
                     ItemSeparatorComponent = {this.renderSeparator}
                     ListHeaderComponent = {this.renderHeader}
                     ListFooterComponent = {this.renderFooter}
@@ -180,6 +180,20 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     }
 });
+
+function getRandomActionItems() {
+    var actionItems = [];
+    for (var i = 0; i < 15; i++) {
+        var obj = {
+            guests: getRandomGuests(),
+            color: getRandomColor(),
+            location: getRandomLocation(),
+            id: i,
+        }
+        actionItems.push(obj);
+    }
+    return actionItems;
+}
 
 function getRandomColor() {
     var letters = '0123456789ABCDEF';

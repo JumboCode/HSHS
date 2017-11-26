@@ -17,7 +17,7 @@ function mapStateToProps(state, ownProps) {
     return {
         guests: guests,
         loading: state.loading,
-        interactions: state.interactions
+        interactions: state.interactions,
     };
 }
 
