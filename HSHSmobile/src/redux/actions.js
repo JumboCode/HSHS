@@ -63,7 +63,7 @@ export const addNewGuest = (name, age, gender, hairColor, tattoo, description, i
   });
 }
 
-export const addNewActionItemsStart = () => ({
+export const addNewActionItemStart = () => ({
         type: 'ADD_NEW_ACTION_ITEMS_START'
 })
 
@@ -83,4 +83,23 @@ export const addNewActionItem = (isDone, title, creationTimestamp, location, des
                         volunteerId: volunteerId
                 })
         }
+}
+
+export const getActionItemsStart = () => ({
+        type: 'ADD_NEW_ACTION_ITEMS_START'
+})
+
+export const getActionItemSuccess = () => ({
+        type: 'ADD_NEW_ACTION_ITEMS_SUCCESS'
+})
+
+export const getActionItems = (isDone, title, creationTimestamp, location, description, guestIds, volunteerId) => {
+        store.dispatch(getActionItemsStart());
+        firebase.database()
+                        .ref('actionItems')
+                        .on('value', snapshot => {
+                                setTimeout(() => {
+                                        store.dispatch(getActionItemsSuccess(snapshot.val()));
+                                }, 0);
+                        })
 }
