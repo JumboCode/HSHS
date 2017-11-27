@@ -29,7 +29,7 @@ var homeIcon // ios-home-outline
 var todolistIcon // ios-paper-outline
 var checkinIcon // ios-list-outline
 var guestsIcon // ios-people-outline
-var rescourcesIcon // ios-help-circle-outline
+var resourcesIcon // ios-help-circle-outline
 var addIcon // ios-add-circle-outline
 
 export default class Login extends Component {
@@ -73,7 +73,7 @@ export default class Login extends Component {
             todolistIcon = values[1];
             checkinIcon = values[2];
             guestsIcon = values[3];
-            rescourcesIcon = values[4];
+            resourcesIcon = values[4];
             addIcon = values[5];
             resolve(true);
           }).catch((error) => {
@@ -122,10 +122,10 @@ export default class Login extends Component {
                     icon: guestsIcon,
                 },
                 {
-                    label: 'rescources',
+                    label: 'resources',
                     screen: 'Info',
-                    title: 'Rescources',
-                    icon: rescourcesIcon
+                    title: 'resources',
+                    icon: resourcesIcon
                 }
             ]
         })

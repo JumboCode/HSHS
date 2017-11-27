@@ -20,7 +20,7 @@ function mapStateToProps(state, ownProps) {
     return {};
 }
 
-function mapDispatchToProps(dispath, ownProps) {
+function mapDispatchToProps(dispatch, ownProps) {
     return {
         getGuests: getGuests,
         getInteractions: getInteractions,

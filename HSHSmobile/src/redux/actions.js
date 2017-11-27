@@ -41,6 +41,27 @@ export const getInteractions = () => {
 			})
 };
 
+export const getActionItemsStart = () => ({
+        type: 'GET_ACTION_ITEMS_START'
+})
+
+export const getActionItemSuccess = (data) => ({
+        type: 'GET_ACTION_ITEMS_SUCCESS',
+        payload: data
+})
+
+export const getActionItems = () => {
+        store.dispatch(getActionItemsStart());
+        firebase.database()
+                        .ref('actionItems')
+                        .on('value', snapshot => {
+                                setTimeout(() => {
+                                	console.log(snapshot.val());
+                                        store.dispatch(getActionItemsSuccess(snapshot.val()));
+                                }, 0);
+                        })
+}
+
 export const addNewGuestStart = () => ({
 	type: 'ADD_NEW_GUEST_START'
 });
@@ -63,7 +84,7 @@ export const addNewGuest = (name, age, gender, hairColor, tattoo, description, i
   });
 }
 
-export const addNewActionItemsStart = () => ({
+export const addNewActionItemStart = () => ({
         type: 'ADD_NEW_ACTION_ITEMS_START'
 })
 

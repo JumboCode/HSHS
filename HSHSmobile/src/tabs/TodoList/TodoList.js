@@ -17,6 +17,7 @@ const IonIcon = require('react-native-vector-icons/Ionicons');
 
 
 function mapStateToProps(state, ownProps) {
+    console.log(state.actionItems);
     return {
         actionItems: state.actionItems,
         guests: [],
