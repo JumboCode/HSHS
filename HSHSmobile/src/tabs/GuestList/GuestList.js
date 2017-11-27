@@ -17,7 +17,7 @@ function mapStateToProps(state, ownProps) {
     return {
         guests: guests,
         loading: state.loading,
-        interactions: state.interactions
+        interactions: state.interactions,
     };
 }
 
@@ -83,12 +83,7 @@ class GuestList extends Component {
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.Screen_GuestListProfile = this.Screen_GuestListProfile.bind(this);
 
-        this.state = {
-            page: 1,
-            seed: 1,
-            error: null,
-            refreshing: false
-        };
+        this.props.loading = true;
     };
 
     static navigatorButtons = {
@@ -127,18 +122,6 @@ class GuestList extends Component {
         })
     };
 
-    Screen_Temporary = () => {
-        this.props.navigator.push({
-            screen: 'Info', // unique ID registered with Navigation.registerScreen
-            passProps: {}, // Object that will be passed as props to the pushed screen (optional)
-            animated: true, // does the push have transition animation or does it happen immediately (optional)
-            animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
-            backButtonHidden: false, // hide the back button altogether (optional)
-            navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
-            navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
-        })
-    };
-
     Screen_GuestListProfile = (guest) => {
         this.props.navigator.push({
             screen: 'GuestListProfile', // unique ID registered with Navigation.registerScreen
@@ -168,28 +151,6 @@ class GuestList extends Component {
         console.log(this.props.guests);
     };
 
-    handleRefresh = () => {
-        this.setState(
-            {
-                page: 1,
-                seed: this.state.seed + 1,
-                refreshing: true
-            },
-            () => {
-            }
-        );
-    };
-
-    handleLoadMore = () => {
-        this.setState(
-            {
-                page: this.state.page + 1
-            },
-            () => {
-            }
-        );
-    };
-
     renderSeparator = () => {
         return (
             <View
@@ -208,9 +169,7 @@ class GuestList extends Component {
         //return <SearchBar placeholder="Type Here..." lightTheme round />;
     };
 
-    renderFooter = () => {
-        if (!this.state.loading) return null;
-
+    renderLoading = () => {
         return (
             <View
                 style={{
@@ -225,7 +184,11 @@ class GuestList extends Component {
     };
 
     render() {
-        console.log(this.props.guests);
+
+        // TODO: this is a janky way of ensuring that the guest data has been computed, because when it hasn't the guests object has length 1. We should do this better.
+        if (this.props.loading == true || this.props.guests.length <= 1) {
+            return this.renderLoading();
+        }
         return (
             <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0, marginTop: 0 }}>
                 <FlatList
@@ -244,8 +207,7 @@ class GuestList extends Component {
                     ItemSeparatorComponent = {this.renderSeparator}
                     ListHeaderComponent = {this.renderHeader}
                     ListFooterComponent = {this.renderFooter}
-                    onRefresh = {this.handleRefresh}
-                    refreshing = {this.state.refreshing}
+                    refreshing = {this.props.refreshing}
                     onEndReached = {this.handleLoadMore}
                     onEndReachedThreshold = {50}
                 />

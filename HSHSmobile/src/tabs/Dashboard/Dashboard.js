@@ -12,7 +12,7 @@ import {
 import { List, ListItem, SearchBar } from "react-native-elements";
 import {connect} from 'react-redux';
 import MapView from 'react-native-maps';
-import {getGuests, getInteractions} from './redux/actions.js';
+import {getGuests, getInteractions} from '../../redux/actions.js';
 
 const Icon = require('react-native-vector-icons/Ionicons');
 
@@ -164,7 +164,7 @@ class Dashboard extends Component {
                 accessibilityLabel="Learn more about this purple button"
             />
     </View>
-    </View> 
+    </View>
         );
     }
 }

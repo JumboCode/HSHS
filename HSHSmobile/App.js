@@ -1,13 +1,13 @@
 import {Navigation} from 'react-native-navigation';
 import {Provider} from 'react-redux';
 import {store} from './src/redux/store.js';
-import GuestList from './src/GuestList';
-import Dashboard from './src/Dashboard';
+import GuestList from './src/tabs/GuestList/GuestList';
+import Dashboard from './src/tabs/Dashboard/Dashboard';
 import Login from './src/Login';
-import Info from './src/Info';
-import GuestListProfile from './src/GuestListProfile';
-import CRUDnote from './src/CRUDnote';
-import GuestListNew from './src/GuestListNew';
+import Info from './src/dummy/BoilerPlate/TemporaryTab';
+import GuestListProfile from './src/tabs/GuestList/GuestListProfile';
+import CRUDnote from './src/tabs/GuestList/CRUDnote';
+import GuestListNew from './src/tabs/GuestList/GuestListNew';
 
 export default () => {
     return new App()

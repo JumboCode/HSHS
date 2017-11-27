@@ -14,11 +14,12 @@ import {
 } from 'react-native';
 import { List, ListItem, SearchBar } from "react-native-elements";
 
-import GuestList from './GuestList';
-import Dashboard from './Dashboard';
-import Info from './Info';
-import GuestListNew from './GuestListNew';
-import GuestListProfile from './GuestListProfile';
+import GuestList from './tabs/GuestList/GuestList';
+import Dashboard from './tabs/Dashboard/Dashboard';
+import Info from './dummy/BoilerPlate/TemporaryTab';
+import GuestListNew from './tabs/GuestList/GuestListNew';
+import GuestListProfile from './tabs/GuestList/GuestListProfile';
+import TodoList from './tabs/TodoList/TodoList';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -34,7 +35,7 @@ var addIcon // ios-add-circle-outline
 export default class Login extends Component {
     constructor(props) {
         super(props);
-        this.state = { text: 'Useless Placeholder' };
+        this.state = { username: '', password: ''};
     }
 
     openApp () {
@@ -48,6 +49,7 @@ export default class Login extends Component {
     };
 
     authenticate = () => {
+        //console.log(this.state.username + " " + this.state.password);
         this.openApp();
     };
 
@@ -89,6 +91,7 @@ export default class Login extends Component {
         Navigation.registerComponent('Info', () => Info, store, Provider);
         Navigation.registerComponent('CRUDnote', () => CRUDnote, store, Provider);
         Navigation.registerComponent('GuestListNew', () => GuestListNew, store, Provider);
+        Navigation.registerComponent('TodoList', () => TodoList, store, Provider);
 
         // TODO: make the tabs link to real pages
         Navigation.startTabBasedApp({
@@ -102,8 +105,8 @@ export default class Login extends Component {
                 },
                 {
                     label: 'todo_list',
-                    screen: 'Info',
-                    title: 'Todo List',
+                    screen: 'TodoList',
+                    title: 'Action Items',
                     icon: todolistIcon
                 },
                 {
@@ -147,16 +150,19 @@ export default class Login extends Component {
                     style={styles.textInput} 
                     placeholder='Username' 
                     placeholderTextColor = "#FFFFFF"
+                    onChangeText= {(text) => this.state.username = text}
                 />
             </View>
             <View style = {styles.row} >
                 <Icon style = {styles.icon}
-                        name="ios-lock-outline"
-                        size={25} color="#FFFFFF" />
+                    name="ios-lock-outline"
+                    size={25} color="#FFFFFF" />
                 <TextInput style={styles.textInput} 
-                        placeholder='Password'
-                        secureTextEntry = {true} 
-                        placeholderTextColor = "#FFFFFF"/>
+                    placeholder='Password'
+                    secureTextEntry = {true} 
+                    placeholderTextColor = "#FFFFFF"
+                    onChangeText= {(text) => this.state.password = text}
+                />
             </View>
             <View style = {styles.space}></View>
             <View style = {styles.space}></View>
@@ -222,7 +228,7 @@ const styles = StyleSheet.create({
     },
     icon: {
         paddingRight: 10,
-
+        paddingLeft: 7
     },
     space: {
         height: 15
