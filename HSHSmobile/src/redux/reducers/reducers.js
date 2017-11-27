@@ -39,6 +39,14 @@ export function reducer(state, action) {
             return Object.assign({}, state, {
                 adding: false
             });
+        case 'ADD_NEW_ACTION_ITEM_START':
+            return Object.assign({}, state, {
+                addingAction: true
+            });
+        case 'ADD_NEW_ACTION_ITEM_SUCCESS':
+            return Object.assign({}, state, {
+                addingAction: false
+            });
         default:
             return state;
     }

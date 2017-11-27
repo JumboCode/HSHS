@@ -62,3 +62,25 @@ export const addNewGuest = (name, age, gender, hairColor, tattoo, description, i
             actionItems: actionItems
   });
 }
+
+export const addNewActionItemsStart = () => ({
+        type: 'ADD_NEW_ACTION_ITEMS_START'
+})
+
+export const addNewActionItemSuccess = () => ({
+        type: 'ADD_NEW_ACTION_ITEMS_SUCCESS'
+})
+
+export const addNewActionItem = (isDone, title, creationTimestamp, location, description, guestIds, volunteerId) => {
+                store.dispatch(addNewActionItemStart);
+                firebase.database().red('action-items').push().set({
+                        isDone: isDone,
+                        title: title,
+                        creationTimestamp: creationTimestamp,
+                        location: location,
+                        description: description,
+                        guestIds: guestIds,
+                        volunteerId: volunteerId
+                })
+        }
+}
