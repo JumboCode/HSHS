@@ -82,5 +82,4 @@ export const addNewActionItem = (isDone, title, creationTimestamp, location, des
                         guestIds: guestIds,
                         volunteerId: volunteerId
                 })
-        }
 }
