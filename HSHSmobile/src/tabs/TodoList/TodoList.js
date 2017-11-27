@@ -35,7 +35,6 @@ class TodoList extends Component {
         super(props);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
 
-        this.renderListItem = this.renderListItem.bind(this);
         this.props.loading = true;
     };
 
@@ -139,15 +138,6 @@ class TodoList extends Component {
                 containerStyle = {{ borderBottomWidth: 0, marginLeft: 10, backgroundColor:"#F5FCFF" }}
                 onPress = {() => {
                     alert("you pressed a thing!"); 
-                    var actionItems = getRandomActionItems;
-                    return(
-                        this.renderListItem({
-                            guests: "YOU PRESSED ME",
-                            color: "#ABC123",
-                            location: "place",
-                            id: 0,
-                        })
-                    );
                 }}
             />
         </View>)
