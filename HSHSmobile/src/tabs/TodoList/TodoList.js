@@ -1,16 +1,23 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
     Platform,
     StyleSheet,
     Text,
     View,
     FlatList,
-    ActivityIndicator
+    ActivityIndicator,
+    Dimensions,
+    TouchableOpacity
 } from 'react-native';
-import { List, ListItem, SearchBar } from "react-native-elements";
+import {List, ListItem, SearchBar} from "react-native-elements";
 import {connect} from 'react-redux';
+import PopupDialog, {SlideAnimation, DialogTitle, DialogButton, DefaultAnimation,} from 'react-native-popup-dialog';
 
-import { Icon } from 'react-native-elements'
+let dimension = Dimensions.get('window');
+let width = dimension.width, height = dimension.height;
+
+
+import {Icon} from 'react-native-elements'
 
 // for navigation
 const IonIcon = require('react-native-vector-icons/Ionicons');
@@ -26,8 +33,7 @@ function mapStateToProps(state, ownProps) {
 }
 
 function mapDispatchToProps(dispath, ownProps) {
-    return {
-    };
+    return {};
 }
 
 class TodoList extends Component {
@@ -39,16 +45,16 @@ class TodoList extends Component {
 
     static navigatorButtons = {
         rightButtons: [
-          {
-            title: 'Add', // for a textual button, provide the button title (label)
-            id: 'new_actionItem', // id for this button, given in onNavigatorEvent(event) to help understand which button was clicked
-            disabled: false, // optional, used to disable the button (appears faded and doesn't interact)
-            disableIconTint: true, // optional, by default the image colors are overridden and tinted to navBarButtonColor, set to true to keep the original image colors
-            showAsAction: 'ifRoom', // optional, Android only. Control how the button is displayed in the Toolbar. Accepted valued: 'ifRoom' (default) - Show this item as a button in an Action Bar if the system decides there is room for it. 'always' - Always show this item as a button in an Action Bar. 'withText' - When this item is in the action bar, always show it with a text label even if it also has an icon specified. 'never' - Never show this item as a button in an Action Bar.
-            buttonColor: 'blue', // Optional, iOS only. Set color for the button (can also be used in setButtons function to set different button style programatically)
-            buttonFontSize: 14, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
-            buttonFontWeight: '600', // Set font weight for the button (can also be used in setButtons function to set different button style programatically)
-          }
+            {
+                title: 'Add', // for a textual button, provide the button title (label)
+                id: 'new_actionItem', // id for this button, given in onNavigatorEvent(event) to help understand which button was clicked
+                disabled: false, // optional, used to disable the button (appears faded and doesn't interact)
+                disableIconTint: true, // optional, by default the image colors are overridden and tinted to navBarButtonColor, set to true to keep the original image colors
+                showAsAction: 'ifRoom', // optional, Android only. Control how the button is displayed in the Toolbar. Accepted valued: 'ifRoom' (default) - Show this item as a button in an Action Bar if the system decides there is room for it. 'always' - Always show this item as a button in an Action Bar. 'withText' - When this item is in the action bar, always show it with a text label even if it also has an icon specified. 'never' - Never show this item as a button in an Action Bar.
+                buttonColor: 'blue', // Optional, iOS only. Set color for the button (can also be used in setButtons function to set different button style programatically)
+                buttonFontSize: 14, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
+                buttonFontWeight: '600', // Set font weight for the button (can also be used in setButtons function to set different button style programatically)
+            }
         ]
     };
 
@@ -64,7 +70,7 @@ class TodoList extends Component {
         IonIcon.getImageSource('md-create', 36).then((icon) => {
             this.props.navigator.setButtons({
                 rightButtons: [
-                    { id: 'new_actionItem', icon: icon },
+                    {id: 'new_actionItem', icon: icon},
                 ]
             });
         });
@@ -100,9 +106,14 @@ class TodoList extends Component {
                     borderColor: "#CED0CE"
                 }}
             >
-                <ActivityIndicator animating size="large" />
+                <ActivityIndicator animating size="large"/>
             </View>
         );
+    };
+
+    itemPressed = (item) => {
+        // console.log(this.popupDialog);
+        this.popup.show()
     };
 
     render() {
@@ -111,53 +122,75 @@ class TodoList extends Component {
             return this.renderLoading();
         }
         return (
-            <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0, marginTop: 0 }}>
-                <FlatList
-                    data = {this.props.actionItems}
-                    renderItem={({ item }) => (
+            <View style={{flex: 1}}>
+                <PopupDialog
+                    dialogTitle={<DialogTitle title="Here it is"/>}
+                    width={width * 0.8}
+                    height={height * 0.6}
+                    overlayBackgroundColor="#000000"
+                    ref={(tempRef) => { this.popup = tempRef; }}
+                    dialogAnimation={new SlideAnimation({slideFrom: 'top'})}
+                >
+                    <Text>Hello HSHS</Text>
+                </PopupDialog>
+                {/*<PopupDialog*/}
+                    {/*dialogTitle={<DialogTitle title="Dialog Title" />}*/}
+                    {/*ref={(tempRef) => { this.popup = tempRef; }}*/}
+                {/*>*/}
+                    {/*<View>*/}
+                        {/*<Text>Hello</Text>*/}
+                    {/*</View>*/}
+                {/*</PopupDialog>*/}
+                <List containerStyle={{borderTopWidth: 0, borderBottomWidth: 0, marginTop: 0}}>
+                    <FlatList
+                        data={this.props.actionItems}
+                        renderItem={({item}) => (
 
-                        // TODO: populate colors by tags
-                        <View style={{backgroundColor: getRandomColor()}}>
-                            <ListItem
-                                title = {"title"}
-                                titleStyle = {{marginLeft: 0}}
-                                subtitle = {
-                                    <View style={{flex: 1, flexDirection: 'row',}}>
-                                        <View style={{flex: 2, flexDirection: 'row'}}>
-                                            <View style={{flex:1}}>
-                                                <Icon
-                                                    name='person' />
+                            // TODO: populate colors by tags
+                            <View style={{backgroundColor: getRandomColor()}}>
+                                <ListItem
+                                    title={"title"}
+                                    titleStyle={{marginLeft: 0}}
+                                    subtitle={
+                                        <View style={{flex: 1, flexDirection: 'row',}}>
+                                            <View style={{flex: 2, flexDirection: 'row'}}>
+                                                <View style={{flex: 1}}>
+                                                    <Icon
+                                                        name='person'/>
+                                                </View>
+                                                <View style={{flex: 3}}>
+                                                    <Text numberOfLines={1}>{getRandomGuests()}</Text>
+                                                </View>
                                             </View>
-                                            <View style={{flex:3}}>
-                                                <Text numberOfLines={1}>{getRandomGuests()}</Text>
+                                            <View style={{flex: 2, flexDirection: 'row'}}>
+                                                <View style={{flex: 1}}>
+                                                    <Icon
+                                                        name='local-pizza'/>
+                                                </View>
+                                                <View style={{flex: 3}}>
+                                                    <Text numberOfLines={1}>{getRandomLocation()}</Text>
+                                                </View>
                                             </View>
                                         </View>
-                                        <View style={{flex: 2, flexDirection: 'row'}}>
-                                            <View style={{flex:1}}>
-                                                <Icon
-                                                    name='local-pizza' />
-                                            </View>
-                                            <View style={{flex:3}}>
-                                                <Text numberOfLines={1}>{getRandomLocation()}</Text>
-                                            </View>
-                                        </View>
-                                    </View>
-                                } // TODO: fix that without an extra space, the last character is cut off
-                                subtitleStyle = {{textAlign: 'right'}}
-                                containerStyle = {{ borderBottomWidth: 0, marginLeft: 10, backgroundColor:"#F5FCFF" }}
-                                onPress = {() => {alert("you pressed a thing!");}}
-                            />
-                        </View>
-                    )}
-                    //keyExtractor = {item => item.Id}
-                    ItemSeparatorComponent = {this.renderSeparator}
-                    ListHeaderComponent = {this.renderHeader}
-                    ListFooterComponent = {this.renderFooter}
-                    refreshing = {this.props.refreshing}
-                    onEndReached = {this.handleLoadMore}
-                    onEndReachedThreshold = {50}
-                />
-            </List>
+                                    } // TODO: fix that without an extra space, the last character is cut off
+                                    subtitleStyle={{textAlign: 'right'}}
+                                    containerStyle={{borderBottomWidth: 0, marginLeft: 10, backgroundColor: "#F5FCFF"}}
+                                    onPress={() => {
+                                        this.itemPressed(item)
+                                    }}
+                                />
+                            </View>
+                        )}
+                        //keyExtractor = {item => item.Id}
+                        ItemSeparatorComponent={this.renderSeparator}
+                        ListHeaderComponent={this.renderHeader}
+                        ListFooterComponent={this.renderFooter}
+                        refreshing={this.props.refreshing}
+                        onEndReached={this.handleLoadMore}
+                        onEndReachedThreshold={50}
+                    />
+                </List>
+            </View>
         );
     }
 }
@@ -197,10 +230,11 @@ function getRandomGuests() {
     for (var i = 0; i < numGuests; i++) {
         guests += names[Math.floor(Math.random() * names.length)];
 
-        if (i != numGuests - 1 ) {
+        if (i != numGuests - 1) {
             guests += ", "
         }
-    };
+    }
+    ;
     return guests;
 };
 
