@@ -34,6 +34,8 @@ class TodoList extends Component {
     constructor(props) {
         super(props);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+
+        this.renderListItem = this.renderListItem.bind(this);
         this.props.loading = true;
     };
 
@@ -105,6 +107,52 @@ class TodoList extends Component {
         );
     };
 
+    renderListItem(item) {
+        return(
+        <View style={{backgroundColor: item.color}}>
+            <ListItem
+                title = {item.title}
+                titleStyle = {{marginLeft: 0}}
+                subtitle = {
+                    <View style={{flex: 1, flexDirection: 'row',}}>
+                        <View style={{flex: 2, flexDirection: 'row'}}>
+                            <View style={{flex:1}}>
+                                <Icon
+                                    name='person' />
+                            </View>
+                            <View style={{flex:3}}>
+                                <Text numberOfLines={1}>{item.guests}</Text>
+                            </View>
+                        </View>
+                        <View style={{flex: 2, flexDirection: 'row'}}>
+                            <View style={{flex:1}}>
+                                <Icon
+                                    name='local-pizza' />
+                            </View>
+                            <View style={{flex:3}}>
+                                <Text numberOfLines={1}>{item.location}</Text>
+                            </View>
+                        </View>
+                    </View>
+                } // TODO: fix that without an extra space, the last character is cut off
+                subtitleStyle = {{textAlign: 'right'}}
+                containerStyle = {{ borderBottomWidth: 0, marginLeft: 10, backgroundColor:"#F5FCFF" }}
+                onPress = {() => {
+                    alert("you pressed a thing!"); 
+                    var actionItems = getRandomActionItems;
+                    return(
+                        this.renderListItem({
+                            guests: "YOU PRESSED ME",
+                            color: "#ABC123",
+                            location: "place",
+                            id: 0,
+                        })
+                    );
+                }}
+            />
+        </View>)
+    }
+
     render() {
         // TODO : make it actually check if the action items are of a valid type
         if (this.props.loading == true || this.props.actionItems.length <= 1) {
@@ -114,41 +162,7 @@ class TodoList extends Component {
             <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0, marginTop: 0 }}>
                 <FlatList
                     data = {this.props.actionItems}
-                    renderItem={({ item }) => (
-
-                        // TODO: populate colors by tags
-                        <View style={{backgroundColor: item.color}}>
-                            <ListItem
-                                title = {"title"}
-                                titleStyle = {{marginLeft: 0}}
-                                subtitle = {
-                                    <View style={{flex: 1, flexDirection: 'row',}}>
-                                        <View style={{flex: 2, flexDirection: 'row'}}>
-                                            <View style={{flex:1}}>
-                                                <Icon
-                                                    name='person' />
-                                            </View>
-                                            <View style={{flex:3}}>
-                                                <Text numberOfLines={1}>{item.guests}</Text>
-                                            </View>
-                                        </View>
-                                        <View style={{flex: 2, flexDirection: 'row'}}>
-                                            <View style={{flex:1}}>
-                                                <Icon
-                                                    name='local-pizza' />
-                                            </View>
-                                            <View style={{flex:3}}>
-                                                <Text numberOfLines={1}>{item.location}</Text>
-                                            </View>
-                                        </View>
-                                    </View>
-                                } // TODO: fix that without an extra space, the last character is cut off
-                                subtitleStyle = {{textAlign: 'right'}}
-                                containerStyle = {{ borderBottomWidth: 0, marginLeft: 10, backgroundColor:"#F5FCFF" }}
-                                onPress = {() => {alert("you pressed a thing!");}}
-                            />
-                        </View>
-                    )}
+                    renderItem={({item}) => this.renderListItem(item)}
                     keyExtractor = {item => item.id}
                     ItemSeparatorComponent = {this.renderSeparator}
                     ListHeaderComponent = {this.renderHeader}
@@ -185,6 +199,7 @@ function getRandomActionItems() {
     var actionItems = [];
     for (var i = 0; i < 15; i++) {
         var obj = {
+            title: getRandomTitle(),
             guests: getRandomGuests(),
             color: getRandomColor(),
             location: getRandomLocation(),
@@ -193,6 +208,11 @@ function getRandomActionItems() {
         actionItems.push(obj);
     }
     return actionItems;
+}
+
+function getRandomTitle() {
+    var titles = ["Groceries", "Pay the electric bill", "Fix a sticky key", "Clean the printer ink", "Get a new battery", "Charge cones", "Call Comcast", "Netflix & Chill"];
+    return titles[Math.floor(Math.random() * titles.length)];
 }
 
 function getRandomColor() {
