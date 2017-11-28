@@ -65,10 +65,6 @@ export default class Login extends Component {
                 Alert.alert(
                   'Login failed',
                   'Unable to login. Username or password is incorrect',
-                  [
-                    {text: 'OK', onPress: () => console.log('OK Pressed'), style: 'cancel'},
-                  ],
-                  { cancelable: false }
                 )
             });
 
