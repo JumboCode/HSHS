@@ -23,6 +23,7 @@ import GuestListNew from './tabs/GuestList/GuestListNew';
 import GuestListProfile from './tabs/GuestList/GuestListProfile';
 import TodoList from './tabs/TodoList/TodoList';
 import TodoListItem from './tabs/TodoList/TodoListItem';
+import TodoListItemNew from './tabs/TodoList/TodoListItemNew';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -57,8 +58,8 @@ export default class Login extends Component {
 
         //const { email, password } = this.state;
         firebase.auth().signInWithEmailAndPassword(this.state.username, this.state.password)
-            .then(() => { 
-                console.log("success"); 
+            .then(() => {
+                console.log("success");
                 this.openApp();
             })
             .catch(() => {
@@ -66,10 +67,14 @@ export default class Login extends Component {
                 Alert.alert(
                   'Login failed',
                   'Unable to login. Username or password is incorrect',
-                )
+                );
+
+                // TODO: IMPORTANT! ALERT!
+                // This is just so we don't have to login every time------ DO NOT SHIP THIS
+                this.openApp();
             });
 
-        
+
     };
 
     forgotPassword = () => {
@@ -112,6 +117,7 @@ export default class Login extends Component {
         Navigation.registerComponent('GuestListNew', () => GuestListNew, store, Provider);
         Navigation.registerComponent('TodoList', () => TodoList, store, Provider);
         Navigation.registerComponent('TodoListItem', () => TodoListItem, store, Provider);
+        Navigation.registerComponent('TodoListItemNew', () => TodoListItemNew, store, Provider);
 
         // TODO: make the tabs link to real pages
         Navigation.startTabBasedApp({
@@ -149,7 +155,7 @@ export default class Login extends Component {
                 }
             ]
         })
-    }    
+    }
 
     render() {
         //console.log(this.props.data);
@@ -161,14 +167,14 @@ export default class Login extends Component {
             <View style = {styles.space}></View>
             <View style = {styles.space}></View>
             <View style = {styles.row} >
-                <Icon style = {styles.icon} 
-                      name="ios-mail-outline" 
-                      size={25} 
-                      color="#FFFFFF" 
+                <Icon style = {styles.icon}
+                      name="ios-mail-outline"
+                      size={25}
+                      color="#FFFFFF"
                 />
-                <TextInput 
-                    style={styles.textInput} 
-                    placeholder='Username' 
+                <TextInput
+                    style={styles.textInput}
+                    placeholder='Username'
                     placeholderTextColor = "#FFFFFF"
                     onChangeText= {(text) => this.state.username = text}
                 />
@@ -177,9 +183,9 @@ export default class Login extends Component {
                 <Icon style = {styles.icon}
                     name="ios-lock-outline"
                     size={25} color="#FFFFFF" />
-                <TextInput style={styles.textInput} 
+                <TextInput style={styles.textInput}
                     placeholder='Password'
-                    secureTextEntry = {true} 
+                    secureTextEntry = {true}
                     placeholderTextColor = "#FFFFFF"
                     onChangeText= {(text) => this.state.password = text}
                 />
@@ -195,7 +201,7 @@ export default class Login extends Component {
                 />
             </View>
             <View style = {styles.space}></View>
-            <Text onPress={this.forgotPassword} style = {styles.forgotPassword}> 
+            <Text onPress={this.forgotPassword} style = {styles.forgotPassword}>
                   Forgot your password?
             </Text>
             </View>
