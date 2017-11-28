@@ -20,6 +20,7 @@ import Info from './dummy/BoilerPlate/TemporaryTab';
 import GuestListNew from './tabs/GuestList/GuestListNew';
 import GuestListProfile from './tabs/GuestList/GuestListProfile';
 import TodoList from './tabs/TodoList/TodoList';
+import TodoListItem from './tabs/TodoList/TodoListItem';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -92,6 +93,7 @@ export default class Login extends Component {
         Navigation.registerComponent('CRUDnote', () => CRUDnote, store, Provider);
         Navigation.registerComponent('GuestListNew', () => GuestListNew, store, Provider);
         Navigation.registerComponent('TodoList', () => TodoList, store, Provider);
+        Navigation.registerComponent('TodoListItem', () => TodoListItem, store, Provider);
 
         // TODO: make the tabs link to real pages
         Navigation.startTabBasedApp({

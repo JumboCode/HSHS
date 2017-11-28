@@ -35,6 +35,8 @@ class TodoList extends Component {
         super(props);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
 
+        this.Screen_TodoListItem = this.Screen_TodoListItem.bind(this);
+
         this.props.loading = true;
     };
 
@@ -73,6 +75,20 @@ class TodoList extends Component {
 
     componentWillUpdate(nextProps, nextState) {
 
+    };
+
+    Screen_TodoListItem = (item) => {
+        this.props.navigator.push({
+            screen: 'TodoListItem', // unique ID registered with Navigation.registerScreen
+            passProps: {
+                id: item.id,
+            }, // Object that will be passed as props to the pushed screen (optional)
+            animated: true, // does the push have transition animation or does it happen immediately (optional)
+            animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
+            backButtonHidden: false, // hide the back button altogether (optional)
+            navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
+            navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
+        })
     };
 
     renderSeparator = () => {
@@ -136,9 +152,7 @@ class TodoList extends Component {
                 } // TODO: fix that without an extra space, the last character is cut off
                 subtitleStyle = {{textAlign: 'right'}}
                 containerStyle = {{ borderBottomWidth: 0, marginLeft: 10, backgroundColor:"#F5FCFF" }}
-                onPress = {() => {
-                    alert("you pressed a thing!"); 
-                }}
+                onPress = {() => this.Screen_TodoListItem(item)}
             />
         </View>)
     }
