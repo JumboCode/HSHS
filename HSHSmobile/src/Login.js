@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {store} from './redux/store.js';
 import {Provider} from 'react-redux';
 import {Navigation} from 'react-native-navigation';
+import firebase from "firebase";
 import {
     Platform,
     StyleSheet,
@@ -10,7 +11,8 @@ import {
     FlatList,
     Button,
     ActivityIndicator,
-    TextInput
+    TextInput,
+    Alert
 } from 'react-native';
 import { List, ListItem, SearchBar } from "react-native-elements";
 
@@ -51,7 +53,23 @@ export default class Login extends Component {
 
     authenticate = () => {
         //console.log(this.state.username + " " + this.state.password);
-        this.openApp();
+
+
+        //const { email, password } = this.state;
+        firebase.auth().signInWithEmailAndPassword(this.state.username, this.state.password)
+            .then(() => { 
+                console.log("success"); 
+                this.openApp();
+            })
+            .catch(() => {
+                console.log("failure");
+                Alert.alert(
+                  'Login failed',
+                  'Unable to login. Username or password is incorrect',
+                )
+            });
+
+        
     };
 
     forgotPassword = () => {
