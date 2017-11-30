@@ -81,7 +81,7 @@ export default class Login extends Component {
             [
                 Icons.getImageSource('ios-home-outline', 30),
                 Icons.getImageSource('ios-list-outline', 30),
-                Icons.getImageSource('ios-paper-outline', 30),
+                Icons.getImageSource('ios-add-circle', 30),
                 Icons.getImageSource('ios-people-outline', 30),
                 Icons.getImageSource('ios-help-circle-outline', 30),
                 Icons.getImageSource('ios-add-circle-outline', 30),
@@ -128,9 +128,9 @@ export default class Login extends Component {
                     icon: todolistIcon
                 },
                 {
-                    label: 'check_in',
+                    label: 'Add Note',
                     screen: 'Info',
-                    title: 'Check In',
+                    title: 'Add Note',
                     icon: checkinIcon
                 },
                 {
