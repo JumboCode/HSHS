@@ -45,7 +45,7 @@ export const getActionItemsStart = () => ({
         type: 'GET_ACTION_ITEMS_START'
 })
 
-export const getActionItemSuccess = (data) => ({
+export const getActionItemsSuccess = (data) => ({
         type: 'GET_ACTION_ITEMS_SUCCESS',
         payload: data
 })
@@ -94,7 +94,7 @@ export const addNewActionItemSuccess = () => ({
 
 export const addNewActionItem = (isDone, title, creationTimestamp, location, description, guestIds, volunteerId) => {
                 store.dispatch(addNewActionItemStart);
-                firebase.database().red('action-items').push().set({
+                firebase.database().ref('action-items').push().set({
                         isDone: isDone,
                         title: title,
                         creationTimestamp: creationTimestamp,

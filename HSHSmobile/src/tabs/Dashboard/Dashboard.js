@@ -12,7 +12,7 @@ import {
 import { List, ListItem, SearchBar } from "react-native-elements";
 import {connect} from 'react-redux';
 import MapView from 'react-native-maps';
-import {getGuests, getInteractions} from '../../redux/actions.js';
+import {getGuests, getInteractions, getActionItems} from '../../redux/actions.js';
 
 const Icon = require('react-native-vector-icons/Ionicons');
 
@@ -20,10 +20,11 @@ function mapStateToProps(state, ownProps) {
     return {};
 }
 
-function mapDispatchToProps(dispath, ownProps) {
+function mapDispatchToProps(dispatch, ownProps) {
     return {
         getGuests: getGuests,
-        getInteractions: getInteractions
+        getInteractions: getInteractions,
+        getActionItems: getActionItems
     };
 }
 
@@ -52,6 +53,7 @@ class Dashboard extends Component {
     makeRemoteRequest = () => {
         this.props.getInteractions();
         this.props.getGuests();
+        this.props.getActionItems();
     };
 
     componentWillUpdate(nextProps, nextState) {
@@ -164,7 +166,7 @@ class Dashboard extends Component {
                 accessibilityLabel="Learn more about this purple button"
             />
     </View>
-    </View>
+    </View> 
         );
     }
 }
