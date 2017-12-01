@@ -131,7 +131,7 @@ export default class Login extends Component {
                     label: 'Add Note',
                     screen: 'Info',
                     title: 'Add Note',
-                    icon: checkinIcon
+                    icon: checkinIcon,
                 },
                 {
                     label: 'guests',
@@ -145,7 +145,21 @@ export default class Login extends Component {
                     title: 'resources',
                     icon: resourcesIcon
                 }
-            ]
+            ],
+            tabsStyle: { // optional, **iOS Only** add this if you want to style the tab bar beyond the defaults
+                tabBarButtonColor: '#FFFFFF',
+                tabBarBackgroundColor: '#445256',
+                tabBarSelectedButtonColor: '#770B16',
+            },
+            appStyle: {
+                tabBarBackgroundColor: '#445256',
+                tabBarButtonColor: '#FFFFFF',
+                tabBarSelectedButtonColor: '#770B16',
+                navigationBarColor: '#770B16',
+                navBarBackgroundColor: '#770B16',
+                navBarButtonColor: '#ffffff',
+                navBarTextColor: '#ffffff',
+              }
         })
     }    
 
