@@ -33,7 +33,7 @@ var homeIcon // ios-home-outline
 var todolistIcon // ios-paper-outline
 var checkinIcon // ios-list-outline
 var guestsIcon // ios-people-outline
-var rescourcesIcon // ios-help-circle-outline
+var resourcesIcon // ios-help-circle-outline
 var addIcon // ios-add-circle-outline
 
 export default class Login extends Component {
@@ -87,7 +87,7 @@ export default class Login extends Component {
             [
                 Icons.getImageSource('ios-home-outline', 30),
                 Icons.getImageSource('ios-list-outline', 30),
-                Icons.getImageSource('ios-paper-outline', 30),
+                Icons.getImageSource('ios-add-circle', 30),
                 Icons.getImageSource('ios-people-outline', 30),
                 Icons.getImageSource('ios-help-circle-outline', 30),
                 Icons.getImageSource('ios-add-circle-outline', 30),
@@ -97,7 +97,7 @@ export default class Login extends Component {
             todolistIcon = values[1];
             checkinIcon = values[2];
             guestsIcon = values[3];
-            rescourcesIcon = values[4];
+            resourcesIcon = values[4];
             addIcon = values[5];
             resolve(true);
           }).catch((error) => {
@@ -130,16 +130,16 @@ export default class Login extends Component {
 
                 },
                 {
-                    label: 'todo_list',
+                    label: 'action items',
                     screen: 'TodoList',
                     title: 'Action Items',
                     icon: todolistIcon
                 },
                 {
-                    label: 'check_in',
+                    label: 'add note',
                     screen: 'Info',
-                    title: 'Check In',
-                    icon: checkinIcon
+                    title: 'Add Note',
+                    icon: checkinIcon,
                 },
                 {
                     label: 'guests',
@@ -148,12 +148,26 @@ export default class Login extends Component {
                     icon: guestsIcon,
                 },
                 {
-                    label: 'rescources',
+                    label: 'resources',
                     screen: 'Info',
-                    title: 'Rescources',
-                    icon: rescourcesIcon
+                    title: 'resources',
+                    icon: resourcesIcon
                 }
-            ]
+            ],
+            tabsStyle: { // optional, **iOS Only** add this if you want to style the tab bar beyond the defaults
+                tabBarButtonColor: '#FFFFFF',
+                tabBarBackgroundColor: '#445256',
+                tabBarSelectedButtonColor: '#770B16',
+            },
+            appStyle: {
+                tabBarBackgroundColor: '#445256',
+                tabBarButtonColor: '#FFFFFF',
+                tabBarSelectedButtonColor: '#770B16',
+                navigationBarColor: '#770B16',
+                navBarBackgroundColor: '#770B16',
+                navBarButtonColor: '#ffffff',
+                navBarTextColor: '#ffffff',
+              }
         })
     }
 

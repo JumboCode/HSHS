@@ -17,8 +17,10 @@ const IonIcon = require('react-native-vector-icons/Ionicons');
 
 
 function mapStateToProps(state, ownProps) {
+    console.log(state.actionItems);
+    var actionItems = getActionItems(state.actionItems);
     return {
-        actionItems: getRandomActionItems(),
+        actionItems: actionItems,
         guests: [],
         loading: state.loading,
         interactions: state.interactions
@@ -213,17 +215,16 @@ const styles = StyleSheet.create({
     }
 });
 
-function getRandomActionItems() {
+function getActionItems(IdsToActionItems) {
     var actionItems = [];
-    for (var i = 0; i < 15; i++) {
-        var obj = {
-            title: getRandomTitle(),
+    for (var Id in IdsToActionItems) {
+        actionItems.push({
+            title : IdsToActionItems[Id].title,
             guests: getRandomGuests(),
             color: getRandomColor(),
-            location: getRandomLocation(),
-            id: i,
-        }
-        actionItems.push(obj);
+            location: IdsToActionItems[Id].locationStr,
+            id: Id,
+        });
     }
     return actionItems;
 }

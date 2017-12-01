@@ -33,6 +33,13 @@ We chose to use react-native for frontend and firebase for backend
 
 4. react-native run-ios / react-native run-android
 
+## How to create a new account:
+1. Login to firebase
+
+2. Navigate to https://console.firebase.google.com/project/hshs-street-team/authentication/users
+
+2. Click Add User and enter a new username and password
+
 ## React Native Installation
 Click the link below, and follow the instructions within "Building Projects with Native Code" <br />
 https://facebook.github.io/react-native/docs/getting-started.html

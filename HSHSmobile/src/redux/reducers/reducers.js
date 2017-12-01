@@ -39,6 +39,26 @@ export function reducer(state, action) {
             return Object.assign({}, state, {
                 adding: false
             });
+        case 'ADD_NEW_ACTION_ITEM_START':
+            return Object.assign({}, state, {
+                addingAction: true
+            });
+        case 'ADD_NEW_ACTION_ITEM_SUCCESS':
+            return Object.assign({}, state, {
+                addingAction: false
+            });
+        case 'GET_ACTION_ITEMS_START':
+            return Object.assign({}, state, {
+                loading: true
+            });
+
+        case 'GET_ACTION_ITEMS_SUCCESS':
+            return Object.assign({}, state, {
+                loading: false,
+                loaded: true,
+                actionItems: action.payload
+            });
+        
         default:
             return state;
     }
