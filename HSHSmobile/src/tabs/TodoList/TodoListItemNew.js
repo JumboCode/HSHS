@@ -11,6 +11,8 @@ import {
 import { List, ListItem } from "react-native-elements";
 import nodeEmoji from 'node-emoji';
 import {connect} from 'react-redux';
+import { Icon } from 'react-native-elements'
+
 
 const Timestamp = require('react-timestamp');
 
@@ -26,7 +28,10 @@ class TodoListItemNew extends Component {
     constructor(props) {
         super(props);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
-
+        this.state = {
+            selectedGuests: null,
+            selectedLocation: null,
+        };
     };
 
     static navigatorButtons = {
@@ -52,14 +57,40 @@ class TodoListItemNew extends Component {
         }
     };
 
+    renderSelectedGuestsText = (guests) => {
+        return guests ? "TODO" : "Add Guest Profiles"
+    };
+
+    renderSelectedLocation = (location) => {
+      return location ? "TODO" : "Add Location"
+    };
+
 
     render() {
         return (
-            <View>
+            <View style={{flex: 1, flexDirection: 'column',}}>
                 <TextInput
                     editable = {true}
                     placeholder = "Title"
                 />
+                <View style={{flexDirection: 'row'}}>
+                    <View>
+                        <Icon
+                            name='person' />
+                    </View>
+                    <View>
+                        <Text numberOfLines={1}>{this.renderSelectedGuestsText(this.state.selectedGuests)}</Text>
+                    </View>
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                    <View>
+                        <Icon
+                            name='local-pizza' />
+                    </View>
+                    <View>
+                        <Text numberOfLines={1}>{this.renderSelectedLocation(this.state.selectedLocation)}</Text>
+                    </View>
+                </View>
             </View>
         );
     }
