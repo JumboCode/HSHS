@@ -17,11 +17,10 @@ const IonIcon = require('react-native-vector-icons/Ionicons');
 
 
 function mapStateToProps(state, ownProps) {
-    console.log(state.actionItems);
     var actionItems = getActionItems(state.actionItems);
     return {
         actionItems: actionItems,
-        guests: [],
+        guests: state.guests,
         loading: state.loading,
         interactions: state.interactions
     };
@@ -161,7 +160,7 @@ class TodoList extends Component {
                                     name='local-pizza' />
                             </View>
                             <View style={{flex:3}}>
-                                <Text numberOfLines={1}>{item.location}</Text>
+                                <Text numberOfLines={1}>{item.locationStr}</Text>
                             </View>
                         </View>
                     </View>
@@ -215,6 +214,9 @@ const styles = StyleSheet.create({
     }
 });
 
+
+// TODO: populate guests, color and ensure that deleting guests removes from these action items.
+
 function getActionItems(IdsToActionItems) {
     var actionItems = [];
     for (var Id in IdsToActionItems) {
@@ -222,7 +224,7 @@ function getActionItems(IdsToActionItems) {
             title : IdsToActionItems[Id].title,
             guests: getRandomGuests(),
             color: getRandomColor(),
-            location: IdsToActionItems[Id].locationStr,
+            locationStr: IdsToActionItems[Id].locationStr,
             id: Id,
         });
     }
