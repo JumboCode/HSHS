@@ -122,13 +122,13 @@ export default class Login extends Component {
 
                 },
                 {
-                    label: 'todo_list',
+                    label: 'action items',
                     screen: 'TodoList',
                     title: 'Action Items',
                     icon: todolistIcon
                 },
                 {
-                    label: 'Add Note',
+                    label: 'add note',
                     screen: 'Info',
                     title: 'Add Note',
                     icon: checkinIcon,
