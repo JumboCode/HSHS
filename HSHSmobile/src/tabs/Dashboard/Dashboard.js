@@ -111,7 +111,12 @@ class Dashboard extends Component {
             (!this.props.loading &&
             <View>
                 <MapView
-
+                    region={this.state.region}
+                    onRegionChange={(region) => {
+                        this.setState(previousState => {
+                            return { region: region};
+                        })
+                    }}
                     style = {{
                         height: this.state.isMapFullScreen ? Dimensions.get('window').height * 0.4 : Dimensions.get('window').height,
                         width: Dimensions.get('window').width,
@@ -141,6 +146,21 @@ class Dashboard extends Component {
                                 return { isMapFullScreen: !previousState.isMapFullScreen};
                             });
                         }} />
+                </View>
+
+                <View style = {{
+                    position: 'absolute',
+                    top: 5,
+                    right: 5
+                }}>
+                    <Icon
+                        size={28}
+                        underlayColor='transparent'
+                        name='my-location'
+                        onPress={() => {
+                            Alert.alert("", "This should do something!");
+                        }}
+                        />
                 </View>
 
                 <View style={{flexDirection: 'row', alignSelf: 'center'}}>
@@ -180,6 +200,9 @@ class Dashboard extends Component {
                         title={"Call on Lottery"}
                         color="#841584"
                         accessibilityLabel="Learn more about this purple button"
+                        onPress={() => {
+                            Alert.alert("", "Call on Lottery Button Pressed");
+                        }}
                     />
                 </View>
             </View>
