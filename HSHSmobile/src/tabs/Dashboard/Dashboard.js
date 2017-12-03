@@ -7,14 +7,22 @@ import {
     FlatList,
     ActivityIndicator,
     Dimensions,
-    Button
+    Button,
+    Alert,
+    NativeModules,
+    LayoutAnimation,
 } from 'react-native';
 import { List, ListItem, SearchBar } from "react-native-elements";
 import {connect} from 'react-redux';
 import MapView from 'react-native-maps';
 import {getGuests, getInteractions, getActionItems} from '../../redux/actions.js';
 
-const Icon = require('react-native-vector-icons/Ionicons');
+import { Icon } from 'react-native-elements'
+
+const { UIManager } = NativeModules;
+
+UIManager.setLayoutAnimationEnabledExperimental &&
+UIManager.setLayoutAnimationEnabledExperimental(true);
 
 function mapStateToProps(state, ownProps) {
     return {
@@ -37,6 +45,12 @@ class Dashboard extends Component {
         super(props);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.props.loading = true;
+        this.state = {
+            isMapFullScreen: true
+        }
+    };
+
+    componentDidMount() {
     };
 
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
@@ -97,8 +111,9 @@ class Dashboard extends Component {
             (!this.props.loading &&
             <View>
                 <MapView
+
                     style = {{
-                        height: Dimensions.get('window').height*0.4,
+                        height: this.state.isMapFullScreen ? Dimensions.get('window').height * 0.4 : Dimensions.get('window').height,
                         width: Dimensions.get('window').width,
                         margin: 0}}
                     initialRegion={{
@@ -111,6 +126,22 @@ class Dashboard extends Component {
                         this.props.actionItems && this.renderMarkers()
                     }
                 </MapView>
+
+                <View style = {{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0
+                }}>
+                    <Icon
+                        size={36}
+                        underlayColor='transparent'
+                        name={this.state.isMapFullScreen ? 'fullscreen' : 'fullscreen-exit'}
+                        onPress={() => {
+                            this.setState(previousState => {
+                                return { isMapFullScreen: !previousState.isMapFullScreen};
+                            });
+                        }} />
+                </View>
 
                 <View style={{flexDirection: 'row', alignSelf: 'center'}}>
                     <Button
@@ -146,8 +177,7 @@ class Dashboard extends Component {
                     </View>
 
                     <Button
-                        onPress={() => {}}
-                        title="Call on Lottery"
+                        title={"Call on Lottery"}
                         color="#841584"
                         accessibilityLabel="Learn more about this purple button"
                     />
