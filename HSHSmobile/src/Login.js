@@ -160,10 +160,10 @@ export default class Login extends Component {
                 tabBarSelectedButtonColor: '#770B16',
             },
             appStyle: {
-                tabBarBackgroundColor: '#445256',
+                tabBarBackgroundColor: '#770B16',
                 tabBarButtonColor: '#FFFFFF',
-                tabBarSelectedButtonColor: '#770B16',
-                navigationBarColor: '#770B16',
+                tabBarSelectedButtonColor: '#ffffff',
+                navigationBarColor: '#000000',
                 navBarBackgroundColor: '#770B16',
                 navBarButtonColor: '#ffffff',
                 navBarTextColor: '#ffffff',

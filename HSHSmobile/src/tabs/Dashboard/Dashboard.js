@@ -58,19 +58,6 @@ class Dashboard extends Component {
         console.log(this.props.guests);
     };
 
-    handleRefresh = () => {
-        this.setState(
-            {
-                page: 1,
-                seed: this.state.seed + 1,
-                refreshing: true
-            },
-            () => {
-                this.makeRemoteRequest();
-            }
-        );
-    };
-
     handleLoadMore = () => {
         this.setState(
             {
@@ -80,24 +67,6 @@ class Dashboard extends Component {
                 this.makeRemoteRequest();
             }
         );
-    };
-
-    renderSeparator = () => {
-        return (
-            <View
-                style={{
-                    height: 1,
-                    width: "86%",
-                    backgroundColor: "#CED0CE",
-                    marginLeft: "14%"
-                }}
-            />
-        );
-    };
-
-    renderHeader = () => {
-        return null;
-        //return <SearchBar placeholder="Type Here..." lightTheme round />;
     };
 
     renderMarkers = () => {
