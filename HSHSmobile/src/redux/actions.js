@@ -104,3 +104,25 @@ export const addNewActionItem = (isDone, title, creationTimestamp, location, des
                         volunteerId: volunteerId
                 })
 }
+
+
+export const addNewInteractionStart = () => ({
+        type: 'ADD_NEW_INTERACTIONS_START'
+})
+
+export const addNewInteractionSuccess = () => ({
+        type: 'ADD_NEW_INTERACTIONS_SUCCESS'
+})
+
+export const addInteractionItem = (description, details, location, receptiveness, resources, timestamp, volunteers) => {
+                store.dispatch(addNewActionItemStart);
+                firebase.database().ref('interactions').push().set({
+                        description: description,
+                        details: details,
+                        location: location,
+                        receptiveness: receptiveness,
+                        resources: resources,
+                        timestamp: timestamp,
+                        volunteers: volunteers
+                })
+}

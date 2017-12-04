@@ -47,6 +47,14 @@ export function reducer(state, action) {
             return Object.assign({}, state, {
                 addingAction: false
             });
+        case 'ADD_NEW_INTERACTIONS_START':
+            return Object.assign({}, state, {
+                addingInteraction: true
+            });
+        case 'ADD_NEW_INTERACTIONS_SUCCESS':
+            return Object.assign({}, state, {
+                addingInteraction: false
+            });
         case 'GET_ACTION_ITEMS_START':
             return Object.assign({}, state, {
                 loading: true
