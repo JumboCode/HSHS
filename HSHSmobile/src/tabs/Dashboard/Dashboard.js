@@ -163,21 +163,6 @@ class Dashboard extends Component {
                         />
                 </View>
 
-                <View style={{flexDirection: 'row', alignSelf: 'center'}}>
-                    <Button
-                    onPress={() => {}}
-                    title="Add New Note"
-                    color="#841584"
-                    accessibilityLabel="Learn more about this purple button"
-                    />
-                    <Button
-                        onPress={() => {}}
-                        title="Add Action Item"
-                        color="#841584"
-                        accessibilityLabel="Learn more about this purple button"
-                    />
-                </View>
-
                 <View style={{flexDirection: 'column', alignItems: 'center'}}>
 
                     <Text>
