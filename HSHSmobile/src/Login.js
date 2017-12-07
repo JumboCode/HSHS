@@ -30,7 +30,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 const Icons = require('react-native-vector-icons/Ionicons');
 
 var homeIcon // ios-home-outline
-var todolistIcon // ios-paper-outline
+var todolistIcon // ios-checkbox-outline
 var checkinIcon // ios-list-outline
 var guestsIcon // ios-people-outline
 var resourcesIcon // ios-help-circle-outline
@@ -86,7 +86,7 @@ export default class Login extends Component {
           Promise.all(
             [
                 Icons.getImageSource('ios-home-outline', 30),
-                Icons.getImageSource('ios-list-outline', 30),
+                Icons.getImageSource('ios-checkbox-outline', 30),
                 Icons.getImageSource('ios-add-circle', 30),
                 Icons.getImageSource('ios-people-outline', 30),
                 Icons.getImageSource('ios-help-circle-outline', 30),
