@@ -16,7 +16,7 @@ import { List, ListItem, SearchBar } from "react-native-elements";
 import {connect} from 'react-redux';
 import MapView from 'react-native-maps';
 import {getGuests, getInteractions, getActionItems} from '../../redux/actions.js';
-
+import ActionItemList from '../TodoList/ActionItem';
 import { Icon } from 'react-native-elements'
 
 const { UIManager } = NativeModules;
@@ -84,7 +84,6 @@ class Dashboard extends Component {
     };
 
     renderMarkers = () => {
-
         var markers = [];
         for (var actionItemId in this.props.actionItems) {
             let actionItem = this.props.actionItems[actionItemId];
@@ -132,6 +131,8 @@ class Dashboard extends Component {
                     }
                 </MapView>
 
+                
+
                 <View style = {{
                     position: 'absolute',
                     top: 0,
@@ -163,7 +164,12 @@ class Dashboard extends Component {
                         />
                 </View>
 
-                <View style={{flexDirection: 'column', alignItems: 'center'}}>
+                { this.props.actionItems.length <= 1 ? 
+                    null : <ActionItemList actionItems={this.props.actionItems} />}
+
+
+                {/* Commented out until we figure out lottery number implementation
+                    <View style={{flexDirection: 'column', alignItems: 'center'}}>
 
                     <Text>
                         Lottery Status: Number not given out
@@ -189,7 +195,10 @@ class Dashboard extends Component {
                             Alert.alert("", "Call on Lottery Button Pressed");
                         }}
                     />
-                </View>
+                
+
+                </View> */}
+
             </View>
             )
         );
