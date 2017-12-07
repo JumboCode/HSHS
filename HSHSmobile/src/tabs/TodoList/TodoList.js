@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { List, ListItem, SearchBar } from "react-native-elements";
 import {connect} from 'react-redux';
-
+import ActionItemList from './ActionItem'
 import { Icon } from 'react-native-elements'
 
 // for navigation
@@ -17,9 +17,8 @@ const IonIcon = require('react-native-vector-icons/Ionicons');
 
 
 function mapStateToProps(state, ownProps) {
-    var actionItems = getActionItems(state.actionItems);
     return {
-        actionItems: actionItems,
+        actionItems: state.actionItems,
         guests: state.guests,
         loading: state.loading,
         interactions: state.interactions
@@ -106,23 +105,6 @@ class TodoList extends Component {
         })
     };
 
-    renderSeparator = () => {
-        return (
-            <View
-                style={{
-                    height: 1,
-                    width: "100%",
-                    backgroundColor: "#CED0CE",
-                    marginLeft: 10
-                }}
-            />
-        );
-    };
-
-    renderHeader = () => {
-        return null;
-    };
-
     renderLoading = () => {
         return (
             <View
@@ -137,60 +119,13 @@ class TodoList extends Component {
         );
     };
 
-    renderListItem(item) {
-        return(
-        <View style={{backgroundColor: item.color}}>
-            <ListItem
-                title = {item.title}
-                titleStyle = {{marginLeft: 0}}
-                subtitle = {
-                    <View style={{flex: 1, flexDirection: 'row',}}>
-                        <View style={{flex: 2, flexDirection: 'row'}}>
-                            <View style={{flex:1}}>
-                                <Icon
-                                    name='person' />
-                            </View>
-                            <View style={{flex:3}}>
-                                <Text numberOfLines={1}>{item.guests}</Text>
-                            </View>
-                        </View>
-                        <View style={{flex: 2, flexDirection: 'row'}}>
-                            <View style={{flex:1}}>
-                                <Icon
-                                    name='local-pizza' />
-                            </View>
-                            <View style={{flex:3}}>
-                                <Text numberOfLines={1}>{item.locationStr}</Text>
-                            </View>
-                        </View>
-                    </View>
-                } // TODO: fix that without an extra space, the last character is cut off
-                subtitleStyle = {{textAlign: 'right'}}
-                containerStyle = {{ borderBottomWidth: 0, marginLeft: 10, backgroundColor:"#F5FCFF" }}
-                onPress = {() => this.Screen_TodoListItem(item)}
-            />
-        </View>)
-    }
-
     render() {
         // TODO : make it actually check if the action items are of a valid type
         if (this.props.loading == true || this.props.actionItems.length <= 1) {
             return this.renderLoading();
         }
         return (
-            <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0, marginTop: 0 }}>
-                <FlatList
-                    data = {this.props.actionItems}
-                    renderItem={({item}) => this.renderListItem(item)}
-                    keyExtractor = {item => item.id}
-                    ItemSeparatorComponent = {this.renderSeparator}
-                    ListHeaderComponent = {this.renderHeader}
-                    ListFooterComponent = {this.renderFooter}
-                    refreshing = {this.props.refreshing}
-                    onEndReached = {this.handleLoadMore}
-                    onEndReachedThreshold = {50}
-                />
-            </List>
+            <ActionItemList actionItems={this.props.actionItems}/>
         );
     }
 }
@@ -215,53 +150,6 @@ const styles = StyleSheet.create({
 });
 
 
-// TODO: populate guests, color and ensure that deleting guests removes from these action items.
 
-function getActionItems(IdsToActionItems) {
-    var actionItems = [];
-    for (var Id in IdsToActionItems) {
-        actionItems.push({
-            title : IdsToActionItems[Id].title,
-            guests: getRandomGuests(),
-            color: getRandomColor(),
-            locationStr: IdsToActionItems[Id].locationStr,
-            id: Id,
-        });
-    }
-    return actionItems;
-}
-
-function getRandomTitle() {
-    var titles = ["Groceries", "Pay the electric bill", "Fix a sticky key", "Clean the printer ink", "Get a new battery", "Charge cones", "Call Comcast", "Netflix & Chill"];
-    return titles[Math.floor(Math.random() * titles.length)];
-}
-
-function getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-}
-
-function getRandomGuests() {
-    var names = ['Kristoph', 'kristoble', 'Jeramia', 'Margary', 'Clitus', 'Ron', 'Spoon', 'Moonflower', 'Fresh', 'Laundry'];
-    var guests = '';
-    var numGuests = 1 + Math.floor(Math.random() * 3);
-    for (var i = 0; i < numGuests; i++) {
-        guests += names[Math.floor(Math.random() * names.length)];
-
-        if (i != numGuests - 1 ) {
-            guests += ", "
-        }
-    };
-    return guests;
-};
-
-function getRandomLocation() {
-    var locations = ['San Fran Sisco', 'San Andreas', 'Casterly Rock', 'Fraggle Rock', 'Vegas', 'Yellow Stone', 'Patagonia', 'Intersection of Goose and Marmalaide'];
-    return locations[Math.floor(Math.random() * locations.length)];
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoList);
