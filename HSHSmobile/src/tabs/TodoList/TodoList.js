@@ -34,9 +34,6 @@ class TodoList extends Component {
     constructor(props) {
         super(props);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
-
-        this.Screen_TodoListItem = this.Screen_TodoListItem.bind(this);
-
         this.props.loading = true;
     };
 
@@ -77,20 +74,6 @@ class TodoList extends Component {
 
     };
 
-    Screen_TodoListItem = (item) => {
-        this.props.navigator.push({
-            screen: 'TodoListItem', // unique ID registered with Navigation.registerScreen
-            passProps: {
-                id: item.id,
-            }, // Object that will be passed as props to the pushed screen (optional)
-            animated: true, // does the push have transition animation or does it happen immediately (optional)
-            animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
-            backButtonHidden: false, // hide the back button altogether (optional)
-            navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
-            navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
-        })
-    };
-
     Screen_TodoListItemNew = () => {
         this.props.navigator.push({
             title: 'Add Action Item',
@@ -125,7 +108,7 @@ class TodoList extends Component {
             return this.renderLoading();
         }
         return (
-            <ActionItemList actionItems={this.props.actionItems}/>
+            <ActionItemList actionItems={this.props.actionItems} navigator={this.props.navigator}/>
         );
     }
 }
