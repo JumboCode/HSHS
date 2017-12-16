@@ -41,6 +41,11 @@ class GuestProfile extends Component {
 
     /********************** Helper functions section **********************/
 
+    // gets emoji from receptive value
+    get_receptive = () => {
+        return(nodeEmoji.get(this.id_to_emoji[this.profile_data.receptive]));
+    };
+
     //
     view_crud_note_page = () => {
       this.props.navigator.push({
@@ -75,10 +80,20 @@ class GuestProfile extends Component {
         );
     };
 
+    // renders description on profile page
+    render_description = () => {
+        return (
+            <Text>
+                {this.props.guest.description}
+            </Text>
+        );
+    };
+
+
     // renders gender on profile page
     render_gender = () => {
         return (
-            <Text style={styles.note}>
+            <Text>
                 {this.props.guest.gender}
             </Text>
         );
@@ -102,10 +117,19 @@ class GuestProfile extends Component {
         );
     };
 
+    // renders receptive value (emoji?)
+    render_receptive = () => {
+        return (
+            <Text>
+                Receptive: {this.props.guest.get_receptive()}
+            </Text>
+        );
+    };
+
     // renders last interacted
     render_interacted = () => {
         return (
-            <Text style={styles.last_interacted}>
+            <Text>
                 Last Interacted: <Timestamp time={this.props.guest.last_interacted} component={Text}/>
             </Text>
         );
@@ -151,12 +175,19 @@ class GuestProfile extends Component {
         return (
             <View style={styles.container}>
                 <View style={styles.top}>
+                    <Image
+                        style={styles.profile_image}
+                        source={require("./../../dummy/default.jpg")}
+                    />
                     <View style={styles.profile_info}>
                         {this.render_name()}
                         {this.render_age()}
                         {this.render_gender()}
                         {this.render_interacted()}
                         {this.render_description()}
+                        {this.render_hairColor()}
+                        {this.render_tattoo()}
+                        {/*{this.render_receptive()}*/}
                     </View>
                 </View>
                 {/*{this.render_notes()}*/}
@@ -169,7 +200,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
-        backgroundColor: 'white',
+        backgroundColor: '#F5FCFF',
     },
     top: {
         flex: 1,
@@ -198,6 +229,16 @@ const styles = StyleSheet.create({
         fontSize: 22,
         textDecorationColor:'#686868',
         fontFamily: 'Times New Roman',
+    },
+    profile_image: {
+        flex: 0.55,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 70,
+        width: 70,
+        borderWidth: 1,
+        borderColor: 'black',
+        borderRadius: 35,
     },
     profile_info: {
         flex: 2,
