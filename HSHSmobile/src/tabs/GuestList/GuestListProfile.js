@@ -175,20 +175,19 @@ class GuestProfile extends Component {
         return (
             <View style={styles.container}>
                 <View style={styles.top}>
-                    <Image
-                        style={styles.profile_image}
-                        source={require("./../../dummy/default.jpg")}
-                    />
                     <View style={styles.profile_info}>
                         {this.render_name()}
                         {this.render_age()}
                         {this.render_gender()}
                         {this.render_interacted()}
                         {this.render_description()}
-                        {this.render_hairColor()}
-                        {this.render_tattoo()}
                         {/*{this.render_receptive()}*/}
                     </View>
+                </View>
+                <View>
+                    <Text>
+                        THIS IS WHERE OTHER STUFF GOES
+                    </Text>
                 </View>
                 {/*{this.render_notes()}*/}
             </View>
@@ -203,13 +202,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#F5FCFF',
     },
     top: {
-        flex: 1,
-        justifyContent: "center",
+        flex: 0.33,
         flexDirection: "row",
         flexWrap: "nowrap",
-        padding: 20,
-        borderWidth: 1,
-        borderColor: 'black',
+        padding: 10,
+        alignItems: "center",
+        backgroundColor: "#84232d",
     },
     note_section: {
         flex: 5,
@@ -223,12 +221,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     notes: {
-        fontSize: 22,
+        fontSize: 15,
     },
     name: {
-        fontSize: 22,
+        fontSize: 25,
         textDecorationColor:'#686868',
         fontFamily: 'Times New Roman',
+        marginBottom: 1,
     },
     profile_image: {
         flex: 0.55,
@@ -241,11 +240,13 @@ const styles = StyleSheet.create({
         borderRadius: 35,
     },
     profile_info: {
-        flex: 2,
-        justifyContent: 'flex-start',
-        alignItems: 'baseline',
+        flex: 1,
         flexDirection: 'column',
-        paddingLeft: 10,
+        padding: 10,
+        alignItems: "center",
+        backgroundColor: "#F5FCFF",
+        justifyContent: "flex-start",
+        borderRadius: 20,
     },
     instructions: {
         textAlign: 'center',
@@ -253,7 +254,8 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     last_interacted: {
-        textDecorationStyle: '',
+        fontWeight: "400",
+        fontStyle: 'italic',
     },
 });
 
