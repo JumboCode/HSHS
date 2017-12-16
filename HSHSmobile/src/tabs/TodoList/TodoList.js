@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { List, ListItem, SearchBar } from "react-native-elements";
 import {connect} from 'react-redux';
-import ActionItemList from './ActionItem'
+import ActionItemList from '../../modules/ActionItem'
 import { Icon } from 'react-native-elements'
 
 // for navigation
