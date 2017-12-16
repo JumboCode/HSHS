@@ -7,12 +7,28 @@ import {
 import { List, ListItem } from "react-native-elements";
 import { Icon } from 'react-native-elements'
 
+const oneDayInSeconds = 86400000;
 
 class ActionItemList extends Component {
 	constructor(props) {
 		super(props);
+		var actionItems = getActionItems(this.props.actionItems);
+
+		if (this.props.showDueSoon) {		// Show only actionItems due in 24 hours
+			let now = Date.now();
+			var dueSoon = [];
+
+			for (i in actionItems) {
+				for (j in actionItems[i].shiftDate) {
+					let timeUntilDue = actionItems[i].shiftDate[j] - now;
+					if (timeUntilDue > 0 && timeUntilDue < oneDayInSeconds) dueSoon.push(actionItems[i])
+				}
+			}
+			actionItems = dueSoon;
+		}
+
 		this.state = {
-			actionItems: getActionItems(this.props.actionItems)
+			actionItems: actionItems
 		};
 	}
 
@@ -99,6 +115,7 @@ function getActionItems(IdsToActionItems) {
             color: getRandomColor(),
             locationStr: IdsToActionItems[Id].locationStr,
             id: Id,
+            shiftDate: IdsToActionItems[Id].shiftDate
         });
     }
     return actionItems;

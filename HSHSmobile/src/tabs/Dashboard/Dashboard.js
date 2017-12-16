@@ -164,8 +164,10 @@ class Dashboard extends Component {
                         />
                 </View>
 
-                { this.props.actionItems.length <= 1 ? 
-                    null : <ActionItemList actionItems={this.props.actionItems} />}
+                { this.props.actionItems.length <= 1
+                    ? <ActivityIndicator animating size="large" />
+                    : <ActionItemList actionItems={this.props.actionItems} showDueSoon={true} navigator={this.props.navigator}/>
+                }
 
 
                 {/* Commented out until we figure out lottery number implementation
