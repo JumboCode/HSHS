@@ -15,9 +15,7 @@ export const getGuests = () => {
 		firebase.database()
 				.ref('guests')
 				.on('value', (snapshot) => {
-					setTimeout(() => {
-						store.dispatch(getGuestsSuccess(snapshot.val()));
-					}, 0);
+					store.dispatch(getGuestsSuccess(snapshot.val()));
 				});
 }
 
@@ -35,9 +33,7 @@ export const getInteractions = () => {
 	firebase.database()
 			.ref('interactions')
 			.on('value', snapshot => {
-				setTimeout(() => {
-					store.dispatch(getInteractionsSuccess(snapshot.val()));
-				}, 0);
+				store.dispatch(getInteractionsSuccess(snapshot.val()));
 			})
 };
 
@@ -55,10 +51,7 @@ export const getActionItems = () => {
         firebase.database()
                         .ref('actionItems')
                         .on('value', snapshot => {
-                                setTimeout(() => {
-                                	console.log(snapshot.val());
-                                        store.dispatch(getActionItemsSuccess(snapshot.val()));
-                                }, 0);
+                        	store.dispatch(getActionItemsSuccess(snapshot.val()));
                         })
 }
 
@@ -75,7 +68,7 @@ export const addNewGuest = (name, age, gender, hairColor, tattoo, description, i
 	firebase.database().ref('guests').push().set({
     		name: name,
     		age: age,
-    		gender : gender, 
+    		gender : gender,
     		hairColor: hairColor,
             tattoo: tattoo,
             description: description,
@@ -104,7 +97,6 @@ export const addNewActionItem = (isDone, title, creationTimestamp, location, des
                         volunteerId: volunteerId
                 })
 }
-
 
 export const addNewInteractionStart = () => ({
         type: 'ADD_NEW_INTERACTIONS_START'
