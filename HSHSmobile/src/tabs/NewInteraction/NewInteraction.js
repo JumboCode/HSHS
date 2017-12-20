@@ -24,6 +24,7 @@ import {addNewGuest} from '../../redux/actions.js';
 import FAB from 'react-native-fab'
 
 import Icon from 'react-native-vector-icons/Ionicons';
+import ActionButton from 'react-native-action-button';
 
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
 import ModalDropdown from 'react-native-modal-dropdown';
@@ -60,12 +61,41 @@ class NewInteraction extends Component<{}> {
 
     render () {
         return (
-          <View>
+            <View style={{flex: 1}}>
+            <View style={{flex: 1}}>
+        <ActionButton buttonColor="rgba(231,76,60,1)" onPress={() => console.log("notes tapped!")}>
+
+        </ActionButton>
+            </View>
+
+
+          <View style={{flex: 1}}>
           <Text> new interaction </Text>
+          <FormLabel>Description</FormLabel>
+<FormInput/>
+<FormValidationMessage>Error message</FormValidationMessage>
+
+          <FormLabel>Location</FormLabel>
+<FormInput/>
+<FormValidationMessage>Error message</FormValidationMessage>
+
+
+          </View>
           </View>
         );
     }
 }
+
+
+
+const styles = StyleSheet.create({
+  actionButtonIcon: {
+    fontSize: 20,
+    height: 22,
+    color: 'white',
+  },
+});
+
 
 export default connect(
   mapStateToProps,
