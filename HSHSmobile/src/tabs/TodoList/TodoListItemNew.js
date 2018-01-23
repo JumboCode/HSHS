@@ -10,30 +10,168 @@ import {
     TouchableHighlight,
     TouchableOpacity
 } from 'react-native';
-import { List, ListItem } from "react-native-elements";
+import { List, ListItem, SearchBar, CheckBox } from "react-native-elements";
 import nodeEmoji from 'node-emoji';
 import {connect} from 'react-redux';
 import { Icon } from 'react-native-elements'
 import ChooseLocation from '../Component/ChooseLocation';
-
-
+import PopupDialog from 'react-native-popup-dialog';
+import { Button } from 'react-native'
 
 const Timestamp = require('react-timestamp');
 
 function mapStateToProps(state, ownProps) {
+    var guests = guestObjectToArray(state.guests, state.interactions);
     return {
+        guests: guests,
         item: null, //state.actionItems[ownProps.id],
         loading: state.loading,
     };
 }
 
+function guestObjectToArray(IdsToGuests, IdsToInteractions) {
+    var guestList = []
+    for (var Id in IdsToGuests) {
+        guestList.push({
+            "Id" : Id,
+            "name" : IdsToGuests[Id].name,
+        });
+    }
+    console.log(guestList);
+    return guestList;
+}
+
+// Used for ensuring uniquely tagged guests
+Array.prototype.unique = function() {
+    var a = this.concat();
+    for(var i=0; i<a.length; ++i) {
+        for(var j=i+1; j<a.length; ++j) {
+            if(a[i] === a[j])
+                a.splice(j--, 1);
+        }
+    }
+
+    return a;
+};
+
+// This component should be used every time guests need to be tagged.
+// Props: ref gives a reference to the component for opening and closing
+//        guests is the list of guests you get from redux
+//        loading is the loading state from redux
+//        taggedGuests is an array of guest names that have been selected
+//        addGuest is a function that takes a name and adds that name to your
+//          taggedGuests array
+//        removeGuest is similar to addGuest
+class TagGuestDialog extends Component {
+    constructor(props) {
+        super(props);
+
+        // add guest names to the state for checklist
+        this.state = {checked: [], results: [], search: false}
+
+        // NOTE: One invariant is this.state.checked and this.props.taggedGuests
+        // should always be the same. The information is duplicated because
+        // the checks in checkboxes weren't re-rendering properly otherwise.
+    };
+
+    // calls show() fn of PopupDialog
+    show(onShown: ?Function) {
+      this.popupDialog.show();
+    }
+
+
+    renderLoading = () => {
+        return (
+            <View
+                style={{
+                    paddingVertical: 20,
+                    borderTopWidth: 0,
+                    borderColor: "#CED0CE"
+                }}
+            >
+                <ActivityIndicator animating size="large" />
+            </View>
+        );
+    };
+
+    renderSeparator = () => {
+        return (
+            <View
+                style={{
+                    height: 1,
+                    width: "86%",
+                    backgroundColor: "#CED0CE",
+                    marginLeft: "14%"
+                }}
+            />
+        );
+    };
+
+    renderHeader = () => {
+        return <SearchBar placeholder="Type Here..." lightTheme round />;
+    };
+
+    renderFooter = () => {
+        return <Button
+          title="Tag Guests"
+          onPress={() => {
+            this.popupDialog.dismiss();
+          }}
+        />;
+    };
+
+    render() {
+      if (this.props.loading == true || this.props.guests.length <= 1) {
+          return this.renderLoading();
+      }
+      return (
+          <PopupDialog
+              ref={(popupDialog) => { this.popupDialog = popupDialog; }}
+          >
+            <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0, marginTop: 0 }}>
+                <FlatList
+                    data = {this.props.guests}
+                    renderItem={({ item }) => (
+                        <CheckBox
+                            title={`${item.name}`}
+                            onPress={()=>
+                                {
+                                  if (!this.state.checked.includes(item.name)) {
+                                    this.setState({checked: [...this.state.checked, item.name]});
+                                    this.props.addGuest(item.name);
+                                  } else {
+                                    let index = this.state.checked.indexOf(item.name)
+                                    let arr = this.state.checked
+                                    arr.splice(index, 1)
+                                    this.setState({checked: arr})
+                                    this.props.removeGuest(item.name);
+                                  }
+                                }}
+                            checked={this.state.checked.includes(item.name)}
+                        ></CheckBox>
+                    )}
+                    keyExtractor = {item => item.Id}
+                    ListHeaderComponent = {this.renderHeader}
+                    ListFooterComponent = {this.renderFooter}
+                    refreshing = {this.props.refreshing}
+                    onEndReached = {this.handleLoadMore}
+                    onEndReachedThreshold = {50}
+                    extraData={this.state}
+                />
+              </List>
+          </PopupDialog>
+      );
+    }
+}
 
 class TodoListItemNew extends Component {
     constructor(props) {
         super(props);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+        this.addGuest = this.addGuest.bind(this);
+        this.removeGuest = this.removeGuest.bind(this);
         this.state = {
-            selectedGuests: null,
+            taggedGuests: [],
             selectedLocation: null,
             locationName: "This is a location name"
         };
@@ -61,6 +199,17 @@ class TodoListItemNew extends Component {
             }
         }
     };
+
+    addGuest(guest) {
+        this.setState({taggedGuests: [...this.state.taggedGuests, guest]});
+    }
+
+    removeGuest(guest) {
+      let index = this.state.taggedGuests.indexOf(guest)
+      let arr = this.state.taggedGuests
+      arr.splice(index, 1)
+      this.setState({taggedGuests: arr})
+    }
 
     renderSelectedGuestsText = (guests) => {
         return guests ? "TODO" : "Add Guest Profiles"
@@ -112,6 +261,28 @@ class TodoListItemNew extends Component {
                     {this.state.locationName}
                     </Text>
                 </View>
+
+                <View>
+                    <TextInput
+                        editable = {true}
+                        placeholder = "Title"
+                    />
+                    <Button
+                        title="Show Dialog"
+                        onPress={() => {
+                        this.tagGuestDialog.show();
+                        }}
+                    />
+                    <TagGuestDialog
+                        ref={(dialog) => { this.tagGuestDialog = dialog; }}
+                        guests={this.props.guests}
+                        loading={this.props.loading}
+                        taggedGuests={this.state.taggedGuests}
+                        addGuest={this.addGuest}
+                        removeGuest={this.removeGuest}
+                    />
+                </View>
+
                 <ChooseLocation
                     ref={(map) => {
                         this.mapModule = map;
