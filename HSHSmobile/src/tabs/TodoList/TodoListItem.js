@@ -58,6 +58,7 @@ class TodoListItem extends Component {
           /*DateText: '',
           DateHolder: null,*/
       };
+      //console.log(props);
   };
 
   componentDidMount() {

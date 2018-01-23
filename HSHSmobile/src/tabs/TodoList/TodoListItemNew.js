@@ -12,7 +12,7 @@ import { List, ListItem } from "react-native-elements";
 import nodeEmoji from 'node-emoji';
 import {connect} from 'react-redux';
 import { Icon } from 'react-native-elements'
-import { addNewActionItem, addNewGues} from '../../redux/actions.js';
+import { addNewActionItem, getActionItems} from '../../redux/actions.js';
 //import DatePicker from 'react-native-datepicker'
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -30,7 +30,7 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispath, ownProps) {
     return {
         addNewActionItem: addNewActionItem,
-        addNewGuest: addNewGuest
+        getActionItems: getActionItems
     };
 }
 
@@ -64,8 +64,12 @@ class TodoListItemNew extends Component {
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
         if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
             if (event.id == 'save_actionItem') { // this is the same id field from the static navigatorButtons definition
-                addNewActionItem(true, "title", "creationTimestamp", [42, -71], "locationStr", "shiftDate", "description", [0], "volunteerId");
-                Alert.alert("Saving!");
+                addNewActionItem(false, "title", "creationTimestamp", [42, -71], "locationStr", "shiftDate", "description", [0], "volunteerId");
+                getActionItems();
+                this.props.navigator.pop({
+                    animated: true, // does the pop have transition animation or does it happen immediately (optional)
+                    animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
+                });
             }
         }
     };
