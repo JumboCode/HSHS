@@ -52,7 +52,7 @@ class TodoListItemNew extends Component {
             selectedLocation: null,
             locationName: "This is a location name"
         };
-        setInterval(() => {console.log(this.state.taggedGuests);}, 2000);
+        setInterval(() => {console.log(this.state.taggedGuests);}, 2000); //TODO: DELETE DEBUG CODE
     };
 
     static navigatorButtons = {
