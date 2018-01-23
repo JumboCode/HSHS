@@ -78,7 +78,7 @@ export default class Login extends Component {
     };
 
     forgotPassword = () => {
-
+        alert("We don't really have a way to help you with that but I wish you the best of luck in remembering!")
     };
 
     _populateIcons = function () {
@@ -155,9 +155,17 @@ export default class Login extends Component {
                 }
             ],
             tabsStyle: { // optional, **iOS Only** add this if you want to style the tab bar beyond the defaults
-                tabBarButtonColor: '#FFFFFF',
-                tabBarBackgroundColor: '#445256',
-                tabBarSelectedButtonColor: '#770B16',
+                tabBarButtonColor: '#999999',
+                tabBarBackgroundColor: '#770B16',
+                tabBarSelectedButtonColor: '#FFFFFF',
+                tabBarShowLabels: 'hidden', // "Hey Jacob, why did you add this, this code doesn't wire up to anything!"
+                                            // -- "Well, eventually we could follow
+                                            // https://github.com/wix/react-native-navigation/issues/676 ,
+                                            // and manually edit the npm package!
+                                            // however, we would need to change our git pipeline slightly,
+                                            // so let's make this a TODO!
+                tabBarLabelColor: '#999999',
+                tabBarSelectedLabelColor: '#FFFFFF',
             },
             appStyle: {
                 tabBarBackgroundColor: '#770B16',
@@ -210,8 +218,8 @@ export default class Login extends Component {
                  <Button
                   onPress={this.authenticate}
                   title="Log in"
-                  color="#FFFFFF"
-                  accessibilityLabel="Learn more about this purple button"
+                  color={Platform.OS === 'ios' ? "#FFFFFF" : "#556A5B"}
+                  accessibilityLabel="Click to log in after credentials are entered."
                 />
             </View>
             <View style = {styles.space}></View>
