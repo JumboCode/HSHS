@@ -78,7 +78,7 @@ export default class Login extends Component {
     };
 
     forgotPassword = () => {
-
+        alert("We don't really have a way to help you with that but I wish you the best of luck in remembering!")
     };
 
     _populateIcons = function () {
