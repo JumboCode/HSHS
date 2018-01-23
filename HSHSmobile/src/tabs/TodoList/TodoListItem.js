@@ -19,9 +19,9 @@ import { Icon } from 'react-native-elements'
 import { addNewActionItem} from '../../redux/actions.js';
 //import DatePicker from 'react-native-datepicker'
 /*mport { DatePickerDialog } from 'react-native-datepicker-dialog';
-import moment from 'moment';
+import moment from 'moment';*/
 
-import Ionicons from 'react-native-vector-icons/Ionicons';*/
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 const Timestamp = require('react-timestamp');
