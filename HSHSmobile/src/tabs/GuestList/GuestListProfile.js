@@ -74,21 +74,11 @@ class GuestProfile extends Component {
     // renders age on profile page
     render_age = () => {
         return (
-            <Text style={styles.note}>
+            <Text style={styles.age}>
                 {this.props.guest.age}
             </Text>
         );
     };
-
-    // renders description on profile page
-    render_description = () => {
-        return (
-            <Text>
-                {this.props.guest.description}
-            </Text>
-        );
-    };
-
 
     // renders gender on profile page
     render_gender = () => {
@@ -96,6 +86,15 @@ class GuestProfile extends Component {
             <Text>
                 {this.props.guest.gender}
             </Text>
+        );
+    };
+
+    render_age_gender = () => {
+        return (
+            <View style={styles.age_gender}>
+                {this.render_gender()}
+                {this.render_age()}
+            </View>
         );
     };
 
@@ -129,16 +128,16 @@ class GuestProfile extends Component {
     // renders last interacted
     render_interacted = () => {
         return (
-            <Text>
+            <Text style={styles.last_interacted}>
                 Last Interacted: <Timestamp time={this.props.guest.last_interacted} component={Text}/>
             </Text>
         );
     };
 
-    // render description
+    // renders description
     render_description = () => {
         return (
-            <Text style={styles.note}>
+            <Text style={styles.description}>
                 {this.props.guest.description}
             </Text>
         );
@@ -177,8 +176,7 @@ class GuestProfile extends Component {
                 <View style={styles.top}>
                     <View style={styles.profile_info}>
                         {this.render_name()}
-                        {this.render_age()}
-                        {this.render_gender()}
+                        {this.render_age_gender()}
                         {this.render_interacted()}
                         {this.render_description()}
                         {/*{this.render_receptive()}*/}
@@ -199,15 +197,16 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
-        backgroundColor: '#F5FCFF',
+        backgroundColor: '#FFFFFF',
     },
     top: {
         flex: 0.33,
-        flexDirection: "row",
+        flexDirection: "column",
         flexWrap: "nowrap",
         padding: 10,
-        alignItems: "center",
-        backgroundColor: "#84232d",
+        alignItems: "stretch",
+        justifyContent: "flex-end",
+        backgroundColor: "#E5DEDE",
     },
     note_section: {
         flex: 5,
@@ -224,10 +223,10 @@ const styles = StyleSheet.create({
         fontSize: 15,
     },
     name: {
-        fontSize: 25,
+        fontSize: 35,
         textDecorationColor:'#686868',
         fontFamily: 'Times New Roman',
-        marginBottom: 1,
+        marginBottom: 10,
     },
     profile_image: {
         flex: 0.55,
@@ -237,16 +236,18 @@ const styles = StyleSheet.create({
         width: 70,
         borderWidth: 1,
         borderColor: 'black',
-        borderRadius: 35,
+        borderRadius: 100,
     },
     profile_info: {
-        flex: 1,
+        flex: 0.8,
         flexDirection: 'column',
         padding: 10,
+        marginLeft: 20,
+        marginRight: 20,
         alignItems: "center",
-        backgroundColor: "#F5FCFF",
+        backgroundColor: "#FFFFFF",
         justifyContent: "flex-start",
-        borderRadius: 20,
+        borderRadius: 12,
     },
     instructions: {
         textAlign: 'center',
@@ -254,8 +255,18 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     last_interacted: {
-        fontWeight: "400",
+        fontWeight: "100",
         fontStyle: 'italic',
+        color: "#7E7E7E",
+    },
+    age_gender: {
+        flexDirection: "row",
+    },
+    age: {
+        paddingLeft: 20,
+    },
+    description: {
+        paddingTop: 10,
     },
 });
 
