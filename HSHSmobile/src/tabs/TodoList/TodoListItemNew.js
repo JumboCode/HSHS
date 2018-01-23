@@ -12,7 +12,7 @@ import { List, ListItem } from "react-native-elements";
 import nodeEmoji from 'node-emoji';
 import {connect} from 'react-redux';
 import { Icon } from 'react-native-elements'
-import { addNewActionItem} from '../../redux/actions.js';
+import { addNewActionItem, addNewGues} from '../../redux/actions.js';
 //import DatePicker from 'react-native-datepicker'
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -30,7 +30,7 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispath, ownProps) {
     return {
         addNewActionItem: addNewActionItem,
-        //addNewGuest: addNewGuest
+        addNewGuest: addNewGuest
     };
 }
 
@@ -64,7 +64,7 @@ class TodoListItemNew extends Component {
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
         if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
             if (event.id == 'save_actionItem') { // this is the same id field from the static navigatorButtons definition
-                //this.props.addNewActionItem(true, "title", "creationTimestamp", "location", "description", "guestIds", "volunteerId");
+                addNewActionItem(true, "title", "creationTimestamp", [42, -71], "locationStr", "shiftDate", "description", [0], "volunteerId");
                 Alert.alert("Saving!");
             }
         }

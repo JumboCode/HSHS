@@ -85,13 +85,18 @@ export const addNewActionItemSuccess = () => ({
         type: 'ADD_NEW_ACTION_ITEMS_SUCCESS'
 })
 
-export const addNewActionItem = (isDone, title, creationTimestamp, location, description, guestIds, volunteerId) => {
+export const addNewActionItem = (isDone, title, creationTimestamp, locationCoord, locationStr, shiftDate, description, guestIds, volunteerId) => {
                 store.dispatch(addNewActionItemStart);
-                firebase.database().ref('action-items').push().set({
+                firebase.database().ref('actionItems').push().set({
                         isDone: isDone,
                         title: title,
                         creationTimestamp: creationTimestamp,
-                        location: location,
+                        locationCoord: {
+                            lat: locationCoord[0],
+                            lng: locationCoord[1]
+                        },
+                        locationStr: locationStr,
+                        shiftDate: shiftDate,
                         description: description,
                         guestIds: guestIds,
                         volunteerId: volunteerId
