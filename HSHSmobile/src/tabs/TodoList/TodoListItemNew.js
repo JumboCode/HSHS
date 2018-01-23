@@ -7,11 +7,15 @@ import {
     FlatList,
     Alert,
     TextInput,
+    TouchableHighlight,
+    TouchableOpacity
 } from 'react-native';
 import { List, ListItem } from "react-native-elements";
 import nodeEmoji from 'node-emoji';
 import {connect} from 'react-redux';
 import { Icon } from 'react-native-elements'
+import ChooseLocation from '../Component/ChooseLocation';
+
 
 
 const Timestamp = require('react-timestamp');
@@ -31,6 +35,7 @@ class TodoListItemNew extends Component {
         this.state = {
             selectedGuests: null,
             selectedLocation: null,
+            locationName: "This is a location name"
         };
     };
 
@@ -65,6 +70,10 @@ class TodoListItemNew extends Component {
       return location ? "TODO" : "Add Location"
     };
 
+    setChosenLocation = (locationName) => {
+        this.setState({locationName: locationName});
+    };
+
 
     render() {
         return (
@@ -91,6 +100,24 @@ class TodoListItemNew extends Component {
                         <Text numberOfLines={1}>{this.renderSelectedLocation(this.state.selectedLocation)}</Text>
                     </View>
                 </View>
+                <View>
+                    <TouchableHighlight onPress={() => {
+                        this.mapModule.openMap({lat: 42.405804, lng: -71.11956})
+                    }}>
+                        <Text>Lalala</Text>
+                    </TouchableHighlight>
+                </View>
+                <View>
+                    <Text>
+                    {this.state.locationName}
+                    </Text>
+                </View>
+                <ChooseLocation
+                    ref={(map) => {
+                        this.mapModule = map;
+                    }}
+                    locationFunction={this.setChosenLocation.bind(this)}
+                />
             </View>
         );
     }
