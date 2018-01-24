@@ -15,6 +15,7 @@ import { List, ListItem, SearchBar, CheckBox } from "react-native-elements";
 import PopupDialog from 'react-native-popup-dialog';
 import { Button } from 'react-native'
 
+// TODO: change the popup navigation to follow ChooseLocation
 export default class TagGuestDialog extends Component {
     constructor(props) {
         super(props);
@@ -44,19 +45,6 @@ export default class TagGuestDialog extends Component {
             >
                 <ActivityIndicator animating size="large" />
             </View>
-        );
-    };
-
-    renderSeparator = () => {
-        return (
-            <View
-                style={{
-                    height: 1,
-                    width: "86%",
-                    backgroundColor: "#CED0CE",
-                    marginLeft: "14%"
-                }}
-            />
         );
     };
 

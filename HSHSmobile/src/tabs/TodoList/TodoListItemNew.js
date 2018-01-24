@@ -11,15 +11,12 @@ import {
     TouchableHighlight,
     TouchableOpacity
 } from 'react-native';
-import { List, ListItem, SearchBar, CheckBox } from "react-native-elements";
+import { Icon, List, ListItem, SearchBar, CheckBox } from "react-native-elements";
 import {connect} from 'react-redux';
-import { Icon } from 'react-native-elements'
 import ChooseLocation from '../../modules/ChooseLocation';
-import PopupDialog from 'react-native-popup-dialog';
-import { Button } from 'react-native'
-
-const Timestamp = require('react-timestamp');
 import TagGuestDialog from "../../modules/TagGuestDialog"
+import renderSeperator from '../../modules/UI/renderSeperator'
+
 
 function mapStateToProps(state, ownProps) {
     var guests = guestObjectToArray(state.guests, state.interactions);
@@ -51,7 +48,7 @@ class TodoListItemNew extends Component {
         this.state = {
             taggedGuests: [],
             selectedLocation: null,
-            locationName: "No Location Selected"
+            locationName: "No Location Selected",
         };
         setInterval(() => {console.log(this.state.taggedGuests);}, 2000); //TODO: DELETE DEBUG CODE
     };
@@ -62,19 +59,6 @@ class TodoListItemNew extends Component {
                 Alert.alert("Saving!");
             }
         }
-    };
-
-    renderSeparator = () => {
-        return (
-            <View
-                style={{
-                    height: 1,
-                    width: "100%",
-                    backgroundColor: "#CED0CE",
-                    marginLeft: "0%"
-                }}
-            />
-        );
     };
 
     addGuest(guest) {
@@ -92,7 +76,6 @@ class TodoListItemNew extends Component {
         this.setState({locationName: locationName});
     };
 
-
     render() {
         return (
             <View style={{flex: 1, flexDirection: 'column',}}>
@@ -101,7 +84,7 @@ class TodoListItemNew extends Component {
                     editable = {true}
                     placeholder = "Title"
                 />
-                {this.renderSeparator()}
+                {renderSeperator()}
                 <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
                     <View>
                         <Icon
@@ -117,7 +100,7 @@ class TodoListItemNew extends Component {
                         <Text numberOfLines={1} style={{textAlign: 'right',  margin: 10}}>{"X Guests Selected"}</Text>
                     </View>
                 </View>
-                {this.renderSeparator()}
+                {renderSeperator()}
                 <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
                     <View>
                         <Icon
@@ -133,7 +116,7 @@ class TodoListItemNew extends Component {
 
                     </View>
                 </View>
-                {this.renderSeparator()}
+                {renderSeperator()}
                 <View>
                     <TagGuestDialog
                         ref={(dialog) => { this.tagGuestDialog = dialog; }}
@@ -148,6 +131,8 @@ class TodoListItemNew extends Component {
                     ref={(map) => {
                         this.mapModule = map;
                     }}
+                    viewHeight={this.state.viewHeight}
+                    viewWidth={this.state.viewWidth}
                     locationFunction={this.setChosenLocation.bind(this)}
                 />
             </View>

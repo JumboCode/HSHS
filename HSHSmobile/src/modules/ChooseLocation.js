@@ -81,10 +81,8 @@ export default class ChooseLocation extends Component {
                 ref={(popupDialog) => {
                     this.popupDialog = popupDialog;
                 }}
-                width={0.9 * Dimensions.get('window').width}
-                height={0.7 * Dimensions.get('window').height}
                 zIndex={2}
-                dialogStyle={{ position: 'absolute', top: 20 }}
+                dialogStyle={{ position: 'absolute', top: 20, width: '100%', height: 400 }}
                 dialogTitle={<DialogTitle title={"Drag Marker to set a Location:\n" + this.state.address }/>}
             >
                 <View>
