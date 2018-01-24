@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+    Platform,
     StyleSheet,
     Text,
     View,
@@ -13,7 +14,7 @@ import {
 import { List, ListItem, SearchBar, CheckBox } from "react-native-elements";
 import {connect} from 'react-redux';
 import { Icon } from 'react-native-elements'
-import ChooseLocation from '../Component/ChooseLocation';
+import ChooseLocation from '../../modules/ChooseLocation';
 import PopupDialog from 'react-native-popup-dialog';
 import { Button } from 'react-native'
 
@@ -30,7 +31,7 @@ function mapStateToProps(state, ownProps) {
 }
 
 function guestObjectToArray(IdsToGuests, IdsToInteractions) {
-    var guestList = []
+    var guestList = [];
     for (var Id in IdsToGuests) {
         guestList.push({
             "Id" : Id,
@@ -50,24 +51,9 @@ class TodoListItemNew extends Component {
         this.state = {
             taggedGuests: [],
             selectedLocation: null,
-            locationName: "This is a location name"
+            locationName: "No Location Selected"
         };
         setInterval(() => {console.log(this.state.taggedGuests);}, 2000); //TODO: DELETE DEBUG CODE
-    };
-
-    static navigatorButtons = {
-        rightButtons: [
-            {
-                title: 'Save', // for a textual button, provide the button title (label)
-                id: 'save_actionItem', // id for this button, given in onNavigatorEvent(event) to help understand which button was clicked
-                disabled: false, // optional, used to disable the button (appears faded and doesn't interact)
-                disableIconTint: true, // optional, by default the image colors are overridden and tinted to navBarButtonColor, set to true to keep the original image colors
-                showAsAction: 'ifRoom', // optional, Android only. Control how the button is displayed in the Toolbar. Accepted valued: 'ifRoom' (default) - Show this item as a button in an Action Bar if the system decides there is room for it. 'always' - Always show this item as a button in an Action Bar. 'withText' - When this item is in the action bar, always show it with a text label even if it also has an icon specified. 'never' - Never show this item as a button in an Action Bar.
-                buttonColor: 'blue', // Optional, iOS only. Set color for the button (can also be used in setButtons function to set different button style programatically)
-                buttonFontSize: 14, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
-                buttonFontWeight: '600', // Set font weight for the button (can also be used in setButtons function to set different button style programatically)
-            }
-        ]
     };
 
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
@@ -76,6 +62,19 @@ class TodoListItemNew extends Component {
                 Alert.alert("Saving!");
             }
         }
+    };
+
+    renderSeparator = () => {
+        return (
+            <View
+                style={{
+                    height: 1,
+                    width: "100%",
+                    backgroundColor: "#CED0CE",
+                    marginLeft: "0%"
+                }}
+            />
+        );
     };
 
     addGuest(guest) {
@@ -89,14 +88,6 @@ class TodoListItemNew extends Component {
       this.setState({taggedGuests: arr})
     }
 
-    renderSelectedGuestsText = (guests) => {
-        return guests ? "TODO" : "Add Guest Profiles"
-    };
-
-    renderSelectedLocation = (location) => {
-      return location ? "TODO" : "Add Location"
-    };
-
     setChosenLocation = (locationName) => {
         this.setState({locationName: locationName});
     };
@@ -106,51 +97,44 @@ class TodoListItemNew extends Component {
         return (
             <View style={{flex: 1, flexDirection: 'column',}}>
                 <TextInput
+                    style = {{padding: Platform.OS === 'ios' ? 12 : 10}}
                     editable = {true}
                     placeholder = "Title"
                 />
-                <View style={{flexDirection: 'row'}}>
+                {this.renderSeparator()}
+                <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
                     <View>
                         <Icon
-                            name='person' />
+                            raised
+                            color='#770B16'
+                            name='person'
+                            onPress={() => {
+                                this.tagGuestDialog.show();
+                            }}
+                        />
                     </View>
-                    <View>
-                        <Text numberOfLines={1}>{this.renderSelectedGuestsText(this.state.selectedGuests)}</Text>
+                    <View style={{flex:1}}>
+                        <Text numberOfLines={1} style={{textAlign: 'right',  margin: 10}}>{"X Guests Selected"}</Text>
                     </View>
                 </View>
-                <View style={{flexDirection: 'row'}}>
+                {this.renderSeparator()}
+                <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
                     <View>
                         <Icon
-                            name='local-pizza' />
+                            raised
+                            color='#770B16'
+                            name='local-pizza'
+                            onPress={() => {
+                            this.mapModule.openMap({lat: 42.405804, lng: -71.11956})
+                        }} />
                     </View>
-                    <View>
-                        <Text numberOfLines={1}>{this.renderSelectedLocation(this.state.selectedLocation)}</Text>
-                    </View>
-                </View>
-                <View>
-                    <TouchableHighlight onPress={() => {
-                        this.mapModule.openMap({lat: 42.405804, lng: -71.11956})
-                    }}>
-                        <Text>Lalala</Text>
-                    </TouchableHighlight>
-                </View>
-                <View>
-                    <Text>
-                    {this.state.locationName}
-                    </Text>
-                </View>
+                    <View style={{flex:1}}>
+                        <Text numberOfLines={1} style={{textAlign: 'right',  margin: 10}}>{this.state.locationName}</Text>
 
+                    </View>
+                </View>
+                {this.renderSeparator()}
                 <View>
-                    <TextInput
-                        editable = {true}
-                        placeholder = "Title"
-                    />
-                    <Button
-                        title="Show Dialog"
-                        onPress={() => {
-                        this.tagGuestDialog.show();
-                        }}
-                    />
                     <TagGuestDialog
                         ref={(dialog) => { this.tagGuestDialog = dialog; }}
                         guests={this.props.guests}
@@ -160,7 +144,6 @@ class TodoListItemNew extends Component {
                         removeGuest={this.removeGuest}
                     />
                 </View>
-
                 <ChooseLocation
                     ref={(map) => {
                         this.mapModule = map;

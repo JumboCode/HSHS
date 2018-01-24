@@ -10,7 +10,12 @@
         locationFunction={this.setChosenLocation.bind(this)}
     />
 */
-//
+
+// TODO : this has a serious bug interacting with navigation, we can try to resolve it by following
+// https://github.com/jacklam718/react-native-popup-dialog/issues/42#issuecomment-310028245
+// for now, I'm gonna just make the map small enough if dosn't matter.
+
+
 import React, {Component} from 'react';
 import {
     StyleSheet,
@@ -37,7 +42,8 @@ export default class ChooseLocation extends Component {
             x: {
                 latitude: 42.405804,
                 longitude: -71.11956,
-            }
+            },
+            address: "No Location Selected"
         };
         Geocoder.setApiKey('AIzaSyBk97FJAbAoOnu1liyLAGAne9dcYAiJ8Co');
     };
@@ -56,7 +62,9 @@ export default class ChooseLocation extends Component {
             json => {
                 console.log(json.results[0]);
                 let address_component = json.results[0].address_components[0].short_name + " " + json.results[0].address_components[1].short_name;
-                alert(address_component);
+                this.setState(previousState => {
+                    return { address: address_component };
+                });
                 this.props.locationFunction(address_component);
             },
             error => {
@@ -69,17 +77,21 @@ export default class ChooseLocation extends Component {
     render() {
         return (
             <PopupDialog
+
                 ref={(popupDialog) => {
                     this.popupDialog = popupDialog;
                 }}
                 width={0.9 * Dimensions.get('window').width}
+                height={0.7 * Dimensions.get('window').height}
+                zIndex={2}
+                dialogStyle={{ position: 'absolute', top: 20 }}
+                dialogTitle={<DialogTitle title={"Drag Marker to set a Location:\n" + this.state.address }/>}
             >
                 <View>
                     <MapView
                         style={{
-                            height: Dimensions.get('window').height * 0.4,
-                            width: 0.9 * Dimensions.get('window').width,
-                            margin: 0
+                            height: "100%",
+                            width: "100%",
                         }}
                         showsUserLocation={true}
                         initialRegion={{
