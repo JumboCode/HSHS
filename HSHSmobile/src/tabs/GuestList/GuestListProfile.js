@@ -51,7 +51,7 @@ class GuestProfile extends Component {
       this.props.navigator.push({
           screen: 'CRUDnote', // unique ID registered with Navigation.registerScreen
           passProps: {
-              name: this.props.name
+              name: this.props.guest.name
           }, // Object that will be passed as props to the pushed screen (optional)
           animated: true, // does the push have transition animation or does it happen immediately (optional)
           animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
@@ -74,21 +74,11 @@ class GuestProfile extends Component {
     // renders age on profile page
     render_age = () => {
         return (
-            <Text>
+            <Text style={styles.age}>
                 {this.props.guest.age}
             </Text>
         );
     };
-
-    // renders description on profile page
-    render_description = () => {
-        return (
-            <Text>
-                {this.props.guest.description}
-            </Text>
-        );
-    };
-
 
     // renders gender on profile page
     render_gender = () => {
@@ -99,10 +89,19 @@ class GuestProfile extends Component {
         );
     };
 
+    render_age_gender = () => {
+        return (
+            <View style={styles.age_gender}>
+                {this.render_gender()}
+                {this.render_age()}
+            </View>
+        );
+    };
+
     // renders gender on profile page
     render_hairColor = () => {
         return (
-            <Text>
+            <Text style={styles.note}>
                 {this.props.guest.hairColor}
             </Text>
         );
@@ -129,16 +128,16 @@ class GuestProfile extends Component {
     // renders last interacted
     render_interacted = () => {
         return (
-            <Text>
+            <Text style={styles.last_interacted}>
                 Last Interacted: <Timestamp time={this.props.guest.last_interacted} component={Text}/>
             </Text>
         );
     };
 
-    // render description
+    // renders description
     render_description = () => {
         return (
-            <Text>
+            <Text style={styles.description}>
                 {this.props.guest.description}
             </Text>
         );
@@ -175,20 +174,18 @@ class GuestProfile extends Component {
         return (
             <View style={styles.container}>
                 <View style={styles.top}>
-                    <Image
-                        style={styles.profile_image}
-                        source={require("./../../dummy/default.jpg")}
-                    />
                     <View style={styles.profile_info}>
                         {this.render_name()}
-                        {this.render_age()}
-                        {this.render_gender()}
-                        {this.render_hairColor()}
-                        {this.render_description()}
-                        {this.render_tattoo()}
-                        {/*{this.render_receptive()}*/}
+                        {this.render_age_gender()}
                         {this.render_interacted()}
+                        {this.render_description()}
+                        {/*{this.render_receptive()}*/}
                     </View>
+                </View>
+                <View>
+                    <Text>
+                        THIS IS WHERE OTHER STUFF GOES
+                    </Text>
                 </View>
                 {/*{this.render_notes()}*/}
             </View>
@@ -200,16 +197,16 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
-        backgroundColor: '#F5FCFF',
+        backgroundColor: '#FFFFFF',
     },
     top: {
-        flex: 1,
-        justifyContent: "center",
-        flexDirection: "row",
+        flex: 0.33,
+        flexDirection: "column",
         flexWrap: "nowrap",
-        padding: 20,
-        borderWidth: 1,
-        borderColor: 'black',
+        padding: 10,
+        alignItems: "stretch",
+        justifyContent: "flex-end",
+        backgroundColor: "#E5DEDE",
     },
     note_section: {
         flex: 5,
@@ -220,14 +217,16 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     note: {
-        flex: 1,
         flexDirection: 'row',
     },
     notes: {
-        fontSize: 22,
+        fontSize: 15,
     },
     name: {
-        fontSize: 22,
+        fontSize: 35,
+        textDecorationColor:'#686868',
+        fontFamily: 'Times New Roman',
+        marginBottom: 10,
     },
     profile_image: {
         flex: 0.55,
@@ -237,19 +236,37 @@ const styles = StyleSheet.create({
         width: 70,
         borderWidth: 1,
         borderColor: 'black',
-        borderRadius: 35,
+        borderRadius: 100,
     },
     profile_info: {
-        flex: 2,
-        justifyContent: 'flex-start',
-        alignItems: 'baseline',
+        flex: 0.8,
         flexDirection: 'column',
-        paddingLeft: 10,
+        padding: 10,
+        marginLeft: 20,
+        marginRight: 20,
+        alignItems: "center",
+        backgroundColor: "#FFFFFF",
+        justifyContent: "flex-start",
+        borderRadius: 12,
     },
     instructions: {
         textAlign: 'center',
         color: '#333333',
         margin: 10,
+    },
+    last_interacted: {
+        fontWeight: "100",
+        fontStyle: 'italic',
+        color: "#7E7E7E",
+    },
+    age_gender: {
+        flexDirection: "row",
+    },
+    age: {
+        paddingLeft: 20,
+    },
+    description: {
+        paddingTop: 10,
     },
 });
 
