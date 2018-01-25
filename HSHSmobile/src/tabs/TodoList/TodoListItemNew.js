@@ -111,6 +111,14 @@ class TodoListItemNew extends Component {
                             Add Location
                         </Text>
                     </View>
+                    <View style = {styles.daterow}>
+                        <Ionicons style = {styles.icon}
+                            name="ios-clock-outline"
+                            size = {20} />
+                        <Text style = {styles.dateadd}>
+                            Add Shift
+                        </Text>
+                    </View>
                     <TextInput
                         editable = {true}
                         placeholder = "Description"
@@ -152,7 +160,17 @@ const styles = StyleSheet.create({
         paddingTop: 5,
         paddingLeft: 20
     },
+    daterow: {
+        flexDirection: "row",
+        paddingTop: 5,
+        paddingLeft: 18
+    },
     add: {
+        paddingLeft: 2,
+        color: '#0645AD',
+        textDecorationLine: 'underline'
+    },
+    dateadd: {
         color: '#0645AD',
         textDecorationLine: 'underline'
     },
