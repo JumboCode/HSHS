@@ -9,7 +9,8 @@
 import React, { Component } from 'react';
 import {
     View,
-    FlatList
+    FlatList,
+    ActivityIndicator,
 } from 'react-native';
 import { List, ListItem, SearchBar, CheckBox } from "react-native-elements";
 import PopupDialog from 'react-native-popup-dialog';
