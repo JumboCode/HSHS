@@ -28,6 +28,7 @@ const Timestamp = require('react-timestamp');
 
 function mapStateToProps(state, ownProps) {
     return {
+        actionItem: state.actionItems[ownProps.id],
         item: null, //state.actionItems[ownProps.id],
         loading: state.loading,
     };
@@ -54,11 +55,11 @@ class TodoListItem extends Component {
       this.state = {
           selectedGuests: null,
           selectedLocation: null,
+          title: this.props.actionItem.title
           //
           /*DateText: '',
           DateHolder: null,*/
       };
-      //console.log(props);
   };
 
   componentDidMount() {
@@ -101,9 +102,10 @@ class TodoListItem extends Component {
             <View style = {styles.back}>
                 <TextInput
                         editable = {true}
-                        placeholder = "Title"
                         style = {styles.title}
                         placeholderTextColor = "#000000"
+                        defaultValue = {this.state.title}
+                        onChangeText={(title) => this.state.title = title}
                     />
                 <View style = {styles.row}>
                     <Ionicons style = {styles.icon}

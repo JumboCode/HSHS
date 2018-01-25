@@ -41,6 +41,7 @@ class TodoListItemNew extends Component {
         this.state = {
             selectedGuests: null,
             selectedLocation: null,
+            title: "Title"
         };
     };
 
@@ -64,7 +65,7 @@ class TodoListItemNew extends Component {
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
         if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
             if (event.id == 'save_actionItem') { // this is the same id field from the static navigatorButtons definition
-                addNewActionItem(false, "title", "creationTimestamp", [42, -71], "locationStr", "shiftDate", "description", [0], "volunteerId");
+                addNewActionItem(false, this.state.title, "creationTimestamp", [42, -71], "locationStr", "shiftDate", "description", [0], "volunteerId");
                 getActionItems();
                 this.props.navigator.pop({
                     animated: true, // does the pop have transition animation or does it happen immediately (optional)
@@ -92,6 +93,7 @@ class TodoListItemNew extends Component {
                             placeholder = "Title"
                             style = {styles.title}
                             placeholderTextColor = "#000000"
+                            onChangeText={(title) => this.state.title = title}
                         />
                     <View style = {styles.row}>
                         <Ionicons style = {styles.icon}
