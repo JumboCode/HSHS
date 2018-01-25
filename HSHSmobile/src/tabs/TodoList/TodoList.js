@@ -104,7 +104,7 @@ class TodoList extends Component {
 
     render() {
         // TODO : make it actually check if the action items are of a valid type
-        if (this.props.loading == true || this.props.actionItems.length <= 1) {
+        if (this.props.loading == true || !this.props.actionItems || this.props.actionItems.length <= 1) {
             return this.renderLoading();
         }
         return (
