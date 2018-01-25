@@ -16,7 +16,7 @@ import { List, ListItem } from "react-native-elements";
 import nodeEmoji from 'node-emoji';
 import {connect} from 'react-redux';
 import { Icon } from 'react-native-elements'
-import { addNewActionItem} from '../../redux/actions.js';
+import { editActionItem, getActionItems } from '../../redux/actions.js';
 //import DatePicker from 'react-native-datepicker'
 /*mport { DatePickerDialog } from 'react-native-datepicker-dialog';
 import moment from 'moment';*/
@@ -34,18 +34,12 @@ function mapStateToProps(state, ownProps) {
     };
 }
 
-/*    return {
-        item: null, //state.actionItems[ownProps.id],
-        loading: state.loading,
-    };
-}
-
 function mapDispatchToProps(dispath, ownProps) {
     return {
-        addNewActionItem: addNewActionItem,
-        //addNewGuest: addNewGuest
+        editActionItem: editActionItem,
+        getActionItems: getActionItems
     };
-}*/
+}
 
 
 class TodoListItem extends Component {
@@ -82,8 +76,12 @@ class TodoListItem extends Component {
   onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
       if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
           if (event.id == 'save_actionItem') { // this is the same id field from the static navigatorButtons definition
-              //this.props.addNewActionItem(true, "title", "creationTimestamp", "location", "description", "guestIds", "volunteerId");
-              Alert.alert("Saving!");
+              editActionItem(this.state.id, false, this.state.title, "creationTimestamp", [42, -71], "locationStr", "shiftDate", "description", [0], "volunteerId");
+              getActionItems();
+              this.props.navigator.pop({
+                  animated: true, // does the pop have transition animation or does it happen immediately (optional)
+                  animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
+              });
           }
       }
   };

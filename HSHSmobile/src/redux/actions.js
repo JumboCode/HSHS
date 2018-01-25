@@ -103,6 +103,32 @@ export const addNewActionItem = (isDone, title, creationTimestamp, locationCoord
                 })
 }
 
+export const editActionItemStart = () => ({
+        type: 'ADD_NEW_ACTION_ITEMS_START'
+})
+
+export const editActionItemSuccess = () => ({
+        type: 'ADD_NEW_ACTION_ITEMS_SUCCESS'
+})
+
+export const editActionItem = (id, isDone, title, creationTimestamp, locationCoord, locationStr, shiftDate, description, guestIds, volunteerId) => {
+                store.dispatch(addNewActionItemStart);
+                firebase.database().ref('actionItems' + '/' + id).set({
+                        isDone: isDone,
+                        title: title,
+                        creationTimestamp: creationTimestamp,
+                        locationCoord: {
+                            lat: locationCoord[0],
+                            lng: locationCoord[1]
+                        },
+                        locationStr: locationStr,
+                        shiftDate: shiftDate,
+                        description: description,
+                        guestIds: guestIds,
+                        volunteerId: volunteerId
+                })
+}
+
 export const addNewInteractionStart = () => ({
         type: 'ADD_NEW_INTERACTIONS_START'
 })
