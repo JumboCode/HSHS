@@ -66,10 +66,10 @@ class TodoListItemNew extends Component {
     }
 
     removeGuest(guest) {
-      let index = this.state.taggedGuests.indexOf(guest)
-      let arr = this.state.taggedGuests
-      arr.splice(index, 1)
-      this.setState({taggedGuests: arr})
+        let index = this.state.taggedGuests.indexOf(guest)
+        let arr = this.state.taggedGuests
+        arr.splice(index, 1)
+        this.setState({taggedGuests: arr})
     }
 
     setChosenLocation = (locationName) => {
@@ -108,8 +108,8 @@ class TodoListItemNew extends Component {
                             color='#770B16'
                             name='local-pizza'
                             onPress={() => {
-                            this.mapModule.openMap({lat: 42.405804, lng: -71.11956})
-                        }} />
+                                this.mapModule.openMap({lat: 42.405804, lng: -71.11956})
+                            }} />
                     </View>
                     <View style={{flex:1}}>
                         <Text numberOfLines={1} style={{textAlign: 'right',  margin: 10}}>{this.state.locationName}</Text>
