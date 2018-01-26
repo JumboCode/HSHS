@@ -351,7 +351,6 @@ import { addNewActionItem, getActionItems} from '../../redux/actions.js';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-
 const Timestamp = require('react-timestamp');
 
 function mapStateToProps(state, ownProps) {
