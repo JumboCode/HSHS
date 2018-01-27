@@ -16,7 +16,7 @@ import {connect} from 'react-redux';
 import ChooseLocation from '../../modules/ChooseLocation';
 import TagGuestDialog from "../../modules/TagGuestDialog"
 import renderSeperator from '../../modules/UI/renderSeperator'
-const IonIcon = require('react-native-vector-icons/Ionicons');
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 function mapStateToProps(state, ownProps) {
@@ -47,9 +47,12 @@ class TodoListItemNew extends Component {
         this.addGuest = this.addGuest.bind(this);
         this.removeGuest = this.removeGuest.bind(this);
         this.state = {
+            title: null,
             taggedGuests: [],
             selectedLocation: null,
             locationName: "No Location Selected",
+            selectedDate: null,
+            dateName: "No Date Selected",
         };
         setInterval(() => {
             console.log(this.state.taggedGuests);
@@ -69,9 +72,9 @@ class TodoListItemNew extends Component {
     }
 
     removeGuest(guest) {
-        let index = this.state.taggedGuests.indexOf(guest)
-        let arr = this.state.taggedGuests
-        arr.splice(index, 1)
+        let index = this.state.taggedGuests.indexOf(guest);
+        let arr = this.state.taggedGuests;
+        arr.splice(index, 1);
         this.setState({taggedGuests: arr})
     }
 
@@ -156,38 +159,85 @@ class TodoListItemNew extends Component {
                         placeholderTextColor = "#000000"
                         onChangeText={(title) => this.state.title = title}
                     />
-                    <View style = {styles.row}>
-                        <Ionicons style = {styles.icon}
-                                  name="ios-person-outline"
-                                  size = {20} />
-                        <Text style = {styles.add}>
-                            Add Guest Profile
-                        </Text>
+                    {renderSeperator()}
+                    <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
+                        <View>
+                            <Icon
+                                raised
+                                color='#770B16'
+                                name='person'
+                                size={16}
+                                onPress={() => {
+                                    this.tagGuestDialog.show();
+                                }}
+                            />
+                        </View>
+                        <View style={{flex: 1}}>
+                            <Text numberOfLines={1} style={{textAlign: 'right', margin: 10}}>{"X Guests Selected"}</Text>
+                        </View>
                     </View>
-                    <View style = {styles.row}>
-                        <Ionicons style = {styles.icon}
-                                  name="ios-pin-outline"
-                                  size = {20} />
-                        <Text style = {styles.add}>
-                            Add Location
-                        </Text>
+                    {renderSeperator()}
+                    <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
+                        <View>
+                            <Icon
+                                raised
+                                color='#770B16'
+                                name='location-on'
+                                size={16}
+                                onPress={() => {
+                                    this.mapModule.openMap({lat: 42.405804, lng: -71.11956})
+                                }}/>
+                        </View>
+                        <View style={{flex: 1}}>
+                            <Text numberOfLines={1}
+                                  style={{textAlign: 'right', margin: 10}}>{this.state.locationName}</Text>
+
+                        </View>
                     </View>
-                    <View style = {styles.daterow}>
-                        <Ionicons style = {styles.icon}
-                                  name="ios-clock-outline"
-                                  size = {20} />
-                        <Text style = {styles.dateadd}>
-                            Add Shift
-                        </Text>
+                    {renderSeperator()}
+                    <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
+                        <View>
+                            <Icon
+                                raised
+                                color='#770B16'
+                                name='timer'
+                                size={16}
+                                onPress={() => {
+                                    alert("Make this connect to the calendar picker!")
+                                }}/>
+                        </View>
+                        <View style={{flex: 1}}>
+                            <Text numberOfLines={1}
+                                  style={{textAlign: 'right', margin: 10}}>{this.state.dateName}</Text>
+
+                        </View>
                     </View>
+                    {renderSeperator()}
                     <TextInput
                         editable = {true}
                         placeholder = "Description"
                         style = {styles.description}
                         multiline = {true}
                     />
-
                 </View>
+                <TagGuestDialog
+                    ref={(dialog) => {
+                        this.tagGuestDialog = dialog;
+                    }}
+                    guests={this.props.guests}
+                    loading={this.props.loading}
+                    taggedGuests={this.state.taggedGuests}
+                    addGuest={this.addGuest}
+                    removeGuest={this.removeGuest}
+                />
+                <ChooseLocation
+                    ref={(map) => {
+                        this.mapModule = map;
+                    }}
+                    viewHeight={this.state.viewHeight}
+                    viewWidth={this.state.viewWidth}
+                    locationFunction={this.setChosenLocation.bind(this)}
+                />
             </View>
         );
     }
@@ -237,14 +287,14 @@ const styles = StyleSheet.create({
     },
     description: {
         borderWidth: 0.5,
-        marginTop: 5,
+        marginTop: 20,
         marginLeft: 30,
         marginRight: 30,
         borderRadius: 5,
         height: 100,
         padding: 5,
         fontSize: 15,
-        marginBottom: 30
+        marginBottom: 20
     }
 });
 
