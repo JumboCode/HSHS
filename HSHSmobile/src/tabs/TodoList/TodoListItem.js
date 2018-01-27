@@ -31,6 +31,7 @@ function mapStateToProps(state, ownProps) {
         actionItem: state.actionItems[ownProps.id],
         item: null, //state.actionItems[ownProps.id],
         loading: state.loading,
+        id: ownProps.id
     };
 }
 
@@ -76,7 +77,7 @@ class TodoListItem extends Component {
   onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
       if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
           if (event.id == 'save_actionItem') { // this is the same id field from the static navigatorButtons definition
-              editActionItem(this.state.id, false, this.state.title, "creationTimestamp", [42, -71], "locationStr", "shiftDate", "description", [0], "volunteerId");
+              editActionItem(this.props.id, false, this.state.title, "creationTimestamp", [42, -71], "locationStr", "shiftDate", "description", [0], "volunteerId");
               getActionItems();
               this.props.navigator.pop({
                   animated: true, // does the pop have transition animation or does it happen immediately (optional)
