@@ -28,9 +28,6 @@ class ActionItemList extends Component {
 			actionItems = dueSoon;
 		}
 
-		this.state = {
-			actionItems: actionItems
-		};
         this.Screen_TodoListItem = this.Screen_TodoListItem.bind(this);
     }
 
@@ -41,7 +38,7 @@ class ActionItemList extends Component {
                 id: item.id,
             }, // Object that will be passed as props to the pushed screen (optional)
             animated: true, // does the push have transition animation or does it happen immediately (optional)
-            animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
+            animationType: 'slide-horizontal', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
             backButtonHidden: false, // hide the back button altogether (optional)
             navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
             navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
@@ -52,7 +49,7 @@ class ActionItemList extends Component {
 		return (
 			<List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0, marginTop: 0 }}>
 				<FlatList
-					data = {this.state.actionItems}
+					data = {getActionItems(this.props.actionItems)}
 		            renderItem={({item}) => this.renderListItem(item)}
 		            keyExtractor = {item => item.id}
 		            ItemSeparatorComponent = {this.renderSeparator}
