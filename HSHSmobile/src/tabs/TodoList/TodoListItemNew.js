@@ -54,13 +54,17 @@ class TodoListItemNew extends Component {
         this.addGuest = this.addGuest.bind(this);
         this.removeGuest = this.removeGuest.bind(this);
         this.state = {
-            title: null,
+            title: "",
             taggedGuests: [],
-            locationCoords: null,
+            locationCoords: {
+            	longitude: 0,
+            	latitude: 0
+            },
+            selectedLocation: null,
             locationName: "No Location Selected",
-            selectedDate: null,
+            selectedDate: "",
             dateName: "No Date Selected",
-            description: null,
+            description: "",
         };
         setInterval(() => {
             console.log(this.state.taggedGuests);
@@ -126,9 +130,8 @@ class TodoListItemNew extends Component {
                         placeholderTextColor = "#000000"
                         onChangeText={(title) => this.state.title = title}
                     />
-                    {renderSeperator()}
                     <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
-                        <View>
+                        <View style = {styles.icon}>
                             <Icon
                                 raised
                                 color='#770B16'
@@ -140,12 +143,11 @@ class TodoListItemNew extends Component {
                             />
                         </View>
                         <View style={{flex: 1}}>
-                            <Text numberOfLines={1} style={{textAlign: 'right', margin: 10}}>{"X Guests Selected"}</Text>
+                            <Text numberOfLines={1} style={{textAlign: 'right', margin: 10}}>{"0 Guests Selected"}</Text>
                         </View>
                     </View>
-                    {renderSeperator()}
                     <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
-                        <View>
+                        <View style = {styles.icon}>
                             <Icon
                                 raised
                                 color='#770B16'
@@ -161,9 +163,8 @@ class TodoListItemNew extends Component {
 
                         </View>
                     </View>
-                    {renderSeperator()}
                     <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
-                        <View>
+                        <View style = {styles.icon}>
                             <Icon
                                 raised
                                 color='#770B16'
@@ -179,7 +180,6 @@ class TodoListItemNew extends Component {
 
                         </View>
                     </View>
-                    {renderSeperator()}
                     <TextInput
                         editable = {true}
                         placeholder = "Description"
@@ -224,15 +224,15 @@ const styles = StyleSheet.create({
         alignSelf: "stretch",
     },
     title: {
-        paddingTop: 30,
+        paddingTop: 20,
         paddingLeft: 20,
         color: "#000000",
         fontSize: 30,
         paddingBottom: 5
     },
     icon: {
-        paddingRight: 10,
-        paddingLeft: 7
+        //paddingRight: 10,
+        paddingLeft: 15
     },
     row: {
         flexDirection: "row",
@@ -255,14 +255,14 @@ const styles = StyleSheet.create({
     },
     description: {
         borderWidth: 0.5,
-        marginTop: 20,
+        marginTop: 15,
         marginLeft: 30,
         marginRight: 30,
         borderRadius: 5,
         height: 100,
         padding: 5,
         fontSize: 15,
-        marginBottom: 20
+        marginBottom: 30
     }
 });
 
