@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
     Platform,
     StyleSheet,
@@ -12,14 +12,14 @@ import {
     NativeModules,
     LayoutAnimation,
 } from 'react-native';
-import { List, ListItem, SearchBar } from "react-native-elements";
+import {List, ListItem, SearchBar} from "react-native-elements";
 import {connect} from 'react-redux';
 import MapView from 'react-native-maps';
 import {getGuests, getInteractions, getActionItems} from '../../redux/actions.js';
 import ActionItemList from '../../modules/ActionItem';
-import { Icon } from 'react-native-elements'
+import {Icon} from 'react-native-elements'
 
-const { UIManager } = NativeModules;
+const {UIManager} = NativeModules;
 
 UIManager.setLayoutAnimationEnabledExperimental &&
 UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -30,7 +30,8 @@ function mapStateToProps(state, ownProps) {
         guests: state.guests,
         loading: state.loading,
         interactions: state.interactions
-    };}
+    };
+}
 
 function mapDispatchToProps(dispatch, ownProps) {
     return {
@@ -91,10 +92,10 @@ class Dashboard extends Component {
                 let coordinate = {latitude: actionItem.locationCoord.lat, longitude: actionItem.locationCoord.lng};
                 markers.push(
                     <MapView.Marker
-                        coordinate = {coordinate}
-                        title = {actionItem.title}
-                        description = {actionItem.description}
-                        key = {actionItemId}
+                        coordinate={coordinate}
+                        title={actionItem.title}
+                        description={actionItem.description}
+                        key={actionItemId}
                     />
                 )
             }
@@ -106,74 +107,75 @@ class Dashboard extends Component {
     render() {
         return (
 
-            (this.props.loading &&  <ActivityIndicator animating size="large" />) ||
+            (this.props.loading && <ActivityIndicator animating size="large"/>) ||
 
 
             (!this.props.loading &&
-            <View>
-                <MapView
-                    region={this.state.region}
-                    onRegionChange={(region) => {
-                        this.setState(previousState => {
-                            return { region: region};
-                        })
-                    }}
-                    style = {{
-                        height: this.state.isMapFullScreen ? Dimensions.get('window').height * 0.4 : Dimensions.get('window').height,
-                        width: Dimensions.get('window').width,
-                        margin: 0}}
-                    initialRegion={{
-                        latitude: 42.405804,
-                        longitude: -71.11956,
-                        latitudeDelta: 0.02,
-                        longitudeDelta: 0.01,
-                    }}>
-                    {
-                        this.props.actionItems && this.renderMarkers()
-                    }
-                </MapView>
-
-                
-
-                <View style = {{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0
-                }}>
-                    <Icon
-                        size={36}
-                        underlayColor='transparent'
-                        name={this.state.isMapFullScreen ? 'fullscreen' : 'fullscreen-exit'}
-                        onPress={() => {
-                            this.setState(previousState => {
-                                return { isMapFullScreen: !previousState.isMapFullScreen};
-                            });
-                        }} />
-                </View>
-
-                <View style = {{
-                    position: 'absolute',
-                    top: 5,
-                    right: 5
-                }}>
-                    <Icon
-                        size={28}
-                        underlayColor='transparent'
-                        name='my-location'
-                        onPress={() => {
-                            Alert.alert("", "This should do something!");
+                <View>
+                    <MapView
+                        region={this.state.region}
+                        // onRegionChange={(region) => {
+                        //     this.setState(previousState => {
+                        //         return {region: region};
+                        //     })
+                        // }}
+                        style={{
+                            height: this.state.isMapFullScreen ? Dimensions.get('window').height * 0.4 : Dimensions.get('window').height,
+                            width: Dimensions.get('window').width,
+                            margin: 0
                         }}
+                        initialRegion={{
+                            latitude: 42.405804,
+                            longitude: -71.11956,
+                            latitudeDelta: 0.02,
+                            longitudeDelta: 0.01,
+                        }}>
+                        {
+                           this.props.actionItems && this.renderMarkers()
+                        }
+                    </MapView>
+
+
+                    <View style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0
+                    }}>
+                        <Icon
+                            size={36}
+                            underlayColor='transparent'
+                            name={this.state.isMapFullScreen ? 'fullscreen' : 'fullscreen-exit'}
+                            onPress={() => {
+                                this.setState(previousState => {
+                                    return {isMapFullScreen: !previousState.isMapFullScreen};
+                                });
+                            }}/>
+                    </View>
+
+                    <View style={{
+                        position: 'absolute',
+                        top: 5,
+                        right: 5
+                    }}>
+                        <Icon
+                            size={28}
+                            underlayColor='transparent'
+                            name='my-location'
+                            onPress={() => {
+                                Alert.alert("", "This should do something!");
+                            }}
                         />
-                </View>
+                    </View>
 
-                { !this.props.actionItems || this.props.actionItems.length <= 1
-                    ? <ActivityIndicator animating size="large" />
+                    {!this.props.actionItems || this.props.actionItems.length <= 1
+                        ? <ActivityIndicator animating size="large"/>
 
-                    : <ActionItemList actionItems={this.props.actionItems} showDueSoon={true} navigator={this.props.navigator}/>
-                }
+                        : <ActionItemList actionItems={this.props.actionItems} showDueSoon={true}
+                                          navigator={this.props.navigator}/>
+                    }
 
 
-                {/* Commented out until we figure out lottery number implementation
+                    {/* Commented out until we figure out lottery number implementation
                     <View style={{flexDirection: 'column', alignItems: 'center'}}>
 
                     <Text>
@@ -204,13 +206,12 @@ class Dashboard extends Component {
 
                 </View> */}
 
-            </View>
+                </View>
             )
         );
     }
 }
 
-const styles = StyleSheet.create({
-});
+const styles = StyleSheet.create({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

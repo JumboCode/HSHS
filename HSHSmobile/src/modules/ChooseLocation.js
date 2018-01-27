@@ -65,7 +65,7 @@ export default class ChooseLocation extends Component {
                 this.setState(previousState => {
                     return { address: address_component };
                 });
-                this.props.locationFunction(address_component);
+                this.props.locationFunction(address_component, coordinate);
             },
             error => {
                 alert(error);

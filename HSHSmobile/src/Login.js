@@ -24,6 +24,7 @@ import GuestListProfile from './tabs/GuestList/GuestListProfile';
 import TodoList from './tabs/TodoList/TodoList';
 import TodoListItem from './tabs/TodoList/TodoListItem';
 import TodoListItemNew from './tabs/TodoList/TodoListItemNew';
+import NewInteraction from './tabs/NewInteraction/NewInteraction';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -118,6 +119,7 @@ export default class Login extends Component {
         Navigation.registerComponent('TodoList', () => TodoList, store, Provider);
         Navigation.registerComponent('TodoListItem', () => TodoListItem, store, Provider);
         Navigation.registerComponent('TodoListItemNew', () => TodoListItemNew, store, Provider);
+        Navigation.registerComponent('NewInteraction', () => NewInteraction, store, Provider);
 
         // TODO: make the tabs link to real pages
         Navigation.startTabBasedApp({
@@ -137,7 +139,7 @@ export default class Login extends Component {
                 },
                 {
                     label: 'add note',
-                    screen: 'Info',
+                    screen: 'NewInteraction',
                     title: 'Add Note',
                     icon: checkinIcon,
                 },
