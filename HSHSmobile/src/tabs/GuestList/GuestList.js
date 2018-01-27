@@ -207,8 +207,7 @@ class GuestList extends Component {
                                     <Text style={{marginHorizontal: 'auto'}}>{item.lastInteractionString}</Text>
                                 </View>
                             }
-                            subtitle = {<Text numberOfLines={2} style={{marginTop: 5, marginLeft: 10, fontSize: 12, color: '#757575'}}>{item.description}</Text>}
-                            subtitleStyle = {{marginTop: 5}}
+                            subtitle = {<Text numberOfLines={2} style={{marginTop: 5, marginLeft: 10, fontSize: 12, color: '#757575', height: 30}}>{item.description}</Text>}
                             containerStyle = {{ borderBottomWidth: 0 }}
                             onPress = {() => this.Screen_GuestListProfile(item)}
                         />

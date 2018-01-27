@@ -33,15 +33,15 @@ const age_list = [
     },
     {
         label: 'Old',
-        value: 'OLD'
+        value: 'Old'
     },
     {
         label: 'Middle',
-        value: 'MIDDLE'
+        value: 'Middle'
     },
     {
         label: 'Young',
-        value: 'YOUNG'
+        value: 'Young'
     },
 ];
 
@@ -52,15 +52,15 @@ const genders = [
     },
     {
         label: 'Male',
-        value: 'MALE'
+        value: 'M'
     },
     {
         label: 'Female',
-        value: 'FEMALE'
+        value: 'F'
     },
     {
         label: 'Other',
-        value: 'OTHER'
+        value: '/'
     },
 ];
 
@@ -100,9 +100,7 @@ class NewGuest extends Component<{}> {
         this.state = {
             nameError: '',
             genderError: '',
-            tattooError: '',
-            ageError: '',
-            hairColorError: ''
+            ageError: ''
         }
     }
 
@@ -111,19 +109,15 @@ class NewGuest extends Component<{}> {
         const nameError = (form.name == '' ? 'Required Field' : '')
         const genderError = (form.gender == '' ? 'Required Field' : '')
         const ageError = (form.age == '' ? 'Required Field' : '')
-        const hairColorError = (form.hairColor == '' ? 'Required Field' : '')
-        const tattooError = (form.isTattooed == '' ? 'Required Field' : '')
 
         this.setState({
-            nameError, genderError, ageError, hairColorError, tattooError
+            nameError, genderError, ageError
         })
-        console.log("name is " + this.formInput.name)
 
-        if (!nameError && !genderError && !ageError && !hairColorError && !tattooError) {
+        if (!nameError && !genderError && !ageError) {
             let timestamp =
                 this.props.addNewGuest(form.name, form.age, form.gender,
-                    form.hairColor, (form.isTattooed === "TRUE" ? true : false),
-                    form.description, [], []);
+                    form.description);
             this.props.navigator.pop({
                 animated: true, // does the pop have transition animation or does it happen immediately (optional)
                 animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
