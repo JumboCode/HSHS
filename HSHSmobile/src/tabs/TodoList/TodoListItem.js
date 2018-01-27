@@ -17,19 +17,23 @@ import {
 import { List, ListItem } from "react-native-elements";
 import nodeEmoji from 'node-emoji';
 import {connect} from 'react-redux';
+import ChooseLocation from '../../modules/ChooseLocation';
+import TagGuestDialog from "../../modules/TagGuestDialog"
+import renderSeperator from '../../modules/UI/renderSeperator'
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Icon } from 'react-native-elements'
 import { editActionItem, getActionItems } from '../../redux/actions.js';
 //import DatePicker from 'react-native-datepicker'
 /*mport { DatePickerDialog } from 'react-native-datepicker-dialog';
 import moment from 'moment';*/
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
-
 
 const Timestamp = require('react-timestamp');
 
 function mapStateToProps(state, ownProps) {
+    var guests = guestObjectToArray(state.guests, state.interactions);
     return {
+        guests: guests,
         actionItem: state.actionItems[ownProps.id],
         item: null, //state.actionItems[ownProps.id],
         loading: state.loading,
@@ -44,6 +48,18 @@ function mapDispatchToProps(dispath, ownProps) {
     };
 }
 
+function guestObjectToArray(IdsToGuests, IdsToInteractions) {
+    var guestList = [];
+    for (var Id in IdsToGuests) {
+        guestList.push({
+            "Id" : Id,
+            "name" : IdsToGuests[Id].name,
+        });
+    }
+    console.log(guestList);
+    return guestList;
+}
+
 
 class TodoListItem extends Component {
   constructor(props) {
@@ -52,7 +68,14 @@ class TodoListItem extends Component {
       this.state = {
           selectedGuests: null,
           selectedLocation: null,
-          title: this.props.actionItem.title
+          title: this.props.actionItem.title,
+          taggedGuests: [],
+          selectedLocation: null,
+          locationCoords: null,
+          locationName: "No Location Selected",
+          selectedDate: null,
+          dateName: "No Date Selected",
+          description: null
           //
           /*DateText: '',
           DateHolder: null,*/
@@ -106,13 +129,31 @@ class TodoListItem extends Component {
       }
   };
 
-  renderSelectedGuestsText = (guests) => {
+addGuest(guest) {
+      this.setState({taggedGuests: [...this.state.taggedGuests, guest]});
+}
+
+removeGuest(guest) {
+    let index = this.state.taggedGuests.indexOf(guest);
+    let arr = this.state.taggedGuests;
+    arr.splice(index, 1);
+    this.setState({taggedGuests: arr})
+}
+
+setChosenLocation = (locationName, locationCoords) => {
+    this.setState({
+        locationName: locationName,
+        locationCoords: locationCoords,
+    });
+};
+
+  /*renderSelectedGuestsText = (guests) => {
       return guests ? "TODO" : "Add Guest Profiles"
   };
 
   renderSelectedLocation = (location) => {
     return location ? "TODO" : "Add Location"
-  };
+  };*/
 
   render() {
       return (
@@ -125,46 +166,92 @@ class TodoListItem extends Component {
                         defaultValue = {this.state.title}
                         onChangeText={(title) => this.state.title = title}
                     />
-                <View style = {styles.row}>
-                    <Ionicons style = {styles.icon}
-                        name="ios-person-outline"
-                        size = {20} />
-                    <Text style = {styles.add}>
-                        Add Guest Profile
-                    </Text>
-                </View>
-                <View style = {styles.row}>
-                    <Ionicons style = {styles.icon}
-                        name="ios-pin-outline"
-                        size = {20} />
-                    <Text style = {styles.add}>
-                        Add Location
-                    </Text>
-                </View>
-                <View style = {styles.daterow}>
-                        <Ionicons style = {styles.icon}
-                            name="ios-clock-outline"
-                            size = {20} />
-                        <Text style = {styles.dateadd}>
-                            Add Shift
-                        </Text>
+                <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
+                        <View style = {styles.icon}>
+                            <Icon
+                                raised
+                                color='#770B16'
+                                name='person'
+                                size={16}
+                                onPress={() => {
+                                    this.tagGuestDialog.show();
+                                }}
+                            />
+                        </View>
+                        <View style={{flex: 1}}>
+                            <Text numberOfLines={1} style={{textAlign: 'right', margin: 10}}>{"0 Guests Selected"}</Text>
+                        </View>
                     </View>
-                <TextInput
-                    editable = {true}
-                    placeholder = "Description"
-                    style = {styles.description}
-                    multiline = {true}
+                    <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
+                        <View style = {styles.icon}>
+                            <Icon
+                                raised
+                                color='#770B16'
+                                name='location-on'
+                                size={16}
+                                onPress={() => {
+                                    this.mapModule.openMap({lat: 42.405804, lng: -71.11956})
+                                }}/>
+                        </View>
+                        <View style={{flex: 1}}>
+                            <Text numberOfLines={1}
+                                  style={{textAlign: 'right', margin: 10}}>{this.state.locationName}</Text>
+
+                        </View>
+                    </View>
+                    <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
+                        <View style = {styles.icon}>
+                            <Icon
+                                raised
+                                color='#770B16'
+                                name='timer'
+                                size={16}
+                                onPress={() => {
+                                    alert("Make this connect to the calendar picker!")
+                                }}/>
+                        </View>
+                        <View style={{flex: 1}}>
+                            <Text numberOfLines={1}
+                                  style={{textAlign: 'right', margin: 10}}>{this.state.dateName}</Text>
+
+                        </View>
+                    </View>
+                    <TextInput
+                        editable = {true}
+                        placeholder = "Description"
+                        style = {styles.description}
+                        multiline = {true}
+                        onChangeText={(description) => this.state.description = description}
                     />
-                <View style = {styles.done}>
-                 <Button
-                  //onPress={this.authenticate}
-                  title="Mark as Done"
-                  //color={Platform.OS === 'ios' ? "#FFFFFF" : "#556A5B"}
-                  //accessibilityLabel="Mark action item as done."
+                
+                <TagGuestDialog
+                    ref={(dialog) => {
+                        this.tagGuestDialog = dialog;
+                    }}
+                    guests={this.props.guests}
+                    loading={this.props.loading}
+                    taggedGuests={this.state.taggedGuests}
+                    addGuest={this.addGuest}
+                    removeGuest={this.removeGuest}
                 />
+                <ChooseLocation
+                    ref={(map) => {
+                        this.mapModule = map;
+                    }}
+                    viewHeight={this.state.viewHeight}
+                    viewWidth={this.state.viewWidth}
+                    locationFunction={this.setChosenLocation.bind(this)}
+                />
+                 <View style = {styles.done}>
+                  <Button
+                    //onPress={this.authenticate}
+                    title="Mark as Done"
+                    //color={Platform.OS === 'ios' ? "#FFFFFF" : "#556A5B"}
+                    //accessibilityLabel="Mark action item as done."
+                  />
+              </View>
               </View>
             </View>
-        </View>
       );
   }
 }
@@ -188,8 +275,8 @@ const styles = StyleSheet.create({
         paddingBottom: 5
     },
     icon: {
-        paddingRight: 10,
-        paddingLeft: 7
+        //paddingRight: 15
+        paddingLeft: 15
     },
     row: {
         flexDirection: "row",
@@ -212,7 +299,7 @@ const styles = StyleSheet.create({
     },
     description: {
         borderWidth: 0.5,
-        marginTop: 5,
+        marginTop: 15,
         marginLeft: 30,
         marginRight: 30,
         borderRadius: 5,
@@ -223,7 +310,7 @@ const styles = StyleSheet.create({
     },
     done: {
       //backgroundColor: 
-      marginBottom: 30
+      marginBottom: 15
     }
 })
 
