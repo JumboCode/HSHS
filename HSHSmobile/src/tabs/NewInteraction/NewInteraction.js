@@ -1,103 +1,45 @@
-/*
- *
- *
- *
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ * @flow
  */
+
 import React, { Component } from 'react';
 import {
     Platform,
     StyleSheet,
     Text,
-    TextInput,
-    View,
-    Button,
-    Alert,
-    Picker,
-    TouchableOpacity,
-    Modal,
-    TouchableWithoutFeedback,
-    TouchableHighlight,
-    ScrollView
+    View
 } from 'react-native';
-import {connect} from 'react-redux';
-import {addNewGuest} from '../../redux/actions.js';
-import FAB from 'react-native-fab'
 
-import Icon from 'react-native-vector-icons/Ionicons';
-import ActionButton from 'react-native-action-button';
+const instructions = Platform.select({
+    ios: 'please make me an ios screen!',
+    android: 'please make me an android screen!'
+});
 
-import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
-import ModalDropdown from 'react-native-modal-dropdown';
-// Redux functions
-function mapStateToProps(state, ownProps) {
-    return {
-        //data: state.guest_info,
-        //loading: state.loading
-    };
-}
-
-function mapDispatchToProps(dispath, ownProps) {
-    return {
-        //addNewGuest: addNewGuest
-    };
-}
-
-/*
- * NewGuest: props- none i think
- * Represents the complete view containing a form to input new guests
- * formInput is a dictionary containing information about the guest
- * For new form validation, add a [field]Error entry to the state and update
- * it in register() if the current formInput entry is not up to par.
- * TODO make it a scrollview
- */
-class NewInteraction extends Component<{}> {
-    constructor(props) {
-        super(props);
-        //this.formInput = {name: '', description: '', gender: '', hairColor: '',
-                        //isTattooed: '', age: '', actionItems: [], interactions: []}
-        //this.state = { nameError: '', genderError: '', tattooError: '',
-                       //ageError: '',  hairColorError: ''}
-    }
-
-    render () {
+export default class Info extends Component {
+    render() {
         return (
-            <View style={{flex: 1}}>
-            <View style={{flex: 1}}>
-        <ActionButton buttonColor="rgba(231,76,60,1)" onPress={() => console.log("notes tapped!")}>
-
-        </ActionButton>
+            <View style={styles.container}>
+                <Text style={styles.instructions}>
+                    {instructions}
+                </Text>
             </View>
-
-
-          <View style={{flex: 1}}>
-          <Text> new interaction </Text>
-          <FormLabel>Description</FormLabel>
-<FormInput/>
-<FormValidationMessage>Error message</FormValidationMessage>
-
-          <FormLabel>Location</FormLabel>
-<FormInput/>
-<FormValidationMessage>Error message</FormValidationMessage>
-
-
-          </View>
-          </View>
         );
     }
 }
 
-
-
 const styles = StyleSheet.create({
-  actionButtonIcon: {
-    fontSize: 20,
-    height: 22,
-    color: 'white',
-  },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#F5FCFF',
+    },
+    instructions: {
+        fontSize: 18,
+        textAlign: 'center',
+        color: '#333333',
+        marginBottom: 5,
+    },
 });
-
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(NewInteraction)
