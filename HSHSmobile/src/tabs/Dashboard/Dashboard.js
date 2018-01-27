@@ -85,17 +85,19 @@ class Dashboard extends Component {
 
     renderMarkers = () => {
         var markers = [];
-        for (var actionItemId in this.props.actionItems) {
-            let actionItem = this.props.actionItems[actionItemId];
-            let coordinate = {latitude: actionItem.locationCoord.lat, longitude: actionItem.locationCoord.lng};
-            markers.push(
-                <MapView.Marker
-                    coordinate = {coordinate}
-                    title = {actionItem.title}
-                    description = {actionItem.description}
-                    key = {actionItemId}
-                />
-            )
+        if (this.props.actionItems) {
+            for (var actionItemId in this.props.actionItems) {
+                let actionItem = this.props.actionItems[actionItemId];
+                let coordinate = {latitude: actionItem.locationCoord.lat, longitude: actionItem.locationCoord.lng};
+                markers.push(
+                    <MapView.Marker
+                        coordinate = {coordinate}
+                        title = {actionItem.title}
+                        description = {actionItem.description}
+                        key = {actionItemId}
+                    />
+                )
+            }
         }
         return markers;
     };
@@ -164,7 +166,7 @@ class Dashboard extends Component {
                         />
                 </View>
 
-                { this.props.actionItems.length <= 1
+                { !this.props.actionItems || this.props.actionItems.length <= 1
                     ? <ActivityIndicator animating size="large" />
 
                     : <ActionItemList actionItems={this.props.actionItems} showDueSoon={true} navigator={this.props.navigator}/>

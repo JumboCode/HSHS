@@ -86,7 +86,7 @@ class ActionItemList extends Component {
 	                        <View style={{flex: 2, flexDirection: 'row'}}>
 	                            <View style={{flex:1}}>
 	                                <Icon
-	                                    name='local-pizza' />
+	                                    name='location-on' />
 	                            </View>
 	                            <View style={{flex:3}}>
 	                                <Text numberOfLines={1}>{item.locationStr}</Text>
