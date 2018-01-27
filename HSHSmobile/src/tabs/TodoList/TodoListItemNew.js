@@ -17,7 +17,7 @@ import ChooseLocation from '../../modules/ChooseLocation';
 import TagGuestDialog from "../../modules/TagGuestDialog"
 import renderSeperator from '../../modules/UI/renderSeperator'
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import {addNewActionItem, getActionItems} from "../../redux/actions";
 
 function mapStateToProps(state, ownProps) {
     var guests = guestObjectToArray(state.guests, state.interactions);
@@ -25,6 +25,13 @@ function mapStateToProps(state, ownProps) {
         guests: guests,
         item: null, //state.actionItems[ownProps.id],
         loading: state.loading,
+    };
+}
+
+function mapDispatchToProps(dispath, ownProps) {
+    return {
+        addNewActionItem: addNewActionItem,
+        getActionItems: getActionItems
     };
 }
 
@@ -49,20 +56,43 @@ class TodoListItemNew extends Component {
         this.state = {
             title: null,
             taggedGuests: [],
-            selectedLocation: null,
+            locationCoords: null,
             locationName: "No Location Selected",
             selectedDate: null,
             dateName: "No Date Selected",
+            description: null,
         };
         setInterval(() => {
             console.log(this.state.taggedGuests);
         }, 2000); //TODO: DELETE DEBUG CODE
     };
 
+    componentDidMount() {
+        this.props.navigator.setButtons({
+            rightButtons: [
+                {
+                    title: 'Save', // for a textual button, provide the button title (label)
+                    id: 'save_actionItem', // id for this button, given in onNavigatorEvent(event) to help understand which button was clicked
+                    disabled: false, // optional, used to disable the button (appears faded and doesn't interact)
+                    disableIconTint: true, // optional, by default the image colors are overridden and tinted to navBarButtonColor, set to true to keep the original image colors
+                    showAsAction: 'ifRoom', // optional, Android only. Control how the button is displayed in the Toolbar. Accepted valued: 'ifRoom' (default) - Show this item as a button in an Action Bar if the system decides there is room for it. 'always' - Always show this item as a button in an Action Bar. 'withText' - When this item is in the action bar, always show it with a text label even if it also has an icon specified. 'never' - Never show this item as a button in an Action Bar.
+                    buttonColor: 'white', // Optional, iOS only. Set color for the button (can also be used in setButtons function to set different button style programatically)
+                    buttonFontSize: 18, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
+                    buttonFontWeight: '600', // Set font weight for the button (can also be used in setButtons function to set different button style programatically)
+                }
+            ]
+        });
+    };
+
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
         if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
             if (event.id == 'save_actionItem') { // this is the same id field from the static navigatorButtons definition
-                Alert.alert("Saving!");
+                addNewActionItem(false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, "shiftDate", this.state.description, [0], "volunteerId");
+                getActionItems();
+                this.props.navigator.pop({
+                    animated: true, // does the pop have transition animation or does it happen immediately (optional)
+                    animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
+                });
             }
         }
     };
@@ -78,8 +108,11 @@ class TodoListItemNew extends Component {
         this.setState({taggedGuests: arr})
     }
 
-    setChosenLocation = (locationName) => {
-        this.setState({locationName: locationName});
+    setChosenLocation = (locationName, locationCoords) => {
+        this.setState({
+            locationName: locationName,
+            locationCoords: locationCoords,
+        });
     };
 
     render() {
@@ -152,6 +185,7 @@ class TodoListItemNew extends Component {
                         placeholder = "Description"
                         style = {styles.description}
                         multiline = {true}
+                        onChangeText={(description) => this.state.description = description}
                     />
                 </View>
                 <TagGuestDialog
@@ -232,4 +266,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connect(mapStateToProps)(TodoListItemNew);
+export default connect(mapStateToProps, mapDispatchToProps)(TodoListItemNew);

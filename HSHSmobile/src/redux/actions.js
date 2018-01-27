@@ -92,8 +92,8 @@ export const addNewActionItem = (isDone, title, creationTimestamp, locationCoord
                         title: title,
                         creationTimestamp: creationTimestamp,
                         locationCoord: {
-                            lat: locationCoord[0],
-                            lng: locationCoord[1]
+                            lat: locationCoord.latitude,
+                            lng: locationCoord.longitude,
                         },
                         locationStr: locationStr,
                         shiftDate: shiftDate,
@@ -118,8 +118,8 @@ export const editActionItem = (id, isDone, title, creationTimestamp, locationCoo
                         title: title,
                         creationTimestamp: creationTimestamp,
                         locationCoord: {
-                            lat: locationCoord[0],
-                            lng: locationCoord[1]
+                            lat: locationCoord.latitude,
+                            lng: locationCoord.longitude,
                         },
                         locationStr: locationStr,
                         shiftDate: shiftDate,
