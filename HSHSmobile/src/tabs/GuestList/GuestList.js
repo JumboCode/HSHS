@@ -25,7 +25,7 @@ function mapDispatchToProps(dispath, ownProps) {
     return {
     };
 }
- 
+
 //TODO sort by name
 function guestObjectToArray(IdsToGuests, IdsToInteractions) {
     var guestList = []
@@ -33,7 +33,10 @@ function guestObjectToArray(IdsToGuests, IdsToInteractions) {
         guestList.push({
             "Id" : Id,
             "name" : IdsToGuests[Id].name,
-            "lastInteractionString" : computeTimeStampString(IdsToGuests[Id].interactions, IdsToInteractions)
+            "lastInteractionString" : computeTimeStampString(IdsToGuests[Id].interactions, IdsToInteractions),
+            "description": IdsToGuests[Id].description,
+            "age" : IdsToGuests[Id].age,
+            "gender": IdsToGuests[Id].gender
         });
     }
 
@@ -56,7 +59,7 @@ function guestObjectToArray(IdsToGuests, IdsToInteractions) {
 
 function computeTimeStampString(interactionIds, IdsToInteractions) {
     if (interactionIds == null) {
-        return "No recorded interactions ";
+        return "No interactions ";
     } else if (typeof(interactionIds) !== 'object') {
         // TODO : we shouldn't ever need this, but branches not synced have caused issues with types not matching
         return "ERROR: INTERACTIONS ARE IMPROPPER TYPE: " + typeof(interactionIds);
@@ -82,7 +85,6 @@ class GuestList extends Component {
         super(props);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.Screen_GuestListProfile = this.Screen_GuestListProfile.bind(this);
-
         this.props.loading = true;
     };
 
@@ -195,10 +197,18 @@ class GuestList extends Component {
                     data = {this.props.guests}
                     renderItem={({ item }) => (
                         <ListItem
-                            title = {`${item.name}`}
-                            subtitle = {item.lastInteractionString}
-                            subtitleStyle = {{textAlign: 'right'}}
-                            // avatar={{ uri: item.picture.thumbnail }}
+                            title = {
+                                <View style={{flexDirection: 'row', justifyContent: 'space-between', marginLeft: 5}}>
+                                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                                        <Text style={{width: 120, marginRight: 10}}>{item.name}</Text>
+                                        <Text style={{marginRight: 10, width: 15}}>{item.gender}</Text>
+                                        <Text>{item.age}</Text>
+                                    </View>
+                                    <Text style={{marginHorizontal: 'auto'}}>{item.lastInteractionString}</Text>
+                                </View>
+                            }
+                            subtitle = {<Text numberOfLines={2} style={{marginTop: 5, marginLeft: 10, fontSize: 12, color: '#757575'}}>{item.description}</Text>}
+                            subtitleStyle = {{marginTop: 5}}
                             containerStyle = {{ borderBottomWidth: 0 }}
                             onPress = {() => this.Screen_GuestListProfile(item)}
                         />
