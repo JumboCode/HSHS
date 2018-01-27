@@ -16,6 +16,7 @@ import {connect} from 'react-redux';
 import ChooseLocation from '../../modules/ChooseLocation';
 import TagGuestDialog from "../../modules/TagGuestDialog"
 import renderSeperator from '../../modules/UI/renderSeperator'
+const IonIcon = require('react-native-vector-icons/Ionicons');
 
 
 function mapStateToProps(state, ownProps) {
@@ -50,7 +51,9 @@ class TodoListItemNew extends Component {
             selectedLocation: null,
             locationName: "No Location Selected",
         };
-        setInterval(() => {console.log(this.state.taggedGuests);}, 2000); //TODO: DELETE DEBUG CODE
+        setInterval(() => {
+            console.log(this.state.taggedGuests);
+        }, 2000); //TODO: DELETE DEBUG CODE
     };
 
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
@@ -66,23 +69,23 @@ class TodoListItemNew extends Component {
     }
 
     removeGuest(guest) {
-      let index = this.state.taggedGuests.indexOf(guest)
-      let arr = this.state.taggedGuests
-      arr.splice(index, 1)
-      this.setState({taggedGuests: arr})
+        let index = this.state.taggedGuests.indexOf(guest)
+        let arr = this.state.taggedGuests
+        arr.splice(index, 1)
+        this.setState({taggedGuests: arr})
     }
 
     setChosenLocation = (locationName) => {
         this.setState({locationName: locationName});
     };
 
-    render() {
+    render2() {
         return (
             <View style={{flex: 1, flexDirection: 'column',}}>
                 <TextInput
-                    style = {{padding: Platform.OS === 'ios' ? 12 : 10}}
-                    editable = {true}
-                    placeholder = "Title"
+                    style={{padding: Platform.OS === 'ios' ? 12 : 10}}
+                    editable={true}
+                    placeholder="Title"
                 />
                 {renderSeperator()}
                 <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
@@ -96,8 +99,8 @@ class TodoListItemNew extends Component {
                             }}
                         />
                     </View>
-                    <View style={{flex:1}}>
-                        <Text numberOfLines={1} style={{textAlign: 'right',  margin: 10}}>{"X Guests Selected"}</Text>
+                    <View style={{flex: 1}}>
+                        <Text numberOfLines={1} style={{textAlign: 'right', margin: 10}}>{"X Guests Selected"}</Text>
                     </View>
                 </View>
                 {renderSeperator()}
@@ -108,18 +111,21 @@ class TodoListItemNew extends Component {
                             color='#770B16'
                             name='local-pizza'
                             onPress={() => {
-                            this.mapModule.openMap({lat: 42.405804, lng: -71.11956})
-                        }} />
+                                this.mapModule.openMap({lat: 42.405804, lng: -71.11956})
+                            }}/>
                     </View>
-                    <View style={{flex:1}}>
-                        <Text numberOfLines={1} style={{textAlign: 'right',  margin: 10}}>{this.state.locationName}</Text>
+                    <View style={{flex: 1}}>
+                        <Text numberOfLines={1}
+                              style={{textAlign: 'right', margin: 10}}>{this.state.locationName}</Text>
 
                     </View>
                 </View>
                 {renderSeperator()}
                 <View>
                     <TagGuestDialog
-                        ref={(dialog) => { this.tagGuestDialog = dialog; }}
+                        ref={(dialog) => {
+                            this.tagGuestDialog = dialog;
+                        }}
                         guests={this.props.guests}
                         loading={this.props.loading}
                         taggedGuests={this.state.taggedGuests}
@@ -138,6 +144,108 @@ class TodoListItemNew extends Component {
             </View>
         );
     }
+
+    render() {
+        return (
+            <View style = {styles.container}>
+                <View style = {styles.back}>
+                    <TextInput
+                        editable = {true}
+                        placeholder = "Title"
+                        style = {styles.title}
+                        placeholderTextColor = "#000000"
+                        onChangeText={(title) => this.state.title = title}
+                    />
+                    <View style = {styles.row}>
+                        <Ionicons style = {styles.icon}
+                                  name="ios-person-outline"
+                                  size = {20} />
+                        <Text style = {styles.add}>
+                            Add Guest Profile
+                        </Text>
+                    </View>
+                    <View style = {styles.row}>
+                        <Ionicons style = {styles.icon}
+                                  name="ios-pin-outline"
+                                  size = {20} />
+                        <Text style = {styles.add}>
+                            Add Location
+                        </Text>
+                    </View>
+                    <View style = {styles.daterow}>
+                        <Ionicons style = {styles.icon}
+                                  name="ios-clock-outline"
+                                  size = {20} />
+                        <Text style = {styles.dateadd}>
+                            Add Shift
+                        </Text>
+                    </View>
+                    <TextInput
+                        editable = {true}
+                        placeholder = "Description"
+                        style = {styles.description}
+                        multiline = {true}
+                    />
+
+                </View>
+            </View>
+        );
+    }
 }
+
+
+const styles = StyleSheet.create({
+    container : {
+        flex: 1,
+        backgroundColor: '#E9E9E9',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    back: {
+        backgroundColor: '#FFFFFF',
+        alignSelf: "stretch",
+    },
+    title: {
+        paddingTop: 30,
+        paddingLeft: 20,
+        color: "#000000",
+        fontSize: 30,
+        paddingBottom: 5
+    },
+    icon: {
+        paddingRight: 10,
+        paddingLeft: 7
+    },
+    row: {
+        flexDirection: "row",
+        paddingTop: 5,
+        paddingLeft: 20
+    },
+    daterow: {
+        flexDirection: "row",
+        paddingTop: 5,
+        paddingLeft: 18
+    },
+    add: {
+        paddingLeft: 2,
+        color: '#0645AD',
+        textDecorationLine: 'underline'
+    },
+    dateadd: {
+        color: '#0645AD',
+        textDecorationLine: 'underline'
+    },
+    description: {
+        borderWidth: 0.5,
+        marginTop: 5,
+        marginLeft: 30,
+        marginRight: 30,
+        borderRadius: 5,
+        height: 100,
+        padding: 5,
+        fontSize: 15,
+        marginBottom: 30
+    }
+});
 
 export default connect(mapStateToProps)(TodoListItemNew);
