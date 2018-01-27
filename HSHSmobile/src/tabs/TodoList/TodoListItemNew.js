@@ -54,13 +54,16 @@ class TodoListItemNew extends Component {
         this.addGuest = this.addGuest.bind(this);
         this.removeGuest = this.removeGuest.bind(this);
         this.state = {
-            title: null,
+            title: "",
             taggedGuests: [],
-            locationCoords: null,
+            locationCoords: {
+            	longitude: 0,
+            	latitude: 0
+            },
             locationName: "No Location Selected",
-            selectedDate: null,
+            selectedDate: "",
             dateName: "No Date Selected",
-            description: null,
+            description: "",
         };
         setInterval(() => {
             console.log(this.state.taggedGuests);
