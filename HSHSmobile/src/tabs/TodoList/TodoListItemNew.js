@@ -91,6 +91,13 @@ class TodoListItemNew extends Component {
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
         if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
             if (event.id == 'save_actionItem') { // this is the same id field from the static navigatorButtons definition
+
+            	// Don't allow empty fields
+            	if (this.state.title == "") {
+            		alert("Title cannot be empty");
+            		return;
+            	}
+
                 addNewActionItem(false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, "shiftDate", this.state.description, [0], "volunteerId");
                 getActionItems();
                 this.props.navigator.pop({
