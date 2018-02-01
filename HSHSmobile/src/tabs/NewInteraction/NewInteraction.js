@@ -11,6 +11,7 @@ import {
     Text,
     View
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import Counter from '../../modules/Counter.js';
 
 const instructions = Platform.select({
