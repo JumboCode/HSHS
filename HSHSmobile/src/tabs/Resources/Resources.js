@@ -1,3 +1,7 @@
+//
+// Starter for the Resource page
+//
+
 import React, { Component } from 'react';
 import {
     Text,
@@ -31,6 +35,8 @@ class Resources extends Component {
                                   link: "www.fake.com/fake"}]}];
     }
 
+    // Passed to the Accordion component to render the header/closed accordion
+    // view
     _renderAccordionHeader(d) {
       return (
         <View>
@@ -39,10 +45,11 @@ class Resources extends Component {
       );
     }
 
+    // Same thing, but renders the body/open view
     _renderAccordionContent(d) {
       return (
         <List>
-          {d.links.map((linkData) => <Text>{linkData.name}</Text>)}
+          {d.links.map((linkData) => <Text key={linkData.name}>{linkData.name}</Text>)}
         </List>
       );
     }
