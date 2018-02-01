@@ -19,6 +19,8 @@ Julia Grace  <br />
 Jenna Kubiak  <br />
 Pulkit Jain  <br />
 Dennis Kim  <br />
+Jack Collins <br />
+Steph Xu <br />
 Simon Chen
 
 ## Technology Stack
