@@ -163,7 +163,7 @@ class TodoListItemNew extends Component {
                         </View>
                         <View style={{flex: 1}}>
                             <Text numberOfLines={1}
-                                  style={{textAlign: 'right', margin: 10}}>{this.state.locationName}}</Text>
+                                  style={{textAlign: 'right', margin: 10}}>{this.state.locationName}</Text>
 
                         </View>
                     </View>
