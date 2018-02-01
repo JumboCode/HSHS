@@ -1,5 +1,4 @@
 // Defines a simple item counter
-
 // Props: itemName - string
 //        count - int
 //        onValueChange - (val) => {}
@@ -12,12 +11,12 @@
 // TODO: Figure out text name wrapping, spacing between Counters, find the key error?
 import React, { Component } from 'react';
 import {
-  StyleSheet,
-	FlatList,
-	View,
-	Text,
-  Button,
-  TouchableOpacity
+        StyleSheet,
+        FlatList,
+        View,
+        Text,
+        Button,
+        TouchableOpacity
 } from 'react-native';
 import { List, ListItem } from "react-native-elements";
 import Icon from 'react-native-vector-icons/Feather';
