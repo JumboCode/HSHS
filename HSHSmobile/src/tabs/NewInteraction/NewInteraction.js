@@ -11,6 +11,7 @@ import {
     Text,
     View
 } from 'react-native';
+import Counter from '../../modules/Counter.js';
 
 const instructions = Platform.select({
     ios: 'please make me an ios screen!',
@@ -24,6 +25,7 @@ export default class Info extends Component {
                 <Text style={styles.instructions}>
                     {instructions}
                 </Text>
+                <Counter count={0} itemName={"hello"}/>
             </View>
         );
     }
