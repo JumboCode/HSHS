@@ -17,6 +17,8 @@ import PopupDialog from 'react-native-popup-dialog';
 import { Button } from 'react-native'
 
 // TODO: change the popup navigation to follow ChooseLocation
+
+// TODO: use Ids for efficency
 export default class TagGuestDialog extends Component {
     constructor(props) {
         super(props);
@@ -78,18 +80,18 @@ export default class TagGuestDialog extends Component {
                                 title={`${item.name}`}
                                 onPress={()=>
                                 {
-                                    if (!this.state.checked.includes(item.name)) {
-                                        this.setState({checked: [...this.state.checked, item.name]});
-                                        this.props.addGuest(item.name);
+                                    if (!this.state.checked.includes(item)) {
+                                        this.setState({checked: [...this.state.checked, item]});
+                                        this.props.addGuest(item);
                                     } else {
-                                        let index = this.state.checked.indexOf(item.name)
+                                        let index = this.state.checked.indexOf(item)
                                         let arr = this.state.checked
                                         arr.splice(index, 1)
                                         this.setState({checked: arr})
-                                        this.props.removeGuest(item.name);
+                                        this.props.removeGuest(item);
                                     }
                                 }}
-                                checked={this.state.checked.includes(item.name)}
+                                checked={this.state.checked.includes(item)}
                             ></CheckBox>
                         )}
                         keyExtractor = {item => item.Id}

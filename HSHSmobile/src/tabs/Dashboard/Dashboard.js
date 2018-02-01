@@ -170,7 +170,9 @@ class Dashboard extends Component {
                     {!this.props.actionItems || this.props.actionItems.length <= 1
                         ? <ActivityIndicator animating size="large"/>
 
-                        : <ActionItemList actionItems={this.props.actionItems} showDueSoon={true}
+                        : <ActionItemList actionItems={this.props.actionItems}
+                                          guests={this.props.guests}
+                                          showDueSoon={true}
                                           navigator={this.props.navigator}/>
                     }
 

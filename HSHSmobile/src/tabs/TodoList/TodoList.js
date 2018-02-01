@@ -108,7 +108,10 @@ class TodoList extends Component {
             return this.renderLoading();
         }
         return (
-            <ActionItemList actionItems={this.props.actionItems} navigator={this.props.navigator}/>
+            <ActionItemList
+                actionItems={this.props.actionItems}
+                guests={this.props.guests}
+                navigator={this.props.navigator}/>
         );
     }
 }

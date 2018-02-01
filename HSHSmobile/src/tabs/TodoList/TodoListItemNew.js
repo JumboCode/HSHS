@@ -66,9 +66,6 @@ class TodoListItemNew extends Component {
             dateName: "No Date Selected",
             description: "",
         };
-        setInterval(() => {
-            console.log(this.state.taggedGuests);
-        }, 2000); //TODO: DELETE DEBUG CODE
     };
 
     componentDidMount() {
@@ -98,7 +95,7 @@ class TodoListItemNew extends Component {
             		return;
             	}
 
-                addNewActionItem(false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, "shiftDate", this.state.description, [0], "volunteerId");
+                addNewActionItem(false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, "shiftDate", this.state.description, this.state.taggedGuests.map(guest => guest.Id), "volunteerId");
                 getActionItems();
                 this.props.navigator.pop({
                     animated: true, // does the pop have transition animation or does it happen immediately (optional)
@@ -150,7 +147,7 @@ class TodoListItemNew extends Component {
                             />
                         </View>
                         <View style={{flex: 1}}>
-                            <Text numberOfLines={1} style={{textAlign: 'right', margin: 10}}>{"0 Guests Selected"}</Text>
+                            <Text numberOfLines={1} style={{textAlign: 'right', margin: 10}}>{this.state.taggedGuests.length +  " Guests Selected"}</Text>
                         </View>
                     </View>
                     <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
@@ -166,7 +163,7 @@ class TodoListItemNew extends Component {
                         </View>
                         <View style={{flex: 1}}>
                             <Text numberOfLines={1}
-                                  style={{textAlign: 'right', margin: 10}}>{this.state.locationName}</Text>
+                                  style={{textAlign: 'right', margin: 10}}>{this.state.locationName}}</Text>
 
                         </View>
                     </View>

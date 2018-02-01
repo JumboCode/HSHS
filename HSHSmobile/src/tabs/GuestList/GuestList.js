@@ -21,7 +21,7 @@ function mapStateToProps(state, ownProps) {
     };
 }
 
-function mapDispatchToProps(dispath, ownProps) {
+function mapDispatchToProps(dispatch, ownProps) {
     return {
     };
 }

@@ -13,7 +13,7 @@ const oneDayInSeconds = 86400000;
 class ActionItemList extends Component {
 	constructor(props) {
 		super(props);
-		var actionItems = getActionItems(this.props.actionItems);
+		var actionItems = getActionItems(this.props.actionItems, this.props.guests);
 
 		if (this.props.showDueSoon) {		// Show only actionItems due in 24 hours
 			let now = Date.now();
@@ -43,6 +43,17 @@ class ActionItemList extends Component {
             navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
             navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
         })
+    };
+
+    formatGuestNames = (guestIds) => {
+    	if (!guestIds || guestIds.length == 0) {
+    		return "No Selected Guests"
+		}
+        var formatedString = "";
+    	for (id of guestIds) {
+    		formatedString = formatedString + this.props.guests[id].name + ", ";
+		}
+		return formatedString
     };
 
 	render() {
@@ -77,7 +88,7 @@ class ActionItemList extends Component {
 	                                    name='person' />
 	                            </View>
 	                            <View style={{flex:3}}>
-	                                <Text numberOfLines={1}>{item.guests}</Text>
+	                                <Text numberOfLines={1}>{this.formatGuestNames(item.guestIds)}</Text>
 	                            </View>
 	                        </View>
 	                        <View style={{flex: 2, flexDirection: 'row'}}>
@@ -122,13 +133,14 @@ class ActionItemList extends Component {
 function getActionItems(IdsToActionItems) {
     var actionItems = [];
     for (var Id in IdsToActionItems) {
+    	var item = IdsToActionItems[Id];
         actionItems.push({
-            title : IdsToActionItems[Id].title,
-            guests: getRandomGuests(),
+            title : item.title,
+            guestIds: item.guestIds,
             color: getRandomColor(),
-            locationStr: IdsToActionItems[Id].locationStr,
+            locationStr: item.locationStr,
             id: Id,
-            shiftDate: IdsToActionItems[Id].shiftDate
+            shiftDate: item.shiftDate
         });
     }
     return actionItems;
@@ -146,20 +158,6 @@ function getRandomColor() {
         color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
-}
-
-function getRandomGuests() {
-    var names = ['Kristoph', 'kristoble', 'Jeramia', 'Margary', 'Clitus', 'Ron', 'Spoon', 'Moonflower', 'Fresh', 'Laundry'];
-    var guests = '';
-    var numGuests = 1 + Math.floor(Math.random() * 3);
-    for (var i = 0; i < numGuests; i++) {
-        guests += names[Math.floor(Math.random() * names.length)];
-
-        if (i != numGuests - 1 ) {
-            guests += ", "
-        }
-    };
-    return guests;
 };
 
 function getRandomLocation() {
