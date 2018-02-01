@@ -19,6 +19,7 @@ import { List, ListItem, SearchBar } from "react-native-elements";
 import GuestList from './tabs/GuestList/GuestList';
 import Dashboard from './tabs/Dashboard/Dashboard';
 import Info from './dummy/BoilerPlate/TemporaryTab';
+import Resources from './tabs/Resources/Resources';
 import GuestListNew from './tabs/GuestList/GuestListNew';
 import GuestListProfile from './tabs/GuestList/GuestListProfile';
 import TodoList from './tabs/TodoList/TodoList';
@@ -113,6 +114,7 @@ export default class Login extends Component {
         Navigation.registerComponent('Dashboard', () => Dashboard, store, Provider);
         Navigation.registerComponent('GuestList', () => GuestList, store, Provider);
         Navigation.registerComponent('GuestListProfile', () => GuestListProfile, store, Provider);
+        Navigation.registerComponent('Resources', () => Resources, store, Provider);
         Navigation.registerComponent('Info', () => Info, store, Provider);
         Navigation.registerComponent('CRUDnote', () => CRUDnote, store, Provider);
         Navigation.registerComponent('GuestListNew', () => GuestListNew, store, Provider);
@@ -151,7 +153,7 @@ export default class Login extends Component {
                 },
                 {
                     label: 'resources',
-                    screen: 'Info',
+                    screen: 'Resources',
                     title: 'resources',
                     icon: resourcesIcon
                 }
