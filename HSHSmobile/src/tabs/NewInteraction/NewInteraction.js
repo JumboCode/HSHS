@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Counter from '../../modules/Counter.js';
+import PromptDialog from '../../modules/PromptDialog.js';
 
 const instructions = Platform.select({
     ios: 'please make me an ios screen!',
@@ -24,7 +25,8 @@ const instructions = Platform.select({
 export default class Info extends Component {
     constructor(props) {
       super(props);
-      this.counters = {"PB&Js": 2, "Water Bottles": 1, "Blankets": 3}
+      this.counters = {"PB&Js": 2, "Water Bottles": 1, "Blankets": 3};
+      this.state = {counterPromptVisible: false};
     }
 
     renderCounters() {
@@ -41,11 +43,18 @@ export default class Info extends Component {
                               this.counters[name] = val;
                             }}
                       />)}
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity onPress={() => {this.promptDialog.show();}}>
               <Icon name="ios-add-circle" size={60} color="#900" />
           </TouchableOpacity>
         </View>
       );
+    }
+
+
+    // Re render the page when new counter added?
+    addCounter = (newCounterName) => {
+      this.counters[newCounterName] = 0;
+      this.render();
     }
 
     render() {
@@ -54,7 +63,16 @@ export default class Info extends Component {
                 <Text style={styles.instructions}>
                     {instructions}
                 </Text>
-                  {this.renderCounters()}
+                <PromptDialog
+                  ref={(dialog) => {
+                      this.promptDialog = dialog;
+                  }}
+                  title = {"Add an Item"}
+                  placeholder={"Item Name Here"}
+                  onSubmit = {this.addCounter}
+                  onCancel = {() => {}}
+                />
+                {this.renderCounters()}
             </View>
         );
     }

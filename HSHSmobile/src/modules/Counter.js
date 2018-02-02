@@ -1,3 +1,15 @@
+// Defines a simple item counter
+
+// Props: itemName - string
+//        count - int
+//        onValueChange - (val) => {}
+// Example usage:
+// <Counter
+//   title="PB&J"
+//   count=0
+//   onValueChange={(val) => this.setState({PB&J: val}); }
+//   />
+// TODO: Figure out text name wrapping, spacing between Counters, find the key error?
 import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -10,15 +22,9 @@ import {
 import { List, ListItem } from "react-native-elements";
 import Icon from 'react-native-vector-icons/Feather';
 
-const upArrowIcon = (<Icon name="chevron-thin-up" size={15} color="#900" />)
-const downArrowIcon = (<Icon name="chevron-thin-down" size={15} color="#900" />)
-
-
-// Props: item name, count
 export default class Counter extends Component {
   constructor(props) {
     super(props);
-    this.count =
     this.state = {count: this.props.count}
   }
 
