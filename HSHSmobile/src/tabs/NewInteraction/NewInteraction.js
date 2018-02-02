@@ -9,7 +9,9 @@ import {
     Platform,
     StyleSheet,
     Text,
-    View
+    View,
+    Button,
+    TouchableOpacity
 } from 'react-native';
 import Popup from "../../modules/popups/popup"
 
@@ -19,6 +21,32 @@ const instructions = Platform.select({
 });
 
 export default class Info extends Component {
+    constructor(props) {
+      super(props);
+      this.counters = {"PB&Js": 2, "Water Bottles": 1, "Blankets": 3}
+    }
+
+    renderCounters() {
+      let items = Object.keys(this.counters);
+      return (
+        <View style={styles.counterContainer}>
+            {
+              items.map((name) =>
+                      <Counter
+                        itemName={name}
+                        count={this.counters[name]}
+                        onValueChange={(val) =>
+                            {
+                              this.counters[name] = val;
+                            }}
+                      />)}
+          <TouchableOpacity onPress={() => {}}>
+              <Icon name="ios-add-circle" size={60} color="#900" />
+          </TouchableOpacity>
+        </View>
+      );
+    }
+
     render() {
         return (
           <View>
@@ -57,4 +85,10 @@ const styles = StyleSheet.create({
         color: '#333333',
         marginBottom: 5,
     },
+    counterContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexWrap: 'wrap'
+    }
 });

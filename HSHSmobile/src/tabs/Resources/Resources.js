@@ -49,7 +49,7 @@ class Resources extends Component {
     _renderAccordionContent(d) {
       return (
         <List>
-          {d.links.map((linkData) => <Text key={linkData.name}>{linkData.name}</Text>)}
+          
         </List>
       );
     }
