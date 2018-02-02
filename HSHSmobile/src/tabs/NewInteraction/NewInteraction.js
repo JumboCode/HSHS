@@ -23,7 +23,8 @@ const instructions = Platform.select({
 export default class Info extends Component {
     constructor(props) {
       super(props);
-      this.counters = {"PB&Js": 2, "Water Bottles": 1, "Blankets": 3}
+      this.counters = {"PB&Js": 2, "Water Bottles": 1, "Blankets": 3};
+      this.state = {counterPromptVisible: false};
     }
 
     renderCounters() {
@@ -40,11 +41,18 @@ export default class Info extends Component {
                               this.counters[name] = val;
                             }}
                       />)}
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity onPress={() => {this.promptDialog.show();}}>
               <Icon name="ios-add-circle" size={60} color="#900" />
           </TouchableOpacity>
         </View>
       );
+    }
+
+
+    // Re render the page when new counter added?
+    addCounter = (newCounterName) => {
+      this.counters[newCounterName] = 0;
+      this.render();
     }
 
     render() {
