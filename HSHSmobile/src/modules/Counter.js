@@ -18,25 +18,37 @@ const downArrowIcon = (<Icon name="chevron-thin-down" size={15} color="#900" />)
 export default class Counter extends Component {
   constructor(props) {
     super(props);
+    this.count =
+    this.state = {count: this.props.count}
+  }
+
+  // Must be a member variable that is assigned a => function to ensure it's in
+  // the same realm (not the right word) as this.state
+  incrementCount = () => {
+    console.log(this.state);
+    let newVal = this.state.count + 1;
+    this.setState({count: newVal});
+    this.props.onValueChange(newVal);
+  }
+
+  decrementCount = () => {
+    let newVal = this.state.count - 1;
+    if (newVal < 0) { newVal = 0; }
+    this.setState({count: newVal});
+    this.props.onValueChange(newVal);
   }
 
   render() {
 		return (
-      <View style={{flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems:'center'}}>
-        <TouchableOpacity
-          onPress={() => {this.props.count++;}}
-        >
-          <Icon name="chevron-up" size={30} color="#900" />
+      <View style={styles.container}>
+        <TouchableOpacity onPress={this.incrementCount}>
+            <Icon name="chevron-up" size={30} color="#900" />
         </TouchableOpacity>
         <View style={styles.circle}>
-          <Text style={styles.text}>{this.props.count.toString()}</Text>
+            <Text style={styles.text}>{this.state.count.toString()}</Text>
         </View>
-        <TouchableOpacity
-          onPress={() => {if (this.props.count > 0) this.props.count--;}}
-        >
-          <Icon name="chevron-down" size={30} color="#900" />
+        <TouchableOpacity onPress={this.decrementCount}>
+            <Icon name="chevron-down" size={30} color="#900" />
         </TouchableOpacity>
         <Text style={styles.text}>{this.props.itemName}</Text>
       </View>
@@ -45,6 +57,10 @@ export default class Counter extends Component {
 }
 
 const styles = StyleSheet.create({
+    container: {
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems:'center'},
     circle: {
       flexDirection:'column',
       justifyContent:'center',
