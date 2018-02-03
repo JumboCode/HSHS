@@ -6,6 +6,9 @@ import {
 } from 'react-native';
 import { List, ListItem } from "react-native-elements";
 import { Icon } from 'react-native-elements'
+import renderSeperator from "./UI/renderSeperator";
+import renderLoader from "./UI/renderLoader";
+
 
 const oneDayInSeconds = 86400000;
 
@@ -63,7 +66,7 @@ class ActionItemList extends Component {
 					data = {getActionItems(this.props.actionItems)}
 		            renderItem={({item}) => this.renderListItem(item)}
 		            keyExtractor = {item => item.id}
-		            ItemSeparatorComponent = {this.renderSeparator}
+		            ItemSeparatorComponent = {() => {return(renderSeperator())}}
 		            ListHeaderComponent = {this.renderHeader}
 		            ListFooterComponent = {this.renderFooter}
 		            refreshing = {this.props.refreshing}
@@ -110,19 +113,6 @@ class ActionItemList extends Component {
         )
     }
 
-    renderSeparator = () => {
-        return (
-            <View
-                style={{
-                    height: 1,
-                    width: "100%",
-                    backgroundColor: "#CED0CE",
-                    marginLeft: 10
-                }}
-            />
-        );
-    };
-
     renderHeader = () => {
         return null;
     };
@@ -146,11 +136,6 @@ function getActionItems(IdsToActionItems) {
     return actionItems;
 }
 
-function getRandomTitle() {
-    var titles = ["Groceries", "Pay the electric bill", "Fix a sticky key", "Clean the printer ink", "Get a new battery", "Charge cones", "Call Comcast", "Netflix & Chill"];
-    return titles[Math.floor(Math.random() * titles.length)];
-}
-
 function getRandomColor() {
     var letters = '0123456789ABCDEF';
     var color = '#';
@@ -158,11 +143,6 @@ function getRandomColor() {
         color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
-};
-
-function getRandomLocation() {
-    var locations = ['San Fran Sisco', 'San Andreas', 'Casterly Rock', 'Fraggle Rock', 'Vegas', 'Yellow Stone', 'Patagonia', 'Intersection of Goose and Marmalaide'];
-    return locations[Math.floor(Math.random() * locations.length)];
 };
 
 export default ActionItemList;

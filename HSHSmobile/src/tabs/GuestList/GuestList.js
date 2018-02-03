@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import { List, ListItem, SearchBar } from "react-native-elements";
 import {connect} from 'react-redux';
+import renderSeperator from "../../modules/UI/renderSeperator";
+import renderLoader from "../../modules/UI/renderLoader";
 
 const Icon = require('react-native-vector-icons/Ionicons');
 
@@ -36,7 +38,8 @@ function guestObjectToArray(IdsToGuests, IdsToInteractions) {
             "lastInteractionString" : computeTimeStampString(IdsToGuests[Id].interactions, IdsToInteractions),
             "description": IdsToGuests[Id].description,
             "age" : IdsToGuests[Id].age,
-            "gender": IdsToGuests[Id].gender
+            "gender": IdsToGuests[Id].gender,
+            "color": getRandomColor()
         });
     }
 
@@ -153,34 +156,29 @@ class GuestList extends Component {
         console.log(this.props.guests);
     };
 
-    renderSeparator = () => {
-        return (
-            <View
-                style={{
-                    height: 1,
-                    width: "86%",
-                    backgroundColor: "#CED0CE",
-                    marginLeft: "14%"
-                }}
-            />
-        );
-    };
-
     renderHeader = () => {
         return null;
         //return <SearchBar placeholder="Type Here..." lightTheme round />;
     };
 
-    renderLoading = () => {
-        return (
-            <View
-                style={{
-                    paddingVertical: 20,
-                    borderTopWidth: 0,
-                    borderColor: "#CED0CE"
-                }}
-            >
-                <ActivityIndicator animating size="large" />
+    renderListItem = (item) => {
+        return(
+            <View style={{backgroundColor: item.color}}>
+                <ListItem
+                    title = {
+                        <View style={{flexDirection: 'row', justifyContent: 'space-between', marginLeft: 5}}>
+                            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                                <Text style={{width: 120, marginRight: 10}}>{item.name}</Text>
+                                <Text style={{marginRight: 10, width: 15}}>{item.gender}</Text>
+                                <Text>{item.age}</Text>
+                            </View>
+                            <Text style={{marginHorizontal: 'auto'}}>{item.lastInteractionString}</Text>
+                        </View>
+                    }
+                    subtitle = {<Text numberOfLines={2} style={{marginTop: 5, marginLeft: 10, fontSize: 12, color: '#757575', height: 30}}>{item.description}</Text>}
+                    containerStyle = {{ borderBottomWidth: 0, marginLeft: 10, backgroundColor:"#F5FCFF" }}
+                    onPress = {() => this.Screen_GuestListProfile(item)}
+                />
             </View>
         );
     };
@@ -189,31 +187,16 @@ class GuestList extends Component {
 
         // TODO: this is a janky way of ensuring that the guest data has been computed, because when it hasn't the guests object has length 1. We should do this better.
         if (this.props.loading == true || this.props.guests.length <= 1) {
-            return this.renderLoading();
+            return renderLoader();
         }
         return (
+
             <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0, marginTop: 0 }}>
                 <FlatList
                     data = {this.props.guests}
-                    renderItem={({ item }) => (
-                        <ListItem
-                            title = {
-                                <View style={{flexDirection: 'row', justifyContent: 'space-between', marginLeft: 5}}>
-                                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                                        <Text style={{width: 120, marginRight: 10}}>{item.name}</Text>
-                                        <Text style={{marginRight: 10, width: 15}}>{item.gender}</Text>
-                                        <Text>{item.age}</Text>
-                                    </View>
-                                    <Text style={{marginHorizontal: 'auto'}}>{item.lastInteractionString}</Text>
-                                </View>
-                            }
-                            subtitle = {<Text numberOfLines={2} style={{marginTop: 5, marginLeft: 10, fontSize: 12, color: '#757575', height: 30}}>{item.description}</Text>}
-                            containerStyle = {{ borderBottomWidth: 0 }}
-                            onPress = {() => this.Screen_GuestListProfile(item)}
-                        />
-                    )}
+                    renderItem={({item}) => this.renderListItem(item)}
                     keyExtractor = {item => item.Id}
-                    ItemSeparatorComponent = {this.renderSeparator}
+                    ItemSeparatorComponent = {() => {return(renderSeperator())}}
                     ListHeaderComponent = {this.renderHeader}
                     ListFooterComponent = {this.renderFooter}
                     refreshing = {this.props.refreshing}
@@ -243,5 +226,14 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     }
 });
+
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(GuestList);
