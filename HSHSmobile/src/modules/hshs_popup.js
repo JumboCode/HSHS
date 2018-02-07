@@ -5,9 +5,10 @@ USAGE:
     ref={(popupDialog) => {
         this.popupDialog = popupDialog;
     }}
-    dialogTitle={<DialogTitle title={"Drag Marker to set a Location:\n" + this.state.address }/>} <-- optional for a title
->
 
+    // optional for a title (similar for a footer): 
+    dialogTitle={<DialogTitle title={"Drag Marker to set a Location:\n" + this.state.address }/>}
+>
 */
 
 import React, {Component} from 'react';

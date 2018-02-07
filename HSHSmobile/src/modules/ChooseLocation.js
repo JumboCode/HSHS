@@ -11,11 +11,6 @@
     />
 */
 
-// TODO : this has a serious bug interacting with navigation, we can try to resolve it by following
-// https://github.com/jacklam718/react-native-popup-dialog/issues/42#issuecomment-310028245
-// for now, I'm gonna just make the map small enough if dosn't matter.
-
-
 import React, {Component} from 'react';
 import {
     StyleSheet,
