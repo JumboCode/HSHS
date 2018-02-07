@@ -32,6 +32,7 @@ import PopupDialog, {SlideAnimation, DialogTitle, DialogButton, DefaultAnimation
 import {connect} from 'react-redux';
 import MapView from 'react-native-maps';
 import Geocoder from 'react-native-geocoding';
+import PopupDialog_hshs from "./hshs_popup"
 
 const Timestamp = require('react-timestamp');
 
@@ -76,13 +77,10 @@ export default class ChooseLocation extends Component {
 
     render() {
         return (
-            <PopupDialog
-
+            <PopupDialog_hshs
                 ref={(popupDialog) => {
                     this.popupDialog = popupDialog;
                 }}
-                zIndex={2}
-                dialogStyle={{ position: 'absolute', top: 20, width: '100%', height: 400 }}
                 dialogTitle={<DialogTitle title={"Drag Marker to set a Location:\n" + this.state.address }/>}
             >
                 <View>
@@ -104,8 +102,7 @@ export default class ChooseLocation extends Component {
                         />
                     </MapView>
                 </View>
-            </PopupDialog>
+            </PopupDialog_hshs>
         );
     }
 }
-

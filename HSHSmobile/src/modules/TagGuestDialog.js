@@ -13,8 +13,10 @@ import {
     ActivityIndicator,
 } from 'react-native';
 import { List, ListItem, SearchBar, CheckBox } from "react-native-elements";
-import PopupDialog from 'react-native-popup-dialog';
+import PopupDialog, {SlideAnimation, DialogTitle, DialogButton, DefaultAnimation} from 'react-native-popup-dialog';
 import { Button } from 'react-native'
+import PopupDialog_hshs from "./hshs_popup"
+
 
 // TODO: change the popup navigation to follow ChooseLocation
 
@@ -69,9 +71,11 @@ export default class TagGuestDialog extends Component {
             return this.renderLoading();
         }
         return (
-            <PopupDialog
-                ref={(popupDialog) => { this.popupDialog = popupDialog; }}
-            >
+          <PopupDialog_hshs
+              ref={(popupDialog) => {
+                  this.popupDialog = popupDialog;
+              }}
+          >
                 <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0, marginTop: 0 }}>
                     <FlatList
                         data = {this.props.guests}
@@ -103,7 +107,7 @@ export default class TagGuestDialog extends Component {
                         extraData={this.state}
                     />
                 </List>
-            </PopupDialog>
+            </PopupDialog_hshs>
         );
     }
 }
