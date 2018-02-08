@@ -16,9 +16,8 @@ import { List, ListItem, SearchBar, CheckBox } from "react-native-elements";
 import PopupDialog, {SlideAnimation, DialogTitle, DialogButton, DefaultAnimation} from 'react-native-popup-dialog';
 import { Button } from 'react-native'
 import PopupDialog_hshs from "./hshs_popup"
-
-
-// TODO: change the popup navigation to follow ChooseLocation
+import renderSeperator from "./UI/renderSeperator";
+import renderLoader from "./UI/renderLoader";
 
 // TODO: use Ids for efficency
 export default class TagGuestDialog extends Component {
@@ -38,21 +37,6 @@ export default class TagGuestDialog extends Component {
         this.popupDialog.show();
     }
 
-
-    renderLoading = () => {
-        return (
-            <View
-                style={{
-                    paddingVertical: 20,
-                    borderTopWidth: 0,
-                    borderColor: "#CED0CE"
-                }}
-            >
-                <ActivityIndicator animating size="large" />
-            </View>
-        );
-    };
-
     renderHeader = () => {
         return <SearchBar placeholder="Type Here..." lightTheme round />;
     };
@@ -68,7 +52,7 @@ export default class TagGuestDialog extends Component {
 
     render() {
         if (this.props.loading == true || this.props.guests.length <= 1) {
-            return this.renderLoading();
+            return renderLoader();
         }
         return (
           <PopupDialog_hshs

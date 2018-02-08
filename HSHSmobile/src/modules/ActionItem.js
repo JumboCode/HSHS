@@ -66,7 +66,7 @@ class ActionItemList extends Component {
 					data = {getActionItems(this.props.actionItems)}
 		            renderItem={({item}) => this.renderListItem(item)}
 		            keyExtractor = {item => item.id}
-		            ItemSeparatorComponent = {() => {return(renderSeperator())}}
+								ItemSeparatorComponent = {() => {return(renderSeperator())}}
 		            ListHeaderComponent = {this.renderHeader}
 		            ListFooterComponent = {this.renderFooter}
 		            refreshing = {this.props.refreshing}

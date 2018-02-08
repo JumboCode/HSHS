@@ -11,6 +11,7 @@ import { List, ListItem, SearchBar } from "react-native-elements";
 import {connect} from 'react-redux';
 import ActionItemList from '../../modules/ActionItem'
 import { Icon } from 'react-native-elements'
+import renderLoader from "../../modules/UI/renderLoader";
 
 // for navigation
 const IonIcon = require('react-native-vector-icons/Ionicons');
@@ -88,24 +89,10 @@ class TodoList extends Component {
         })
     };
 
-    renderLoading = () => {
-        return (
-            <View
-                style={{
-                    paddingVertical: 20,
-                    borderTopWidth: 0,
-                    borderColor: "#CED0CE"
-                }}
-            >
-                <ActivityIndicator animating size="large" />
-            </View>
-        );
-    };
-
     render() {
         // TODO : make it actually check if the action items are of a valid type
         if (this.props.loading == true || !this.props.actionItems || this.props.actionItems.length <= 1) {
-            return this.renderLoading();
+            return renderLoader();
         }
         return (
             <ActionItemList
