@@ -11,11 +11,13 @@ import {
     Text,
     View,
     Button,
-    TouchableOpacity
+    TouchableOpacity,
+    TextInput
 } from 'react-native';
+import {DialogTitle, DialogButton, DialogFooter} from 'react-native-popup-dialog';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Counter from '../../modules/Counter.js';
-import PromptDialog from '../../modules/PromptDialog.js';
+import PopupDialog_hshs from '../../modules/hshs_popup.js';
 
 const instructions = Platform.select({
     ios: 'please make me an ios screen!',
@@ -26,7 +28,7 @@ export default class Info extends Component {
     constructor(props) {
       super(props);
       this.counters = {"PB&Js": 2, "Water Bottles": 1, "Blankets": 3};
-      this.state = {counterPromptVisible: false};
+      this.state = {counterPromptVisible: false, counterPromptInput: ""};
     }
 
     renderCounters() {
@@ -36,6 +38,7 @@ export default class Info extends Component {
             {
               items.map((name) =>
                       <Counter
+                        key={name}
                         itemName={name}
                         count={this.counters[name]}
                         onValueChange={(val) =>
@@ -43,7 +46,7 @@ export default class Info extends Component {
                               this.counters[name] = val;
                             }}
                       />)}
-          <TouchableOpacity onPress={() => {this.promptDialog.show();}}>
+          <TouchableOpacity onPress={() => {this.addCounterDialog.show();}}>
               <Icon name="ios-add-circle" size={60} color="#900" />
           </TouchableOpacity>
         </View>
@@ -52,9 +55,29 @@ export default class Info extends Component {
 
 
     // Re render the page when new counter added?
-    addCounter = (newCounterName) => {
-      this.counters[newCounterName] = 0;
+    //
+    submitCounterPopup = () => {
+      let newCounterName = this.state.counterPromptInput;
+      if (newCounterName != "") {
+        this.counters[newCounterName] = 0;
+      }
+      this.setState({counterPromptInput: ""});
+      this.addCounterDialog.dismiss();
       this.render();
+    }
+    // Re render the page when new counter added?
+    cancelCounterPopup = () => {
+      this.setState({counterPromptInput: ""});
+      this.addCounterDialog.dismiss();
+    }
+
+    renderCounterPopupButtons() {
+      return (
+          <View style={styles.popupDialogButtons}>
+            <DialogButton text="Cancel" onPress={this.cancelCounterPopup}/>
+            <DialogButton text="Submit" onPress={this.submitCounterPopup}/>
+          </View>
+      );
     }
 
     render() {
@@ -63,15 +86,21 @@ export default class Info extends Component {
                 <Text style={styles.instructions}>
                     {instructions}
                 </Text>
-                <PromptDialog
+                <PopupDialog_hshs
                   ref={(dialog) => {
-                      this.promptDialog = dialog;
+                      this.addCounterDialog = dialog;
                   }}
-                  title = {"Add an Item"}
-                  placeholder={"Item Name Here"}
-                  onSubmit = {this.addCounter}
-                  onCancel = {() => {}}
-                />
+                  dialogTitle={<DialogTitle title={"Add a New Item"}/>}
+                  placeholder={"Item Name Here"}>
+                    <View style={{flexDirection:'column'}}>
+                      <TextInput
+                        style={styles.textInput}
+                        onChangeText={(counterPromptInput) => this.setState({counterPromptInput})}
+                        value={this.state.counterPromptInput}
+                      />
+                      {this.renderCounterPopupButtons()}
+                    </View>
+                </PopupDialog_hshs>
                 {this.renderCounters()}
             </View>
         );
@@ -96,5 +125,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flexWrap: 'wrap'
-    }
+    },
+    popupDialogButtons: {
+      flexDirection: 'row',
+      justifyContent: 'space-around'
+    },
+    textInput: {
+      marginTop: 3,
+      height: 40,
+      width: "80%",
+      borderColor: 'gray',
+      borderWidth: 1
+    },
 });
