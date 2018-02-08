@@ -11,6 +11,7 @@ import {
     Text,
     View,
     Button,
+<<<<<<< HEAD
     TouchableOpacity,
     TextInput
 } from 'react-native';
@@ -18,6 +19,13 @@ import {DialogTitle, DialogButton, DialogFooter} from 'react-native-popup-dialog
 import Icon from 'react-native-vector-icons/Ionicons';
 import Counter from '../../modules/Counter.js';
 import PopupDialog_hshs from '../../modules/hshs_popup.js';
+=======
+    TouchableOpacity
+} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import Counter from '../../modules/Counter.js';
+import PromptDialog from '../../modules/PromptDialog.js';
+>>>>>>> 7c0325a2ddc96d4275981c50d335ea7ef40c8c3a
 
 const instructions = Platform.select({
     ios: 'please make me an ios screen!',
@@ -28,7 +36,11 @@ export default class Info extends Component {
     constructor(props) {
       super(props);
       this.counters = {"PB&Js": 2, "Water Bottles": 1, "Blankets": 3};
+<<<<<<< HEAD
       this.state = {counterPromptVisible: false, counterPromptInput: ""};
+=======
+      this.state = {counterPromptVisible: false};
+>>>>>>> 7c0325a2ddc96d4275981c50d335ea7ef40c8c3a
     }
 
     renderCounters() {
