@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import { Icon, List, ListItem, SearchBar, CheckBox } from "react-native-elements";
 import {connect} from 'react-redux';
-import ChooseLocation_old from '../../modules/ChooseLocation';
 import ChooseLocationPopup from '../../modules/popups/ChooseLocationPopup';
 
 import TagGuestDialog from "../../modules/TagGuestDialog"
@@ -204,19 +203,12 @@ class TodoListItemNew extends Component {
                     addGuest={this.addGuest}
                     removeGuest={this.removeGuest}
                 />
-                <ChooseLocation_old
-                    ref={(map) => {
-                        this.mapModule = map;
-                    }}
-                    viewHeight={this.state.viewHeight}
-                    viewWidth={this.state.viewWidth}
-                    locationFunction={this.setChosenLocation.bind(this)}
-                />
                 <ChooseLocationPopup
-                ref={(map) => {
-                    this.ChooseLocationPopup = map;
-                }}
-                title={"Test Choose Location Popup"}/>
+                  ref={(map) => {
+                      this.ChooseLocationPopup = map;
+                  }}
+                  onConfirm={this.setChosenLocation}
+                />
             </View>
         );
     }

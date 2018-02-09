@@ -6,33 +6,78 @@ import Popup from "./popup"
 import MapView from 'react-native-maps';
 import Geocoder from 'react-native-geocoding';
 
-export default class ChooseLocationPopup extends Popup {
+// Needs an onSave function passed, that takes (coordinate, address) as parameters
+export default class ChooseLocationPopup extends Component {
   constructor(props) {
       super(props);
       this.state = {
-        
-      }
+        coordinate: {
+            latitude: 42.405804,
+            longitude: -71.11956,
+        },
+        address: null,
+      };
+      Geocoder.setApiKey('AIzaSyBk97FJAbAoOnu1liyLAGAne9dcYAiJ8Co');
+    }
+  show = () => {
+    this.Popup.show()
+  };
+
+  renderContent = () => {
+    return(
+      <View style={{
+        height: "80%",
+        width: "100%",
+      }}>
+          <MapView
+              style={{
+                  height: "100%",
+                  width: "100%",
+              }}
+              showsUserLocation={true}
+              initialRegion={{
+                  latitude: this.state.coordinate.latitude,
+                  longitude: this.state.coordinate.longitude,
+                  latitudeDelta: 0.02,
+                  longitudeDelta: 0.01,
+              }}>
+              <MapView.Marker draggable
+                              coordinate={this.state.coordinate}
+                              onDragEnd={(e) => this.onMarkerLocationChange(e.nativeEvent.coordinate)}
+              />
+          </MapView>
+      </View>
+    );
+  };
+
+  onMarkerLocationChange = (coordinate) => {
+      Geocoder.getFromLatLng(coordinate.latitude, coordinate.longitude).then(
+          json => {
+              let address_component = json.results[0].address_components[0].short_name + " " + json.results[0].address_components[1].short_name;
+              this.setState(previousState => {
+                  return { address: address_component };
+              });
+          },
+          error => {
+              alert(error);
+          }
+      );
+      this.setState({coords: coordinate})
+  };
+
+  render() {
+    var titleString = "Drag Marker to set a Location:\n" + (this.state.address == null ? "No Location Selected" : this.state.address);
+
+    return (
+      <Popup
+        ref={(popup) => {
+            this.Popup = popup;
+        }}
+        title={titleString}
+        onConfirm={()=>{this.props.onConfirm(this.state.address, this.state.coordinate)}}
+        >
+        {this.renderContent()}
+      </Popup>
+    );
   }
 }
-
-ChooseLocationPopup.defaultProps = {
-  children: <View>
-      <MapView
-          style={{
-              height: "100%",
-              width: "100%",
-          }}
-          showsUserLocation={true}
-          initialRegion={{
-              latitude: 42.405804,
-              longitude: -71.11956,
-              latitudeDelta: 0.02,
-              longitudeDelta: 0.01,
-          }}>
-          <MapView.Marker draggable
-                          coordinate={this.state.x}
-                          onDragEnd={(e) => this.onMarkerLocationChange(e.nativeEvent.coordinate)}
-          />
-      </MapView>
-  </View>
-};

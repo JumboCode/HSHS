@@ -41,7 +41,7 @@ export default class Popup extends Component {
             {renderSeperator()}
             <View style={styles.modalButtons}>
               {this._renderButton("Cancel", () => this.setState({ isVisible: false }))}
-              {this._renderButton("Confirm", () => this.setState({ isVisible: false }))}
+              {this._renderButton("Confirm", () => {this.setState({ isVisible: false }); this.props.onConfirm()})}
             </View>
           </View>
         </Modal>
