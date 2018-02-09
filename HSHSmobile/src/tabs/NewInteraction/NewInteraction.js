@@ -11,6 +11,7 @@ import {
     Text,
     View
 } from 'react-native';
+import Popup from "../../modules/popups/popup"
 
 const instructions = Platform.select({
     ios: 'please make me an ios screen!',
@@ -20,11 +21,24 @@ const instructions = Platform.select({
 export default class Info extends Component {
     render() {
         return (
+          <View>
+            <Text
+            onPress= {()=>{this.Popup.show()}}
+            >
+            {"Click me to open"}
+            </Text>
             <View style={styles.container}>
-                <Text style={styles.instructions}>
-                    {instructions}
-                </Text>
+                <Popup
+                  ref={(popup) => {
+                      this.Popup = popup;
+                  }}
+                  title={"Title"}
+                  >
+                  <Text>Test</Text>
+                  <Text>Test</Text>
+                </Popup>
             </View>
+          </View>
         );
     }
 }

@@ -13,7 +13,9 @@ import {
 } from 'react-native';
 import { Icon, List, ListItem, SearchBar, CheckBox } from "react-native-elements";
 import {connect} from 'react-redux';
-import ChooseLocation from '../../modules/ChooseLocation';
+import ChooseLocation_old from '../../modules/ChooseLocation';
+import ChooseLocationPopup from '../../modules/popups/ChooseLocationPopup';
+
 import TagGuestDialog from "../../modules/TagGuestDialog"
 import renderSeperator from '../../modules/UI/renderSeperator'
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -158,7 +160,7 @@ class TodoListItemNew extends Component {
                                 name='location-on'
                                 size={16}
                                 onPress={() => {
-                                    this.mapModule.openMap({lat: 42.405804, lng: -71.11956})
+                                    this.ChooseLocationPopup.show()
                                 }}/>
                         </View>
                         <View style={{flex: 1}}>
@@ -202,7 +204,7 @@ class TodoListItemNew extends Component {
                     addGuest={this.addGuest}
                     removeGuest={this.removeGuest}
                 />
-                <ChooseLocation
+                <ChooseLocation_old
                     ref={(map) => {
                         this.mapModule = map;
                     }}
@@ -210,6 +212,11 @@ class TodoListItemNew extends Component {
                     viewWidth={this.state.viewWidth}
                     locationFunction={this.setChosenLocation.bind(this)}
                 />
+                <ChooseLocationPopup
+                ref={(map) => {
+                    this.ChooseLocationPopup = map;
+                }}
+                title={"Test Choose Location Popup"}/>
             </View>
         );
     }
