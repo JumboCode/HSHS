@@ -89,6 +89,7 @@ class GuestList extends Component {
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.Screen_GuestListProfile = this.Screen_GuestListProfile.bind(this);
         this.props.loading = true;
+        this.state = {searchInput: ''};
     };
 
     static navigatorButtons = {
@@ -157,8 +158,7 @@ class GuestList extends Component {
     };
 
     renderHeader = () => {
-        return null;
-        //return <SearchBar placeholder="Type Here..." lightTheme round />;
+        return ;
     };
 
     renderListItem = (item) => {
@@ -191,19 +191,26 @@ class GuestList extends Component {
         }
         return (
 
-            <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0, marginTop: 0 }}>
+            <View>
+                <SearchBar
+                    placeholder="Search"
+                    onChangeText={(str) => {this.setState({searchInput: str.toLowerCase()})}}
+                    onClearText={() => this.setState({searchInput: ''})}
+                    lightTheme
+                    clearIcon
+                    round
+                />
                 <FlatList
-                    data = {this.props.guests}
+                    data = {this.props.guests.filter(item => item.name.toLowerCase().includes(this.state.searchInput) || item.description.toLowerCase().includes(this.state.searchInput))}
                     renderItem={({item}) => this.renderListItem(item)}
                     keyExtractor = {item => item.Id}
                     ItemSeparatorComponent = {() => {return(renderSeperator())}}
-                    ListHeaderComponent = {this.renderHeader}
                     ListFooterComponent = {this.renderFooter}
                     refreshing = {this.props.refreshing}
                     onEndReached = {this.handleLoadMore}
                     onEndReachedThreshold = {50}
                 />
-            </List>
+            </View>
         );
     }
 }
