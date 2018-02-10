@@ -10,7 +10,6 @@ import {
     Text,
     TextInput,
     View,
-    Button,
     Alert,
     Picker,
     TouchableOpacity,
@@ -22,7 +21,7 @@ import {
 import {connect} from 'react-redux';
 import {addNewGuest} from '../../redux/actions.js';
 
-import {FormLabel, FormInput, FormValidationMessage} from 'react-native-elements'
+import {FormLabel, FormInput, FormValidationMessage, Button} from 'react-native-elements';
 import ModalDropdown from 'react-native-modal-dropdown';
 
 // Dropdown fields
@@ -89,76 +88,17 @@ function mapDispatchToProps(dispath, ownProps) {
 class NewGuest extends Component<{}> {
     constructor(props) {
         super(props);
-        this.formInput = {
-            name: '',
-            description: '',
-            gender: '',
-            age: '',
-            actionItems: [],
-            interactions: []
-        };
-        this.state = {
-            nameError: '',
-            genderError: '',
-            ageError: ''
-        }
-    }
-
-
-    register(form) {
-        const nameError = (form.name == '' ? 'Required Field' : '')
-        const genderError = (form.gender == '' ? 'Required Field' : '')
-        const ageError = (form.age == '' ? 'Required Field' : '')
-
-        this.setState({
-            nameError, genderError, ageError
-        })
-
-        if (!nameError && !genderError && !ageError) {
-            let timestamp =
-                this.props.addNewGuest(form.name, form.age, form.gender,
-                    form.description);
-            this.props.navigator.pop({
-                animated: true, // does the pop have transition animation or does it happen immediately (optional)
-                animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
-            });
-        }
     }
 
     render() {
         return (
-            <ScrollView style={{flex: 1, flexDirection: 'column', padding: 10}}>
-                <FormInputField
-                    label={'Name'}
-                    ref={input => this.input = input}
-                    onChangeText={(text) => this.formInput.name = text}
-                    error={this.state.nameError}
-                />
-                <PickerFormField
-                    label="Age"
-                    value={this.formInput.age}
-                    onValueChange={(selected) => this.formInput.age = selected}
-                    error={this.state.ageError}
-                    items={age_list}/>
-                <PickerFormField
-                    label="Gender"
-                    value={this.formInput.gender}
-                    onValueChange={(selected) => this.formInput.gender = selected}
-                    error={this.state.genderError}
-                    items={genders}/>
-                <FormLabel>Description</FormLabel>
-                <FormInput
-                    ref={input => this.input = input}
-                    multiline={true}
-                    numberOfLines={4}
-                    onChangeText={(text) => this.formInput.description = text}
-                />
-                <Button
-                    style={{height: 50}}
-                    onPress={() => this.register(this.formInput)}
-                    title="Submit"
-                />
-            </ScrollView>
+            <View style = {styles.wrapper}>
+                <Text>Conner doesnt know how to code</Text>
+                <Button style = {styles.submitButton} >
+                    backgroundColor: "#892F39"
+                    onPress={this.submit}
+                    title='Submit'/>
+            </View>
         );
     }
 }
@@ -321,5 +261,14 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         padding: 4,
         backgroundColor: "#ececec"
+    },
+    submitButton: {
+        position: "absolute",
+        bottom: 10,
+        justifyContent: "center",
+        backgroundColor: "#892F39",
+    },
+    wrapper: {
+        flex: 1,
     }
 });
