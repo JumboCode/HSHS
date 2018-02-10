@@ -67,7 +67,7 @@ class ActionItemList extends Component {
 					<SearchBar
 						lightTheme
 						round
-						clearIcon
+						clearIcon={this.state.searchInput !== ''}
 						onChangeText={(str) => {this.setState({searchInput: str.toLowerCase()})}}
 						onClearText={() => this.setState({searchInput: ''})}
 						placeholder='Search'

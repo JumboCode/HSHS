@@ -197,7 +197,7 @@ class GuestList extends Component {
                     onChangeText={(str) => {this.setState({searchInput: str.toLowerCase()})}}
                     onClearText={() => this.setState({searchInput: ''})}
                     lightTheme
-                    clearIcon
+                    clearIcon={this.state.searchInput !== ''}
                     round
                 />
                 <FlatList
