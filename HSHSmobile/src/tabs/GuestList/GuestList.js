@@ -39,7 +39,8 @@ function guestObjectToArray(IdsToGuests, IdsToInteractions) {
             "description": IdsToGuests[Id].description,
             "age" : IdsToGuests[Id].age,
             "gender": IdsToGuests[Id].gender,
-            "color": getRandomColor()
+            "color": getRandomColor(),
+            "actionItems": IdsToGuests[Id].actionItems
         });
     }
 
@@ -132,7 +133,8 @@ class GuestList extends Component {
             screen: 'GuestListProfile', // unique ID registered with Navigation.registerScreen
             passProps: {
                 Id: guest.Id,
-                name: "Hey I left this variable so stuff dosn't break but please don't use it!"
+                name: "Hey I left this variable so stuff dosn't break but please don't use it!",
+                actionItems: "hello"
             }, // Object that will be passed as props to the pushed screen (optional)
             animated: true, // does the push have transition animation or does it happen immediately (optional)
             animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
@@ -153,7 +155,7 @@ class GuestList extends Component {
     };
 
     componentWillUpdate(nextProps, nextState) {
-        console.log(this.props.guests);
+        // console.log(this.props.guests);
     };
 
     renderHeader = () => {
