@@ -15,7 +15,7 @@ import { Icon, List, ListItem, SearchBar, CheckBox } from "react-native-elements
 import {connect} from 'react-redux';
 import ChooseLocationPopup from '../../modules/popups/ChooseLocationPopup';
 
-import TagGuestDialog from "../../modules/TagGuestDialog"
+import TagGuestPopup from "../../modules/popups/TagGuestPopup"
 import renderSeperator from '../../modules/UI/renderSeperator'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {addNewActionItem, getActionItems} from "../../redux/actions";
@@ -52,8 +52,6 @@ class TodoListItemNew extends Component {
     constructor(props) {
         super(props);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
-        this.addGuest = this.addGuest.bind(this);
-        this.removeGuest = this.removeGuest.bind(this);
         this.state = {
             title: "",
             taggedGuests: [],
@@ -106,15 +104,10 @@ class TodoListItemNew extends Component {
         }
     };
 
-    addGuest(guest) {
-        this.setState({taggedGuests: [...this.state.taggedGuests, guest]});
-    }
-
-    removeGuest(guest) {
-        let index = this.state.taggedGuests.indexOf(guest);
-        let arr = this.state.taggedGuests;
-        arr.splice(index, 1);
-        this.setState({taggedGuests: arr})
+    setSelectedGuests = (guests) => {
+      this.setState({
+        taggedGuests: guests
+      });
     }
 
     setChosenLocation = (locationName, locationCoords) => {
@@ -193,15 +186,14 @@ class TodoListItemNew extends Component {
                         onChangeText={(description) => this.state.description = description}
                     />
                 </View>
-                <TagGuestDialog
+                <TagGuestPopup
                     ref={(dialog) => {
                         this.tagGuestDialog = dialog;
                     }}
                     guests={this.props.guests}
                     loading={this.props.loading}
                     taggedGuests={this.state.taggedGuests}
-                    addGuest={this.addGuest}
-                    removeGuest={this.removeGuest}
+                    onConfirm={this.setSelectedGuests}
                 />
                 <ChooseLocationPopup
                   ref={(map) => {

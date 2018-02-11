@@ -12,9 +12,12 @@ export default class Popup extends Component {
       };
   }
 
-  _renderButton = (text, onPress) => (
-    <TouchableOpacity onPress={onPress}>
-      <View style={styles.button}>
+  _renderButton = (text, isDisabled, onPress) => (
+    <TouchableOpacity
+      onPress={onPress}
+      disabled={isDisabled}
+      >
+      <View style={isDisabled ? styles.disabledButton : styles.button}>
         {<Text>{text}</Text>}
       </View>
     </TouchableOpacity>
@@ -40,8 +43,8 @@ export default class Popup extends Component {
             {this.props.children}
             {renderSeperator()}
             <View style={styles.modalButtons}>
-              {this._renderButton("Cancel", () => this.setState({ isVisible: false }))}
-              {this._renderButton("Confirm", () => {this.setState({ isVisible: false }); this.props.onConfirm()})}
+              {this._renderButton("Cancel", false, () => {this.setState({ isVisible: false }); this.props.onCancel()})}
+              {this._renderButton("Confirm", this.props.confimDisable, () => {this.setState({ isVisible: false }); this.props.onConfirm()})}
             </View>
           </View>
         </Modal>
@@ -59,6 +62,16 @@ styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center"
   },
+  disabledButton: {
+    backgroundColor: "lightblue",
+    padding: 12,
+    margin: 16,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 4,
+    borderColor: "rgba(0, 0, 0, 0.1)",
+    opacity: 0.3
+  },
   button: {
     backgroundColor: "lightblue",
     padding: 12,
@@ -66,7 +79,7 @@ styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 4,
-    borderColor: "rgba(0, 0, 0, 0.1)"
+    borderColor: "rgba(0, 0, 0, 0.1)",
   },
   modalTitle: {
     margin: 12,

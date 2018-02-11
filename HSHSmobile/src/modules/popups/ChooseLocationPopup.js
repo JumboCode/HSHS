@@ -3,22 +3,30 @@ import { Text, TouchableOpacity, View, alert } from "react-native";
 import Modal from "react-native-modal";
 import renderSeperator from "../UI/renderSeperator"
 import Popup from "./popup"
-import MapView from 'react-native-maps';
+import MapView, { AnimatedRegion, Animated } from 'react-native-maps';
 import Geocoder from 'react-native-geocoding';
+
+
+const LATITUDE_DELTA = 0.02;
+const LONGITUDE_DELTA = 0.01;
+
+// Before Geolocation gets current location, or incase geolocation fails
+const initialCoords = {
+  latitude: 42.3736,
+  longitude: -71.1190,
+}
 
 // Needs an onSave function passed, that takes (coordinate, address) as parameters
 export default class ChooseLocationPopup extends Component {
   constructor(props) {
-      super(props);
-      this.state = {
-        coordinate: {
-            latitude: 42.405804,
-            longitude: -71.11956,
-        },
-        address: null,
-      };
-      Geocoder.setApiKey('AIzaSyBk97FJAbAoOnu1liyLAGAne9dcYAiJ8Co');
-    }
+    super(props);
+    this.state = {
+      coordinate: initialCoords,
+      address: null,
+    };
+    Geocoder.setApiKey('AIzaSyBk97FJAbAoOnu1liyLAGAne9dcYAiJ8Co');
+  }
+
   show = () => {
     this.Popup.show()
   };
@@ -30,6 +38,9 @@ export default class ChooseLocationPopup extends Component {
         width: "100%",
       }}>
           <MapView
+              ref={(map) => {
+                this.map = map }
+              }
               style={{
                   height: "100%",
                   width: "100%",
@@ -75,6 +86,8 @@ export default class ChooseLocationPopup extends Component {
         }}
         title={titleString}
         onConfirm={()=>{this.props.onConfirm(this.state.address, this.state.coordinate)}}
+        onCancel={()=>{}}
+        confimDisable={this.state.address == null}
         >
         {this.renderContent()}
       </Popup>

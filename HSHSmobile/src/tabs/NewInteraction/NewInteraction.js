@@ -33,6 +33,7 @@ export default class Info extends Component {
                       this.Popup = popup;
                   }}
                   title={"Title"}
+                  onConfirm={()=>{}}
                   >
                   <Text>Test</Text>
                   <Text>Test</Text>
