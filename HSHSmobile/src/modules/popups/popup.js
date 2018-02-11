@@ -34,6 +34,7 @@ export default class Popup extends Component {
           isVisible={this.state.isVisible}
           animationIn="fadeIn"
           animationOut="fadeOut"
+          onShow={this.props.onShow}
           >
           <View style={styles.modalContent}>
             <View style={styles.modalTitle}>

@@ -25,11 +25,7 @@ export default class TagGuestDialog extends Component {
         super(props);
 
         // add guest names to the state for checklist
-        this.state = {checkedNow: [], checkedBefore: [], search: false}
-
-        // NOTE: One invariant is this.state.checked and this.props.taggedGuests
-        // should always be the same. The information is duplicated because
-        // the checks in checkboxes weren't re-rendering properly otherwise.
+        this.state = {checkedNow: [], checkedBefore: [], searchInput: ''}
     };
 
     // calls show() fn of PopupDialog
@@ -37,44 +33,45 @@ export default class TagGuestDialog extends Component {
         this.Popup.show();
     }
 
-    renderHeader = () => {
-        return <SearchBar placeholder="Type Here..." lightTheme round />;
-    };
-
     renderContent = () => {
       return (
         <View style={{
           height: "80%",
           width: "100%",
         }}>
-            <List containerStyle={{height: "100%", width: "100%"}}>
-                <FlatList
-                    data = {this.props.guests}
-                    renderItem={({ item }) => (
-                        <CheckBox
-                            title={`${item.name}`}
-                            onPress={()=>
-                            {
-                                if (!this.state.checkedNow.includes(item)) {
-                                    this.setState({checkedNow: [...this.state.checkedNow, item]});
-                                } else {
-                                    let index = this.state.checkedNow.indexOf(item)
-                                    let arr = this.state.checkedNow
-                                    arr.splice(index, 1)
-                                    this.setState({checkedNow: arr})
-                                }
-                            }}
-                            checked={this.state.checkedNow.includes(item)}
-                        ></CheckBox>
-                    )}
-                    keyExtractor = {item => item.Id}
-                    ListHeaderComponent = {this.renderHeader}
-                    refreshing = {this.props.refreshing}
-                    onEndReached = {this.handleLoadMore}
-                    onEndReachedThreshold = {50}
-                    extraData={this.state}
-                />
-            </List>
+          <SearchBar
+            placeholder="Search"
+            onChangeText={(str) => {this.setState({searchInput: str.toLowerCase()})}}
+            onClearText={() => this.setState({searchInput: ''})}
+            lightTheme
+            clearIcon={this.state.searchInput !== ''}
+            round
+          />
+          <FlatList
+              data = {this.props.guests.filter(item => item.name.toLowerCase().includes(this.state.searchInput)) }
+              renderItem={({ item }) => (
+                  <CheckBox
+                      title={`${item.name}`}
+                      onPress={()=>
+                      {
+                          if (!this.state.checkedNow.includes(item.Id)) {
+                              this.setState({checkedNow: [...this.state.checkedNow, item.Id]});
+                          } else {
+                              let index = this.state.checkedNow.indexOf(item.Id)
+                              let arr = this.state.checkedNow
+                              arr.splice(index, 1)
+                              this.setState({checkedNow: arr})
+                          }
+                      }}
+                      checked={this.state.checkedNow.includes(item.Id)}
+                  ></CheckBox>
+              )}
+              keyExtractor = {item => item.Id}
+              refreshing = {this.props.refreshing}
+              onEndReached = {this.handleLoadMore}
+              onEndReachedThreshold = {50}
+              extraData={this.state}
+          />
           </View>
       );
     }
@@ -85,9 +82,9 @@ export default class TagGuestDialog extends Component {
         }
         return (
           <Popup
-            title={"test title"}
-            onConfirm= { () => { this.setState ( { checkedBefore: this.state.checkedNow } ); this.props.onConfirm(this.state.checkedNow)}}
-            onCancel = { () => { this.setState ( { checkedNow: this.state.checkedBefore } ); }}
+            title={"Choose guests"}
+            onConfirm= { () => { this.setState ( { checkedBefore: this.state.checkedNow.slice() } ); this.props.onConfirm(this.state.checkedNow)}}
+            onCancel = { () => { this.setState ( { checkedNow: this.state.checkedBefore.slice() } );}}
             ref={(popup) => {
                 this.Popup = popup;
             }}

@@ -192,7 +192,6 @@ class TodoListItemNew extends Component {
                     }}
                     guests={this.props.guests}
                     loading={this.props.loading}
-                    taggedGuests={this.state.taggedGuests}
                     onConfirm={this.setSelectedGuests}
                 />
                 <ChooseLocationPopup
