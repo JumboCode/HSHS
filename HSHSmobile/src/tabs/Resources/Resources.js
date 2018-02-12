@@ -6,7 +6,8 @@ import React, { Component } from 'react';
 import {
     Text,
     View,
-    StyleSheet
+    StyleSheet,
+    Button
 } from 'react-native';
 import {List, ListItem} from 'react-native-elements';
 import Accordion from 'react-native-collapsible/Accordion';
@@ -31,9 +32,69 @@ class Resources extends Component {
         super(props);
 
         this.linkData = [{categoryName: "Emergency Shelters",
-                          links: [{name: "Dry Men's shelter",description: "dummy information about link",
-                                  link: "www.fake.com/fake"}]}];
+                          links: [
+                              {name: "Dry Men's shelter",description: "dummy information about link",
+                                  link: "www.fake.com/fake"},
+                              {name: "Dry Womens's shelter",description: "dummy information about link",
+                                  link: "www.fake.com/fake"},
+                              {name: "Late Night Men's shelter",description: "dummy information about link",
+                                  link: "www.fake.com/fake"},
+                              {name: "Late Night Women's shelter",description: "dummy information about link",
+                                  link: "www.fake.com/fake"},
+                                  ]
+                        },
+                        {categoryName: "Permanent Housing",
+                            links: [
+                                {name: "Furniture",description: "dummy information about link",
+                                    link: "www.fake.com/fake"},
+                                {name: "Market Rate Appartment",description: "dummy information about link",
+                                    link: "www.fake.com/fake"},
+                                {name: "Private Subsidized Housing",description: "dummy information about link",
+                                    link: "www.fake.com/fake"},
+                                {name: "Public Housing",description: "dummy information about link",
+                                    link: "www.fake.com/fake"},
+                            ]
+                        },
+            {categoryName: "Permanent Housing",
+                links: [
+                    {name: "Furniture",description: "dummy information about link",
+                        link: "www.fake.com/fake"},
+                    {name: "Market Rate Appartment",description: "dummy information about link",
+                        link: "www.fake.com/fake"},
+                    {name: "Private Subsidized Housing",description: "dummy information about link",
+                        link: "www.fake.com/fake"},
+                    {name: "Public Housing",description: "dummy information about link",
+                        link: "www.fake.com/fake"},
+                ]
+            },
+            {categoryName: "Permanent Housing",
+                links: [
+                    {name: "Furniture",description: "dummy information about link",
+                        link: "www.fake.com/fake"},
+                    {name: "Market Rate Appartment",description: "dummy information about link",
+                        link: "www.fake.com/fake"},
+                    {name: "Private Subsidized Housing",description: "dummy information about link",
+                        link: "www.fake.com/fake"},
+                    {name: "Public Housing",description: "dummy information about link",
+                        link: "www.fake.com/fake"},
+                ]
+            },
+            {categoryName: "Permanent Housing",
+                links: [
+                    {name: "Furniture",description: "dummy information about link",
+                        link: "www.fake.com/fake"},
+                    {name: "Market Rate Appartment",description: "dummy information about link",
+                        link: "www.fake.com/fake"},
+                    {name: "Private Subsidized Housing",description: "dummy information about link",
+                        link: "www.fake.com/fake"},
+                    {name: "Public Housing",description: "dummy information about link",
+                        link: "www.fake.com/fake"},
+                ]
+            },
+        ];
     }
+
+
 
     // Passed to the Accordion component to render the header/closed accordion
     // view
@@ -54,13 +115,32 @@ class Resources extends Component {
       );
     }
 
-    render() {
+    _renderCategoryButton(d){
         return (
-          <Accordion
-            sections={this.linkData}
-            renderHeader={this._renderAccordionHeader}
-            renderContent={this._renderAccordionContent}
-          />
+            <View>
+                <Button
+                    title={d.categoryName}
+                    color="#841584"
+                />
+            </View>
+        );
+    }
+
+    render() {
+
+        const categories = [];
+        this.linkData.forEach((category) => {
+            categories.push(
+                this._renderCategoryButton(category)
+            );
+        });
+
+        return (
+            <View style={{flex: 1, flexDirection: 'column'}}>
+                <View style={{flex : 1, flexDirection: 'row', flexWrap: 'wrap'}}>
+                    {categories}
+                </View>
+            </View>
         );
     }
 }
