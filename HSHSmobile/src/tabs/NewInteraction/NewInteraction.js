@@ -41,7 +41,7 @@ export default class Info extends Component {
                               this.counters[name] = val;
                             }}
                       />)}
-          <TouchableOpacity onPress={() => {this.promptDialog.show();}}>
+          <TouchableOpacity onPress={() => {}}>
               <Icon name="ios-add-circle" size={60} color="#900" />
           </TouchableOpacity>
         </View>
