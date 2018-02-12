@@ -34,6 +34,7 @@ export default class Info extends Component {
             {
               items.map((name) =>
                       <Counter
+                        key={name}
                         itemName={name}
                         count={this.counters[name]}
                         onValueChange={(val) =>
@@ -50,9 +51,29 @@ export default class Info extends Component {
 
 
     // Re render the page when new counter added?
-    addCounter = (newCounterName) => {
-      this.counters[newCounterName] = 0;
+    //
+    submitCounterPopup = () => {
+      let newCounterName = this.state.counterPromptInput;
+      if (newCounterName != "") {
+        this.counters[newCounterName] = 0;
+      }
+      this.setState({counterPromptInput: ""});
+      this.addCounterDialog.dismiss();
       this.render();
+    }
+    // Re render the page when new counter added?
+    cancelCounterPopup = () => {
+      this.setState({counterPromptInput: ""});
+      this.addCounterDialog.dismiss();
+    }
+
+    renderCounterPopupButtons() {
+      return (
+          <View style={styles.popupDialogButtons}>
+            <DialogButton text="Cancel" onPress={this.cancelCounterPopup}/>
+            <DialogButton text="Submit" onPress={this.submitCounterPopup}/>
+          </View>
+      );
     }
 
     render() {
@@ -98,5 +119,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flexWrap: 'wrap'
-    }
+    },
+    popupDialogButtons: {
+      flexDirection: 'row',
+      justifyContent: 'space-around'
+    },
+    textInput: {
+      marginTop: 3,
+      height: 40,
+      width: "80%",
+      borderColor: 'gray',
+      borderWidth: 1
+    },
 });
