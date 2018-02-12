@@ -13,7 +13,10 @@ import {
     Button,
     TouchableOpacity
 } from 'react-native';
-import Popup from "../../modules/popups/popup"
+import Popup from "../../modules/popups/popup";
+import Counter from "../../modules/Counter";
+import Icon from 'react-native-vector-icons/Ionicons';
+
 
 const instructions = Platform.select({
     ios: 'please make me an ios screen!',
@@ -24,7 +27,6 @@ export default class Info extends Component {
     constructor(props) {
       super(props);
       this.counters = {"PB&Js": 2, "Water Bottles": 1, "Blankets": 3};
-      this.state = {counterPromptVisible: false};
     }
 
     renderCounters() {
@@ -41,38 +43,9 @@ export default class Info extends Component {
                             {
                               this.counters[name] = val;
                             }}
-                      />)}
-          <TouchableOpacity onPress={() => {}}>
-              <Icon name="ios-add-circle" size={60} color="#900" />
-          </TouchableOpacity>
+                      />)
+              }
         </View>
-      );
-    }
-
-
-    // Re render the page when new counter added?
-    //
-    submitCounterPopup = () => {
-      let newCounterName = this.state.counterPromptInput;
-      if (newCounterName != "") {
-        this.counters[newCounterName] = 0;
-      }
-      this.setState({counterPromptInput: ""});
-      this.addCounterDialog.dismiss();
-      this.render();
-    }
-    // Re render the page when new counter added?
-    cancelCounterPopup = () => {
-      this.setState({counterPromptInput: ""});
-      this.addCounterDialog.dismiss();
-    }
-
-    renderCounterPopupButtons() {
-      return (
-          <View style={styles.popupDialogButtons}>
-            <DialogButton text="Cancel" onPress={this.cancelCounterPopup}/>
-            <DialogButton text="Submit" onPress={this.submitCounterPopup}/>
-          </View>
       );
     }
 
@@ -87,15 +60,16 @@ export default class Info extends Component {
             <View style={styles.container}>
                 <Popup
                   ref={(popup) => {
-                      this.Popup = popup;
+                      this.addCounterDialog = popup;
                   }}
-                  title={"Title"}
+                  title={"Add a New Item"}
                   onConfirm={()=>{}}
                   >
                   <Text>Test</Text>
                   <Text>Test</Text>
                 </Popup>
             </View>
+            {this.renderCounters()}
           </View>
         );
     }
