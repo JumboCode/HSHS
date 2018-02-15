@@ -16,22 +16,11 @@ const oneDayInSeconds = 86400000;
 class ActionItemList extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {searchInput: ''};
-		var actionItems = getActionItems(this.props.actionItems, this.props.guests);
+		this.state = {
+			searchInput: '',
 
-		if (this.props.showDueSoon) {		// Show only actionItems due in 24 hours
-			let now = Date.now();
-			var dueSoon = [];
-
-			for (i in actionItems) {
-				for (j in actionItems[i].shiftDate) {
-					let timeUntilDue = actionItems[i].shiftDate[j] - now;
-					if (timeUntilDue > 0 && timeUntilDue < oneDayInSeconds) dueSoon.push(actionItems[i])
-				}
-			}
-			actionItems = dueSoon;
-		}
-
+		};
+		
         this.Screen_TodoListItem = this.Screen_TodoListItem.bind(this);
     }
 
@@ -39,7 +28,7 @@ class ActionItemList extends Component {
         this.props.navigator.push({
             screen: 'TodoListItem', // unique ID registered with Navigation.registerScreen
             passProps: {
-                id: item.id,
+                id: item.id
             }, // Object that will be passed as props to the pushed screen (optional)
             animated: true, // does the push have transition animation or does it happen immediately (optional)
             animationType: 'slide-horizontal', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
@@ -61,6 +50,29 @@ class ActionItemList extends Component {
     };
 
 	render() {
+		var actionItems;
+		if (!this.props.actionItems) {
+			// actionItems = getActionItems()
+		} else {
+			actionItems = getActionItems(this.props.actionItems, this.props.guests);
+		}
+
+		if (this.props.showDueSoon) {		// Show only actionItems due in 24 hours
+			let now = Date.now();
+			console.log(now)
+			var dueSoon = [];
+
+			for (i in actionItems) {
+				for (j in actionItems[i].shiftDate) {
+					let timeUntilDue = actionItems[i].shiftDate[j] - now;
+					console.log(timeUntilDue);
+					if (timeUntilDue > 0 && timeUntilDue < oneDayInSeconds) dueSoon.push(actionItems[i])
+				}
+			}
+			actionItems = dueSoon;
+		}
+		console.log(actionItems)
+
 		return (
 			<View>
 				{!this.props.showDueSoon &&
@@ -74,7 +86,7 @@ class ActionItemList extends Component {
 					/>
 				}
 				<FlatList
-					data = {getActionItems(this.props.actionItems).filter(item => item.title.toLowerCase().includes(this.state.searchInput))}
+					data = {getActionItems(actionItems).filter(item => item.title.toLowerCase().includes(this.state.searchInput))}
 		            renderItem={({item}) => this.renderListItem(item)}
 		            keyExtractor = {item => item.id}
 								ItemSeparatorComponent = {() => {return(renderSeperator())}}

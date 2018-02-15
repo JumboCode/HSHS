@@ -105,6 +105,7 @@ class Dashboard extends Component {
 
     // I'm not sure if this is the best way to have logical statements within renders, but it's not the worst way!
     render() {
+        console.log('hello')
         return (
 
             (this.props.loading && <ActivityIndicator animating size="large"/>) ||
