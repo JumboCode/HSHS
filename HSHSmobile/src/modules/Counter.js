@@ -8,7 +8,8 @@
 //   count=0
 //   onValueChange={(val) => this.setState({PB&J: val}); }
 //   />
-// TODO: Figure out text name wrapping, spacing between Counters, find the key error?
+// TODO: Figure out uniform sizing for counters. (ie text should wrap etc)
+// TODO: change circle rendering @jacob?
 import React, { Component } from 'react';
 import {
         StyleSheet,
@@ -29,13 +30,15 @@ export default class Counter extends Component {
 
   // Must be a member variable that is assigned a => function to ensure it's in
   // the same realm (not the right word) as this.state
+  // Functions passed to TouchableOpacity below; they set local state
+  // and call the onValueChange prop with updated value
   incrementCount = () => {
-    console.log(this.state);
     let newVal = this.state.count + 1;
     this.setState({count: newVal});
     this.props.onValueChange(newVal);
   }
 
+  // Lower bound of 0
   decrementCount = () => {
     let newVal = this.state.count - 1;
     if (newVal < 0) { newVal = 0; }
@@ -65,7 +68,9 @@ const styles = StyleSheet.create({
     container: {
       flexDirection: 'column',
       justifyContent: 'center',
-      alignItems:'center'},
+      alignItems:'center',
+      margin: 2
+    },
     circle: {
       flexDirection:'column',
       justifyContent:'center',

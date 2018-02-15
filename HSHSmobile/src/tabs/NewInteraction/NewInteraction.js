@@ -26,9 +26,12 @@ const instructions = Platform.select({
 export default class Info extends Component {
     constructor(props) {
       super(props);
-      this.counters = {"PB&Js": 2, "Water Bottles": 1, "Blankets": 3};
+      this.counters = {"Example Counter": 666};
     }
 
+    // Sample function to render the item counters. To add new counters,
+    // add elements to this.counters (item list could also come from redux)
+    // Counter spacing issues are probably in Counter.js
     renderCounters() {
       let items = Object.keys(this.counters);
       return (
