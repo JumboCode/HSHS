@@ -4,7 +4,7 @@ import {
 	View,
 	Text
 } from 'react-native';
-import { List, ListItem } from "react-native-elements";
+import { List, ListItem, SearchBar } from "react-native-elements";
 import { Icon } from 'react-native-elements'
 import renderSeperator from "./UI/renderSeperator";
 import renderLoader from "./UI/renderLoader";
@@ -16,6 +16,10 @@ const oneDayInSeconds = 86400000;
 class ActionItemList extends Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			searchInput: '',
+
+		};
 		
         this.Screen_TodoListItem = this.Screen_TodoListItem.bind(this);
     }
@@ -46,7 +50,12 @@ class ActionItemList extends Component {
     };
 
 	render() {
-		var actionItems = getActionItems(this.props.actionItems, this.props.guests);
+		var actionItems;
+		if (!this.props.actionItems) {
+			// actionItems = getActionItems()
+		} else {
+			actionItems = getActionItems(this.props.actionItems, this.props.guests);
+		}
 
 		if (this.props.showDueSoon) {		// Show only actionItems due in 24 hours
 			let now = Date.now();
@@ -62,11 +71,22 @@ class ActionItemList extends Component {
 			}
 			actionItems = dueSoon;
 		}
+		console.log(actionItems)
 
 		return (
-			<List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0, marginTop: 0 }}>
+			<View>
+				{!this.props.showDueSoon &&
+					<SearchBar
+						lightTheme
+						round
+						clearIcon={this.state.searchInput !== ''}
+						onChangeText={(str) => {this.setState({searchInput: str.toLowerCase()})}}
+						onClearText={() => this.setState({searchInput: ''})}
+						placeholder='Search'
+					/>
+				}
 				<FlatList
-					data = {getActionItems(actionItems)}
+					data = {getActionItems(actionItems).filter(item => item.title.toLowerCase().includes(this.state.searchInput))}
 		            renderItem={({item}) => this.renderListItem(item)}
 		            keyExtractor = {item => item.id}
 								ItemSeparatorComponent = {() => {return(renderSeperator())}}
@@ -76,7 +96,7 @@ class ActionItemList extends Component {
 		            onEndReached = {this.handleLoadMore}
 		            onEndReachedThreshold = {50}
 				/>
-			</List>
+			</View>
 		)
 	}
 

@@ -6,7 +6,7 @@ USAGE:
         this.popupDialog = popupDialog;
     }}
 
-    // optional for a title (similar for a footer): 
+    // optional for a title (similar for a footer):
     dialogTitle={<DialogTitle title={"Drag Marker to set a Location:\n" + this.state.address }/>}
 >
 */
