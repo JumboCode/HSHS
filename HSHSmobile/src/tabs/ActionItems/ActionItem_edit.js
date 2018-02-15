@@ -18,7 +18,7 @@ import ChooseLocationPopup from '../../modules/popups/ChooseLocationPopup';
 import TagGuestPopup from "../../modules/popups/TagGuestPopup"
 import renderSeperator from '../../modules/UI/renderSeperator'
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {addNewActionItem, getActionItems} from "../../redux/actions";
+import {addNewActionItem, getActionItems, editActionItem} from "../../redux/actions";
 
 function mapStateToProps(state, ownProps) {
     var guests = guestObjectToArray(state.guests, state.interactions);
@@ -32,6 +32,7 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispath, ownProps) {
     return {
         addNewActionItem: addNewActionItem,
+        editActionItem: editActionItem,
         getActionItems: getActionItems
     };
 }
@@ -48,22 +49,25 @@ function guestObjectToArray(IdsToGuests, IdsToInteractions) {
     return guestList;
 }
 
-class TodoListItemNew extends Component {
+class ActionItem_edit extends Component {
     constructor(props) {
         super(props);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.state = {
-            title: "",
-            taggedGuests: [],
-            locationCoords: {
+            id: this.props.id ? this.props.id : null,
+            title: this.props.title ? this.props.title : '',
+            taggedGuests: this.props.taggedGuests ? this.props.taggedGuests : [],
+
+            // TODO: geeze why is this longitude latitude and other places lat lng? cause google maps api sucks. please let's fix this later.
+            locationCoords: this.props.locationCoords ? this.props.locationCoords : {
             	longitude: 0,
-            	latitude: 0
+            	latitude: 0,
             },
-            selectedLocation: null,
-            locationName: "No Location Selected",
-            selectedDate: "",
-            dateName: "No Date Selected",
-            description: "",
+            selectedLocation: this.props.selectedLocation ? this.props.selectedLocation : null,
+            locationName: this.props.locationName ? this.props.locationName : "No Location Selected",
+            selectedDate: this.props.selectedDate ? this.props.selectedDate : "",
+            dateName: this.props.dateName ? this.props.dateName : "No Date Selected",
+            description: this.props.description ? this.props.description : "",
         };
     };
 
@@ -94,11 +98,17 @@ class TodoListItemNew extends Component {
             		return;
             	}
 
+              // It's new if there is no ID
+              if (!this.state.id) {
                 addNewActionItem(false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, "shiftDate", this.state.description, this.state.taggedGuests.map(guest => guest.Id), "volunteerId");
-                getActionItems();
-                this.props.navigator.pop({
-                    animated: true, // does the pop have transition animation or does it happen immediately (optional)
-                    animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
+              } else {
+                editActionItem(this.state.id, false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, "shiftDate", this.state.description, this.state.taggedGuests.map(guest => guest.Id), "volunteerId");
+              }
+
+              getActionItems();
+              this.props.navigator.pop({
+                  animated: true, // does the pop have transition animation or does it happen immediately (optional)
+                  animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
                 });
             }
         }
@@ -122,11 +132,12 @@ class TodoListItemNew extends Component {
             <View style = {styles.container}>
                 <View style = {styles.back}>
                     <TextInput
+                        value = {this.state.title}
                         editable = {true}
                         placeholder = "Title"
                         style = {styles.title}
-                        placeholderTextColor = "#000000"
-                        onChangeText={(title) => this.state.title = title}
+                        placeholderTextColor = '#d3d3d3'
+                        onChangeText={(title) => {this.setState({'title': title});}}
                     />
                     <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
                         <View style = {styles.icon}>
@@ -260,4 +271,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(TodoListItemNew);
+export default connect(mapStateToProps, mapDispatchToProps)(ActionItem_edit );

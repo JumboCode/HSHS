@@ -23,7 +23,7 @@ import Resources from './tabs/Resources/Resources';
 import GuestListNew from './tabs/GuestList/GuestListNew';
 import GuestListProfile from './tabs/GuestList/GuestListProfile';
 import ActionItem_view from './tabs/ActionItems/ActionItem_view';
-import ActionItem_new from './tabs/ActionItems/ActionItem_new';
+import ActionItem_edit from './tabs/ActionItems/ActionItem_edit';
 import ActionItem_list from './tabs/ActionItems/ActionItem_list';
 import NewInteraction from './tabs/NewInteraction/NewInteraction';
 
@@ -114,10 +114,9 @@ export default class Login extends Component {
         Navigation.registerComponent('GuestListProfile', () => GuestListProfile, store, Provider);
         Navigation.registerComponent('Resources', () => Resources, store, Provider);
         Navigation.registerComponent('Info', () => Info, store, Provider);
-        Navigation.registerComponent('CRUDnote', () => CRUDnote, store, Provider);
         Navigation.registerComponent('GuestListNew', () => GuestListNew, store, Provider);
         Navigation.registerComponent('ActionItem_list', () => ActionItem_list, store, Provider);
-        Navigation.registerComponent('ActionItem_new', () => ActionItem_new, store, Provider);
+        Navigation.registerComponent('ActionItem_edit', () => ActionItem_edit, store, Provider);
         Navigation.registerComponent('ActionItem_view', () => ActionItem_view, store, Provider);
         Navigation.registerComponent('NewInteraction', () => NewInteraction, store, Provider);
 

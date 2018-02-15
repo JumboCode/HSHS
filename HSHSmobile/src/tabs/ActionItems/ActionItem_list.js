@@ -78,9 +78,12 @@ class ActionItem_list extends Component {
     Screen_ActionItem_new = () => {
         this.props.navigator.push({
             title: 'Add Action Item',
-            screen: 'ActionItem_new', // unique ID registered with Navigation.registerScreen
+            screen: 'ActionItem_edit', // unique ID registered with Navigation.registerScreen
+
+            // No pass props because new default
             passProps: {
             }, // Object that will be passed as props to the pushed screen (optional)
+
             animated: true, // does the push have transition animation or does it happen immediately (optional)
             animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
             backButtonHidden: false, // hide the back button altogether (optional)
