@@ -9,9 +9,14 @@ import {
     Platform,
     StyleSheet,
     Text,
-    View
+    View,
+    Button,
+    TouchableOpacity
 } from 'react-native';
-import Popup from "../../modules/popups/popup"
+import Popup from "../../modules/popups/popup";
+import Counter from "../../modules/Counter";
+import Icon from 'react-native-vector-icons/Ionicons';
+
 
 const instructions = Platform.select({
     ios: 'please make me an ios screen!',
@@ -19,6 +24,34 @@ const instructions = Platform.select({
 });
 
 export default class Info extends Component {
+    constructor(props) {
+      super(props);
+      this.counters = {"Example Counter": 666};
+    }
+
+    // Sample function to render the item counters. To add new counters,
+    // add elements to this.counters (item list could also come from redux)
+    // Counter spacing issues are probably in Counter.js
+    renderCounters() {
+      let items = Object.keys(this.counters);
+      return (
+        <View style={styles.counterContainer}>
+            {
+              items.map((name) =>
+                      <Counter
+                        key={name}
+                        itemName={name}
+                        count={this.counters[name]}
+                        onValueChange={(val) =>
+                            {
+                              this.counters[name] = val;
+                            }}
+                      />)
+              }
+        </View>
+      );
+    }
+
     render() {
         return (
           <View>
@@ -30,15 +63,16 @@ export default class Info extends Component {
             <View style={styles.container}>
                 <Popup
                   ref={(popup) => {
-                      this.Popup = popup;
+                      this.addCounterDialog = popup;
                   }}
-                  title={"Title"}
+                  title={"Add a New Item"}
                   onConfirm={()=>{}}
                   >
                   <Text>Test</Text>
                   <Text>Test</Text>
                 </Popup>
             </View>
+            {this.renderCounters()}
           </View>
         );
     }
@@ -56,5 +90,22 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#333333',
         marginBottom: 5,
+    },
+    counterContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexWrap: 'wrap'
+    },
+    popupDialogButtons: {
+      flexDirection: 'row',
+      justifyContent: 'space-around'
+    },
+    textInput: {
+      marginTop: 3,
+      height: 40,
+      width: "80%",
+      borderColor: 'gray',
+      borderWidth: 1
     },
 });
