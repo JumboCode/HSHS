@@ -22,6 +22,7 @@ import ActionItemList from '../../modules/ActionItem';
 const Timestamp = require('react-timestamp');
 
 function mapStateToProps(state, ownProps) {
+    console.log(state.actionItems);
     return {
         guest: state.guests[ownProps.Id],
         loading: state.loading,
@@ -29,6 +30,7 @@ function mapStateToProps(state, ownProps) {
     };
 }
 
+function mapDispatchToProps(dispatch, ownProps) { return {}; }
 
 class GuestProfile extends Component {
     constructor(props) {
@@ -173,6 +175,12 @@ class GuestProfile extends Component {
 
     // Creates a list of actions items in which this guest is tagged
     _renderActionItems() {
+        /*
+            TODO: FOR SOME REASON STATE IS NULL. FIX IT, THEN YOU CAN FIND THE SPECIFIC ACTION ITEMS AND PASS IT THROUGH TO ACTIONITEM.JS
+        */
+        console.log(this.state);
+        console.log(this.props)
+        var actionItems = this.state.actionItems;
         return (
             <ActionItemList actionItems={this.props.guest.actionItems}
                             guests={this.props.guest}
@@ -331,4 +339,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connect(mapStateToProps)(GuestProfile);
+export default connect(mapStateToProps, mapDispatchToProps)(GuestProfile);
