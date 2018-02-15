@@ -22,9 +22,9 @@ import Info from './dummy/BoilerPlate/TemporaryTab';
 import Resources from './tabs/Resources/Resources';
 import GuestListNew from './tabs/GuestList/GuestListNew';
 import GuestListProfile from './tabs/GuestList/GuestListProfile';
-import TodoList from './tabs/TodoList/TodoList';
-import TodoListItem from './tabs/TodoList/TodoListItem';
-import TodoListItemNew from './tabs/TodoList/TodoListItemNew';
+import ActionItem_view from './tabs/ActionItems/ActionItem_view';
+import ActionItem_new from './tabs/ActionItems/ActionItem_new';
+import ActionItem_list from './tabs/ActionItems/ActionItem_list';
 import NewInteraction from './tabs/NewInteraction/NewInteraction';
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -32,7 +32,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 const Icons = require('react-native-vector-icons/Ionicons');
 
 var homeIcon // ios-home-outline
-var todolistIcon // ios-checkbox-outline
+var actionItemIcon // ios-checkbox-outline
 var checkinIcon // ios-list-outline
 var guestsIcon // ios-people-outline
 var resourcesIcon // ios-help-circle-outline
@@ -96,7 +96,7 @@ export default class Login extends Component {
             ]
           ).then((values) => {
             homeIcon = values[0];
-            todolistIcon = values[1];
+            actionItemIcon = values[1];
             checkinIcon = values[2];
             guestsIcon = values[3];
             resourcesIcon = values[4];
@@ -118,9 +118,9 @@ export default class Login extends Component {
         Navigation.registerComponent('Info', () => Info, store, Provider);
         Navigation.registerComponent('CRUDnote', () => CRUDnote, store, Provider);
         Navigation.registerComponent('GuestListNew', () => GuestListNew, store, Provider);
-        Navigation.registerComponent('TodoList', () => TodoList, store, Provider);
-        Navigation.registerComponent('TodoListItem', () => TodoListItem, store, Provider);
-        Navigation.registerComponent('TodoListItemNew', () => TodoListItemNew, store, Provider);
+        Navigation.registerComponent('ActionItem_list', () => ActionItem_list, store, Provider);
+        Navigation.registerComponent('ActionItem_new', () => ActionItem_new, store, Provider);
+        Navigation.registerComponent('ActionItem_view', () => ActionItem_view, store, Provider);
         Navigation.registerComponent('NewInteraction', () => NewInteraction, store, Provider);
 
         // TODO: make the tabs link to real pages
@@ -135,9 +135,9 @@ export default class Login extends Component {
                 },
                 {
                     label: 'action items',
-                    screen: 'TodoList',
+                    screen: 'ActionItem_list',
                     title: 'Action Items',
-                    icon: todolistIcon
+                    icon: actionItemIcon,
                 },
                 {
                     label: 'add note',

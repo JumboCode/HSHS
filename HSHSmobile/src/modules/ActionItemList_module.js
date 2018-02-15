@@ -13,20 +13,20 @@ import renderLoader from "./UI/renderLoader";
 const oneDayInSeconds = 86400000;
 
 // YOU GOTTA PASS THE NAVIGATOR AS A PROP FOR THIS TO WORK
-class ActionItemList extends Component {
+class ActionItemList_module extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			searchInput: '',
 
 		};
-		
-        this.Screen_TodoListItem = this.Screen_TodoListItem.bind(this);
+
+        this.Screen_ActionItem_view = this.Screen_ActionItem_view.bind(this);
     }
 
-    Screen_TodoListItem = (item) => {
+    Screen_ActionItem_view = (item) => {
         this.props.navigator.push({
-            screen: 'TodoListItem', // unique ID registered with Navigation.registerScreen
+            screen: 'ActionItem_view', // unique ID registered with Navigation.registerScreen
             passProps: {
                 id: item.id
             }, // Object that will be passed as props to the pushed screen (optional)
@@ -130,7 +130,7 @@ class ActionItemList extends Component {
 	                } // TODO: fix that without an extra space, the last character is cut off
 	                subtitleStyle = {{textAlign: 'right'}}
 	                containerStyle = {{ borderBottomWidth: 0, marginLeft: 10, backgroundColor:"#F5FCFF" }}
-	                onPress = {() => this.Screen_TodoListItem(item)}
+	                onPress = {() => this.Screen_ActionItem_view(item)}
 	            />
 	        </View>
         )
@@ -168,4 +168,4 @@ function getRandomColor() {
     return color;
 };
 
-export default ActionItemList;
+export default ActionItemList_module;

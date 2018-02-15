@@ -17,7 +17,7 @@ import {
 import { List, ListItem } from "react-native-elements";
 import nodeEmoji from 'node-emoji';
 import {connect} from 'react-redux';
-import ActionItemList from '../../modules/ActionItem';
+import ActionItemList_module from '../../modules/ActionItemList_module';
 
 const Timestamp = require('react-timestamp');
 
@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
         fontSize: 35,
         textDecorationColor:'#686868',
         fontFamily: 'Times New Roman',
-        
+
     },
     profile_image: {
         flex: 0.55,
