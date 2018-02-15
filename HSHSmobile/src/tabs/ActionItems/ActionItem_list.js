@@ -18,6 +18,12 @@ const IonIcon = require('react-native-vector-icons/Ionicons');
 
 
 function mapStateToProps(state, ownProps) {
+
+    // TODO: Make this a more legit way to add the ID:
+    for (var id in state.actionItems) {
+      state.actionItems[id].actionItemId = id;
+    }
+
     return {
         actionItems: state.actionItems,
         guests: state.guests,
@@ -124,8 +130,5 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     }
 });
-
-
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(ActionItem_list);

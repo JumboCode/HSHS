@@ -28,7 +28,7 @@ class ActionItemList_module extends Component {
         this.props.navigator.push({
             screen: 'ActionItem_view', // unique ID registered with Navigation.registerScreen
             passProps: {
-                id: item.id
+                actionItemId: item.actionItemId,
             }, // Object that will be passed as props to the pushed screen (optional)
             animated: true, // does the push have transition animation or does it happen immediately (optional)
             animationType: 'slide-horizontal', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
@@ -153,6 +153,7 @@ function getActionItems(IdsToActionItems) {
             color: getRandomColor(),
             locationStr: item.locationStr,
             id: Id,
+						actionItemId: item.actionItemId,
             shiftDate: item.shiftDate
         });
     }

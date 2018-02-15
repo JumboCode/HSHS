@@ -52,9 +52,11 @@ function guestObjectToArray(IdsToGuests, IdsToInteractions) {
 class ActionItem_edit extends Component {
     constructor(props) {
         super(props);
+        console.log("ACTION ITEM EDIT CONSTRUCTOR: ");
+        console.log(this.props.taggedGuests);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.state = {
-            id: this.props.id ? this.props.id : null,
+            actionItemId: this.props.actionItemId ? this.props.actionItemId : null,
             title: this.props.title ? this.props.title : '',
             taggedGuests: this.props.taggedGuests ? this.props.taggedGuests : [],
 
@@ -99,10 +101,10 @@ class ActionItem_edit extends Component {
             	}
 
               // It's new if there is no ID
-              if (!this.state.id) {
-                addNewActionItem(false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, "shiftDate", this.state.description, this.state.taggedGuests.map(guest => guest.Id), "volunteerId");
+              if (!this.state.actionItemId) {
+                addNewActionItem(false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, "shiftDate", this.state.description, this.state.taggedGuests, "volunteerId");
               } else {
-                editActionItem(this.state.id, false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, "shiftDate", this.state.description, this.state.taggedGuests.map(guest => guest.Id), "volunteerId");
+                editActionItem(this.state.actionItemId, false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, "shiftDate", this.state.description, this.state.taggedGuests, "volunteerId");
               }
 
               getActionItems();
