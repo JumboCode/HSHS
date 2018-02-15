@@ -174,7 +174,7 @@ class GuestProfile extends Component {
     // Creates a list of actions items in which this guest is tagged
     _renderActionItems() {
         return (
-            <ActionItemList actionItems={this.props.guest.actionItems}
+            <ActionItemList_module actionItems={this.props.guest.actionItems}
                             guests={this.props.guest}
                             navigator={this.props.navigator} />
         )
