@@ -75,8 +75,6 @@ export default class Login extends Component {
                 // This is just so we don't have to login every time------ DO NOT SHIP THIS
                 this.openApp();
             });
-
-
     };
 
     forgotPassword = () => {
