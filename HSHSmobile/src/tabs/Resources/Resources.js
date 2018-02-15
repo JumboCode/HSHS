@@ -94,32 +94,26 @@ class Resources extends Component {
         ];
     }
 
-
-
-    // Passed to the Accordion component to render the header/closed accordion
-    // view
-    _renderAccordionHeader(d) {
-      return (
-        <View>
-          <Text>{d.categoryName}</Text>
-        </View>
-      );
+    gotoCategoryScreen(category) {
+        this.props.navigator.push({
+            screen: 'ResourceCategory',
+            passProps: {
+                category: category,
+            },
+            animated: true,
+            animationType: 'slide-horizontal',
+            backButtonHidden: false,
+            navigatorStyle: {},
+            navigatorButtons: {}
+        })
     }
 
-    // Same thing, but renders the body/open view
-    _renderAccordionContent(d) {
-      return (
-        <List>
-          {d.links.map((linkData) => <Text key={linkData.name}>{linkData.name}</Text>)}
-        </List>
-      );
-    }
-
-    _renderCategoryButton(d){
+    makeCategoryButton(category) {
         return (
             <View>
                 <Button
-                    title={d.categoryName}
+                    onPress={this.gotoCategoryScreen(category)}
+                    title={category.categoryName}
                     color="#841584"
                 />
             </View>
@@ -131,7 +125,7 @@ class Resources extends Component {
         const categories = [];
         this.linkData.forEach((category) => {
             categories.push(
-                this._renderCategoryButton(category)
+                this.makeCategoryButton(category)
             );
         });
 
