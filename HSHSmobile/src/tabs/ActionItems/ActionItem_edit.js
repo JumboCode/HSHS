@@ -19,6 +19,8 @@ import TagGuestPopup from "../../modules/popups/TagGuestPopup"
 import renderSeperator from '../../modules/UI/renderSeperator'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {addNewActionItem, getActionItems, editActionItem} from "../../redux/actions";
+import DatePicker from 'react-native-datepicker';
+import Moment from 'moment';
 
 function mapStateToProps(state, ownProps) {
     var guests = guestObjectToArray(state.guests, state.interactions);
@@ -67,8 +69,7 @@ class ActionItem_edit extends Component {
             },
             selectedLocation: this.props.selectedLocation ? this.props.selectedLocation : null,
             locationName: this.props.locationName ? this.props.locationName : "No Location Selected",
-            selectedDate: this.props.selectedDate ? this.props.selectedDate : "",
-            dateName: this.props.dateName ? this.props.dateName : "No Date Selected",
+            selectedDate: this.props.selectedDate ? this.props.selectedDate : Moment().format('YYYY-MM-DD'),
             description: this.props.description ? this.props.description : "",
         };
     };
@@ -81,8 +82,7 @@ class ActionItem_edit extends Component {
                     id: 'save_actionItem', // id for this button, given in onNavigatorEvent(event) to help understand which button was clicked
                     disabled: false, // optional, used to disable the button (appears faded and doesn't interact)
                     disableIconTint: true, // optional, by default the image colors are overridden and tinted to navBarButtonColor, set to true to keep the original image colors
-                    showAsAction: 'ifRoom', // optional, Android only. Control how the button is displayed in the Toolbar. Accepted valued: 'ifRoom' (default) - Show this item as a button in an Action Bar if the system decides there is room for it. 'always' - Always show this item as a button in an Action Bar. 'withText' - When this item is in the action bar, always show it with a text label even if it also has an icon specified. 'never' - Never show this item as a button in an Action Bar.
-                    buttonColor: 'white', // Optional, iOS only. Set color for the button (can also be used in setButtons function to set different button style programatically)
+                    showAsAction: 'ifRoom', // optional, Android only. Control how the button is displayed in the Toolbar.
                     buttonFontSize: 18, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
                     buttonFontWeight: '600', // Set font weight for the button (can also be used in setButtons function to set different button style programatically)
                 }
@@ -102,9 +102,9 @@ class ActionItem_edit extends Component {
 
               // It's new if there is no ID
               if (!this.state.actionItemId) {
-                addNewActionItem(false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, "shiftDate", this.state.description, this.state.taggedGuests, "volunteerId");
+                addNewActionItem(false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId");
               } else {
-                editActionItem(this.state.actionItemId, false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, "shiftDate", this.state.description, this.state.taggedGuests, "volunteerId");
+                editActionItem(this.state.actionItemId, false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId");
               }
 
               getActionItems();
@@ -176,18 +176,32 @@ class ActionItem_edit extends Component {
                     </View>
                     <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
                         <View style = {styles.icon}>
-                            <Icon
-                                raised
-                                color='#770B16'
-                                name='timer'
-                                size={16}
-                                onPress={() => {
-                                    alert("Make this connect to the calendar picker!")
-                                }}/>
+
+                                <DatePicker
+                                    date={this.state.selectedDate}
+                                    mode="date"
+                                    placeholder="select date"
+                                    format="YYYY-MM-DD"
+                                    confirmBtnText="Confirm"
+                                    cancelBtnText="Cancel"
+                                    hideText
+                                    iconComponent={<Icon
+                                        raised
+                                        color='#770B16'
+                                        name='timer'
+                                        size={16}
+                                        />}
+                                    customStyles={{
+                                      dateTouchBody: {
+                                        width: 50
+                                      }
+                                    }}
+                                    onDateChange={(date) => {this.setState({selectedDate: date})}}
+                                  />
                         </View>
                         <View style={{flex: 1}}>
                             <Text numberOfLines={1}
-                                  style={{textAlign: 'right', margin: 10}}>{this.state.dateName}</Text>
+                                  style={{textAlign: 'right', margin: 10}}>Due on: {this.state.selectedDate}</Text>
 
                         </View>
                     </View>
