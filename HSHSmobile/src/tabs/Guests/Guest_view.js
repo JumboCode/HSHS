@@ -174,6 +174,7 @@ class GuestProfile extends Component {
         }
     };
 
+    // Commented out because it crashes probably bc Jacob Jaffe messed it up
     // Creates a list of actions items in which this guest is tagged
     _renderActionItems() {
         var actionItems = this.props.actionItems;
@@ -205,7 +206,20 @@ class GuestProfile extends Component {
     }
 
     _renderHistory() {
-
+        let actionItems = this.props.guest.actionItems;
+        if (actionItems == undefined) {
+            return (
+                <View style={styles.historyContainer}>
+                    <Text style={styles.historyHeader}>Guest History</Text>
+                    <Text>No action items or notes to display!</Text>
+                </View>
+            );
+        }
+        return (
+            <View style={styles.historyContainer}>
+                <Text>There are action items or notes to display!</Text>
+            </View>
+        )
     }
 
     render() {
@@ -223,8 +237,8 @@ class GuestProfile extends Component {
                 <View style={{flex: .5}}>
                     {this._renderActionItems()}
                     {this._renderButtons()}
+                    {this._renderHistory()}
                 </View>
-                {/*{this.render_notes()}*/}
             </View>
         );
     }
@@ -334,6 +348,16 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flex: 1,
         paddingHorizontal: 10
+    },
+    historyContainer: {
+        flexDirection: 'column',
+        padding: 10
+    },
+    historyHeader: {
+        marginLeft: 15,
+        marginBottom: 10,
+        fontWeight: 'bold',
+        fontSize: 15
     }
 });
 
