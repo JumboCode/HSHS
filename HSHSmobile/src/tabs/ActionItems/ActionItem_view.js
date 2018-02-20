@@ -69,6 +69,8 @@ class ActionItem_view extends Component {
         latitude: this.props.actionItems[this.props.actionItemId].locationCoords.lat,
       } : null;
 
+      console.log(this.props.actionItems[this.props.actionItemId]);
+
       this.props.navigator.push({
 
           title: 'Edit Action Item',
@@ -85,8 +87,8 @@ class ActionItem_view extends Component {
 
             locationCoords: coords,
             selectedLocation: this.props.actionItems[this.props.actionItemId].selectedLocation,
-            locationName: this.props.actionItems[this.props.actionItemId].locationName,
-            selectedDate: this.props.actionItems[this.props.actionItemId].selectedDate,
+            locationName: this.props.actionItems[this.props.actionItemId].locationStr,
+            selectedDate: this.props.actionItems[this.props.actionItemId].shiftDate,
             dateName: this.props.actionItems[this.props.actionItemId].dateName,
             description: this.props.actionItems[this.props.actionItemId].description,
           }, // Object that will be passed as props to the pushed screen (optional)
