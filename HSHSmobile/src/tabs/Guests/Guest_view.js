@@ -205,6 +205,8 @@ class GuestProfile extends Component {
         )
     }
 
+    // Once interactions are added to Guest schema, interpolate w/ actionItems
+    // and render in the list.
     _renderHistory() {
         let actionItems = this.props.guest.actionItems;
         if (actionItems == undefined) {
@@ -217,7 +219,17 @@ class GuestProfile extends Component {
         }
         return (
             <View style={styles.historyContainer}>
-                <Text>There are action items or notes to display!</Text>
+                <Text style={styles.historyHeader}>Guest History</Text>
+                <FlatList
+                    data = {actionItems}
+                     {/*renderItem={({item}) => this.renderListItem(item)}
+                    // keyExtractor = {item => item.Id}
+                    // ItemSeparatorComponent = {() => {return(renderSeperator())}}
+                    // ListFooterComponent = {this.renderFooter}
+                    // refreshing = {this.props.refreshing}
+                    // onEndReached = {this.handleLoadMore}
+                    // onEndReachedThreshold = {50}*/}
+                />
             </View>
         )
     }
