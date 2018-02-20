@@ -74,7 +74,7 @@ class ActionItemList_module extends Component {
 		console.log(actionItems)
 
 		return (
-			<View>
+			<View style={{height: '100%'}}>
 				{!this.props.showDueSoon &&
 					<SearchBar
 						lightTheme
@@ -91,7 +91,6 @@ class ActionItemList_module extends Component {
 		            keyExtractor = {item => item.id}
 								ItemSeparatorComponent = {() => {return(renderSeperator())}}
 		            ListHeaderComponent = {this.renderHeader}
-		            ListFooterComponent = {this.renderFooter}
 		            refreshing = {this.props.refreshing}
 		            onEndReached = {this.handleLoadMore}
 		            onEndReachedThreshold = {50}

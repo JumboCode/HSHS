@@ -104,10 +104,13 @@ class ActionItem_list extends Component {
             return renderLoader();
         }
         return (
+          <View
+          style={{height: '100%'}}>
             <ActionItemList_module
                 actionItems={this.props.actionItems}
                 guests={this.props.guests}
                 navigator={this.props.navigator}/>
+          </View>
         );
     }
 }
