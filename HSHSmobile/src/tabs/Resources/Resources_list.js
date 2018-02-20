@@ -1,4 +1,3 @@
-//
 // Starter for the Resource page
 //
 
@@ -26,7 +25,7 @@ import Accordion from 'react-native-collapsible/Accordion';
 //
 
 
-class Resources extends Component {
+class Resources_list extends Component {
     constructor(props) {
         super(props);
 
@@ -47,11 +46,7 @@ class Resources extends Component {
 
     // Same thing, but renders the body/open view
     _renderAccordionContent(d) {
-      return (
-        <List>
-          {d.links.map((linkData) => <Text key={linkData.name}>{linkData.name}</Text>)}
-        </List>
-      );
+
     }
 
     render() {
@@ -84,4 +79,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Resources
+export default Resources_list

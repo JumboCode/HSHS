@@ -18,7 +18,9 @@ import ChooseLocationPopup from '../../modules/popups/ChooseLocationPopup';
 import TagGuestPopup from "../../modules/popups/TagGuestPopup"
 import renderSeperator from '../../modules/UI/renderSeperator'
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {addNewActionItem, getActionItems} from "../../redux/actions";
+import {addNewActionItem, getActionItems, editActionItem} from "../../redux/actions";
+import DatePicker from 'react-native-datepicker';
+import Moment from 'moment';
 
 function mapStateToProps(state, ownProps) {
     var guests = guestObjectToArray(state.guests, state.interactions);
@@ -32,6 +34,7 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispath, ownProps) {
     return {
         addNewActionItem: addNewActionItem,
+        editActionItem: editActionItem,
         getActionItems: getActionItems
     };
 }
@@ -48,22 +51,26 @@ function guestObjectToArray(IdsToGuests, IdsToInteractions) {
     return guestList;
 }
 
-class TodoListItemNew extends Component {
+class ActionItem_edit extends Component {
     constructor(props) {
         super(props);
+        console.log("ACTION ITEM EDIT CONSTRUCTOR: ");
+        console.log(this.props.taggedGuests);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.state = {
-            title: "",
-            taggedGuests: [],
-            locationCoords: {
+            actionItemId: this.props.actionItemId ? this.props.actionItemId : null,
+            title: this.props.title ? this.props.title : '',
+            taggedGuests: this.props.taggedGuests ? this.props.taggedGuests : [],
+
+            // TODO: geeze why is this longitude latitude and other places lat lng? cause google maps api sucks. please let's fix this later.
+            locationCoords: this.props.locationCoords ? this.props.locationCoords : {
             	longitude: 0,
-            	latitude: 0
+            	latitude: 0,
             },
-            selectedLocation: null,
-            locationName: "No Location Selected",
-            selectedDate: "",
-            dateName: "No Date Selected",
-            description: "",
+            selectedLocation: this.props.selectedLocation ? this.props.selectedLocation : null,
+            locationName: this.props.locationName ? this.props.locationName : "No Location Selected",
+            selectedDate: this.props.selectedDate ? this.props.selectedDate : Moment().format('YYYY-MM-DD'),
+            description: this.props.description ? this.props.description : "",
         };
     };
 
@@ -75,8 +82,7 @@ class TodoListItemNew extends Component {
                     id: 'save_actionItem', // id for this button, given in onNavigatorEvent(event) to help understand which button was clicked
                     disabled: false, // optional, used to disable the button (appears faded and doesn't interact)
                     disableIconTint: true, // optional, by default the image colors are overridden and tinted to navBarButtonColor, set to true to keep the original image colors
-                    showAsAction: 'ifRoom', // optional, Android only. Control how the button is displayed in the Toolbar. Accepted valued: 'ifRoom' (default) - Show this item as a button in an Action Bar if the system decides there is room for it. 'always' - Always show this item as a button in an Action Bar. 'withText' - When this item is in the action bar, always show it with a text label even if it also has an icon specified. 'never' - Never show this item as a button in an Action Bar.
-                    buttonColor: 'white', // Optional, iOS only. Set color for the button (can also be used in setButtons function to set different button style programatically)
+                    showAsAction: 'ifRoom', // optional, Android only. Control how the button is displayed in the Toolbar.
                     buttonFontSize: 18, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
                     buttonFontWeight: '600', // Set font weight for the button (can also be used in setButtons function to set different button style programatically)
                 }
@@ -94,11 +100,17 @@ class TodoListItemNew extends Component {
             		return;
             	}
 
-                addNewActionItem(false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, "shiftDate", this.state.description, this.state.taggedGuests.map(guest => guest.Id), "volunteerId");
-                getActionItems();
-                this.props.navigator.pop({
-                    animated: true, // does the pop have transition animation or does it happen immediately (optional)
-                    animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
+              // It's new if there is no ID
+              if (!this.state.actionItemId) {
+                addNewActionItem(false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId");
+              } else {
+                editActionItem(this.state.actionItemId, false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId");
+              }
+
+              getActionItems();
+              this.props.navigator.pop({
+                  animated: true, // does the pop have transition animation or does it happen immediately (optional)
+                  animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
                 });
             }
         }
@@ -122,11 +134,12 @@ class TodoListItemNew extends Component {
             <View style = {styles.container}>
                 <View style = {styles.back}>
                     <TextInput
+                        value = {this.state.title}
                         editable = {true}
                         placeholder = "Title"
                         style = {styles.title}
-                        placeholderTextColor = "#000000"
-                        onChangeText={(title) => this.state.title = title}
+                        placeholderTextColor = '#d3d3d3'
+                        onChangeText={(title) => {this.setState({'title': title});}}
                     />
                     <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
                         <View style = {styles.icon}>
@@ -163,18 +176,32 @@ class TodoListItemNew extends Component {
                     </View>
                     <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
                         <View style = {styles.icon}>
-                            <Icon
-                                raised
-                                color='#770B16'
-                                name='timer'
-                                size={16}
-                                onPress={() => {
-                                    alert("Make this connect to the calendar picker!")
-                                }}/>
+
+                                <DatePicker
+                                    date={this.state.selectedDate}
+                                    mode="date"
+                                    placeholder="select date"
+                                    format="YYYY-MM-DD"
+                                    confirmBtnText="Confirm"
+                                    cancelBtnText="Cancel"
+                                    hideText
+                                    iconComponent={<Icon
+                                        raised
+                                        color='#770B16'
+                                        name='timer'
+                                        size={16}
+                                        />}
+                                    customStyles={{
+                                      dateTouchBody: {
+                                        width: 50
+                                      }
+                                    }}
+                                    onDateChange={(date) => {this.setState({selectedDate: date})}}
+                                  />
                         </View>
                         <View style={{flex: 1}}>
                             <Text numberOfLines={1}
-                                  style={{textAlign: 'right', margin: 10}}>{this.state.dateName}</Text>
+                                  style={{textAlign: 'right', margin: 10}}>Due on: {this.state.selectedDate}</Text>
 
                         </View>
                     </View>
@@ -260,4 +287,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(TodoListItemNew);
+export default connect(mapStateToProps, mapDispatchToProps)(ActionItem_edit );

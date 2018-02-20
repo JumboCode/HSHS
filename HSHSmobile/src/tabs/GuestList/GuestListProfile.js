@@ -17,7 +17,7 @@ import {
 import { List, ListItem } from "react-native-elements";
 import nodeEmoji from 'node-emoji';
 import {connect} from 'react-redux';
-import ActionItemList from '../../modules/ActionItem';
+import ActionItemList_module from '../../modules/ActionItemList_module';
 
 const Timestamp = require('react-timestamp');
 
@@ -25,6 +25,8 @@ function mapStateToProps(state, ownProps) {
     console.log(state.actionItems);
     return {
         guest: state.guests[ownProps.Id],
+        guestId: ownProps.Id,
+        allGuests: state.guests,
         loading: state.loading,
         actionItems: state.actionItems
     };
@@ -180,8 +182,10 @@ class GuestProfile extends Component {
         */
         var actionItems = this.props.actionItems;
         return (
-            <ActionItemList actionItems={this.props.actionItems}
-                            guests={this.props.guest}
+            <ActionItemList_module actionItems={this.props.actionItems}
+                            selectedGuest={this.props.guest}
+                            selectedGuestId={this.props.guestId}
+                            guests={this.props.allGuests}
                             navigator={this.props.navigator} />
         )
     }
@@ -284,7 +288,7 @@ const styles = StyleSheet.create({
         fontSize: 35,
         textDecorationColor:'#686868',
         fontFamily: 'Times New Roman',
-        
+
     },
     profile_image: {
         flex: 0.55,

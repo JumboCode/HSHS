@@ -13,7 +13,7 @@ import renderLoader from "./UI/renderLoader";
 const oneDayInSeconds = 86400000;
 
 // YOU GOTTA PASS THE NAVIGATOR AS A PROP FOR THIS TO WORK
-class ActionItemList extends Component {
+class ActionItemList_module extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -21,14 +21,14 @@ class ActionItemList extends Component {
 
 		};
 
-        this.Screen_TodoListItem = this.Screen_TodoListItem.bind(this);
+        this.Screen_ActionItem_view = this.Screen_ActionItem_view.bind(this);
     }
 
-    Screen_TodoListItem = (item) => {
+    Screen_ActionItem_view = (item) => {
         this.props.navigator.push({
-            screen: 'TodoListItem', // unique ID registered with Navigation.registerScreen
+            screen: 'ActionItem_view', // unique ID registered with Navigation.registerScreen
             passProps: {
-                id: item.id
+                actionItemId: item.actionItemId,
             }, // Object that will be passed as props to the pushed screen (optional)
             animated: true, // does the push have transition animation or does it happen immediately (optional)
             animationType: 'slide-horizontal', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
@@ -39,27 +39,21 @@ class ActionItemList extends Component {
     };
 
     formatGuestNames = (guestIds) => {
+    	console.log(this.props)
+    	console.log(guestIds)
     	if (!guestIds || guestIds.length == 0) {
     		return "No Selected Guests"
 		}
-        var formattedString = "";
+        var formatedString = "";
     	for (id of guestIds) {
-    		formattedString = formattedString + this.props.guests[id].name + ", ";
+    		formatedString = formatedString + this.props.guests[id].name + ", ";
 		}
-		return formattedString
+		return formatedString
     };
 
 	render() {
-		console.log(this.props.actionItems)
-		var actionItems;
-		if (!this.props.actionItems) {
-			// actionItems = getActionItems()
-			
-			var rawActionItems = this.state.actionItems;
-		} else {
-			actionItems = getActionItems(this.props.actionItems, this.props.guests);
-		}
-
+		var actionItems = getActionItems(this.props.actionItems, this.props.selectedGuestId);
+		console.log(actionItems);
 		if (this.props.showDueSoon) {		// Show only actionItems due in 24 hours
 			let now = Date.now();
 			console.log(now)
@@ -74,10 +68,9 @@ class ActionItemList extends Component {
 			}
 			actionItems = dueSoon;
 		}
-		console.log(actionItems)
 
 		return (
-			<View>
+			<View style={{height: '100%'}}>
 				{!this.props.showDueSoon &&
 					<SearchBar
 						lightTheme
@@ -94,7 +87,6 @@ class ActionItemList extends Component {
 		            keyExtractor = {item => item.id}
 								ItemSeparatorComponent = {() => {return(renderSeperator())}}
 		            ListHeaderComponent = {this.renderHeader}
-		            ListFooterComponent = {this.renderFooter}
 		            refreshing = {this.props.refreshing}
 		            onEndReached = {this.handleLoadMore}
 		            onEndReachedThreshold = {50}
@@ -133,7 +125,7 @@ class ActionItemList extends Component {
 	                } // TODO: fix that without an extra space, the last character is cut off
 	                subtitleStyle = {{textAlign: 'right'}}
 	                containerStyle = {{ borderBottomWidth: 0, marginLeft: 10, backgroundColor:"#F5FCFF" }}
-	                onPress = {() => this.Screen_TodoListItem(item)}
+	                onPress = {() => this.Screen_ActionItem_view(item)}
 	            />
 	        </View>
         )
@@ -146,19 +138,38 @@ class ActionItemList extends Component {
 }
 
 // TODO: populate guests, color and ensure that deleting guests removes from these action items.
-function getActionItems(IdsToActionItems) {
-    var actionItems = [];
-    for (var Id in IdsToActionItems) {
-    	var item = IdsToActionItems[Id];
-        actionItems.push({
-            title : item.title,
-            guestIds: item.guestIds,
-            color: getRandomColor(),
-            locationStr: item.locationStr,
-            id: Id,
-            shiftDate: item.shiftDate
-        });
-    }
+function getActionItems(IdsToActionItems, selectedGuestId) {
+	var actionItems = [];
+	if (selectedGuestId) {
+		for (var Id in IdsToActionItems) {
+	    	var item = IdsToActionItems[Id];
+	    	if (item.guestIds && item.guestIds.includes(selectedGuestId)) {
+
+		        actionItems.push({
+		            title : item.title,
+		            guestIds: item.guestIds,
+		            color: getRandomColor(),
+		            locationStr: item.locationStr,
+		            id: Id,
+								actionItemId: item.actionItemId,
+		            shiftDate: item.shiftDate
+		        });
+	    	} 
+	    }
+	} else {
+	    for (var Id in IdsToActionItems) {
+	    	var item = IdsToActionItems[Id];
+	        actionItems.push({
+	            title : item.title,
+	            guestIds: item.guestIds,
+	            color: getRandomColor(),
+	            locationStr: item.locationStr,
+	            id: Id,
+							actionItemId: item.actionItemId,
+	            shiftDate: item.shiftDate
+	        });
+	    }
+	}
     return actionItems;
 }
 
@@ -171,4 +182,4 @@ function getRandomColor() {
     return color;
 };
 
-export default ActionItemList;
+export default ActionItemList_module;

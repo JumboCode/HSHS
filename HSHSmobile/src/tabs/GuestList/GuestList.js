@@ -193,7 +193,7 @@ class GuestList extends Component {
         }
         return (
 
-            <View>
+            <View style={{height: '100%'}}>
                 <SearchBar
                     placeholder="Search"
                     onChangeText={(str) => {this.setState({searchInput: str.toLowerCase()})}}
@@ -207,7 +207,6 @@ class GuestList extends Component {
                     renderItem={({item}) => this.renderListItem(item)}
                     keyExtractor = {item => item.Id}
                     ItemSeparatorComponent = {() => {return(renderSeperator())}}
-                    ListFooterComponent = {this.renderFooter}
                     refreshing = {this.props.refreshing}
                     onEndReached = {this.handleLoadMore}
                     onEndReachedThreshold = {50}

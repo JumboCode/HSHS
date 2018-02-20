@@ -16,7 +16,7 @@ import {List, ListItem, SearchBar} from "react-native-elements";
 import {connect} from 'react-redux';
 import MapView from 'react-native-maps';
 import {getGuests, getInteractions, getActionItems} from '../../redux/actions.js';
-import ActionItemList from '../../modules/ActionItem';
+import ActionItemList_module from '../../modules/ActionItemList_module';
 import {Icon} from 'react-native-elements'
 
 const {UIManager} = NativeModules;
@@ -173,7 +173,7 @@ class Dashboard extends Component {
                     {!this.props.actionItems || this.props.actionItems.length <= 1
                         ? <ActivityIndicator animating size="large"/>
 
-                        : <ActionItemList actionItems={this.props.actionItems}
+                        : <ActionItemList_module actionItems={this.props.actionItems}
                                           guests={this.props.guests}
                                           showDueSoon={true}
                                           navigator={this.props.navigator}/>
@@ -207,7 +207,7 @@ class Dashboard extends Component {
                             Alert.alert("", "Call on Lottery Button Pressed");
                         }}
                     />
-                
+
 
                 </View> */}
 
