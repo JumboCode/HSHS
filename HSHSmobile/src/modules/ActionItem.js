@@ -20,7 +20,7 @@ class ActionItemList extends Component {
 			searchInput: '',
 
 		};
-		
+
         this.Screen_TodoListItem = this.Screen_TodoListItem.bind(this);
     }
 
@@ -50,9 +50,12 @@ class ActionItemList extends Component {
     };
 
 	render() {
+		console.log(this.props.actionItems)
 		var actionItems;
 		if (!this.props.actionItems) {
 			// actionItems = getActionItems()
+			
+			var rawActionItems = this.state.actionItems;
 		} else {
 			actionItems = getActionItems(this.props.actionItems, this.props.guests);
 		}

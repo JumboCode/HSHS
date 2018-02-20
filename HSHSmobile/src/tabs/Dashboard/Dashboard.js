@@ -49,6 +49,8 @@ class Dashboard extends Component {
         this.state = {
             isMapFullScreen: true
         }
+
+        
     };
 
     componentDidMount() {

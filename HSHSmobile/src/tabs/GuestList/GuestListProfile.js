@@ -178,11 +178,9 @@ class GuestProfile extends Component {
         /*
             TODO: FOR SOME REASON STATE IS NULL. FIX IT, THEN YOU CAN FIND THE SPECIFIC ACTION ITEMS AND PASS IT THROUGH TO ACTIONITEM.JS
         */
-        console.log(this.state);
-        console.log(this.props)
-        var actionItems = this.state.actionItems;
+        var actionItems = this.props.actionItems;
         return (
-            <ActionItemList actionItems={this.props.guest.actionItems}
+            <ActionItemList actionItems={this.props.actionItems}
                             guests={this.props.guest}
                             navigator={this.props.navigator} />
         )
