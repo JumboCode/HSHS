@@ -1,12 +1,11 @@
 // This component should be used every time guests need to be tagged.
 // Props: ref gives a reference to the component for opening and closing
-//        guests is the list of guests you get from redux
-//        loading is the loading state from redux
-//        taggedGuests is an array of guest names that have been selected
-//        addGuest is a function that takes a name and adds that name to your
-//          taggedGuests array
-//        removeGuest is similar to addGuest
-import React, { Component } from 'react';
+//        guests: array of guest objects with name and Id, e.g.
+//                [{name: 'foo', Id: 'bar'}, {name: 'foo2', Id: 'bar2'}]
+//        loading: loading state from redux
+//        onConfirm: callback for the confirm button press,
+//                   a function that takes the set guests as a parameter. 
+
 import {
     View,
     FlatList,
@@ -19,13 +18,17 @@ import Popup from "./popup"
 import renderSeperator from "../UI/renderSeperator";
 import renderLoader from "../UI/renderLoader";
 
-// TODO: use Ids for efficency
 export default class TagGuestDialog extends Component {
     constructor(props) {
         super(props);
 
-        // add guest names to the state for checklist
-        this.state = {checkedNow: [], checkedBefore: [], searchInput: ''}
+        // This allows us to overload the Component for editting
+        // e.g. pass initialGuests as a prop when editing with guests that are already tagged
+        this.state = {
+          checkedNow: this.props.initialGuests ? this.props.initialGuests.slice() : [],
+          checkedBefore: this.props.initialGuests ? this.props.initialGuests.slice() : [],
+          searchInput: '',
+        }
     };
 
     // calls show() fn of PopupDialog
