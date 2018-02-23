@@ -4,8 +4,9 @@
 //                [{name: 'foo', Id: 'bar'}, {name: 'foo2', Id: 'bar2'}]
 //        loading: loading state from redux
 //        onConfirm: callback for the confirm button press,
-//                   a function that takes the set guests as a parameter. 
+//                   a function that takes the set guests as a parameter.
 
+import React, { Component } from 'react';
 import {
     View,
     FlatList,
