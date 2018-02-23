@@ -18,7 +18,7 @@ export function reducer(state, action) {
                 loaded: true,
                 guests: action.payload
             });
-            
+
         case 'GET_INTERACTIONS_START':
             return Object.assign({}, state, {
                 loading: true
@@ -66,6 +66,7 @@ export function reducer(state, action) {
                 actionItems: action.payload
             });
         
+
         default:
             return state;
     }

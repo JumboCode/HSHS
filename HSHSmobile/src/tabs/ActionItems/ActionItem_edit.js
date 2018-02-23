@@ -284,7 +284,26 @@ const styles = StyleSheet.create({
         padding: 5,
         fontSize: 15,
         marginBottom: 30
-    }
+    },
+    disabledButton: {
+      backgroundColor: "lightblue",
+      padding: 12,
+      margin: 16,
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 4,
+      borderColor: "rgba(0, 0, 0, 0.1)",
+      opacity: 0.3
+    },
+    button: {
+      backgroundColor: "lightblue",
+      padding: 12,
+      margin: 16,
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 4,
+      borderColor: "rgba(0, 0, 0, 0.1)",
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ActionItem_edit );

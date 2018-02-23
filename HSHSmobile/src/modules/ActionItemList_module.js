@@ -148,13 +148,13 @@ function getActionItems(IdsToActionItems, selectedGuestId) {
 		        actionItems.push({
 		            title : item.title,
 		            guestIds: item.guestIds,
-		            color: getRandomColor(),
+		            color: item.color ? item.color : "#F5FCFF",
 		            locationStr: item.locationStr,
 		            id: Id,
 								actionItemId: item.actionItemId,
 		            shiftDate: item.shiftDate
 		        });
-	    	} 
+	    	}
 	    }
 	} else {
 	    for (var Id in IdsToActionItems) {
@@ -162,7 +162,7 @@ function getActionItems(IdsToActionItems, selectedGuestId) {
 	        actionItems.push({
 	            title : item.title,
 	            guestIds: item.guestIds,
-	            color: getRandomColor(),
+	            color: item.color ? item.color : "#F5FCFF",
 	            locationStr: item.locationStr,
 	            id: Id,
 							actionItemId: item.actionItemId,
@@ -172,14 +172,5 @@ function getActionItems(IdsToActionItems, selectedGuestId) {
 	}
     return actionItems;
 }
-
-function getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-};
 
 export default ActionItemList_module;
