@@ -217,6 +217,7 @@ class ActionItem_edit extends Component {
                     ref={(dialog) => {
                         this.tagGuestDialog = dialog;
                     }}
+                    initialGuests={this.state.taggedGuests}
                     guests={this.props.guests}
                     loading={this.props.loading}
                     onConfirm={this.setSelectedGuests}
