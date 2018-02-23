@@ -48,6 +48,9 @@ class ActionItemList_module extends Component {
     	for (id of guestIds) {
     		formatedString = formatedString + this.props.guests[id].name + ", ";
 		}
+
+		// get rid of that dumb last comma and space
+		formatedString = formatedString.slice(0, -2);
 		return formatedString
     };
 
