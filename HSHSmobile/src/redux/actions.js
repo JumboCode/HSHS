@@ -81,7 +81,7 @@ export const addNewActionItemSuccess = () => ({
         type: 'ADD_NEW_ACTION_ITEMS_SUCCESS'
 })
 
-export const addNewActionItem = (isDone, title, creationTimestamp, locationCoord, locationStr, shiftDate, description, guestIds, volunteerId) => {
+export const addNewActionItem = (isDone, title, creationTimestamp, locationCoord, locationStr, shiftDate, description, guestIds, volunteerId, color) => {
                 store.dispatch(addNewActionItemStart);
                 firebase.database().ref('actionItems').push().set({
                         isDone: isDone,
@@ -95,7 +95,8 @@ export const addNewActionItem = (isDone, title, creationTimestamp, locationCoord
                         shiftDate: shiftDate,
                         description: description,
                         guestIds: guestIds,
-                        volunteerId: volunteerId
+                        volunteerId: volunteerId,
+												color: color,
                 })
 }
 
@@ -107,7 +108,7 @@ export const editActionItemSuccess = () => ({
         type: 'ADD_NEW_ACTION_ITEMS_SUCCESS'
 })
 
-export const editActionItem = (id, isDone, title, creationTimestamp, locationCoord, locationStr, shiftDate, description, guestIds, volunteerId) => {
+export const editActionItem = (id, isDone, title, creationTimestamp, locationCoord, locationStr, shiftDate, description, guestIds, volunteerId, color) => {
                 store.dispatch(addNewActionItemStart);
                 firebase.database().ref('actionItems' + '/' + id).set({
                         isDone: isDone,
@@ -121,7 +122,8 @@ export const editActionItem = (id, isDone, title, creationTimestamp, locationCoo
                         shiftDate: shiftDate,
                         description: description,
                         guestIds: guestIds,
-                        volunteerId: volunteerId
+                        volunteerId: volunteerId,
+												color: color,
                 })
 }
 

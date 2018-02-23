@@ -91,6 +91,7 @@ class ActionItem_view extends Component {
             selectedDate: this.props.actionItems[this.props.actionItemId].shiftDate,
             dateName: this.props.actionItems[this.props.actionItemId].dateName,
             description: this.props.actionItems[this.props.actionItemId].description,
+            color: this.props.actionItems[this.props.actionItemId].color,
           }, // Object that will be passed as props to the pushed screen (optional)
 
           animated: true, // does the push have transition animation or does it happen immediately (optional)

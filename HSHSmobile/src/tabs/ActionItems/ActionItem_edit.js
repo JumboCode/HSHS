@@ -71,6 +71,7 @@ class ActionItem_edit extends Component {
             locationName: this.props.locationName ? this.props.locationName : "No Location Selected",
             selectedDate: this.props.selectedDate ? this.props.selectedDate : Moment().format('YYYY-MM-DD'),
             description: this.props.description ? this.props.description : "",
+            color: this.props.color ? this.props.color : null,
         };
     };
 
@@ -102,9 +103,9 @@ class ActionItem_edit extends Component {
 
               // It's new if there is no ID
               if (!this.state.actionItemId) {
-                addNewActionItem(false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId");
+                addNewActionItem(false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
               } else {
-                editActionItem(this.state.actionItemId, false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId");
+                editActionItem(this.state.actionItemId, false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
               }
 
               getActionItems();
@@ -128,6 +129,22 @@ class ActionItem_edit extends Component {
             locationCoords: locationCoords,
         });
     };
+
+    renderColorButton = (c) =>
+    (
+        <TouchableOpacity
+          onPress={() => {
+                console.log(this.state.color);
+                let stateColor = this.state.color == c ? null : c;
+                this.setState({color: stateColor });
+            }
+          }
+          style={{flex: 1}}
+          >
+          <View style={this.state.color == c ? [styles.button, {backgroundColor: c}] : [styles.button, styles.disabled, {backgroundColor: c}]}>
+          </View>
+        </TouchableOpacity>
+    )
 
     render() {
         return (
@@ -212,6 +229,14 @@ class ActionItem_edit extends Component {
                         multiline = {true}
                         onChangeText={(description) => this.state.description = description}
                     />
+                    <View style={{flexDirection: 'row', alignItems: 'stretch', justifyContent: 'space-between', zIndex: 0, paddingLeft: 15, paddingRight: 15}}>
+                      {this.renderColorButton('red')}
+                      {this.renderColorButton('orange')}
+                      {this.renderColorButton('yellow')}
+                      {this.renderColorButton('green')}
+                      {this.renderColorButton('blue')}
+                      {this.renderColorButton('purple')}
+                    </View>
                 </View>
                 <TagGuestPopup
                     ref={(dialog) => {
@@ -284,27 +309,20 @@ const styles = StyleSheet.create({
         height: 100,
         padding: 5,
         fontSize: 15,
-        marginBottom: 30
-    },
-    disabledButton: {
-      backgroundColor: "lightblue",
-      padding: 12,
-      margin: 16,
-      justifyContent: "center",
-      alignItems: "center",
-      borderRadius: 4,
-      borderColor: "rgba(0, 0, 0, 0.1)",
-      opacity: 0.3
+        marginBottom: 15,
     },
     button: {
       backgroundColor: "lightblue",
-      padding: 12,
-      margin: 16,
+      height: 25,
+      margin: 5,
       justifyContent: "center",
       alignItems: "center",
       borderRadius: 4,
       borderColor: "rgba(0, 0, 0, 0.1)",
     },
+    disabled: {
+      opacity: 0.3
+    }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ActionItem_edit );
