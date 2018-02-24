@@ -183,7 +183,7 @@ class GuestProfile extends Component {
         var actionItems = this.props.actionItems;
         return (
             <ActionItemList_module actionItems={this.props.actionItems}
-                            selectedGuest={this.props.guest}
+                            selectedGuest={this.props.guest}    // TODO: get rid of this
                             selectedGuestId={this.props.guestId}
                             guests={this.props.allGuests}
                             navigator={this.props.navigator} />
