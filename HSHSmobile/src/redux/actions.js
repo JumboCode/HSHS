@@ -83,21 +83,35 @@ export const addNewActionItemSuccess = () => ({
 
 export const addNewActionItem = (isDone, title, creationTimestamp, locationCoord, locationStr, shiftDate, description, guestIds, volunteerId, color) => {
                 store.dispatch(addNewActionItemStart);
-                firebase.database().ref('actionItems').push().set({
-                        isDone: isDone,
-                        title: title,
-                        creationTimestamp: creationTimestamp,
-                        locationCoord: {
-                            lat: locationCoord.latitude,
-                            lng: locationCoord.longitude,
-                        },
-                        locationStr: locationStr,
-                        shiftDate: shiftDate,
-                        description: description,
-                        guestIds: guestIds,
-                        volunteerId: volunteerId,
-												color: color,
-                })
+                var ref = firebase.database().ref('/');
+                var updates = {};
+                var newActionItemKey = firebase.database().ref('actionItems').push().key;
+
+                // Create action item
+                updates['actionItems/' + newActionItemKey] = {
+                    isDone: isDone,
+                    title: title,
+                    creationTimestamp: creationTimestamp,
+                    locationCoord: {
+                        lat: locationCoord.latitude,
+                        lng: locationCoord.longitude,
+                    },
+                    locationStr: locationStr,
+                    shiftDate: shiftDate,
+                    description: description,
+                    guestIds: guestIds,
+                    volunteerId: volunteerId,
+                    color: color,
+                }
+
+                // Add action item to guests' actionItem list
+                for (i in guestIds) {
+                    let key = firebase.database().ref('guests/' + guestIds[i] + '/actionItems').push().key;
+                    updates['guests/' + guestIds[i] + '/actionItems'] = newActionItemKey;
+                }
+
+                ref.update(updates);
+
 }
 
 export const editActionItemStart = () => ({

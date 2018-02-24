@@ -177,9 +177,6 @@ class GuestProfile extends Component {
 
     // Creates a list of actions items in which this guest is tagged
     _renderActionItems() {
-        /*
-            TODO: FOR SOME REASON STATE IS NULL. FIX IT, THEN YOU CAN FIND THE SPECIFIC ACTION ITEMS AND PASS IT THROUGH TO ACTIONITEM.JS
-        */
         var actionItems = this.props.actionItems;
         return (
             <ActionItemList_module actionItems={this.props.actionItems}
