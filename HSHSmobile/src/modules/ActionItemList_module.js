@@ -40,7 +40,8 @@ class ActionItemList_module extends Component {
 
     formatGuestNames = (guestIds) => {
     	if (!guestIds || guestIds.length == 0) {
-    		return "No Selected Guests"
+				console.log("ERROR: formatGuestNames called despite no guestIds-- this should not happen");
+    		return ("No Tagged Guests");
 		}
         var formatedString = "";
     	for (id of guestIds) {
@@ -107,19 +108,27 @@ class ActionItemList_module extends Component {
 	                        <View style={{flex: 2, flexDirection: 'row'}}>
 	                            <View style={{flex:1}}>
 	                                <Icon
-	                                    name='person' />
+	                                    name='people' />
 	                            </View>
 	                            <View style={{flex:3}}>
-	                                <Text numberOfLines={1}>{this.formatGuestNames(item.guestIds)}</Text>
+	                                <Text
+																		style={item.guestIds ? {} : {fontStyle: 'italic'}}
+																		numberOfLines={1}>
+																			{item.guestIds ? this.formatGuestNames(item.guestIds) : "No Tagged Guests"}
+																	</Text>
 	                            </View>
 	                        </View>
 	                        <View style={{flex: 2, flexDirection: 'row'}}>
 	                            <View style={{flex:1}}>
 																		<Icon
-	                                    name={item.locationStr ? 'location-on' : 'location-off'}/>
+	                                    name={'location-on'}/>
 	                            </View>
 	                            <View style={{flex:3}}>
-	                                <Text numberOfLines={1}>{ item.locationStr}</Text>
+	                                <Text
+																		style={item.locationStr ? {} : {fontStyle: 'italic'}}
+																		numberOfLines={1}>
+																			{item.locationStr ? item.locationStr : "No Tagged Location"}
+																	</Text>
 	                            </View>
 	                        </View>
 	                    </View>

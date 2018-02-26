@@ -166,7 +166,7 @@ class ActionItem_edit extends Component {
                             />
                         </View>
                         <View style={{flex: 1}}>
-                            <Text numberOfLines={1} style={{textAlign: 'right', margin: 10}}>{this.state.taggedGuests.length +  " Guests Selected"}</Text>
+                            <Text numberOfLines={1} style={{textAlign: 'right', margin: 10}}>{this.state.taggedGuests.length +  " Tagged Guests"}</Text>
                         </View>
                     </View>
                     <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
@@ -182,7 +182,7 @@ class ActionItem_edit extends Component {
                         </View>
                         <View style={{flex: 1}}>
                             <Text numberOfLines={1}
-                                  style={{textAlign: 'right', margin: 10}}>{this.state.locationStr ? this.state.locationStr : "No Location Selected"}</Text>
+                                  style={{textAlign: 'right', margin: 10}}>{this.state.locationStr ? this.state.locationStr : "No Tagged Location"}</Text>
 
                         </View>
                     </View>
