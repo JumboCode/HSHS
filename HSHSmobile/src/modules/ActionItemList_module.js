@@ -110,7 +110,7 @@ class ActionItemList_module extends Component {
 	                                <Icon
 	                                    name='people' />
 	                            </View>
-	                            <View style={{flex:3}}>
+	                            <View style={{flex:3, justifyContent: 'center'}}>
 	                                <Text
 																		style={item.guestIds ? {} : {fontStyle: 'italic'}}
 																		numberOfLines={1}>
@@ -123,7 +123,7 @@ class ActionItemList_module extends Component {
 																		<Icon
 	                                    name={'location-on'}/>
 	                            </View>
-	                            <View style={{flex:3}}>
+	                            <View style={{flex:3, justifyContent: 'center'}}>
 	                                <Text
 																		style={item.locationStr ? {} : {fontStyle: 'italic'}}
 																		numberOfLines={1}>
