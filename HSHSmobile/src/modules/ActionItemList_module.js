@@ -76,6 +76,7 @@ class ActionItemList_module extends Component {
 			<View style={{height: '100%'}}>
 				{!this.props.showDueSoon &&
 					<SearchBar
+						containerStyle={{backgroundColor: 'transparent'}}
 						lightTheme
 						round
 						clearIcon={this.state.searchInput !== ''}
@@ -121,7 +122,7 @@ class ActionItemList_module extends Component {
 	                                    name='location-on' />
 	                            </View>
 	                            <View style={{flex:3}}>
-	                                <Text numberOfLines={1}>{item.locationStr}</Text>
+	                                <Text numberOfLines={1}>{item.locationCoord ? item.locationStr: "No"}</Text>
 	                            </View>
 	                        </View>
 	                    </View>
