@@ -3,9 +3,11 @@ import {
     StyleSheet,
     Text,
     View,
-    ScrollView,
     Button,
-    TouchableOpacity
+    FlatList,
+    TouchableHighlight,
+    Linking,
+    Image
 } from 'react-native';
 import {connect} from 'react-redux';
 import renderLoader from "../../modules/UI/renderLoader";
@@ -13,7 +15,11 @@ import renderLoader from "../../modules/UI/renderLoader";
 class Resources_menu extends Component {
     constructor(props) {
         super(props);
-        console.log("here");
+
+        this.linkData = [];
+        for(i = 0; i < 100; i++) {
+            this.linkData.push({categoryName : i.toString()});
+        }
 
         this.linkData = [
             {categoryName: "Emergency Shelters",
@@ -87,83 +93,132 @@ class Resources_menu extends Component {
             {"categoryName": "9"},
             {"categoryName": "10"},
             {"categoryName": "11"},
+            {"categoryName": null},
+            {"categoryName": null}
         ];
-        this.cats = ["Shelters", "Employment", "Drop in Centers", "Food Resources", "Housing", "Healthcare", "Clothing", "Transportation"];
+
     }
 
     renderHeader = () => {
-      return (
-        <View style={styles.header}>
-          <Text style={styles.title}>HSHS</Text>
-          <Text style={styles.address}>Harvard Homeless Shelter</Text>
-          <Text style={styles.address}>66 Winthrop Street</Text>
-          <Text style={styles.address}>Cambridge, MA, 02138</Text>
-          <Text style={styles.phoneNum}>875-364-2228</Text>
-        </View>
-      );
-    };
-
-    /*
-    (elem) => this.renderMenuButton(elem)
-     */
-
-    renderMenuButtons = () => {
-        const cat_buttons = this.linkData.map((category, key) => {
-            return (
-                <View key={key} style={styles.button_container}>
-                    <TouchableOpacity style={{flex: 1, backgroundColor: '#DDDDDD'}}>
-                        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                            <Text style={{textAlign: "center", fontSize: 10}}>
-                                {category.categoryName.split(" ").join("\n")}
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>
-            );
-        });
         return (
-          <View style={styles.buttons}>
-              {cat_buttons}
-          </View>
+            <View style = {styles.headerContainer}>
+                <Image
+                      source = {require("./hshs_monochrome.jpg")}
+                      style = {styles.headerImage}>
+                      <View>
+                            <Text style={styles.title}>HSHS</Text>
+                            <Text style={styles.address}>Harvard Square Homeless Shelter</Text>
+                            <Text style={styles.address}>66 Winthrop Street</Text>
+                            <Text style={styles.address}>Cambridge, MA, 02138</Text>
+                      </View>
+                  </Image>
+                  <View style = {{flex: 1, margin: "5%"}}>
+                      <Button
+                        onPress = {() => Linking.openURL("tel:1-875-364-2228")}
+                        title = {"Call : 875-364-2228"}
+                        color = {"rgba(119, 11, 22, 1)"}
+                        accessibilityLabel = {"Call : 875-364-2228"}
+                        />
+                  </View>
+            </View>
         );
     };
 
+// <Text style={styles.phoneNum} onPress = {() => Linking.openURL("tel:1-875-364-2228")}>875-364-2228</Text>
 
-    /* TODO: add {({linkData}) => this._renderMenuButtons(linkData)}*/
+    renderButton = (category, key) => {
+        if(category.categoryName === null) {
+            return (
+                <View style = {styles.buttonContainer}/>
+            );
+        } else {
+            return(
+                <View style = {styles.buttonContainer}>
+                    <TouchableHighlight
+                        style = {styles.button}
+                        onPress = {() => {let one = 1}}
+                        underlayColor = {"rgba(119, 11, 22, .75)"}
+                    >
+                        <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                            <Text style = {{textAlign: "center", fontSize: 10}}>
+                                {category.categoryName.split(" ").join("\n")}
+                            </Text>
+                        </View>
+                    </TouchableHighlight>
+                </View>
+            );
+        }
+    };
+
     render(){
         /*if (this.props.loading == true)
             return renderLoader();
         */
+        return(
+            <FlatList
+              ListHeaderComponent={this.renderHeader}
+              data = {this.linkData}
+              numColumns = {3}
+              renderItem = {({item, key}) => this.renderButton(item, key)}
+              keyExtractor = {(item, index) => (item.id + index)}
+              columnWrapperStyle = {{margin: "1%"}}
+            />
+        );
+        /*
         return (
           <ScrollView contentContainerStyle={styles.container}>
               {this.renderHeader()}
-              {this.renderMenuButtons()}
+              {this.linkData.map((category, key) => {
+                  return (
+                      <View key={key} style={styles.button_container}>
+                          <TouchableHighlight
+                              style={{flex: 1, backgroundColor: '#DDDDDD'}}
+                              onPress={() => {let one = 1}}
+                              underlayColor='#FFF'
+                          >
+                              <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                                  <Text style={{textAlign: "center", fontSize: 10}}>
+                                      {category.categoryName.split(" ").join("\n")}
+                                  </Text>
+                              </View>
+                          </TouchableHighlight>
+                      </View>
+                  );
+              })}
           </ScrollView>
         );
+        */
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: 'column',
+    headerContainer: {
+        height : 300,
     },
 
-    header: {
-        flex: 1,
+    headerImage: {
+        flex : 10,
+        resizeMode : "cover",
+        width : "100%",
+        height : "100%",
+
+        justifyContent: "center",
+        alignItems: "center",
     },
 
     title: {
         fontSize: 25,
         fontWeight: 'bold',
         textAlign: 'center',
-        color: '#000000',
+        //color: '#000000',
+        color: "#FFF"
     },
 
     address: {
         fontSize: 16,
         textAlign: 'center',
-        color: '#000000',
+        //color: '#000000',
+        color: "#FFF"
     },
 
     phoneNum: {
@@ -174,17 +229,20 @@ const styles = StyleSheet.create({
       marginBottom: 10,
     },
 
-    buttons: {
-        flex: 3,
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: "center",
+    buttonContainer: {
+        flex: 1,
+        width: 110,
+        height: 110,
+        marginLeft: "1%",
+        marginRight: "1%",
+        borderStyle: "solid",
     },
 
-    button_container: {
-        width: "27%",
-        height: "17%",
-        margin: "2.5%",
+    button: {
+        flex: 1,
+        borderStyle: "solid",
+        borderWidth: 1,
+        borderRadius: 10,
     }
 });
 
