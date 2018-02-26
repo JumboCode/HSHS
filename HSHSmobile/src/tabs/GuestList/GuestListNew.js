@@ -92,8 +92,8 @@ class NewGuest extends Component<{}> {
         this.formInput = {
             name: '',
             description: '',
-            gender: '',
-            age: '',
+            gender: 'M',
+            age: 'Middle',
             actionItems: [],
             interactions: []
         };

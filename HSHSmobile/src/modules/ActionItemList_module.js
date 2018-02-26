@@ -39,14 +39,14 @@ class ActionItemList_module extends Component {
     };
 
     formatGuestNames = (guestIds) => {
-    	console.log(this.props)
-    	console.log(guestIds)
     	if (!guestIds || guestIds.length == 0) {
     		return "No Selected Guests"
 		}
         var formatedString = "";
     	for (id of guestIds) {
-    		formatedString = formatedString + this.props.guests[id].name + ", ";
+				// Prevent app from crashing when an inavlid guest is included
+				if (this.props.guests[id])
+    			formatedString = formatedString + this.props.guests[id].name + ", ";
 		}
 
 		// get rid of that dumb last comma and space
@@ -56,16 +56,13 @@ class ActionItemList_module extends Component {
 
 	render() {
 		var actionItems = getActionItems(this.props.actionItems, this.props.selectedGuestId);
-		console.log(actionItems);
 		if (this.props.showDueSoon) {		// Show only actionItems due in 24 hours
 			let now = Date.now();
-			console.log(now)
 			var dueSoon = [];
 
 			for (i in actionItems) {
 				for (j in actionItems[i].shiftDate) {
 					let timeUntilDue = actionItems[i].shiftDate[j] - now;
-					console.log(timeUntilDue);
 					if (timeUntilDue > 0 && timeUntilDue < oneDayInSeconds) dueSoon.push(actionItems[i])
 				}
 			}

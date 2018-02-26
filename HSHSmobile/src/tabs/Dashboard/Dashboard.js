@@ -50,7 +50,7 @@ class Dashboard extends Component {
             isMapFullScreen: true
         }
 
-        
+
     };
 
     componentDidMount() {
@@ -72,7 +72,6 @@ class Dashboard extends Component {
     };
 
     componentWillUpdate(nextProps, nextState) {
-        console.log(this.props.guests);
     };
 
     handleLoadMore = () => {
@@ -107,7 +106,6 @@ class Dashboard extends Component {
 
     // I'm not sure if this is the best way to have logical statements within renders, but it's not the worst way!
     render() {
-        console.log('hello')
         return (
 
             (this.props.loading && <ActivityIndicator animating size="large"/>) ||
