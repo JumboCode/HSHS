@@ -226,12 +226,11 @@ class ActionItem_edit extends Component {
                         onChangeText={(description) => {this.setState({description: description})}}
                     />
                     <View style={{flexDirection: 'row', alignItems: 'stretch', justifyContent: 'space-between', zIndex: 0, paddingLeft: 15, paddingRight: 15}}>
-                      {this.renderColorButton('red')}
-                      {this.renderColorButton('orange')}
-                      {this.renderColorButton('yellow')}
-                      {this.renderColorButton('green')}
-                      {this.renderColorButton('blue')}
-                      {this.renderColorButton('purple')}
+                      {this.renderColorButton('#659B7F')}
+                      {this.renderColorButton('#818DC7')}
+                      {this.renderColorButton('#B65E68')}
+                      {this.renderColorButton('#D0AF55')}
+                      {this.renderColorButton('#C19FC7')}
                     </View>
                 </View>
                 <TagGuestPopup
