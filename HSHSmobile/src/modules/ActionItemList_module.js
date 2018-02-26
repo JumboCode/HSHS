@@ -40,7 +40,8 @@ class ActionItemList_module extends Component {
 
     formatGuestNames = (guestIds) => {
     	if (!guestIds || guestIds.length == 0) {
-    		return "No Selected Guests"
+				console.log("ERROR: formatGuestNames called despite no guestIds-- this should not happen");
+    		return ("No Tagged Guests");
 		}
         var formatedString = "";
     	for (id of guestIds) {
@@ -73,6 +74,7 @@ class ActionItemList_module extends Component {
 			<View style={{height: '100%'}}>
 				{!this.props.showDueSoon &&
 					<SearchBar
+						containerStyle={{backgroundColor: 'transparent'}}
 						lightTheme
 						round
 						clearIcon={this.state.searchInput !== ''}
@@ -106,19 +108,27 @@ class ActionItemList_module extends Component {
 	                        <View style={{flex: 2, flexDirection: 'row'}}>
 	                            <View style={{flex:1}}>
 	                                <Icon
-	                                    name='person' />
+	                                    name='people' />
 	                            </View>
-	                            <View style={{flex:3}}>
-	                                <Text numberOfLines={1}>{this.formatGuestNames(item.guestIds)}</Text>
+	                            <View style={{flex:3, justifyContent: 'center'}}>
+	                                <Text
+																		style={item.guestIds ? {} : {fontStyle: 'italic'}}
+																		numberOfLines={1}>
+																			{item.guestIds ? this.formatGuestNames(item.guestIds) : "No Tagged Guests"}
+																	</Text>
 	                            </View>
 	                        </View>
 	                        <View style={{flex: 2, flexDirection: 'row'}}>
 	                            <View style={{flex:1}}>
-	                                <Icon
-	                                    name='location-on' />
+																		<Icon
+	                                    name={'location-on'}/>
 	                            </View>
-	                            <View style={{flex:3}}>
-	                                <Text numberOfLines={1}>{item.locationStr}</Text>
+	                            <View style={{flex:3, justifyContent: 'center'}}>
+	                                <Text
+																		style={item.locationStr ? {} : {fontStyle: 'italic'}}
+																		numberOfLines={1}>
+																			{item.locationStr ? item.locationStr : "No Tagged Location"}
+																	</Text>
 	                            </View>
 	                        </View>
 	                    </View>
@@ -148,7 +158,7 @@ function getActionItems(IdsToActionItems, selectedGuestId) {
 		        actionItems.push({
 		            title : item.title,
 		            guestIds: item.guestIds,
-		            color: item.color ? item.color : "#F5FCFF",
+		            color: item.color ? item.color : "transparent",
 		            locationStr: item.locationStr,
 		            id: Id,
 								actionItemId: item.actionItemId,

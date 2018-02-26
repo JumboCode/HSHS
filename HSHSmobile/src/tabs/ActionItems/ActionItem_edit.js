@@ -60,12 +60,11 @@ class ActionItem_edit extends Component {
             taggedGuests: this.props.taggedGuests ? this.props.taggedGuests : [],
 
             // TODO: geeze why is this longitude latitude and other places lat lng? cause google maps api sucks. please let's fix this later.
-            locationCoords: this.props.locationCoords ? this.props.locationCoords : {
+            locationCoord: this.props.locationCoord ? this.props.locationCoord : {
             	longitude: 0,
             	latitude: 0,
             },
-            selectedLocation: this.props.selectedLocation ? this.props.selectedLocation : null,
-            locationName: this.props.locationName ? this.props.locationName : "No Location Selected",
+            locationStr: this.props.locationStr ? this.props.locationStr : null,
             selectedDate: this.props.selectedDate ? this.props.selectedDate : Moment().format('YYYY-MM-DD'),
             description: this.props.description ? this.props.description : "",
             color: this.props.color ? this.props.color : null,
@@ -91,19 +90,18 @@ class ActionItem_edit extends Component {
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
         if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
             if (event.id == 'save_actionItem') { // this is the same id field from the static navigatorButtons definition
-                // Don't allow empty fields
-                if (this.state.title == "") {
-                	alert("Title cannot be empty");
-                	return;
-                }
+            	// Don't allow empty fields
+            	if (this.state.title == "") {
+            		alert("Title cannot be empty");
+            		return;
+            	}
 
-                // It's new if there is no ID
-                if (!this.state.actionItemId) {
-                    addNewActionItem(false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
-                } else {
-                    editActionItem(this.state.actionItemId, false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
-                }
-
+              // It's new if there is no ID
+              if (!this.state.actionItemId) {
+                addNewActionItem(false, this.state.title, "creationTimestamp", this.state.locationCoord, this.state.locationStr, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
+              } else {
+                editActionItem(this.state.actionItemId, false, this.state.title, "creationTimestamp", this.state.locationCoord, this.state.locationStr, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
+              }
                 getActionItems();
                 this.props.navigator.pop({
                   animated: true, // does the pop have transition animation or does it happen immediately (optional)
@@ -119,10 +117,10 @@ class ActionItem_edit extends Component {
       });
     }
 
-    setChosenLocation = (locationName, locationCoords) => {
+    setChosenLocation = (locationStr, locationCoord) => {
         this.setState({
-            locationName: locationName,
-            locationCoords: locationCoords,
+            locationStr: locationStr,
+            locationCoord: locationCoord,
         });
     };
 
@@ -188,7 +186,7 @@ class ActionItem_edit extends Component {
                             />
                         </View>
                         <View style={{flex: 1}}>
-                            <Text numberOfLines={1} style={{textAlign: 'right', margin: 10}}>{this.state.taggedGuests.length +  " Guests Selected"}</Text>
+                            <Text numberOfLines={1} style={{textAlign: 'right', margin: 10}}>{this.state.taggedGuests.length +  " Tagged Guests"}</Text>
                         </View>
                     </View>
                     <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
@@ -204,7 +202,7 @@ class ActionItem_edit extends Component {
                         </View>
                         <View style={{flex: 1}}>
                             <Text numberOfLines={1}
-                                  style={{textAlign: 'right', margin: 10}}>{this.state.locationName}</Text>
+                                  style={{textAlign: 'right', margin: 10}}>{this.state.locationStr ? this.state.locationStr : "No Tagged Location"}</Text>
 
                         </View>
                     </View>
@@ -242,17 +240,17 @@ class ActionItem_edit extends Component {
                     <TextInput
                         editable = {true}
                         placeholder = "Description"
+                        value = {this.state.description}
                         style = {styles.description}
                         multiline = {true}
-                        onChangeText={(description) => this.state.description = description}
+                        onChangeText={(description) => {this.setState({description: description})}}
                     />
-                    <View style={{flexDirection: 'row', alignItems: 'stretch', justifyContent: 'space-between', zIndex: 0, paddingLeft: 15, paddingRight: 15, marginBottom: 15}}>
-                      {this.renderColorButton('red')}
-                      {this.renderColorButton('orange')}
-                      {this.renderColorButton('yellow')}
-                      {this.renderColorButton('green')}
-                      {this.renderColorButton('blue')}
-                      {this.renderColorButton('purple')}
+                    <View style={{flexDirection: 'row', alignItems: 'stretch', justifyContent: 'space-between', zIndex: 0, paddingLeft: 15, paddingRight: 15}}>
+                      {this.renderColorButton('#659B7F')}
+                      {this.renderColorButton('#818DC7')}
+                      {this.renderColorButton('#B65E68')}
+                      {this.renderColorButton('#D0AF55')}
+                      {this.renderColorButton('#C19FC7')}
                     </View>
                 </View>
                 {this._renderDeleteButton()}
@@ -270,6 +268,8 @@ class ActionItem_edit extends Component {
                       this.ChooseLocationPopup = map;
                   }}
                   onConfirm={this.setChosenLocation}
+                  locationStr={this.props.locationStr}
+                  locationCoord={this.props.locationCoord}
                 />
             </View>
         );
