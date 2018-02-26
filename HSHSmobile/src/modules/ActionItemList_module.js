@@ -158,7 +158,7 @@ function getActionItems(IdsToActionItems, selectedGuestId) {
 		        actionItems.push({
 		            title : item.title,
 		            guestIds: item.guestIds,
-		            color: item.color ? item.color : "#F5FCFF",
+		            color: item.color ? item.color : "transparent",
 		            locationStr: item.locationStr,
 		            id: Id,
 								actionItemId: item.actionItemId,
