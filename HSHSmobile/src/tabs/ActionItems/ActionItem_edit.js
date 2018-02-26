@@ -220,9 +220,10 @@ class ActionItem_edit extends Component {
                     <TextInput
                         editable = {true}
                         placeholder = "Description"
+                        value = {this.state.description}
                         style = {styles.description}
                         multiline = {true}
-                        onChangeText={(description) => this.state.description = description}
+                        onChangeText={(description) => {this.setState({description: description})}}
                     />
                     <View style={{flexDirection: 'row', alignItems: 'stretch', justifyContent: 'space-between', zIndex: 0, paddingLeft: 15, paddingRight: 15}}>
                       {this.renderColorButton('red')}
