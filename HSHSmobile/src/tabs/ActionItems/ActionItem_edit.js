@@ -60,7 +60,7 @@ class ActionItem_edit extends Component {
             taggedGuests: this.props.taggedGuests ? this.props.taggedGuests : [],
 
             // TODO: geeze why is this longitude latitude and other places lat lng? cause google maps api sucks. please let's fix this later.
-            locationCoord: this.props.locationCoords ? this.props.locationCoords : {
+            locationCoord: this.props.locationCoord ? this.props.locationCoord : {
             	longitude: 0,
             	latitude: 0,
             },
@@ -99,9 +99,9 @@ class ActionItem_edit extends Component {
 
               // It's new if there is no ID
               if (!this.state.actionItemId) {
-                addNewActionItem(false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationStr, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
+                addNewActionItem(false, this.state.title, "creationTimestamp", this.state.locationCoord, this.state.locationStr, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
               } else {
-                editActionItem(this.state.actionItemId, false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationStr, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
+                editActionItem(this.state.actionItemId, false, this.state.title, "creationTimestamp", this.state.locationCoord, this.state.locationStr, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
               }
 
               getActionItems();
@@ -119,10 +119,10 @@ class ActionItem_edit extends Component {
       });
     }
 
-    setChosenLocation = (locationStr, locationCoords) => {
+    setChosenLocation = (locationStr, locationCoord) => {
         this.setState({
             locationStr: locationStr,
-            locationCoords: locationCoords,
+            locationCoord: locationCoord,
         });
     };
 
