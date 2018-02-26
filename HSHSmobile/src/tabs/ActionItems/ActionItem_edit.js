@@ -91,23 +91,21 @@ class ActionItem_edit extends Component {
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
         if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
             if (event.id == 'save_actionItem') { // this is the same id field from the static navigatorButtons definition
-                deleteActionItem(this.state.actionItemId);
+                // Don't allow empty fields
+                if (this.state.title == "") {
+                	alert("Title cannot be empty");
+                	return;
+                }
 
-            	// // Don't allow empty fields
-            	// if (this.state.title == "") {
-            	// 	alert("Title cannot be empty");
-            	// 	return;
-            	// }
+                // It's new if there is no ID
+                if (!this.state.actionItemId) {
+                    addNewActionItem(false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
+                } else {
+                    editActionItem(this.state.actionItemId, false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
+                }
 
-             //  // It's new if there is no ID
-             //  if (!this.state.actionItemId) {
-             //    addNewActionItem(false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
-             //  } else {
-             //    editActionItem(this.state.actionItemId, false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
-             //  }
-
-             //  getActionItems();
-              this.props.navigator.pop({
+                getActionItems();
+                this.props.navigator.pop({
                   animated: true, // does the pop have transition animation or does it happen immediately (optional)
                   animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
                 });
@@ -142,6 +140,28 @@ class ActionItem_edit extends Component {
           </View>
         </TouchableOpacity>
     )
+
+    _handleDelete() {
+        console.log("pressed!!")
+        deleteActionItem(this.state.actionItemId);
+        this.props.navigator.popToRoot({
+          animated: true, // does the pop have transition animation or does it happen immediately (optional)
+          animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
+        });
+    }
+
+    _renderDeleteButton() {
+        if (!this.state.actionItemId) return;
+        return (
+            <View style={styles.deleteButtonContainer}>
+                <TouchableOpacity 
+                    style={styles.deleteButton}
+                    onPress={() => {this._handleDelete()}}>
+                    <Text style={{color: 'white', fontWeight: 'bold'}}>DELETE</Text>
+                </TouchableOpacity>
+            </View>
+        )
+    }
 
     render() {
         return (
@@ -226,7 +246,7 @@ class ActionItem_edit extends Component {
                         multiline = {true}
                         onChangeText={(description) => this.state.description = description}
                     />
-                    <View style={{flexDirection: 'row', alignItems: 'stretch', justifyContent: 'space-between', zIndex: 0, paddingLeft: 15, paddingRight: 15}}>
+                    <View style={{flexDirection: 'row', alignItems: 'stretch', justifyContent: 'space-between', zIndex: 0, paddingLeft: 15, paddingRight: 15, marginBottom: 15}}>
                       {this.renderColorButton('red')}
                       {this.renderColorButton('orange')}
                       {this.renderColorButton('yellow')}
@@ -235,6 +255,7 @@ class ActionItem_edit extends Component {
                       {this.renderColorButton('purple')}
                     </View>
                 </View>
+                {this._renderDeleteButton()}
                 <TagGuestPopup
                     ref={(dialog) => {
                         this.tagGuestDialog = dialog;
@@ -296,6 +317,21 @@ const styles = StyleSheet.create({
     dateadd: {
         color: '#0645AD',
         textDecorationLine: 'underline'
+    },
+    deleteButtonContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    deleteButton: {
+        backgroundColor: 'red',
+        borderRadius: 4,
+        margin: 10,
+        paddingHorizontal: 60,
+        paddingVertical: 15,  
+        height: 30,
+        alignItems: 'center', 
+        justifyContent: 'center'
     },
     description: {
         borderWidth: 0.5,
