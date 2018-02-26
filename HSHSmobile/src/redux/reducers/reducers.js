@@ -54,6 +54,14 @@ export function reducer(state, action) {
             return Object.assign({}, state, {
                 addingInteraction: false
             });
+        case 'DELETE_NEW_ACTION_ITEMS_START':
+            return Object.assign({}, state, {
+                deletingAction: true
+            });
+        case 'DELETE_NEW_ACTION_ITEMS_SUCCESS':
+            return Object.assign({}, state, {
+                deletingAction: false
+            });
         case 'GET_ACTION_ITEMS_START':
             return Object.assign({}, state, {
                 loading: true
