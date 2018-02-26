@@ -29,6 +29,7 @@ import ActionItem_list from './tabs/ActionItems/ActionItem_list';
 import NewInteraction from './tabs/NewInteraction/NewInteraction';
 
 import Icon from 'react-native-vector-icons/Ionicons';
+import renderLoader from './modules/UI/renderLoader'
 
 const Icons = require('react-native-vector-icons/Ionicons');
 
@@ -42,7 +43,12 @@ var addIcon // ios-add-circle-outline
 export default class Login extends Component {
     constructor(props) {
         super(props);
-        this.state = { username: '', password: ''};
+        this.state = {
+          username: '',
+          password: '',
+          isLoggingIn: false,
+        };
+        this.autenticate = this.authenticate.bind(this);
     }
 
     openApp () {
@@ -57,24 +63,32 @@ export default class Login extends Component {
 
     authenticate = () => {
         //console.log(this.state.username + " " + this.state.password);
-
+        this.setState({
+          isLoggingIn: true
+        });
 
         //const { email, password } = this.state;
         firebase.auth().signInWithEmailAndPassword(this.state.username, this.state.password)
             .then(() => {
-                console.log("success");
                 this.openApp();
+                this.setState({
+                  isLoggingIn: false
+                });
             })
             .catch(() => {
-                console.log("failure");
-                Alert.alert(
-                  'Login failed',
-                  'Unable to login. Username or password is incorrect',
-                );
-
                 // TODO: IMPORTANT! ALERT!
                 // This is just so we don't have to login every time------ DO NOT SHIP THIS
-                this.openApp();
+                if (this.state.username == "" && this.state.password == "") {
+                  this.openApp();
+                } else {
+                  Alert.alert(
+                    'Login failed',
+                    'Unable to login. Username or password is incorrect',
+                  );
+                }
+                this.setState({
+                  isLoggingIn: false
+                });
             });
     };
 
@@ -217,19 +231,23 @@ export default class Login extends Component {
             </View>
             <View style = {styles.space}></View>
             <View style = {styles.space}></View>
-            <View style = {styles.login}>
-                 <Button
-                  onPress={this.authenticate}
-                  title="Log in"
-                  color={Platform.OS === 'ios' ? "#FFFFFF" : "#556A5B"}
-                  accessibilityLabel="Click to log in after credentials are entered."
-                />
-            </View>
-            <View style = {styles.space}></View>
-            <Text onPress={this.forgotPassword} style = {styles.forgotPassword}>
-                  Forgot your password?
-            </Text>
-            </View>
+            {this.state.isLoggingIn ? renderLoader() :
+              <View>
+                <View style = {styles.login}>
+                     <Button
+                      onPress={this.authenticate}
+                      title="Log in"
+                      color={Platform.OS === 'ios' ? "#FFFFFF" : "#556A5B"}
+                      accessibilityLabel="Click to log in after credentials are entered."
+                    />
+                </View>
+                <View style = {styles.space}></View>
+                  <Text onPress={this.forgotPassword} style = {styles.forgotPassword}>
+                        Forgot your password?
+                  </Text>
+                </View>
+              }
+              </View>
         );
     }
 }
