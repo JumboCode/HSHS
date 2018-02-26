@@ -118,11 +118,11 @@ class ActionItemList_module extends Component {
 	                        </View>
 	                        <View style={{flex: 2, flexDirection: 'row'}}>
 	                            <View style={{flex:1}}>
-	                                <Icon
-	                                    name='location-on' />
+																		<Icon
+	                                    name={item.locationStr ? 'location-on' : 'location-off'}/>
 	                            </View>
 	                            <View style={{flex:3}}>
-	                                <Text numberOfLines={1}>{item.locationStr}</Text>
+	                                <Text numberOfLines={1}>{ item.locationStr}</Text>
 	                            </View>
 	                        </View>
 	                    </View>

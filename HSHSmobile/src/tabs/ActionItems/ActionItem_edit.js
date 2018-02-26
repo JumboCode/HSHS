@@ -54,8 +54,6 @@ function guestObjectToArray(IdsToGuests, IdsToInteractions) {
 class ActionItem_edit extends Component {
     constructor(props) {
         super(props);
-        console.log("ACTION ITEM EDIT CONSTRUCTOR: ");
-        console.log(this.props.taggedGuests);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.state = {
             actionItemId: this.props.actionItemId ? this.props.actionItemId : null,
@@ -63,12 +61,11 @@ class ActionItem_edit extends Component {
             taggedGuests: this.props.taggedGuests ? this.props.taggedGuests : [],
 
             // TODO: geeze why is this longitude latitude and other places lat lng? cause google maps api sucks. please let's fix this later.
-            locationCoords: this.props.locationCoords ? this.props.locationCoords : {
+            locationCoord: this.props.locationCoords ? this.props.locationCoords : {
             	longitude: 0,
             	latitude: 0,
             },
-            selectedLocation: this.props.selectedLocation ? this.props.selectedLocation : null,
-            locationName: this.props.locationName ? this.props.locationName : "No Location Selected",
+            locationStr: this.props.locationStr ? this.props.locationStr : null,
             selectedDate: this.props.selectedDate ? this.props.selectedDate : Moment().format('YYYY-MM-DD'),
             description: this.props.description ? this.props.description : "",
             color: this.props.color ? this.props.color : null,
@@ -103,9 +100,9 @@ class ActionItem_edit extends Component {
 
               // It's new if there is no ID
               if (!this.state.actionItemId) {
-                addNewActionItem(false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
+                addNewActionItem(false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationStr, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
               } else {
-                editActionItem(this.state.actionItemId, false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
+                editActionItem(this.state.actionItemId, false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationStr, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
               }
 
               getActionItems();
@@ -123,9 +120,9 @@ class ActionItem_edit extends Component {
       });
     }
 
-    setChosenLocation = (locationName, locationCoords) => {
+    setChosenLocation = (locationStr, locationCoords) => {
         this.setState({
-            locationName: locationName,
+            locationStr: locationStr,
             locationCoords: locationCoords,
         });
     };
@@ -187,7 +184,7 @@ class ActionItem_edit extends Component {
                         </View>
                         <View style={{flex: 1}}>
                             <Text numberOfLines={1}
-                                  style={{textAlign: 'right', margin: 10}}>{this.state.locationName}</Text>
+                                  style={{textAlign: 'right', margin: 10}}>{this.state.locationStr ? this.state.locationStr : "No Location Selected"}</Text>
 
                         </View>
                     </View>
@@ -252,6 +249,8 @@ class ActionItem_edit extends Component {
                       this.ChooseLocationPopup = map;
                   }}
                   onConfirm={this.setChosenLocation}
+                  locationStr={this.props.locationStr}
+                  locationCoord={this.props.locationCoord}
                 />
             </View>
         );

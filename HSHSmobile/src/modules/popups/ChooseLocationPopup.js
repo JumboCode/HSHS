@@ -11,7 +11,7 @@ const LATITUDE_DELTA = 0.02;
 const LONGITUDE_DELTA = 0.01;
 
 // Before Geolocation gets current location, or incase geolocation fails
-const initialCoords = {
+const initiallocationCoord = {
   latitude: 42.3736,
   longitude: -71.1190,
 }
@@ -21,8 +21,8 @@ export default class ChooseLocationPopup extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      coordinate: initialCoords,
-      address: null,
+      locationCoord: this.props.locationCoord ? this.props.locationCoord : initiallocationCoord,
+      locationStr: this.props.locationStr ? this.props.locationStr : null,
     };
     Geocoder.setApiKey('AIzaSyBk97FJAbAoOnu1liyLAGAne9dcYAiJ8Co');
   }
@@ -47,13 +47,13 @@ export default class ChooseLocationPopup extends Component {
               }}
               showsUserLocation={true}
               initialRegion={{
-                  latitude: this.state.coordinate.latitude,
-                  longitude: this.state.coordinate.longitude,
+                  latitude: this.state.locationCoord.latitude,
+                  longitude: this.state.locationCoord.longitude,
                   latitudeDelta: 0.02,
                   longitudeDelta: 0.01,
               }}>
               <MapView.Marker draggable
-                              coordinate={this.state.coordinate}
+                              coordinate={this.state.locationCoord}
                               onDragEnd={(e) => this.onMarkerLocationChange(e.nativeEvent.coordinate)}
               />
           </MapView>
@@ -66,18 +66,18 @@ export default class ChooseLocationPopup extends Component {
           json => {
               let address_component = json.results[0].address_components[0].short_name + " " + json.results[0].address_components[1].short_name;
               this.setState(previousState => {
-                  return { address: address_component };
+                  return { locationStr: address_component };
               });
           },
           error => {
               alert(error);
           }
       );
-      this.setState({coords: coordinate})
+      this.setState({locationCoord: coordinate})
   };
 
   render() {
-    var titleString = "Drag Marker to set a Location:\n" + (this.state.address == null ? "No Location Selected" : this.state.address);
+    var titleString = "Drag Marker to set a Location:\n" + (this.state.locationStr == null ? "No Location Selected" : this.state.locationStr);
 
     return (
       <Popup
@@ -85,9 +85,9 @@ export default class ChooseLocationPopup extends Component {
             this.Popup = popup;
         }}
         title={titleString}
-        onConfirm={()=>{this.props.onConfirm(this.state.address, this.state.coordinate)}}
+        onConfirm={()=>{this.props.onConfirm(this.state.locationStr, this.state.locationCoord)}}
         onCancel={()=>{}}
-        confimDisable={this.state.address == null}
+        confimDisable={this.state.locationStr == null}
         >
         {this.renderContent()}
       </Popup>

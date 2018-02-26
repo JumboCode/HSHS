@@ -64,9 +64,9 @@ class ActionItem_view extends Component {
   Screen_ActionItem_edit = () => {
 
     // TODO: geeze why is this longitude latitude and other places lat lng? cause google maps api sucks. please let's fix this later.
-      var coords = this.props.actionItems[this.props.actionItemId].locationCoords ? {
-        longitude: this.props.actionItems[this.props.actionItemId].locationCoords.lng,
-        latitude: this.props.actionItems[this.props.actionItemId].locationCoords.lat,
+      var coords = this.props.actionItems[this.props.actionItemId].locationCoord ? {
+        longitude: this.props.actionItems[this.props.actionItemId].locationCoord.lng,
+        latitude: this.props.actionItems[this.props.actionItemId].locationCoord.lat,
       } : null;
 
       console.log(this.props.actionItems[this.props.actionItemId]);
@@ -85,9 +85,8 @@ class ActionItem_view extends Component {
             // make a copy
             taggedGuests: this.props.actionItems[this.props.actionItemId].guestIds ? this.props.actionItems[this.props.actionItemId].guestIds.slice() : null,
 
-            locationCoords: coords,
-            selectedLocation: this.props.actionItems[this.props.actionItemId].selectedLocation,
-            locationName: this.props.actionItems[this.props.actionItemId].locationStr,
+            locationCoord: coords,
+            locationStr: this.props.actionItems[this.props.actionItemId].locationStr,
             selectedDate: this.props.actionItems[this.props.actionItemId].shiftDate,
             dateName: this.props.actionItems[this.props.actionItemId].dateName,
             description: this.props.actionItems[this.props.actionItemId].description,
