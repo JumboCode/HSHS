@@ -55,24 +55,6 @@ export default class Info extends Component {
     render() {
         return (
           <View>
-            <Text
-            onPress= {()=>{this.Popup.show()}}
-            >
-            {"Click me to open"}
-            </Text>
-            <View style={styles.container}>
-                <Popup
-                  ref={(popup) => {
-                      this.addCounterDialog = popup;
-                  }}
-                  title={"Add a New Item"}
-                  onConfirm={()=>{}}
-                  >
-                  <Text>Test</Text>
-                  <Text>Test</Text>
-                </Popup>
-            </View>
-            {this.renderCounters()}
           </View>
         );
     }
@@ -84,28 +66,5 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
-    },
-    instructions: {
-        fontSize: 18,
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
-    },
-    counterContainer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexWrap: 'wrap'
-    },
-    popupDialogButtons: {
-      flexDirection: 'row',
-      justifyContent: 'space-around'
-    },
-    textInput: {
-      marginTop: 3,
-      height: 40,
-      width: "80%",
-      borderColor: 'gray',
-      borderWidth: 1
     },
 });

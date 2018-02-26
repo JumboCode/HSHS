@@ -32,58 +32,6 @@ class Resources_menu extends Component {
     }
 
     renderMenuButtons = () => {
-        return (
-          <View style={styles.container}>
-            <View style={styles.buttons}>
-              <Button
-                title="Shelters"
-              />
-            </View>
-            <View style={styles.buttons}>
-              <Button
-                title="Employment"
-                style={styles.buttons}
-              />
-            </View>
-            <View style={styles.buttons}>
-              <Button
-                title="Drop in Centers"
-                style={styles.buttons}
-              />
-            </View>
-            <View style={styles.buttons}>
-              <Button
-                title="Food Resources"
-                style={styles.buttons}
-              />
-            </View>
-            <View style={styles.buttons}>
-              <Button
-                title="Housing"
-                style={styles.buttons}
-              />
-            </View>
-            <View style={styles.buttons}>
-              <Button
-                title="Healthcare"
-                style={styles.buttons}
-              />
-            </View>
-            <View style={styles.buttons}>
-              <Button
-                title="Clothing"
-                style={styles.buttons}
-              />
-            </View>
-            <View style={styles.buttons}>
-              <Button
-                title="Transportation"
-                textStyle={{ frontWeight: "700" }}
-                style={styles.buttons}
-              />
-            </View>
-          </View>
-        );
     }
 
 

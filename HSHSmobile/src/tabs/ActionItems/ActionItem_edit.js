@@ -47,7 +47,6 @@ function guestObjectToArray(IdsToGuests, IdsToInteractions) {
             "name" : IdsToGuests[Id].name,
         });
     }
-    console.log(guestList);
     return guestList;
 }
 
@@ -131,7 +130,6 @@ class ActionItem_edit extends Component {
     (
         <TouchableOpacity
           onPress={() => {
-                console.log(this.state.color);
                 let stateColor = this.state.color == c ? null : c;
                 this.setState({color: stateColor });
             }
