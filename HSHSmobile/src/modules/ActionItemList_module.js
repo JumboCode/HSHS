@@ -122,7 +122,7 @@ class ActionItemList_module extends Component {
 	                                    name='location-on' />
 	                            </View>
 	                            <View style={{flex:3}}>
-	                                <Text numberOfLines={1}>{item.locationCoord ? item.locationStr: "No"}</Text>
+	                                <Text numberOfLines={1}>{item.locationStr}</Text>
 	                            </View>
 	                        </View>
 	                    </View>
