@@ -16,11 +16,6 @@ class Resources_menu extends Component {
     constructor(props) {
         super(props);
 
-        this.linkData = [];
-        for(i = 0; i < 100; i++) {
-            this.linkData.push({categoryName : i.toString()});
-        }
-
         this.linkData = [
             {categoryName: "Emergency Shelters",
                 links: [
@@ -164,30 +159,6 @@ class Resources_menu extends Component {
               columnWrapperStyle = {{margin: "1%"}}
             />
         );
-        /*
-        return (
-          <ScrollView contentContainerStyle={styles.container}>
-              {this.renderHeader()}
-              {this.linkData.map((category, key) => {
-                  return (
-                      <View key={key} style={styles.button_container}>
-                          <TouchableHighlight
-                              style={{flex: 1, backgroundColor: '#DDDDDD'}}
-                              onPress={() => {let one = 1}}
-                              underlayColor='#FFF'
-                          >
-                              <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                                  <Text style={{textAlign: "center", fontSize: 10}}>
-                                      {category.categoryName.split(" ").join("\n")}
-                                  </Text>
-                              </View>
-                          </TouchableHighlight>
-                      </View>
-                  );
-              })}
-          </ScrollView>
-        );
-        */
     }
 }
 
@@ -197,7 +168,7 @@ const styles = StyleSheet.create({
     },
 
     headerImage: {
-        flex : 10,
+        flex : 7,
         resizeMode : "cover",
         width : "100%",
         height : "100%",
