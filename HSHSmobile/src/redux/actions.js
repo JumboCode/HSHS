@@ -177,7 +177,11 @@ export const editActionItem = (id, isDone, title, creationTimestamp, locationCoo
                         guestIds: guestIds,
                         volunteerId: volunteerId,
 												color: color,
-                })
+                }, error => {
+									if (error) {
+										Alert.alert("Failed to edit action item. Please try again.");
+									}
+								})
 }
 
 export const addNewInteractionStart = () => ({

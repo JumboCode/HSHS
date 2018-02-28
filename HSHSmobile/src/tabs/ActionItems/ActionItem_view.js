@@ -69,8 +69,6 @@ class ActionItem_view extends Component {
         latitude: this.props.actionItems[this.props.actionItemId].locationCoord.lat,
       } : null;
 
-      console.log(this.props.actionItems[this.props.actionItemId]);
-
       this.props.navigator.push({
 
           title: 'Edit Action Item',
