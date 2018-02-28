@@ -81,7 +81,7 @@ export default class TagGuestDialog extends Component {
     }
 
     render() {
-        if (this.props.loading == true || this.props.guests.length <= 1) {
+        if (this.props.loading == true && this.props.guests) {
             return renderLoader();
         }
         return (
