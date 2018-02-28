@@ -13,11 +13,14 @@ import {
 } from 'react-native';
 import { Icon, List, ListItem, SearchBar, CheckBox } from "react-native-elements";
 import {connect} from 'react-redux';
-import ChooseLocation from '../../modules/ChooseLocation';
-import TagGuestDialog from "../../modules/TagGuestDialog"
+import ChooseLocationPopup from '../../modules/popups/ChooseLocationPopup';
+
+import TagGuestPopup from "../../modules/popups/TagGuestPopup"
 import renderSeperator from '../../modules/UI/renderSeperator'
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {addNewActionItem, getActionItems} from "../../redux/actions";
+import {addNewActionItem, getActionItems, editActionItem} from "../../redux/actions";
+import DatePicker from 'react-native-datepicker';
+import Moment from 'moment';
 
 function mapStateToProps(state, ownProps) {
     var guests = guestObjectToArray(state.guests, state.interactions);
@@ -31,6 +34,7 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispath, ownProps) {
     return {
         addNewActionItem: addNewActionItem,
+        editActionItem: editActionItem,
         getActionItems: getActionItems
     };
 }
@@ -43,28 +47,27 @@ function guestObjectToArray(IdsToGuests, IdsToInteractions) {
             "name" : IdsToGuests[Id].name,
         });
     }
-    console.log(guestList);
     return guestList;
 }
 
-class TodoListItemNew extends Component {
+class ActionItem_edit extends Component {
     constructor(props) {
         super(props);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
-        this.addGuest = this.addGuest.bind(this);
-        this.removeGuest = this.removeGuest.bind(this);
         this.state = {
-            title: "",
-            taggedGuests: [],
-            locationCoords: {
+            actionItemId: this.props.actionItemId ? this.props.actionItemId : null,
+            title: this.props.title ? this.props.title : '',
+            taggedGuests: this.props.taggedGuests ? this.props.taggedGuests : [],
+
+            // TODO: geeze why is this longitude latitude and other places lat lng? cause google maps api sucks. please let's fix this later.
+            locationCoord: this.props.locationCoord ? this.props.locationCoord : {
             	longitude: 0,
-            	latitude: 0
+            	latitude: 0,
             },
-            selectedLocation: null,
-            locationName: "No Location Selected",
-            selectedDate: "",
-            dateName: "No Date Selected",
-            description: "",
+            locationStr: this.props.locationStr ? this.props.locationStr : null,
+            selectedDate: this.props.selectedDate ? this.props.selectedDate : Moment().format('YYYY-MM-DD'),
+            description: this.props.description ? this.props.description : "",
+            color: this.props.color ? this.props.color : null,
         };
     };
 
@@ -76,8 +79,7 @@ class TodoListItemNew extends Component {
                     id: 'save_actionItem', // id for this button, given in onNavigatorEvent(event) to help understand which button was clicked
                     disabled: false, // optional, used to disable the button (appears faded and doesn't interact)
                     disableIconTint: true, // optional, by default the image colors are overridden and tinted to navBarButtonColor, set to true to keep the original image colors
-                    showAsAction: 'ifRoom', // optional, Android only. Control how the button is displayed in the Toolbar. Accepted valued: 'ifRoom' (default) - Show this item as a button in an Action Bar if the system decides there is room for it. 'always' - Always show this item as a button in an Action Bar. 'withText' - When this item is in the action bar, always show it with a text label even if it also has an icon specified. 'never' - Never show this item as a button in an Action Bar.
-                    buttonColor: 'white', // Optional, iOS only. Set color for the button (can also be used in setButtons function to set different button style programatically)
+                    showAsAction: 'ifRoom', // optional, Android only. Control how the button is displayed in the Toolbar.
                     buttonFontSize: 18, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
                     buttonFontWeight: '600', // Set font weight for the button (can also be used in setButtons function to set different button style programatically)
                 }
@@ -95,44 +97,61 @@ class TodoListItemNew extends Component {
             		return;
             	}
 
-                addNewActionItem(false, this.state.title, "creationTimestamp", this.state.locationCoords, this.state.locationName, "shiftDate", this.state.description, this.state.taggedGuests.map(guest => guest.Id), "volunteerId");
-                getActionItems();
-                this.props.navigator.pop({
-                    animated: true, // does the pop have transition animation or does it happen immediately (optional)
-                    animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
+              // It's new if there is no ID
+              if (!this.state.actionItemId) {
+                addNewActionItem(false, this.state.title, "creationTimestamp", this.state.locationCoord, this.state.locationStr, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
+              } else {
+                editActionItem(this.state.actionItemId, false, this.state.title, "creationTimestamp", this.state.locationCoord, this.state.locationStr, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
+              }
+
+              getActionItems();
+              this.props.navigator.pop({
+                  animated: true, // does the pop have transition animation or does it happen immediately (optional)
+                  animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
                 });
             }
         }
     };
 
-    addGuest(guest) {
-        this.setState({taggedGuests: [...this.state.taggedGuests, guest]});
+    setSelectedGuests = (guests) => {
+      this.setState({
+        taggedGuests: guests
+      });
     }
 
-    removeGuest(guest) {
-        let index = this.state.taggedGuests.indexOf(guest);
-        let arr = this.state.taggedGuests;
-        arr.splice(index, 1);
-        this.setState({taggedGuests: arr})
-    }
-
-    setChosenLocation = (locationName, locationCoords) => {
+    setChosenLocation = (locationStr, locationCoord) => {
         this.setState({
-            locationName: locationName,
-            locationCoords: locationCoords,
+            locationStr: locationStr,
+            locationCoord: locationCoord,
         });
     };
+
+    renderColorButton = (c) =>
+    (
+        <TouchableOpacity
+          onPress={() => {
+                let stateColor = this.state.color == c ? null : c;
+                this.setState({color: stateColor });
+            }
+          }
+          style={{flex: 1}}
+          >
+          <View style={this.state.color == c ? [styles.button, {backgroundColor: c}] : [styles.button, styles.disabled, {backgroundColor: c}]}>
+          </View>
+        </TouchableOpacity>
+    )
 
     render() {
         return (
             <View style = {styles.container}>
                 <View style = {styles.back}>
                     <TextInput
+                        value = {this.state.title}
                         editable = {true}
                         placeholder = "Title"
                         style = {styles.title}
-                        placeholderTextColor = "#000000"
-                        onChangeText={(title) => this.state.title = title}
+                        placeholderTextColor = '#d3d3d3'
+                        onChangeText={(title) => {this.setState({'title': title});}}
                     />
                     <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
                         <View style = {styles.icon}>
@@ -147,7 +166,7 @@ class TodoListItemNew extends Component {
                             />
                         </View>
                         <View style={{flex: 1}}>
-                            <Text numberOfLines={1} style={{textAlign: 'right', margin: 10}}>{this.state.taggedGuests.length +  " Guests Selected"}</Text>
+                            <Text numberOfLines={1} style={{textAlign: 'right', margin: 10}}>{this.state.taggedGuests.length +  " Tagged Guests"}</Text>
                         </View>
                     </View>
                     <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
@@ -158,57 +177,78 @@ class TodoListItemNew extends Component {
                                 name='location-on'
                                 size={16}
                                 onPress={() => {
-                                    this.mapModule.openMap({lat: 42.405804, lng: -71.11956})
+                                    this.ChooseLocationPopup.show()
                                 }}/>
                         </View>
                         <View style={{flex: 1}}>
                             <Text numberOfLines={1}
-                                  style={{textAlign: 'right', margin: 10}}>{this.state.locationName}</Text>
+                                  style={{textAlign: 'right', margin: 10}}>{this.state.locationStr ? this.state.locationStr : "No Tagged Location"}</Text>
 
                         </View>
                     </View>
                     <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
                         <View style = {styles.icon}>
-                            <Icon
-                                raised
-                                color='#770B16'
-                                name='timer'
-                                size={16}
-                                onPress={() => {
-                                    alert("Make this connect to the calendar picker!")
-                                }}/>
+
+                                <DatePicker
+                                    date={this.state.selectedDate}
+                                    mode="date"
+                                    placeholder="select date"
+                                    format="YYYY-MM-DD"
+                                    confirmBtnText="Confirm"
+                                    cancelBtnText="Cancel"
+                                    hideText
+                                    iconComponent={<Icon
+                                        raised
+                                        color='#770B16'
+                                        name='timer'
+                                        size={16}
+                                        />}
+                                    customStyles={{
+                                      dateTouchBody: {
+                                        width: 50
+                                      }
+                                    }}
+                                    onDateChange={(date) => {this.setState({selectedDate: date})}}
+                                  />
                         </View>
                         <View style={{flex: 1}}>
                             <Text numberOfLines={1}
-                                  style={{textAlign: 'right', margin: 10}}>{this.state.dateName}</Text>
+                                  style={{textAlign: 'right', margin: 10}}>Due on: {this.state.selectedDate}</Text>
 
                         </View>
                     </View>
                     <TextInput
                         editable = {true}
                         placeholder = "Description"
+                        value = {this.state.description}
                         style = {styles.description}
                         multiline = {true}
-                        onChangeText={(description) => this.state.description = description}
+                        onChangeText={(description) => {this.setState({description: description})}}
                     />
+                    <View style={{flexDirection: 'row', alignItems: 'stretch', justifyContent: 'space-between', zIndex: 0, paddingLeft: 15, paddingRight: 15}}>
+                      {this.renderColorButton('#659B7F')}
+                      {this.renderColorButton('#818DC7')}
+                      {this.renderColorButton('#B65E68')}
+                      {this.renderColorButton('#D0AF55')}
+                      {this.renderColorButton('#C19FC7')}
+                    </View>
                 </View>
-                <TagGuestDialog
+                <TagGuestPopup
                     ref={(dialog) => {
                         this.tagGuestDialog = dialog;
                     }}
+                    initialGuests={this.state.taggedGuests}
                     guests={this.props.guests}
                     loading={this.props.loading}
-                    taggedGuests={this.state.taggedGuests}
-                    addGuest={this.addGuest}
-                    removeGuest={this.removeGuest}
+                    onConfirm={this.setSelectedGuests}
                 />
-                <ChooseLocation
-                    ref={(map) => {
-                        this.mapModule = map;
-                    }}
-                    viewHeight={this.state.viewHeight}
-                    viewWidth={this.state.viewWidth}
-                    locationFunction={this.setChosenLocation.bind(this)}
+                <ChooseLocationPopup
+                  ref={(map) => {
+                      this.ChooseLocationPopup = map;
+                  }}
+                  onConfirm={this.setChosenLocation}
+                  locationStr={this.props.locationStr}
+                  locationCoord={this.props.locationCoord}
                 />
             </View>
         );
@@ -266,8 +306,20 @@ const styles = StyleSheet.create({
         height: 100,
         padding: 5,
         fontSize: 15,
-        marginBottom: 30
+        marginBottom: 15,
+    },
+    button: {
+      backgroundColor: "lightblue",
+      height: 25,
+      margin: 5,
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 4,
+      borderColor: "rgba(0, 0, 0, 0.1)",
+    },
+    disabled: {
+      opacity: 0.3
     }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(TodoListItemNew);
+export default connect(mapStateToProps, mapDispatchToProps)(ActionItem_edit );

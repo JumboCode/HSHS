@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { List, ListItem, SearchBar } from "react-native-elements";
 import {connect} from 'react-redux';
-import ActionItemList from '../../modules/ActionItem'
+import ActionItemList_module from '../../modules/ActionItemList_module'
 import { Icon } from 'react-native-elements'
 import renderLoader from "../../modules/UI/renderLoader";
 
@@ -18,6 +18,12 @@ const IonIcon = require('react-native-vector-icons/Ionicons');
 
 
 function mapStateToProps(state, ownProps) {
+
+    // TODO: Make this a more legit way to add the ID:
+    for (var id in state.actionItems) {
+      state.actionItems[id].actionItemId = id;
+    }
+
     return {
         actionItems: state.actionItems,
         guests: state.guests,
@@ -31,7 +37,7 @@ function mapDispatchToProps(dispath, ownProps) {
     };
 }
 
-class TodoList extends Component {
+class ActionItem_list extends Component {
     constructor(props) {
         super(props);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
@@ -56,7 +62,7 @@ class TodoList extends Component {
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
         if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
             if (event.id == 'new_actionItem') { // this is the same id field from the static navigatorButtons definition
-                this.Screen_TodoListItemNew();
+                this.Screen_ActionItem_new();
             }
         }
     };
@@ -75,12 +81,15 @@ class TodoList extends Component {
 
     };
 
-    Screen_TodoListItemNew = () => {
+    Screen_ActionItem_new = () => {
         this.props.navigator.push({
             title: 'Add Action Item',
-            screen: 'TodoListItemNew', // unique ID registered with Navigation.registerScreen
+            screen: 'ActionItem_edit', // unique ID registered with Navigation.registerScreen
+
+            // No pass props because new default
             passProps: {
             }, // Object that will be passed as props to the pushed screen (optional)
+
             animated: true, // does the push have transition animation or does it happen immediately (optional)
             animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
             backButtonHidden: false, // hide the back button altogether (optional)
@@ -95,10 +104,13 @@ class TodoList extends Component {
             return renderLoader();
         }
         return (
-            <ActionItemList
+          <View
+          style={{height: '100%'}}>
+            <ActionItemList_module
                 actionItems={this.props.actionItems}
                 guests={this.props.guests}
                 navigator={this.props.navigator}/>
+          </View>
         );
     }
 }
@@ -122,7 +134,4 @@ const styles = StyleSheet.create({
     }
 });
 
-
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(TodoList);
+export default connect(mapStateToProps, mapDispatchToProps)(ActionItem_list);

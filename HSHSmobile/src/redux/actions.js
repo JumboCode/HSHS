@@ -1,5 +1,6 @@
 import firebase from "../firebase";
 import {store} from './store.js';
+import {Alert} from 'react-native';
 
 export const getGuestsStart = () => ({
 	type: 'GET_GUESTS_START'
@@ -81,22 +82,75 @@ export const addNewActionItemSuccess = () => ({
         type: 'ADD_NEW_ACTION_ITEMS_SUCCESS'
 })
 
-export const addNewActionItem = (isDone, title, creationTimestamp, locationCoord, locationStr, shiftDate, description, guestIds, volunteerId) => {
-                store.dispatch(addNewActionItemStart);
-                firebase.database().ref('actionItems').push().set({
-                        isDone: isDone,
-                        title: title,
-                        creationTimestamp: creationTimestamp,
-                        locationCoord: {
-                            lat: locationCoord.latitude,
-                            lng: locationCoord.longitude,
-                        },
-                        locationStr: locationStr,
-                        shiftDate: shiftDate,
-                        description: description,
-                        guestIds: guestIds,
-                        volunteerId: volunteerId
-                })
+export const addNewActionItem = (isDone, title, creationTimestamp, locationCoord, locationStr, shiftDate, description, guestIds, volunteerId, color) => {
+	store.dispatch(addNewActionItemStart);
+	//var ref = firebase.database().ref('/');
+	let newActionItemKey = firebase.database().ref('actionItems').push().key;
+	let ref = firebase.database().ref('/actionItems/' + newActionItemKey);
+	let updates = {};
+
+	// let guestRef = firebase.database().ref('guests/');
+	// guestRef.transaction((cur) =>
+	// {
+	// 	this.guestIds = guestIds.filter(id => cur[id] !== null);
+	// 	return;
+	// 	// this.guestIds.map((id) => {
+	// 	// 	(!cur[id]["actionItems"]) && (cur[id]["actionItems"] = {})
+	// 	// 	cur[id]["actionItems"][newActionItemKey] = newActionItemKey;
+	// 	// });
+	// 	// return cur;
+	// }, (error) => {
+	// 	if (error) {
+	// 		Alert.alert(error);
+	// 	} else {
+	// 		// Create action item
+	// 		updates['actionItems/' + newActionItemKey] = {
+	// 				isDone: isDone,
+	// 				title: title,
+	// 				creationTimestamp: creationTimestamp,
+	// 				locationCoord: {
+	// 						lat: locationCoord.latitude,
+	// 						lng: locationCoord.longitude,
+	// 				},
+	// 				locationStr: locationStr,
+	// 				shiftDate: shiftDate,
+	// 				description: description,
+	// 				guestIds: this.guestIds,
+	// 				volunteerId: volunteerId,
+	// 				color: color,
+	// 		}
+	// 		ref.update(updates);
+	// 	}
+	// });
+
+	ref.update({
+		isDone: isDone,
+		title: title,
+		creationTimestamp: creationTimestamp,
+		locationCoord: {
+		    lat: locationCoord.latitude,
+		    lng: locationCoord.longitude,
+		},
+		locationStr: locationStr,
+		shiftDate: shiftDate,
+		description: description,
+		volunteerId: volunteerId,
+		color: color,
+  }, error => {
+		if (error) {
+			Alert.alert("Failed to add new action item. Please try again.");
+		} else if (guestIds && guestIds.length != 0) {
+			ref.update({guestIds: guestIds}, err => {
+				err && Alert.alert("Failed to tag guests in the action item you just created. Please try again.");
+			})
+		}
+	});
+
+	// Add action item to guests' actionItem list
+	// for (i in guestIds) {
+	//     let key = firebase.database().ref('guests/' + guestIds[i] + '/actionItems').push().key;
+	//     updates['guests/' + guestIds[i] + '/actionItems/' + key] = newActionItemKey;
+	// }
 }
 
 export const editActionItemStart = () => ({
@@ -107,7 +161,7 @@ export const editActionItemSuccess = () => ({
         type: 'ADD_NEW_ACTION_ITEMS_SUCCESS'
 })
 
-export const editActionItem = (id, isDone, title, creationTimestamp, locationCoord, locationStr, shiftDate, description, guestIds, volunteerId) => {
+export const editActionItem = (id, isDone, title, creationTimestamp, locationCoord, locationStr, shiftDate, description, guestIds, volunteerId, color) => {
                 store.dispatch(addNewActionItemStart);
                 firebase.database().ref('actionItems' + '/' + id).set({
                         isDone: isDone,
@@ -121,7 +175,8 @@ export const editActionItem = (id, isDone, title, creationTimestamp, locationCoo
                         shiftDate: shiftDate,
                         description: description,
                         guestIds: guestIds,
-                        volunteerId: volunteerId
+                        volunteerId: volunteerId,
+												color: color,
                 })
 }
 

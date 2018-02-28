@@ -39,7 +39,8 @@ function guestObjectToArray(IdsToGuests, IdsToInteractions) {
             "description": IdsToGuests[Id].description,
             "age" : IdsToGuests[Id].age,
             "gender": IdsToGuests[Id].gender,
-            "color": getRandomColor()
+            "color": getRandomColor(),
+            "actionItems": IdsToGuests[Id].actionItems
         });
     }
 
@@ -89,6 +90,7 @@ class GuestList extends Component {
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.Screen_GuestListProfile = this.Screen_GuestListProfile.bind(this);
         this.props.loading = true;
+        this.state = {searchInput: ''};
     };
 
     static navigatorButtons = {
@@ -132,7 +134,8 @@ class GuestList extends Component {
             screen: 'GuestListProfile', // unique ID registered with Navigation.registerScreen
             passProps: {
                 Id: guest.Id,
-                name: "Hey I left this variable so stuff dosn't break but please don't use it!"
+                name: "Hey I left this variable so stuff dosn't break but please don't use it!",
+                actionItems: "hello"
             }, // Object that will be passed as props to the pushed screen (optional)
             animated: true, // does the push have transition animation or does it happen immediately (optional)
             animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
@@ -153,12 +156,11 @@ class GuestList extends Component {
     };
 
     componentWillUpdate(nextProps, nextState) {
-        console.log(this.props.guests);
+        // console.log(this.props.guests);
     };
 
     renderHeader = () => {
-        return null;
-        //return <SearchBar placeholder="Type Here..." lightTheme round />;
+        return ;
     };
 
     renderListItem = (item) => {
@@ -184,26 +186,41 @@ class GuestList extends Component {
     };
 
     render() {
-
-        // TODO: this is a janky way of ensuring that the guest data has been computed, because when it hasn't the guests object has length 1. We should do this better.
-        if (this.props.loading == true || this.props.guests.length <= 1) {
+        if (this.props.loading == true) {
             return renderLoader();
+        }
+        if (this.props.guests.length < 1) {
+          return (
+            <View style={styles.container}>
+                <Text style={{textAlign: 'center', fontStyle: 'italic'}}>
+                {'No guests in database.'}
+                </Text>
+            </View>
+
+            )
         }
         return (
 
-            <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0, marginTop: 0 }}>
+            <View style={{height: '100%'}}>
+                <SearchBar
+                    placeholder="Search"
+                    containerStyle={{backgroundColor: 'transparent'}}
+                    onChangeText={(str) => {this.setState({searchInput: str.toLowerCase()})}}
+                    onClearText={() => this.setState({searchInput: ''})}
+                    lightTheme
+                    clearIcon={this.state.searchInput !== ''}
+                    round
+                />
                 <FlatList
-                    data = {this.props.guests}
+                    data = {this.props.guests.filter(item => item.name.toLowerCase().includes(this.state.searchInput) || item.description.toLowerCase().includes(this.state.searchInput))}
                     renderItem={({item}) => this.renderListItem(item)}
                     keyExtractor = {item => item.Id}
                     ItemSeparatorComponent = {() => {return(renderSeperator())}}
-                    ListHeaderComponent = {this.renderHeader}
-                    ListFooterComponent = {this.renderFooter}
                     refreshing = {this.props.refreshing}
                     onEndReached = {this.handleLoadMore}
                     onEndReachedThreshold = {50}
                 />
-            </List>
+            </View>
         );
     }
 }
@@ -213,17 +230,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
-    },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
-    },
-    instructions: {
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
     }
 });
 

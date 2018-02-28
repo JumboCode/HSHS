@@ -9,8 +9,14 @@ import {
     Platform,
     StyleSheet,
     Text,
-    View
+    View,
+    Button,
+    TouchableOpacity
 } from 'react-native';
+import Popup from "../../modules/popups/popup";
+import Counter from "../../modules/Counter";
+import Icon from 'react-native-vector-icons/Ionicons';
+
 
 const instructions = Platform.select({
     ios: 'please make me an ios screen!',
@@ -18,13 +24,38 @@ const instructions = Platform.select({
 });
 
 export default class Info extends Component {
+    constructor(props) {
+      super(props);
+      this.counters = {"Example Counter": 666};
+    }
+
+    // Sample function to render the item counters. To add new counters,
+    // add elements to this.counters (item list could also come from redux)
+    // Counter spacing issues are probably in Counter.js
+    renderCounters() {
+      let items = Object.keys(this.counters);
+      return (
+        <View style={styles.counterContainer}>
+            {
+              items.map((name) =>
+                      <Counter
+                        key={name}
+                        itemName={name}
+                        count={this.counters[name]}
+                        onValueChange={(val) =>
+                            {
+                              this.counters[name] = val;
+                            }}
+                      />)
+              }
+        </View>
+      );
+    }
+
     render() {
         return (
-            <View style={styles.container}>
-                <Text style={styles.instructions}>
-                    {instructions}
-                </Text>
-            </View>
+          <View>
+          </View>
         );
     }
 }
@@ -35,11 +66,5 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
-    },
-    instructions: {
-        fontSize: 18,
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
     },
 });
