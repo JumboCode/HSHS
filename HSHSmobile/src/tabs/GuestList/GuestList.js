@@ -186,10 +186,7 @@ class GuestList extends Component {
     };
 
     render() {
-      console.log(this.props.guests);
-
-        // TODO: this is a janky way of ensuring that the guest data has been computed, because when it hasn't the guests object has length 1. We should do this better.
-        if (this.props.loading == true || this.props.guests.length <= 1) {
+        if (this.props.loading == true) {
             return renderLoader();
         }
         return (
