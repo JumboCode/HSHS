@@ -189,11 +189,22 @@ class GuestList extends Component {
         if (this.props.loading == true) {
             return renderLoader();
         }
+        if (this.props.guests.length < 1) {
+          return (
+            <View style={styles.container}>
+                <Text style={{textAlign: 'center', fontStyle: 'italic'}}>
+                {'No guests in database.'}
+                </Text>
+            </View>
+
+            )
+        }
         return (
 
             <View style={{height: '100%'}}>
                 <SearchBar
                     placeholder="Search"
+                    containerStyle={{backgroundColor: 'transparent'}}
                     onChangeText={(str) => {this.setState({searchInput: str.toLowerCase()})}}
                     onClearText={() => this.setState({searchInput: ''})}
                     lightTheme
@@ -219,17 +230,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
-    },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
-    },
-    instructions: {
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
     }
 });
 
