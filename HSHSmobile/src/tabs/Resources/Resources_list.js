@@ -50,23 +50,23 @@ class Resources_list extends Component {
       return;
     }
 
+    _goToURL(url) {
+      console.log(url);
+      Linking.canOpenURL(url).then(supported => {
+        if (supported) {
+          Linking.openURL('https://' + url);
+        } else {
+          console.log('Don\'t know how to open URI: ' + url);
+        }
+      });
+    }
+
     _renderAccordionTitle (content) {
       return (
         <View style={styles.accordionTitle}>
           <Text style={styles.title}>{content.name}</Text>
         </View>
       );
-    }
-
-    _goToURL(url) {
-      console.log(url);
-      Linking.canOpenURL(url).then(supported => {
-        if (supported) {
-          Linking.openURL('http://' + url);
-        } else {
-          console.log('Don\'t know how to open URI: ' + url);
-        }
-      });
     }
 
     _renderAccordionContent (content) {
@@ -77,7 +77,7 @@ class Resources_list extends Component {
             <Text style={{width: 180}}>{content.description}</Text>
           </View>
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-            <Text style={{width: 180}}
+            <Text style={{width: 180, color: 'blue', textDecorationLine: 'underline'}}
                 onPress={() => {this._goToURL(link)}}>
               {link}
             </Text>
@@ -132,8 +132,12 @@ const styles = StyleSheet.create({
     },
 
     accordionTitle: {
-      borderWidth: 1,
+      borderWidth: 1.3,
+      borderRadius: 10,
       borderColor: '#000000',
+      marginHorizontal: 5,
+      marginTop: 3,
+      marginBottom: 3,
     },
 
     title: {
@@ -143,11 +147,6 @@ const styles = StyleSheet.create({
       marginHorizontal: 5,
     },
 
-    accordionContent: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#F5FCFF',
-    },
 
 });
 
