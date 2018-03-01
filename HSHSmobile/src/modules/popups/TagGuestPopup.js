@@ -23,6 +23,11 @@ export default class TagGuestDialog extends Component {
     constructor(props) {
         super(props);
 
+        // TODO:
+        // Just in case things go horribly wrong
+        // (e.g. a guest is deleted from firebase without disascoiating correctly from the tagged gust list)
+        // we remove non existent guests from the tagging
+
         // This allows us to overload the Component for editting
         // e.g. pass initialGuests as a prop when editing with guests that are already tagged
         this.state = {
