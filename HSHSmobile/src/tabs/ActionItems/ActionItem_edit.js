@@ -139,8 +139,19 @@ class ActionItem_edit extends Component {
         </TouchableOpacity>
     )
 
+    _confirmDelete(){
+      Alert.alert(
+        'Really Delete this Action Item?',
+        'This will remove this Action Item from history; consider marking the item as completed',
+        [
+          {text: 'Cancel', onPress: () => {style: 'cancel'}},
+          {text: 'Okay', onPress: () => {this._handleDelete();}},
+        ],
+        { cancelable: true }
+      );
+    }
+
     _handleDelete() {
-        console.log("pressed!!")
         deleteActionItem(this.state.actionItemId);
         this.props.navigator.popToRoot({
           animated: true, // does the pop have transition animation or does it happen immediately (optional)
@@ -152,9 +163,9 @@ class ActionItem_edit extends Component {
         if (!this.state.actionItemId) return;
         return (
             <View style={styles.deleteButtonContainer}>
-                <TouchableOpacity 
+                <TouchableOpacity
                     style={styles.deleteButton}
-                    onPress={() => {this._handleDelete()}}>
+                    onPress={() => {this._confirmDelete()}}>
                     <Text style={{color: 'white', fontWeight: 'bold'}}>DELETE</Text>
                 </TouchableOpacity>
             </View>
@@ -328,9 +339,9 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         margin: 10,
         paddingHorizontal: 60,
-        paddingVertical: 15,  
+        paddingVertical: 15,
         height: 30,
-        alignItems: 'center', 
+        alignItems: 'center',
         justifyContent: 'center'
     },
     description: {
