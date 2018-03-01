@@ -67,9 +67,9 @@ export const addNewGuestSuccess = () => ({
 export const addNewGuest = (name, age, gender, description, interactions, actionItems) => {
 	store.dispatch(addNewGuestStart);
 	firebase.database().ref('guests').push().set({
-    		name: name,
-    		age: age,
-    		gender : gender,
+		name: name,
+		age: age,
+		gender : gender,
         description: description
   });
 }
@@ -87,8 +87,10 @@ export const addNewActionItem = (isDone, title, creationTimestamp, locationCoord
 	//var ref = firebase.database().ref('/');
 	let newActionItemKey = firebase.database().ref('actionItems').push().key;
 	let ref = firebase.database().ref('/actionItems/' + newActionItemKey);
-	let updates = {};
+	
 
+    /* Attempt to use transactions, don't delete */
+    // let updates = {};
 	// let guestRef = firebase.database().ref('guests/');
 	// guestRef.transaction((cur) =>
 	// {
@@ -162,22 +164,49 @@ export const editActionItemSuccess = () => ({
 })
 
 export const editActionItem = (id, isDone, title, creationTimestamp, locationCoord, locationStr, shiftDate, description, guestIds, volunteerId, color) => {
-                store.dispatch(addNewActionItemStart);
-                firebase.database().ref('actionItems' + '/' + id).set({
-                        isDone: isDone,
-                        title: title,
-                        creationTimestamp: creationTimestamp,
-                        locationCoord: {
-                            lat: locationCoord.latitude,
-                            lng: locationCoord.longitude,
-                        },
-                        locationStr: locationStr,
-                        shiftDate: shiftDate,
-                        description: description,
-                        guestIds: guestIds,
-                        volunteerId: volunteerId,
-												color: color,
-                })
+    store.dispatch(addNewActionItemStart);
+    let ref = firebase.database().ref('actionItems/' + id);
+    ref.update({
+        isDone: isDone,
+        title: title,
+        creationTimestamp: creationTimestamp,
+        locationCoord: {
+            lat: locationCoord.latitude,
+            lng: locationCoord.longitude,
+        },
+        locationStr: locationStr,
+        shiftDate: shiftDate,
+        description: description,
+        guestIds: guestIds,
+        volunteerId: volunteerId,
+		color: color,
+    }, error => {
+        if (error) {
+            Alert.alert("Failed to edit action item. Please try again.");
+        } else if (guestIds && guestIds.length != 0) {
+            ref.update({guestIds: guestIds}, err => {
+                err && Alert.alert("Failed to tag guests in the action item you just created. Please try again.")
+            })
+        }
+    });
+}
+
+export const deleteActionItemStart = () => ({
+    type: 'DELETE_NEW_ACTION_ITEMS_START'
+})
+
+export const deleteActionItemSuccess = () => ({
+    type: 'DELETE_NEW_ACTION_ITEMS_SUCCESS'
+})
+
+export const deleteActionItem = (id) => {
+    store.dispatch(deleteActionItemStart);
+    firebase.database().ref('actionItems').child(id).remove(error => {
+        if (error) {
+            Alert.alert("Failed to delete action item. Please try again.");
+        }
+    });
+    
 }
 
 export const addNewInteractionStart = () => ({

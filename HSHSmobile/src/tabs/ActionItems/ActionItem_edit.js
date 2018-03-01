@@ -18,7 +18,7 @@ import ChooseLocationPopup from '../../modules/popups/ChooseLocationPopup';
 import TagGuestPopup from "../../modules/popups/TagGuestPopup"
 import renderSeperator from '../../modules/UI/renderSeperator'
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {addNewActionItem, getActionItems, editActionItem} from "../../redux/actions";
+import {addNewActionItem, getActionItems, editActionItem, deleteActionItem} from "../../redux/actions";
 import DatePicker from 'react-native-datepicker';
 import Moment from 'moment';
 
@@ -90,7 +90,6 @@ class ActionItem_edit extends Component {
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
         if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
             if (event.id == 'save_actionItem') { // this is the same id field from the static navigatorButtons definition
-
             	// Don't allow empty fields
             	if (this.state.title == "") {
             		alert("Title cannot be empty");
@@ -103,9 +102,8 @@ class ActionItem_edit extends Component {
               } else {
                 editActionItem(this.state.actionItemId, false, this.state.title, "creationTimestamp", this.state.locationCoord, this.state.locationStr, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
               }
-
-              getActionItems();
-              this.props.navigator.pop({
+                getActionItems();
+                this.props.navigator.pop({
                   animated: true, // does the pop have transition animation or does it happen immediately (optional)
                   animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
                 });
@@ -140,6 +138,28 @@ class ActionItem_edit extends Component {
           </View>
         </TouchableOpacity>
     )
+
+    _handleDelete() {
+        console.log("pressed!!")
+        deleteActionItem(this.state.actionItemId);
+        this.props.navigator.popToRoot({
+          animated: true, // does the pop have transition animation or does it happen immediately (optional)
+          animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
+        });
+    }
+
+    _renderDeleteButton() {
+        if (!this.state.actionItemId) return;
+        return (
+            <View style={styles.deleteButtonContainer}>
+                <TouchableOpacity 
+                    style={styles.deleteButton}
+                    onPress={() => {this._handleDelete()}}>
+                    <Text style={{color: 'white', fontWeight: 'bold'}}>DELETE</Text>
+                </TouchableOpacity>
+            </View>
+        )
+    }
 
     render() {
         return (
@@ -233,6 +253,7 @@ class ActionItem_edit extends Component {
                       {this.renderColorButton('#C19FC7')}
                     </View>
                 </View>
+                {this._renderDeleteButton()}
                 <TagGuestPopup
                     ref={(dialog) => {
                         this.tagGuestDialog = dialog;
@@ -296,6 +317,21 @@ const styles = StyleSheet.create({
     dateadd: {
         color: '#0645AD',
         textDecorationLine: 'underline'
+    },
+    deleteButtonContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    deleteButton: {
+        backgroundColor: 'red',
+        borderRadius: 4,
+        margin: 10,
+        paddingHorizontal: 60,
+        paddingVertical: 15,  
+        height: 30,
+        alignItems: 'center', 
+        justifyContent: 'center'
     },
     description: {
         borderWidth: 0.5,
