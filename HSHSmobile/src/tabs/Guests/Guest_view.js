@@ -205,6 +205,21 @@ class GuestProfile extends Component {
         )
     }
 
+    _renderHistoryListItem(id) {
+        let actionItem = this.props.actionItems[id];
+        // TODO add visual flair to view (create wrapper View w/ flexDir 'row')
+        // TODO Add live timestamps to action items
+        return (
+            <View style={{flexDirection:'column'}}>
+                <Text style={{marginLeft:10, fontWeight:200}}> Monday, June 6, 1966</Text>
+                <Text>{ actionItem.isDone ? "Completed" : "Incomplete" }</Text>
+                <View>
+                    <Text style={{marginLeft:10, paddingLeft:5}}>{actionItem.title}</Text>
+                </View>
+            </View>
+        );
+    }
+
     // Once interactions are added to Guest schema, interpolate w/ actionItems
     // and render in the list.
     _renderHistory() {
@@ -222,13 +237,10 @@ class GuestProfile extends Component {
                 <Text style={styles.historyHeader}>Guest History</Text>
                 <FlatList
                     data = {actionItems}
-                     {/*renderItem={({item}) => this.renderListItem(item)}
-                    // keyExtractor = {item => item.Id}
-                    // ItemSeparatorComponent = {() => {return(renderSeperator())}}
-                    // ListFooterComponent = {this.renderFooter}
-                    // refreshing = {this.props.refreshing}
-                    // onEndReached = {this.handleLoadMore}
-                    // onEndReachedThreshold = {50}*/}
+                    renderItem={this._renderHistoryListItem}
+                    keyExtractor = {item => item.Id}
+                    ItemSeparatorComponent = {() => {}}
+                    ListFooterComponent = {() => {}}
                 />
             </View>
         )
