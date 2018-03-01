@@ -177,7 +177,6 @@ export const editActionItem = (id, isDone, title, creationTimestamp, locationCoo
         locationStr: locationStr,
         shiftDate: shiftDate,
         description: description,
-        guestIds: guestIds,
         volunteerId: volunteerId,
 		color: color,
     }, error => {
