@@ -77,6 +77,7 @@ class Resources_menu extends Component {
                         link: "www.fake.com/fake"},
                 ]
             },
+            /*
             {"categoryName": "1"},
             {"categoryName": "2"},
             {"categoryName": "3"},
@@ -88,8 +89,8 @@ class Resources_menu extends Component {
             {"categoryName": "9"},
             {"categoryName": "10"},
             {"categoryName": "11"},
+            */
             {"categoryName": null},
-            {"categoryName": null}
         ];
 
     }
@@ -131,7 +132,7 @@ class Resources_menu extends Component {
                 <View style = {styles.buttonContainer}>
                     <TouchableHighlight
                         style = {styles.button}
-                        onPress = {() => {let one = 1}}
+                        onPress = {() => (this.screenResourcesList(category))}
                         underlayColor = {"rgba(119, 11, 22, .75)"}
                     >
                         <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -143,6 +144,22 @@ class Resources_menu extends Component {
                 </View>
             );
         }
+    };
+
+    screenResourcesList = (category_data) => {
+        console.log(category_data);
+        this.props.navigator.push({
+            title : category_data.categoryName,
+            screen : "Resources_list",
+            passProps : {
+                linkData : category_data
+            },
+            animated : true,
+            animationType : 'slide-horizontal',
+            backButtonHidden : false,
+            navigatorStyle : {},
+            navigatorButtons : {},
+        });
     };
 
     render(){

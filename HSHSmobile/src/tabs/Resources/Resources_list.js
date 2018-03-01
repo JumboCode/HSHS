@@ -31,19 +31,7 @@ import Accordion from 'react-native-collapsible/Accordion';
 class Resources_list extends Component {
     constructor(props) {
         super(props);
-        this.state = {searchInput: ''};
-        this.linkData = {categoryName: "Emergency Shelters",
-                          links: [
-                              {name: "Dry Men's shelter",description: "dummy information about link",
-                                  link: "www.google.com"},
-                              {name: "Dry Womens's shelter",description: "dummy information about link",
-                                  link: "www.fake.com/fake"},
-                              {name: "Late Night Men's shelter",description: "dummy information about link",
-                                  link: "www.fake.com/fake"},
-                              {name: "Late Night Women's shelter",description: "dummy information about link",
-                                  link: "www.fake.com/fake"},
-                                  ]
-                        };
+        this.state = {searchInput: '', loaded: false};
     }
 
     _renderHeader() {
@@ -87,11 +75,9 @@ class Resources_list extends Component {
     }
 
     render() {
+
         return (
-          <View>
-            <View style={styles.container}>
-              <Text style={styles.welcome}>{this.linkData.categoryName}</Text>
-            </View>
+          <View style = {{backgroundColor : "#F7F7F7", height : "100%"}}>
     				<SearchBar
     					lightTheme
     					round
@@ -102,13 +88,13 @@ class Resources_list extends Component {
     				/>
             <View>
               <Accordion
-                sections={this.linkData.links.filter(item => item.name.toLowerCase().includes(this.state.searchInput))}
+                sections={this.props.linkData.links.filter(item => item.name.toLowerCase().includes(this.state.searchInput))}
                 renderHeader={this._renderAccordionTitle.bind(this)}
                 renderContent={this._renderAccordionContent.bind(this)}
                 easing="easeOutCubic"
               />
             </View>
-    			</View>
+    	  </View>
         );
     }
 }
