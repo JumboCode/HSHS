@@ -13,7 +13,7 @@ import renderLoader from "./UI/renderLoader";
 const oneDayInSeconds = 86400000;
 
 // YOU GOTTA PASS THE NAVIGATOR AS A PROP FOR THIS TO WORK
-class ActionItemList extends Component {
+class ActionItemList_module extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -21,14 +21,14 @@ class ActionItemList extends Component {
 
 		};
 
-        this.Screen_TodoListItem = this.Screen_TodoListItem.bind(this);
+        this.Screen_ActionItem_view = this.Screen_ActionItem_view.bind(this);
     }
 
-    Screen_TodoListItem = (item) => {
+    Screen_ActionItem_view = (item) => {
         this.props.navigator.push({
-            screen: 'TodoListItem', // unique ID registered with Navigation.registerScreen
+            screen: 'ActionItem_view', // unique ID registered with Navigation.registerScreen
             passProps: {
-                id: item.id
+                actionItemId: item.actionItemId,
             }, // Object that will be passed as props to the pushed screen (optional)
             animated: true, // does the push have transition animation or does it happen immediately (optional)
             animationType: 'slide-horizontal', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
@@ -40,46 +40,41 @@ class ActionItemList extends Component {
 
     formatGuestNames = (guestIds) => {
     	if (!guestIds || guestIds.length == 0) {
-    		return "No Selected Guests"
+				console.log("ERROR: formatGuestNames called despite no guestIds-- this should not happen");
+    		return ("No Tagged Guests");
 		}
-        var formattedString = "";
+        var formatedString = "";
     	for (id of guestIds) {
-    		formattedString = formattedString + this.props.guests[id].name + ", ";
+				// Prevent app from crashing when an inavlid guest is included
+				if (this.props.guests[id])
+    			formatedString = formatedString + this.props.guests[id].name + ", ";
 		}
-		return formattedString
+
+		// get rid of that dumb last comma and space
+		formatedString = formatedString.slice(0, -2);
+		return formatedString
     };
 
 	render() {
-		console.log(this.props.actionItems)
-		var actionItems;
-		if (!this.props.actionItems) {
-			// actionItems = getActionItems()
-			
-			var rawActionItems = this.state.actionItems;
-		} else {
-			actionItems = getActionItems(this.props.actionItems, this.props.guests);
-		}
-
+		var actionItems = getActionItems(this.props.actionItems, this.props.selectedGuestId);
 		if (this.props.showDueSoon) {		// Show only actionItems due in 24 hours
 			let now = Date.now();
-			console.log(now)
 			var dueSoon = [];
 
 			for (i in actionItems) {
 				for (j in actionItems[i].shiftDate) {
 					let timeUntilDue = actionItems[i].shiftDate[j] - now;
-					console.log(timeUntilDue);
 					if (timeUntilDue > 0 && timeUntilDue < oneDayInSeconds) dueSoon.push(actionItems[i])
 				}
 			}
 			actionItems = dueSoon;
 		}
-		console.log(actionItems)
 
 		return (
-			<View>
+			<View style={{height: '100%'}}>
 				{!this.props.showDueSoon &&
 					<SearchBar
+						containerStyle={{backgroundColor: 'transparent'}}
 						lightTheme
 						round
 						clearIcon={this.state.searchInput !== ''}
@@ -94,7 +89,6 @@ class ActionItemList extends Component {
 		            keyExtractor = {item => item.id}
 								ItemSeparatorComponent = {() => {return(renderSeperator())}}
 		            ListHeaderComponent = {this.renderHeader}
-		            ListFooterComponent = {this.renderFooter}
 		            refreshing = {this.props.refreshing}
 		            onEndReached = {this.handleLoadMore}
 		            onEndReachedThreshold = {50}
@@ -114,26 +108,34 @@ class ActionItemList extends Component {
 	                        <View style={{flex: 2, flexDirection: 'row'}}>
 	                            <View style={{flex:1}}>
 	                                <Icon
-	                                    name='person' />
+	                                    name='people' />
 	                            </View>
-	                            <View style={{flex:3}}>
-	                                <Text numberOfLines={1}>{this.formatGuestNames(item.guestIds)}</Text>
+	                            <View style={{flex:3, justifyContent: 'center'}}>
+	                                <Text
+																		style={item.guestIds ? {} : {fontStyle: 'italic'}}
+																		numberOfLines={1}>
+																			{item.guestIds ? this.formatGuestNames(item.guestIds) : "No Tagged Guests"}
+																	</Text>
 	                            </View>
 	                        </View>
 	                        <View style={{flex: 2, flexDirection: 'row'}}>
 	                            <View style={{flex:1}}>
-	                                <Icon
-	                                    name='location-on' />
+																		<Icon
+	                                    name={'location-on'}/>
 	                            </View>
-	                            <View style={{flex:3}}>
-	                                <Text numberOfLines={1}>{item.locationStr}</Text>
+	                            <View style={{flex:3, justifyContent: 'center'}}>
+	                                <Text
+																		style={item.locationStr ? {} : {fontStyle: 'italic'}}
+																		numberOfLines={1}>
+																			{item.locationStr ? item.locationStr : "No Tagged Location"}
+																	</Text>
 	                            </View>
 	                        </View>
 	                    </View>
 	                } // TODO: fix that without an extra space, the last character is cut off
 	                subtitleStyle = {{textAlign: 'right'}}
 	                containerStyle = {{ borderBottomWidth: 0, marginLeft: 10, backgroundColor:"#F5FCFF" }}
-	                onPress = {() => this.Screen_TodoListItem(item)}
+	                onPress = {() => this.Screen_ActionItem_view(item)}
 	            />
 	        </View>
         )
@@ -146,29 +148,39 @@ class ActionItemList extends Component {
 }
 
 // TODO: populate guests, color and ensure that deleting guests removes from these action items.
-function getActionItems(IdsToActionItems) {
-    var actionItems = [];
-    for (var Id in IdsToActionItems) {
-    	var item = IdsToActionItems[Id];
-        actionItems.push({
-            title : item.title,
-            guestIds: item.guestIds,
-            color: getRandomColor(),
-            locationStr: item.locationStr,
-            id: Id,
-            shiftDate: item.shiftDate
-        });
-    }
+function getActionItems(IdsToActionItems, selectedGuestId) {
+	var actionItems = [];
+	if (selectedGuestId) {
+		for (var Id in IdsToActionItems) {
+	    	var item = IdsToActionItems[Id];
+	    	if (item.guestIds && item.guestIds.includes(selectedGuestId)) {
+
+		        actionItems.push({
+		            title : item.title,
+		            guestIds: item.guestIds,
+		            color: item.color ? item.color : "transparent",
+		            locationStr: item.locationStr,
+		            id: Id,
+								actionItemId: item.actionItemId,
+		            shiftDate: item.shiftDate
+		        });
+	    	}
+	    }
+	} else {
+	    for (var Id in IdsToActionItems) {
+	    	var item = IdsToActionItems[Id];
+	        actionItems.push({
+	            title : item.title,
+	            guestIds: item.guestIds,
+	            color: item.color ? item.color : "transparent",
+	            locationStr: item.locationStr,
+	            id: Id,
+							actionItemId: item.actionItemId,
+	            shiftDate: item.shiftDate
+	        });
+	    }
+	}
     return actionItems;
 }
 
-function getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-};
-
-export default ActionItemList;
+export default ActionItemList_module;

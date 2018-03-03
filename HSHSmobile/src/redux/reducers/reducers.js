@@ -18,7 +18,7 @@ export function reducer(state, action) {
                 loaded: true,
                 guests: action.payload
             });
-            
+
         case 'GET_INTERACTIONS_START':
             return Object.assign({}, state, {
                 loading: true
@@ -54,6 +54,14 @@ export function reducer(state, action) {
             return Object.assign({}, state, {
                 addingInteraction: false
             });
+        case 'DELETE_NEW_ACTION_ITEMS_START':
+            return Object.assign({}, state, {
+                deletingAction: true
+            });
+        case 'DELETE_NEW_ACTION_ITEMS_SUCCESS':
+            return Object.assign({}, state, {
+                deletingAction: false
+            });
         case 'GET_ACTION_ITEMS_START':
             return Object.assign({}, state, {
                 loading: true
@@ -66,6 +74,7 @@ export function reducer(state, action) {
                 actionItems: action.payload
             });
         
+
         default:
             return state;
     }

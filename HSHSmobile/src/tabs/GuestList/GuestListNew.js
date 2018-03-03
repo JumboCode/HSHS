@@ -48,6 +48,40 @@ function mapDispatchToProps(dispath, ownProps) {
 class NewGuest extends Component<{}> {
     constructor(props) {
         super(props);
+        this.formInput = {
+            name: '',
+            description: '',
+            gender: 'M',
+            age: 'Middle',
+            actionItems: [],
+            interactions: []
+        };
+        this.state = {
+            nameError: '',
+            genderError: '',
+            ageError: ''
+        }
+    }
+
+
+    register(form) {
+        const nameError = (form.name == '' ? 'Required Field' : '')
+        const genderError = (form.gender == '' ? 'Required Field' : '')
+        const ageError = (form.age == '' ? 'Required Field' : '')
+
+        this.setState({
+            nameError, genderError, ageError
+        })
+
+        if (!nameError && !genderError && !ageError) {
+            let timestamp =
+                this.props.addNewGuest(form.name, form.age, form.gender,
+                    form.description);
+            this.props.navigator.pop({
+                animated: true, // does the pop have transition animation or does it happen immediately (optional)
+                animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
+            });
+        }
     }
 
     render() {

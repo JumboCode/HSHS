@@ -12,28 +12,33 @@ import {
     View,
     Image,
     FlatList,
+    TouchableOpacity
 } from 'react-native';
 import { List, ListItem } from "react-native-elements";
 import nodeEmoji from 'node-emoji';
 import {connect} from 'react-redux';
+import ActionItemList_module from '../../modules/ActionItemList_module';
 
 const Timestamp = require('react-timestamp');
 
 function mapStateToProps(state, ownProps) {
+    console.log(state.actionItems);
     return {
         guest: state.guests[ownProps.Id],
+        guestId: ownProps.Id,
+        allGuests: state.guests,
         loading: state.loading,
-        testing: state
+        actionItems: state.actionItems
     };
 }
 
+function mapDispatchToProps(dispatch, ownProps) { return {}; }
 
 class GuestProfile extends Component {
     constructor(props) {
         super(props);
         // this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.view_crud_note_page = this.view_crud_note_page.bind(this);
-        console.log(this.props.testing);
     };
 
     // matching receptivity to emojis {0-4} where 4 is the best and 0 is the worst
@@ -137,9 +142,11 @@ class GuestProfile extends Component {
     // renders description
     render_description = () => {
         return (
-            <Text style={styles.description}>
-                {this.props.guest.description}
-            </Text>
+            <View style={styles.descriptionContainer}>
+                <Text style={styles.description}>
+                    {this.props.guest.description}
+                </Text>
+            </View>
         );
     };
 
@@ -168,7 +175,39 @@ class GuestProfile extends Component {
         }
     };
 
-    /********************** Setup screen **********************/
+    // Creates a list of actions items in which this guest is tagged
+    _renderActionItems() {
+        var actionItems = this.props.actionItems;
+        return (
+            <ActionItemList_module actionItems={this.props.actionItems}
+                            selectedGuest={this.props.guest}
+                            selectedGuestId={this.props.guestId}
+                            guests={this.props.allGuests}
+                            navigator={this.props.navigator} />
+        )
+    }
+
+    // Renders add-new-interaction and add-action-item buttons
+    _renderButtons() {
+        return (
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                    onPress={() => {}}
+                    style={styles.button} >
+                    <Text style={styles.buttonText}>Add New Interaction</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {}}
+                    style={styles.button} >
+                    <Text style={styles.buttonText}>Add Action Item</Text>
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
+    _renderHistory() {
+
+    }
 
     render() {
         return (
@@ -182,10 +221,9 @@ class GuestProfile extends Component {
                         {/*{this.render_receptive()}*/}
                     </View>
                 </View>
-                <View>
-                    <Text>
-                        THIS IS WHERE OTHER STUFF GOES
-                    </Text>
+                <View style={{flex: .5}}>
+                    {this._renderActionItems()}
+                    {this._renderButtons()}
                 </View>
                 {/*{this.render_notes()}*/}
             </View>
@@ -198,6 +236,27 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         backgroundColor: '#FFFFFF',
+    },
+    buttonText: {
+        color: 'white'
+    },
+    button: {
+        flex: 1,
+        alignItems: 'center',
+        margin: 5,
+        padding: 10,
+        backgroundColor: '#006666',
+        borderRadius: 5
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        paddingVertical: 15,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomColor: '#D3D3D3',
+        borderTopWidth: StyleSheet.hairlineWidth,
+        borderTopColor: '#D3D3D3',
     },
     top: {
         flex: 0.33,
@@ -226,7 +285,7 @@ const styles = StyleSheet.create({
         fontSize: 35,
         textDecorationColor:'#686868',
         fontFamily: 'Times New Roman',
-        marginBottom: 10,
+
     },
     profile_image: {
         flex: 0.55,
@@ -239,7 +298,7 @@ const styles = StyleSheet.create({
         borderRadius: 100,
     },
     profile_info: {
-        flex: 0.8,
+        flex: 1,
         flexDirection: 'column',
         padding: 10,
         marginLeft: 20,
@@ -266,8 +325,17 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
     },
     description: {
-        paddingTop: 10,
+        borderWidth: 0.3,
+        borderColor: "#000000",
+        borderRadius: 4,
+        marginTop: 10,
+        padding: 5
     },
+    descriptionContainer: {
+        flexDirection: 'row',
+        flex: 1,
+        paddingHorizontal: 10
+    }
 });
 
-export default connect(mapStateToProps)(GuestProfile);
+export default connect(mapStateToProps, mapDispatchToProps)(GuestProfile);

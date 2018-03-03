@@ -19,20 +19,22 @@ import { List, ListItem, SearchBar } from "react-native-elements";
 import GuestList from './tabs/GuestList/GuestList';
 import Dashboard from './tabs/Dashboard/Dashboard';
 import Info from './dummy/BoilerPlate/TemporaryTab';
-import Resources from './tabs/Resources/Resources';
+import Resources_menu from './tabs/Resources/Resources_menu';
+import Resources_list from './tabs/Resources/Resources_list';
 import GuestListNew from './tabs/GuestList/GuestListNew';
 import GuestListProfile from './tabs/GuestList/GuestListProfile';
-import TodoList from './tabs/TodoList/TodoList';
-import TodoListItem from './tabs/TodoList/TodoListItem';
-import TodoListItemNew from './tabs/TodoList/TodoListItemNew';
+import ActionItem_view from './tabs/ActionItems/ActionItem_view';
+import ActionItem_edit from './tabs/ActionItems/ActionItem_edit';
+import ActionItem_list from './tabs/ActionItems/ActionItem_list';
 import NewInteraction from './tabs/NewInteraction/NewInteraction';
 
 import Icon from 'react-native-vector-icons/Ionicons';
+import renderLoader from './modules/UI/renderLoader'
 
 const Icons = require('react-native-vector-icons/Ionicons');
 
 var homeIcon // ios-home-outline
-var todolistIcon // ios-checkbox-outline
+var actionItemIcon // ios-checkbox-outline
 var checkinIcon // ios-list-outline
 var guestsIcon // ios-people-outline
 var resourcesIcon // ios-help-circle-outline
@@ -41,7 +43,12 @@ var addIcon // ios-add-circle-outline
 export default class Login extends Component {
     constructor(props) {
         super(props);
-        this.state = { username: '', password: ''};
+        this.state = {
+          username: '',
+          password: '',
+          isLoggingIn: false,
+        };
+        this.autenticate = this.authenticate.bind(this);
     }
 
     openApp () {
@@ -56,27 +63,33 @@ export default class Login extends Component {
 
     authenticate = () => {
         //console.log(this.state.username + " " + this.state.password);
-
+        this.setState({
+          isLoggingIn: true
+        });
 
         //const { email, password } = this.state;
         firebase.auth().signInWithEmailAndPassword(this.state.username, this.state.password)
             .then(() => {
-                console.log("success");
                 this.openApp();
+                this.setState({
+                  isLoggingIn: false
+                });
             })
             .catch(() => {
-                console.log("failure");
-                Alert.alert(
-                  'Login failed',
-                  'Unable to login. Username or password is incorrect',
-                );
-
                 // TODO: IMPORTANT! ALERT!
                 // This is just so we don't have to login every time------ DO NOT SHIP THIS
-                this.openApp();
+                if (this.state.username == "" && this.state.password == "") {
+                  this.openApp();
+                } else {
+                  Alert.alert(
+                    'Login failed',
+                    'Unable to login. Username or password is incorrect',
+                  );
+                }
+                this.setState({
+                  isLoggingIn: false
+                });
             });
-
-
     };
 
     forgotPassword = () => {
@@ -96,7 +109,7 @@ export default class Login extends Component {
             ]
           ).then((values) => {
             homeIcon = values[0];
-            todolistIcon = values[1];
+            actionItemIcon = values[1];
             checkinIcon = values[2];
             guestsIcon = values[3];
             resourcesIcon = values[4];
@@ -114,13 +127,13 @@ export default class Login extends Component {
         Navigation.registerComponent('Dashboard', () => Dashboard, store, Provider);
         Navigation.registerComponent('GuestList', () => GuestList, store, Provider);
         Navigation.registerComponent('GuestListProfile', () => GuestListProfile, store, Provider);
-        Navigation.registerComponent('Resources', () => Resources, store, Provider);
+        Navigation.registerComponent('Resources_menu', () => Resources_menu, store, Provider);
+        Navigation.registerComponent('Resources_list', () => Resources_list, store, Provider);
         Navigation.registerComponent('Info', () => Info, store, Provider);
-        Navigation.registerComponent('CRUDnote', () => CRUDnote, store, Provider);
         Navigation.registerComponent('GuestListNew', () => GuestListNew, store, Provider);
-        Navigation.registerComponent('TodoList', () => TodoList, store, Provider);
-        Navigation.registerComponent('TodoListItem', () => TodoListItem, store, Provider);
-        Navigation.registerComponent('TodoListItemNew', () => TodoListItemNew, store, Provider);
+        Navigation.registerComponent('ActionItem_list', () => ActionItem_list, store, Provider);
+        Navigation.registerComponent('ActionItem_edit', () => ActionItem_edit, store, Provider);
+        Navigation.registerComponent('ActionItem_view', () => ActionItem_view, store, Provider);
         Navigation.registerComponent('NewInteraction', () => NewInteraction, store, Provider);
 
         // TODO: make the tabs link to real pages
@@ -135,9 +148,9 @@ export default class Login extends Component {
                 },
                 {
                     label: 'action items',
-                    screen: 'TodoList',
+                    screen: 'ActionItem_list',
                     title: 'Action Items',
-                    icon: todolistIcon
+                    icon: actionItemIcon,
                 },
                 {
                     label: 'add note',
@@ -153,8 +166,8 @@ export default class Login extends Component {
                 },
                 {
                     label: 'resources',
-                    screen: 'Resources',
-                    title: 'resources',
+                    screen: 'Resources_menu',
+                    title: 'Resources',
                     icon: resourcesIcon
                 }
             ],
@@ -218,19 +231,23 @@ export default class Login extends Component {
             </View>
             <View style = {styles.space}></View>
             <View style = {styles.space}></View>
-            <View style = {styles.login}>
-                 <Button
-                  onPress={this.authenticate}
-                  title="Log in"
-                  color={Platform.OS === 'ios' ? "#FFFFFF" : "#556A5B"}
-                  accessibilityLabel="Click to log in after credentials are entered."
-                />
-            </View>
-            <View style = {styles.space}></View>
-            <Text onPress={this.forgotPassword} style = {styles.forgotPassword}>
-                  Forgot your password?
-            </Text>
-            </View>
+            {this.state.isLoggingIn ? renderLoader() :
+              <View>
+                <View style = {styles.login}>
+                     <Button
+                      onPress={this.authenticate}
+                      title="Log in"
+                      color={Platform.OS === 'ios' ? "#FFFFFF" : "#556A5B"}
+                      accessibilityLabel="Click to log in after credentials are entered."
+                    />
+                </View>
+                <View style = {styles.space}></View>
+                  <Text onPress={this.forgotPassword} style = {styles.forgotPassword}>
+                        Forgot your password?
+                  </Text>
+                </View>
+              }
+              </View>
         );
     }
 }
