@@ -7,7 +7,8 @@ import {
     FlatList,
     TouchableHighlight,
     Linking,
-    Image
+    Image,
+    ImageBackground,
 } from 'react-native';
 import {connect} from 'react-redux';
 import renderLoader from "../../modules/UI/renderLoader";
@@ -98,16 +99,18 @@ class Resources_menu extends Component {
     renderHeader = () => {
         return (
             <View style = {styles.headerContainer}>
-                <Image
+                <ImageBackground
                       source = {require("./hshs_monochrome.jpg")}
                       style = {styles.headerImage}>
-                      <View>
+                      <View style={{backgroundColor: 'rgba(0, 0, 0, .3)'}}>
+                          <View style={{marginTop: 10, marginBottom: 10}}>
                             <Text style={styles.title}>HSHS</Text>
                             <Text style={styles.address}>Harvard Square Homeless Shelter</Text>
                             <Text style={styles.address}>66 Winthrop Street</Text>
                             <Text style={styles.address}>Cambridge, MA, 02138</Text>
+                          </View>
                       </View>
-                  </Image>
+                  </ImageBackground>
                   <View style = {{flex: 1, margin: "5%"}}>
                       <Button
                         onPress = {() => Linking.openURL("tel:1-875-364-2228")}
@@ -162,6 +165,11 @@ class Resources_menu extends Component {
         });
     };
 
+    _keyExtractor = (item, index) => {
+      console.log("item id = " + item.id);
+      return item.id + index;
+    }
+
     render(){
         /*if (this.props.loading == true)
             return renderLoader();
@@ -171,8 +179,8 @@ class Resources_menu extends Component {
               ListHeaderComponent={this.renderHeader}
               data = {this.linkData}
               numColumns = {3}
-              renderItem = {({item, key}) => this.renderButton(item, key)}
-              keyExtractor = {(item, index) => (item.id + index)}
+              renderItem = { ({item, key}) => this.renderButton(item, key)}
+              keyExtractor = { (item, key) => item.categoryName }
               columnWrapperStyle = {{margin: "1%"}}
             />
         );
@@ -186,7 +194,6 @@ const styles = StyleSheet.create({
 
     headerImage: {
         flex : 7,
-        resizeMode : "cover",
         width : "100%",
         height : "100%",
 
@@ -199,14 +206,17 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         //color: '#000000',
-        color: "#FFF"
+        color: "#FFF",
+        marginTop: 5,
+        marginBottom: 5
     },
 
     address: {
         fontSize: 16,
         textAlign: 'center',
         //color: '#000000',
-        color: "#FFF"
+        color: "#FFF",
+        margin: 3
     },
 
     phoneNum: {
@@ -214,7 +224,7 @@ const styles = StyleSheet.create({
       textAlign: 'center',
       color: '#000000',
       marginTop: 10,
-      marginBottom: 10,
+      marginBottom: 5,
     },
 
     buttonContainer: {
