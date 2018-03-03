@@ -11,8 +11,10 @@ import {
     Button
 } from 'react-native';
 import { List, ListItem, SearchBar } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/Ionicons';
 import Accordion from 'react-native-collapsible/Accordion';
 
+const IonIcon = require('react-native-vector-icons/Ionicons');
 
 // Resource data JSON spec-
 // [{
@@ -53,6 +55,13 @@ class Resources_list extends Component {
       return (
         <View style={styles.accordionTitle}>
           <Text style={styles.title}>{content.name}</Text>
+
+          <Icon
+            name = "md-arrow-dropdown"
+            size = {30}
+            color = '#770B16'
+            style = {{marginRight: 15}}
+            />
         </View>
       );
     }
@@ -74,6 +83,7 @@ class Resources_list extends Component {
       );
     }
 
+    //                easing="easeOutCubic"
     render() {
 
         return (
@@ -91,7 +101,6 @@ class Resources_list extends Component {
                 sections={this.props.linkData.links.filter(item => item.name.toLowerCase().includes(this.state.searchInput))}
                 renderHeader={this._renderAccordionTitle.bind(this)}
                 renderContent={this._renderAccordionContent.bind(this)}
-                easing="easeOutCubic"
               />
             </View>
     	  </View>
@@ -101,36 +110,32 @@ class Resources_list extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 30,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#ffffff',
     },
     welcome: {
         fontSize: 20,
         textAlign: 'center',
         margin: 10,
     },
-    instructions: {
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
-    },
 
     accordionTitle: {
-      borderWidth: 1.3,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      borderWidth: 1.5,
       borderRadius: 10,
-      borderColor: '#000000',
-      marginHorizontal: 5,
+      borderStyle: 'dotted',
+      borderColor: '#770B16',
       marginTop: 3,
       marginBottom: 3,
+      marginHorizontal: 2,
     },
 
     title: {
       fontSize: 18,
       marginTop: 5,
       marginBottom: 5,
-      marginHorizontal: 5,
+      marginHorizontal: 10,
     },
 
 
