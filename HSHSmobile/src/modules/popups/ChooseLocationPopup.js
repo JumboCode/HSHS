@@ -21,7 +21,12 @@ export default class ChooseLocationPopup extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      locationCoord: this.props.locationCoord ? this.props.locationCoord : initiallocationCoord,
+      locationCoord:
+        (this.props.locationCoord
+          && (this.props.locationCoord.latitude != 0
+          && this.props.locationCoord.longitude != 0))
+        ? this.props.locationCoord
+        : initiallocationCoord,
       locationStr: this.props.locationStr ? this.props.locationStr : null,
     };
     Geocoder.setApiKey('AIzaSyBk97FJAbAoOnu1liyLAGAne9dcYAiJ8Co');

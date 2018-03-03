@@ -18,6 +18,7 @@ import MapView from 'react-native-maps';
 import {getGuests, getInteractions, getActionItems} from '../../redux/actions.js';
 import ActionItemList_module from '../../modules/ActionItemList_module';
 import {Icon} from 'react-native-elements'
+import renderSeperator from "../../modules/UI/renderSeperator";
 
 const {UIManager} = NativeModules;
 
@@ -113,6 +114,7 @@ class Dashboard extends Component {
 
             (!this.props.loading &&
                 <View>
+                {renderSeperator()}
                     <MapView
                         region={this.state.region}
                         // onRegionChange={(region) => {
@@ -126,8 +128,8 @@ class Dashboard extends Component {
                             margin: 0
                         }}
                         initialRegion={{
-                            latitude: 42.405804,
-                            longitude: -71.11956,
+                            latitude: 42.371664,
+                            longitude: -71.119837,
                             latitudeDelta: 0.02,
                             longitudeDelta: 0.01,
                         }}>
@@ -135,7 +137,7 @@ class Dashboard extends Component {
                            this.props.actionItems && this.renderMarkers()
                         }
                     </MapView>
-
+                    {renderSeperator()}
 
                     <View style={{
                         position: 'absolute',
