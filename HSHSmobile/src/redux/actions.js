@@ -228,3 +228,37 @@ export const addInteractionItem = (description, details, location, receptiveness
                         volunteers: volunteers
                 })
 }
+
+export const markActionItemAsDoneStart = () => {
+	type: 'MARK_ACTION_ITEM_DONE_START'
+}
+
+export const markActionItemAsDoneSuccess = () => {
+	type: 'MARK_ACTION_ITEM_DONE_SUCCESS'
+}
+
+export const markActionItemAsDone = (id) => {
+	store.dispatch(markActionItemAsDoneStart);
+
+	firebase.database().ref('actionItems').child(id).once('value', snapshot => {
+		firebase.database().ref('completedActionItems').child(id).set(snapshot.val(), error => {
+			if (error) {
+				Alert.alert("Error marking item as done. Please try again.")
+			}
+
+			firebase.database().ref('actionItems').child(id).remove(error => {
+				if (error) {
+					Alert.alert("Error deleting action item.")
+				}
+
+				store.dispatch(markActionItemAsDoneSuccess);		
+			})
+		});
+	})
+
+	firebase.database()
+				.ref('guests')
+				.on('value', (snapshot) => {
+					store.dispatch(getGuestsSuccess(snapshot.val()));
+				});
+}

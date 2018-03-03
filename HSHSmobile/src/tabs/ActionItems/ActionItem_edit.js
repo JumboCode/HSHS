@@ -18,7 +18,7 @@ import ChooseLocationPopup from '../../modules/popups/ChooseLocationPopup';
 import TagGuestPopup from "../../modules/popups/TagGuestPopup"
 import renderSeperator from '../../modules/UI/renderSeperator'
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {addNewActionItem, getActionItems, editActionItem, deleteActionItem} from "../../redux/actions";
+import {addNewActionItem, getActionItems, editActionItem, deleteActionItem, markActionItemAsDone} from "../../redux/actions";
 import DatePicker from 'react-native-datepicker';
 import Moment from 'moment';
 
@@ -141,23 +141,23 @@ class ActionItem_edit extends Component {
         </TouchableOpacity>
     )
 
-    _handleDelete() {
+    _handleMarkDone() {
         console.log("pressed!!")
-        deleteActionItem(this.state.actionItemId);
+        markActionItemAsDone(this.state.actionItemId);
         this.props.navigator.popToRoot({
           animated: true, // does the pop have transition animation or does it happen immediately (optional)
           animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
         });
     }
 
-    _renderDeleteButton() {
+    _renderMarkDoneButton() {
         if (!this.state.actionItemId) return;
         return (
-            <View style={styles.deleteButtonContainer}>
+            <View style={styles.markDoneButtonContainer}>
                 <TouchableOpacity 
-                    style={styles.deleteButton}
-                    onPress={() => {this._handleDelete()}}>
-                    <Text style={{color: 'white', fontWeight: 'bold'}}>DELETE</Text>
+                    style={styles.markDoneButton}
+                    onPress={() => {this._handleMarkDone()}}>
+                    <Text style={{color: 'white', fontWeight: 'bold'}}>Mark as completed</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -255,7 +255,7 @@ class ActionItem_edit extends Component {
                       {this.renderColorButton('#C19FC7')}
                     </View>
                 </View>
-                {this._renderDeleteButton()}
+                {this._renderMarkDoneButton()}
                 <TagGuestPopup
                     ref={(dialog) => {
                         this.tagGuestDialog = dialog;
@@ -320,12 +320,12 @@ const styles = StyleSheet.create({
         color: '#0645AD',
         textDecorationLine: 'underline'
     },
-    deleteButtonContainer: {
+    markDoneButtonContainer: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
     },
-    deleteButton: {
+    markDoneButton: {
         backgroundColor: 'red',
         borderRadius: 4,
         margin: 10,
