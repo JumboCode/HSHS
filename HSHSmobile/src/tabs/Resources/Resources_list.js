@@ -59,7 +59,8 @@ class Resources_list extends Component {
           <Icon
             name = "md-arrow-dropdown"
             size = {30}
-            color = '#770B16'
+            //color = '#770B16'
+            color = '#fff'
             style = {{marginRight: 15}}
             />
         </View>
@@ -91,16 +92,17 @@ class Resources_list extends Component {
     				<SearchBar
     					lightTheme
     					round
-    					clearIcon={this.state.searchInput !== ''}
-    					onChangeText={(str) => {this.setState({searchInput: str.toLowerCase()})}}
-    					onClearText={() => this.setState({searchInput: ''})}
-    					placeholder='Search'
+    					clearIcon = {this.state.searchInput !== ''}
+    					onChangeText = {(str) => {this.setState({searchInput: str.toLowerCase()})}}
+    					onClearText = {() => this.setState({searchInput: ''})}
+    					placeholder = 'Search'
     				/>
             <View>
               <Accordion
-                sections={this.props.linkData.links.filter(item => item.name.toLowerCase().includes(this.state.searchInput))}
-                renderHeader={this._renderAccordionTitle.bind(this)}
-                renderContent={this._renderAccordionContent.bind(this)}
+                sections = {this.props.linkData.links.filter(item => item.name.toLowerCase().includes(this.state.searchInput))}
+                renderHeader = {this._renderAccordionTitle.bind(this)}
+                renderContent = {this._renderAccordionContent.bind(this)}
+                color = {"rgba(119, 11, 22, 1)"}
               />
             </View>
     	  </View>
@@ -129,10 +131,12 @@ const styles = StyleSheet.create({
       marginTop: 3,
       marginBottom: 3,
       marginHorizontal: 2,
+      backgroundColor: "rgba(119, 11, 22, 1)"
     },
 
     title: {
       fontSize: 18,
+      color: '#fff',
       marginTop: 5,
       marginBottom: 5,
       marginHorizontal: 10,
