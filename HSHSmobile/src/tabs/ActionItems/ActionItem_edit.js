@@ -54,6 +54,7 @@ class ActionItem_edit extends Component {
     constructor(props) {
         super(props);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+
         this.state = {
             actionItemId: this.props.actionItemId ? this.props.actionItemId : null,
             title: this.props.title ? this.props.title : '',
@@ -68,6 +69,7 @@ class ActionItem_edit extends Component {
             selectedDate: this.props.selectedDate ? this.props.selectedDate : Moment().format('YYYY-MM-DD'),
             description: this.props.description ? this.props.description : "",
             color: this.props.color ? this.props.color : null,
+            creationTimestamp: this.props.creationTimestamp ? this.props.creationTimestamp : Moment().format()
         };
     };
 
@@ -98,9 +100,9 @@ class ActionItem_edit extends Component {
 
               // It's new if there is no ID
               if (!this.state.actionItemId) {
-                addNewActionItem(false, this.state.title, "creationTimestamp", this.state.locationCoord, this.state.locationStr, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
+                addNewActionItem(false, this.state.title, this.state.creationTimestamp, this.state.locationCoord, this.state.locationStr, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
               } else {
-                editActionItem(this.state.actionItemId, false, this.state.title, "creationTimestamp", this.state.locationCoord, this.state.locationStr, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
+                editActionItem(this.state.actionItemId, false, this.state.title, this.state.creationTimestamp, this.state.locationCoord, this.state.locationStr, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
               }
                 getActionItems();
                 this.props.navigator.pop({
