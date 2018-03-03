@@ -22,46 +22,6 @@ import {connect} from 'react-redux';
 import {addNewGuest} from '../../redux/actions.js';
 
 import {FormLabel, FormInput, FormValidationMessage, Button} from 'react-native-elements';
-import ModalDropdown from 'react-native-modal-dropdown';
-
-// Dropdown fields
-const age_list = [
-    {
-        label: '',
-        value: ''
-    },
-    {
-        label: 'Old',
-        value: 'Old'
-    },
-    {
-        label: 'Middle',
-        value: 'Middle'
-    },
-    {
-        label: 'Young',
-        value: 'Young'
-    },
-];
-
-const genders = [
-    {
-        label: '',
-        value: ''
-    },
-    {
-        label: 'Male',
-        value: 'M'
-    },
-    {
-        label: 'Female',
-        value: 'F'
-    },
-    {
-        label: 'Other',
-        value: '/'
-    },
-];
 
 // Redux functions
 function mapStateToProps(state, ownProps) {
@@ -92,13 +52,37 @@ class NewGuest extends Component<{}> {
 
     render() {
         return (
-            <View style = {styles.wrapper}>
-                <Text>Conner doesnt know how to code</Text>
-                <Button style = {styles.submitButton} >
-                    backgroundColor: "#892F39"
-                    onPress={this.submit}
-                    title='Submit'/>
-            </View>
+            <ScrollView style={styles.wrapper}>
+                <View style={styles.firstView}>
+                    <View style={styles.inputView}>
+                        <Text>Guest Name</Text>
+                        <TextInput
+                            placeholder={"Please input name"}
+                            placeholderTextColor={"#770B16"}
+                            onChangeText={(desc) => this.setState({desc})}
+                            borderBottomColor="#770B16"
+                            borderBottomWidth={1}
+                        />
+                    </View>
+                    <View style={styles.inputView}>
+                        <Text>Guest Name</Text>
+                        <TextInput
+                            placeholder={"Please input name"}
+                            placeholderTextColor={"#770B16"}
+                            onChangeText={(desc) => this.setState({desc})}
+                            borderBottomColor="#770B16"
+                            borderBottomWidth={1}
+                        />
+                    </View>
+                    <View style={{marginTop: 20, marginBottom: 20}}>
+                        <Button
+                            small
+                            backgroundColor="#770B16"
+                            onPress={this.submit}
+                            title='Submit'/>
+                    </View>
+                </View>
+            </ScrollView>
         );
     }
 }
@@ -263,12 +247,26 @@ const styles = StyleSheet.create({
         backgroundColor: "#ececec"
     },
     submitButton: {
-        position: "absolute",
-        bottom: 10,
-        justifyContent: "center",
-        backgroundColor: "#892F39",
+        backgroundColor: "rgba(92, 99,216, 1)",
+        width: 300,
+        height: 45,
+        borderColor: "transparent",
+        borderWidth: 0,
+        borderRadius: 5
     },
     wrapper: {
         flex: 1,
+    },
+    submitView: {
+        position: 'absolute',
+        bottom: 40,
+    },
+    firstView: {
+        marginLeft : 20,
+        marginRight: 20,
+        marginTop: 30
+    },
+    inputView: {
+        paddingLeft: 20
     }
 });
