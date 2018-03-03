@@ -10,6 +10,7 @@ import {
     Image,
     ImageBackground,
 } from 'react-native';
+import { SearchBar } from 'react-native-elements';
 import {connect} from 'react-redux';
 import renderLoader from "../../modules/UI/renderLoader";
 
@@ -91,9 +92,8 @@ class Resources_menu extends Component {
             {"categoryName": "10"},
             {"categoryName": "11"},
             */
-            {"categoryName": null},
         ];
-
+        this.state = {searchInput: '', loaded: false};
     }
 
     renderHeader = () => {
@@ -165,24 +165,29 @@ class Resources_menu extends Component {
         });
     };
 
-    _keyExtractor = (item, index) => {
-      console.log("item id = " + item.id);
-      return item.id + index;
-    }
-
     render(){
         /*if (this.props.loading == true)
             return renderLoader();
         */
         return(
+          <View>
+            <SearchBar
+              lightTheme
+              round
+              clearIcon = {this.state.searchInput !== ''}
+              onChangeText = {(str) => {this.setState({searchInput: str.toLowerCase()})}}
+              onClearText = {() => this.setState({searchInput: ''})}
+              placeholder = 'Search'
+            />
             <FlatList
               ListHeaderComponent={this.renderHeader}
-              data = {this.linkData}
+              data = {this.linkData.filter(item => item.categoryName.toLowerCase().includes(this.state.searchInput))}
               numColumns = {3}
               renderItem = { ({item, key}) => this.renderButton(item, key)}
               keyExtractor = { (item, key) => item.categoryName }
               columnWrapperStyle = {{margin: "1%"}}
             />
+          </View>
         );
     }
 }
