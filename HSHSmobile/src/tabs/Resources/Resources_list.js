@@ -102,7 +102,6 @@ class Resources_list extends Component {
                 sections = {this.props.linkData.links.filter(item => item.name.toLowerCase().includes(this.state.searchInput))}
                 renderHeader = {this._renderAccordionTitle.bind(this)}
                 renderContent = {this._renderAccordionContent.bind(this)}
-                color = {"rgba(119, 11, 22, 1)"}
               />
             </View>
     	  </View>

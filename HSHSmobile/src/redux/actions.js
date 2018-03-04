@@ -228,3 +228,19 @@ export const addInteractionItem = (description, details, location, receptiveness
                         volunteers: volunteers
                 })
 }
+
+export const markActionItemAsDone = (id) => {
+	firebase.database().ref('actionItems').child(id).once('value', snapshot => {
+		firebase.database().ref('completedActionItems').child(id).set(snapshot.val(), error => {
+			if (error) {
+				Alert.alert("Error marking item as done. Please try again.")
+			}
+
+			firebase.database().ref('actionItems').child(id).remove(error => {
+				if (error) {
+					Alert.alert("Error deleting action item.")
+				}
+			})
+		});
+	})
+}
