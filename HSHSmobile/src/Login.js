@@ -52,7 +52,6 @@ export default class Login extends Component {
     }
 
     openApp () {
-        console.log("open");
         this._populateIcons().then(() => {
         // Start app only if all icons are loaded
             this.startApp();
