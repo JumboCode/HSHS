@@ -56,6 +56,23 @@ export const getActionItems = () => {
                         })
 }
 
+export const getCompletedActionItemsStart = () => ({
+	type: 'GET_COMPLETED_ACTION_ITEMS_START'
+})
+
+export const getCompletedActionItemsSuccess = (data) => ({
+	type: 'GET_COMPLETED_ACTION_ITEMS_SUCCESS',
+	payload: data
+})
+
+export const getCompletedActionItems = () => {
+	store.dispatch(getCompletedActionItemsStart());
+	firebase.database().ref('completedActionItems')
+					   .on('value', snapshot => {
+					   		store.dispatch(getCompletedActionItemsSuccess(snapshot.val()));
+					   })
+}
+
 export const addNewGuestStart = () => ({
 	type: 'ADD_NEW_GUEST_START'
 });

@@ -5,9 +5,10 @@ import {
     Text,
     View,
     FlatList,
-    ActivityIndicator
+    ActivityIndicator,
+    Alert
 } from 'react-native';
-import { List, ListItem, SearchBar } from "react-native-elements";
+import { List, ListItem, SearchBar, ButtonGroup } from "react-native-elements";
 import {connect} from 'react-redux';
 import ActionItemList_module from '../../modules/ActionItemList_module'
 import { Icon } from 'react-native-elements'
@@ -26,6 +27,7 @@ function mapStateToProps(state, ownProps) {
 
     return {
         actionItems: state.actionItems,
+        completedActionItems: state.completedActionItems,
         guests: state.guests,
         loading: state.loading,
         interactions: state.interactions
@@ -42,6 +44,11 @@ class ActionItem_list extends Component {
         super(props);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.props.loading = true;
+
+        this.state = {
+            selectedIndex: 0,
+            buttons: ["To do", "Completed"]
+        }
     };
 
     static navigatorButtons = {
@@ -103,13 +110,27 @@ class ActionItem_list extends Component {
         if (this.props.loading == true || !this.props.actionItems || this.props.actionItems.length <= 1) {
             return renderLoader();
         }
+
         return (
           <View
           style={{height: '100%'}}>
-            <ActionItemList_module
-                actionItems={this.props.actionItems}
-                guests={this.props.guests}
-                navigator={this.props.navigator}/>
+            <ButtonGroup
+                onPress={(i) => {this.setState({selectedIndex: i})}}
+                selectedIndex={this.state.selectedIndex}
+                buttons={this.state.buttons}
+                
+            />
+
+            {this.state.selectedIndex === 1 ? 
+                (<ActionItemList_module
+                    actionItems={this.props.completedActionItems}
+                    guests={this.props.guests}
+                    navigator={this.props.navigator} />) : 
+                (<ActionItemList_module
+                    actionItems={this.props.actionItems}
+                    guests={this.props.guests}
+                    navigator={this.props.navigator} />)}
+            
           </View>
         );
     }

@@ -15,7 +15,7 @@ import {
 import {List, ListItem, SearchBar} from "react-native-elements";
 import {connect} from 'react-redux';
 import MapView from 'react-native-maps';
-import {getGuests, getInteractions, getActionItems} from '../../redux/actions.js';
+import {getGuests, getInteractions, getActionItems, getCompletedActionItems} from '../../redux/actions.js';
 import ActionItemList_module from '../../modules/ActionItemList_module';
 import {Icon} from 'react-native-elements'
 import renderSeperator from "../../modules/UI/renderSeperator";
@@ -38,7 +38,8 @@ function mapDispatchToProps(dispatch, ownProps) {
     return {
         getGuests: getGuests,
         getInteractions: getInteractions,
-        getActionItems: getActionItems
+        getActionItems: getActionItems,
+        getCompletedActionItems: getCompletedActionItems
     };
 }
 
@@ -70,6 +71,7 @@ class Dashboard extends Component {
         this.props.getInteractions();
         this.props.getGuests();
         this.props.getActionItems();
+        this.props.getCompletedActionItems();
     };
 
     componentWillUpdate(nextProps, nextState) {
