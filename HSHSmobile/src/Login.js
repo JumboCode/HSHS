@@ -152,9 +152,9 @@ export default class Login extends Component {
                     icon: actionItemIcon,
                 },
                 {
-                    label: 'add note',
+                    label: 'interaction',
                     screen: 'NewInteraction',
-                    title: 'Add Note',
+                    title: 'Add Interaction',
                     icon: checkinIcon,
                 },
                 {
