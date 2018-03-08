@@ -88,7 +88,7 @@ class ActionItemList_module extends Component {
 						? (this.props.selectedInteraction ? [this.props.actionItems[this.props.selectedInteraction]] : null)
 						: getActionItems(actionItems).filter(item => item.title.toLowerCase().includes(this.state.searchInput))}
 		            renderItem={({item}) => this.renderListItem(item)}
-		            keyExtractor = {item => item.id}
+		            keyExtractor = {item => item.actionItemId}
 								ItemSeparatorComponent = {() => {return(renderSeperator())}}
 		            ListHeaderComponent = {this.renderHeader}
 		            refreshing = {this.props.refreshing}

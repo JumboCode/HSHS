@@ -99,6 +99,7 @@ class Dashboard extends Component {
                           title={actionItem.title}
                           description={actionItem.description}
                           key={id}
+                          pinColor = {actionItem.color}
                           onPress={()=>{self.setSelectActionItem(id)}}
                       />
                   )
