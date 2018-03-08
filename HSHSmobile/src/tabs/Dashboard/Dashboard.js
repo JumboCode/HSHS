@@ -90,20 +90,27 @@ class Dashboard extends Component {
         var markers = [];
         if (this.props.actionItems) {
             for (var actionItemId in this.props.actionItems) {
-                let actionItem = this.props.actionItems[actionItemId];
-                let coordinate = {latitude: actionItem.locationCoord.lat, longitude: actionItem.locationCoord.lng};
-                markers.push(
-                    <MapView.Marker
-                        coordinate={coordinate}
-                        title={actionItem.title}
-                        description={actionItem.description}
-                        key={actionItemId}
-                    />
-                )
+              (function(id, self){
+                  let actionItem = self.props.actionItems[id];
+                  let coordinate = {latitude: actionItem.locationCoord.lat, longitude: actionItem.locationCoord.lng};
+                  markers.push(
+                      <MapView.Marker
+                          coordinate={coordinate}
+                          title={actionItem.title}
+                          description={actionItem.description}
+                          key={id}
+                          onPress={()=>{self.setSelectActionItem(id)}}
+                      />
+                  )
+              })(actionItemId, this)
             }
         }
         return markers;
     };
+
+    setSelectActionItem = (id) => {
+      this.setState({selectedInteraction: id});
+    }
 
     // I'm not sure if this is the best way to have logical statements within renders, but it's not the worst way!
     render() {
@@ -132,7 +139,8 @@ class Dashboard extends Component {
                             longitude: -71.119837,
                             latitudeDelta: 0.02,
                             longitudeDelta: 0.01,
-                        }}>
+                        }}
+                        >
                         {
                            this.props.actionItems && this.renderMarkers()
                         }
@@ -175,7 +183,8 @@ class Dashboard extends Component {
 
                         : <ActionItemList_module actionItems={this.props.actionItems}
                                           guests={this.props.guests}
-                                          showDueSoon={true}
+                                          dashboard={true}
+                                          selectedInteraction={this.state.selectedInteraction}
                                           navigator={this.props.navigator}/>
                     }
 

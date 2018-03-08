@@ -72,7 +72,7 @@ class ActionItemList_module extends Component {
 
 		return (
 			<View style={{height: '100%'}}>
-				{!this.props.showDueSoon &&
+				{!this.props.showDueSoon && !this.props.dashboard &&
 					<SearchBar
 						containerStyle={{backgroundColor: 'transparent'}}
 						lightTheme
@@ -84,7 +84,9 @@ class ActionItemList_module extends Component {
 					/>
 				}
 				<FlatList
-					data = {getActionItems(actionItems).filter(item => item.title.toLowerCase().includes(this.state.searchInput))}
+					data = {this.props.dashboard
+						? (this.props.selectedInteraction ? [this.props.actionItems[this.props.selectedInteraction]] : null)
+						: getActionItems(actionItems).filter(item => item.title.toLowerCase().includes(this.state.searchInput))}
 		            renderItem={({item}) => this.renderListItem(item)}
 		            keyExtractor = {item => item.id}
 								ItemSeparatorComponent = {() => {return(renderSeperator())}}
@@ -169,18 +171,22 @@ function getActionItems(IdsToActionItems, selectedGuestId) {
 	} else {
 	    for (var Id in IdsToActionItems) {
 	    	var item = IdsToActionItems[Id];
-	        actionItems.push({
-	            title : item.title,
-	            guestIds: item.guestIds,
-	            color: item.color ? item.color : "transparent",
-	            locationStr: item.locationStr,
-	            id: Id,
-							actionItemId: item.actionItemId,
-	            shiftDate: item.shiftDate
-	        });
+	        actionItems.push(parseActionItem(item, Id));
 	    }
 	}
     return actionItems;
+}
+
+parseActionItem = (item, Id) => {
+	return({
+			title : item.title,
+			guestIds: item.guestIds,
+			color: item.color ? item.color : "transparent",
+			locationStr: item.locationStr,
+			id: Id,
+			actionItemId: item.actionItemId,
+			shiftDate: item.shiftDate
+	});
 }
 
 export default ActionItemList_module;
