@@ -43,7 +43,7 @@ function guestObjectToArray(IdsToGuests, IdsToInteractions) {
             "actionItems": IdsToGuests[Id].actionItems
         });
     }
-
+    console.log(guestList);
     guestList.sort((a, b) => {
         var nameA = a.name.toUpperCase(); // ignore upper and lowercase
         var nameB = b.name.toUpperCase(); // ignore upper and lowercase

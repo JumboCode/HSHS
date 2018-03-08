@@ -7,7 +7,6 @@ const logger = createLogger({collapsed: true});
 let middleware = [thunk, logger];
 
 const initialState = {
-	test: "blah",
 	guests: [],
 	actionItems: []
 };

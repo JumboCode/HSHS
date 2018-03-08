@@ -22,13 +22,13 @@ import ActionItemList_module from '../../modules/ActionItemList_module';
 const Timestamp = require('react-timestamp');
 
 function mapStateToProps(state, ownProps) {
-    console.log(state.actionItems);
     return {
         guest: state.guests[ownProps.Id],
         guestId: ownProps.Id,
         allGuests: state.guests,
         loading: state.loading,
-        actionItems: state.actionItems
+        actionItems: state.actionItems,
+        actionItemIds: state.guestActionItemIds[ownProps.Id]
     };
 }
 
@@ -180,7 +180,7 @@ class GuestProfile extends Component {
         var actionItems = this.props.actionItems;
         return (
             <ActionItemList_module actionItems={this.props.actionItems}
-                            selectedGuest={this.props.guest}
+                            guestActionItemIds={this.props.actionItemIds}
                             selectedGuestId={this.props.guestId}
                             guests={this.props.allGuests}
                             navigator={this.props.navigator} />
