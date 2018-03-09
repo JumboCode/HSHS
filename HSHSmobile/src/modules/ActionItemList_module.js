@@ -8,6 +8,7 @@ import { List, ListItem, SearchBar } from "react-native-elements";
 import { Icon } from 'react-native-elements'
 import renderSeperator from "./UI/renderSeperator";
 import renderLoader from "./UI/renderLoader";
+import dupNavFix from "../dupNavFix";
 
 
 const oneDayInSeconds = 86400000;
@@ -25,7 +26,7 @@ class ActionItemList_module extends Component {
     }
 
     Screen_ActionItem_view = (item) => {
-        this.props.navigator.push({
+        this.props.navigateTo({
             screen: 'ActionItem_view', // unique ID registered with Navigation.registerScreen
             passProps: {
                 actionItemId: item.actionItemId,
@@ -186,4 +187,4 @@ parseActionItem = (item, Id) => {
 	});
 }
 
-export default ActionItemList_module;
+export default dupNavFix(ActionItemList_module);

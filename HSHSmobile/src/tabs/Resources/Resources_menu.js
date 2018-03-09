@@ -13,6 +13,7 @@ import {
 import { SearchBar } from 'react-native-elements';
 import {connect} from 'react-redux';
 import renderLoader from "../../modules/UI/renderLoader";
+import dupNavFix from '../../dupNavFix';
 
 class Resources_menu extends Component {
     constructor(props) {
@@ -150,8 +151,7 @@ class Resources_menu extends Component {
     };
 
     screenResourcesList = (category_data) => {
-        console.log(category_data);
-        this.props.navigator.push({
+        this.props.navigateTo({
             title : category_data.categoryName,
             screen : "Resources_list",
             passProps : {
@@ -249,4 +249,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Resources_menu
+export default dupNavFix(Resources_menu)

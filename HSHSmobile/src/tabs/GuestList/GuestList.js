@@ -11,6 +11,7 @@ import { List, ListItem, SearchBar } from "react-native-elements";
 import {connect} from 'react-redux';
 import renderSeperator from "../../modules/UI/renderSeperator";
 import renderLoader from "../../modules/UI/renderLoader";
+import dupNavFix from "../../dupNavFix";
 
 const Icon = require('react-native-vector-icons/Ionicons');
 
@@ -43,7 +44,6 @@ function guestObjectToArray(IdsToGuests, IdsToInteractions) {
             "actionItems": IdsToGuests[Id].actionItems
         });
     }
-    console.log(guestList);
     guestList.sort((a, b) => {
         var nameA = a.name.toUpperCase(); // ignore upper and lowercase
         var nameB = b.name.toUpperCase(); // ignore upper and lowercase
@@ -118,7 +118,7 @@ class GuestList extends Component {
     };
 
     Screen_GuestListNew = () => {
-        this.props.navigator.push({
+        this.props.navigateTo({
             screen: 'GuestListNew', // unique ID registered with Navigation.registerScreen
             passProps: {}, // Object that will be passed as props to the pushed screen (optional)
             animated: true, // does the push have transition animation or does it happen immediately (optional)
@@ -130,7 +130,7 @@ class GuestList extends Component {
     };
 
     Screen_GuestListProfile = (guest) => {
-        this.props.navigator.push({
+        this.props.navigateTo({
             screen: 'GuestListProfile', // unique ID registered with Navigation.registerScreen
             passProps: {
                 Id: guest.Id,
@@ -242,4 +242,4 @@ function getRandomColor() {
     return color;
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(GuestList);
+export default connect(mapStateToProps, mapDispatchToProps)(dupNavFix(GuestList));

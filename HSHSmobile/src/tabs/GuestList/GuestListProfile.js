@@ -1,8 +1,7 @@
 /* GuestProfile */
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
+ * !!! this page does NOT use dupNavFix, because using it breaks clicking on action item
+ * and everything works as expected without it. Might have to revist later.
  */
 
 import React, { Component } from 'react';
