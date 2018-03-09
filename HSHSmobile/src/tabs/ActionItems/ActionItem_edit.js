@@ -21,6 +21,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {addNewActionItem, getActionItems, editActionItem, deleteActionItem} from "../../redux/actions";
 import DatePicker from 'react-native-datepicker';
 import Moment from 'moment';
+import dupNavFix from '../../dupNavFix';
 
 function mapStateToProps(state, ownProps) {
     var guests = guestObjectToArray(state.guests, state.interactions);
@@ -53,7 +54,7 @@ function guestObjectToArray(IdsToGuests, IdsToInteractions) {
 class ActionItem_edit extends Component {
     constructor(props) {
         super(props);
-        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+        this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
 
         this.state = {
             actionItemId: this.props.actionItemId ? this.props.actionItemId : null,
@@ -69,7 +70,8 @@ class ActionItem_edit extends Component {
             selectedDate: this.props.selectedDate ? this.props.selectedDate : Moment().format('YYYY-MM-DD'),
             description: this.props.description ? this.props.description : "",
             color: this.props.color ? this.props.color : null,
-            creationTimestamp: this.props.creationTimestamp ? this.props.creationTimestamp : Moment().format()
+            creationTimestamp: this.props.creationTimestamp ? this.props.creationTimestamp : Moment().format(),
+            disabled: false
         };
     };
 
@@ -89,17 +91,22 @@ class ActionItem_edit extends Component {
         });
     };
 
-    onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
+    onNavigatorEvent = (event) => { // this is the onPress handler for the two buttons together
         if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
-            if (event.id == 'save_actionItem') { // this is the same id field from the static navigatorButtons definition
-            	// Don't allow empty fields
-            	if (this.state.title == "") {
-            		alert("Title cannot be empty");
-            		return;
-            	}
-
-              // It's new if there is no ID
-              if (!this.state.actionItemId) {
+            if (event.id == 'save_actionItem' && !this.state.disabled) { // this is the same id field from the static navigatorButtons definition
+                // Don't allow empty fields
+                if (this.state.title == "") {
+                    alert("Title cannot be empty");
+                    return;
+                }
+                this.setState({disabled: true});
+                setTimeout(()=>{
+                    this.setState({
+                        disabled: false,
+                    });
+                }, 3000)
+                // It's new if there is no ID
+                if (!this.state.actionItemId) {
                 addNewActionItem(false, this.state.title, this.state.creationTimestamp, this.state.locationCoord, this.state.locationStr, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
               } else {
                 editActionItem(this.state.actionItemId, false, this.state.title, this.state.creationTimestamp, this.state.locationCoord, this.state.locationStr, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
@@ -371,4 +378,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ActionItem_edit );
+export default connect(mapStateToProps, mapDispatchToProps)(dupNavFix(ActionItem_edit) );

@@ -87,7 +87,7 @@ time_diff = (utc_timestamp) => {
 class GuestList extends Component {
     constructor(props) {
         super(props);
-        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+        this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.Screen_GuestListProfile = this.Screen_GuestListProfile.bind(this);
         this.props.loading = true;
         this.state = {searchInput: ''};

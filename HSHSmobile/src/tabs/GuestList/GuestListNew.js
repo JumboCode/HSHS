@@ -100,13 +100,14 @@ class NewGuest extends Component<{}> {
         this.state = {
             nameError: '',
             genderError: '',
-            ageError: ''
+            ageError: '',
+            disabled: false
         }
     }
 
 
     register(form) {
-        const nameError = (form.name == '' ? 'Required Field' : '')
+      const nameError = (form.name == '' ? 'Required Field' : '')
         const genderError = (form.gender == '' ? 'Required Field' : '')
         const ageError = (form.age == '' ? 'Required Field' : '')
 
@@ -114,10 +115,14 @@ class NewGuest extends Component<{}> {
             nameError, genderError, ageError
         })
 
-        if (!nameError && !genderError && !ageError) {
-            let timestamp =
-                this.props.addNewGuest(form.name, form.age, form.gender,
-                    form.description);
+        if (!nameError && !genderError && !ageError && !this.state.disabled) {
+            this.setState({disabled: true});
+            setTimeout(()=>{
+                this.setState({
+                    disabled: false,
+                });
+            }, 3000)
+            this.props.addNewGuest(form.name, form.age, form.gender, form.description);
             this.props.navigator.pop({
                 animated: true, // does the pop have transition animation or does it happen immediately (optional)
                 animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
@@ -157,6 +162,7 @@ class NewGuest extends Component<{}> {
                     style={{height: 50}}
                     onPress={() => this.register(this.formInput)}
                     title="Submit"
+                    disabled={this.state.disabled}
                 />
             </ScrollView>
         );

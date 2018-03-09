@@ -36,7 +36,7 @@ function mapDispatchToProps(dispatch, ownProps) { return {}; }
 class GuestProfile extends Component {
     constructor(props) {
         super(props);
-        // this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+        // this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.view_crud_note_page = this.view_crud_note_page.bind(this);
     };
 

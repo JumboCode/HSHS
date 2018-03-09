@@ -45,7 +45,7 @@ function mapDispatchToProps(dispatch, ownProps) {
 class Dashboard extends Component {
     constructor(props) {
         super(props);
-        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+        this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.props.loading = true;
         this.state = {
             isMapFullScreen: true
@@ -58,8 +58,7 @@ class Dashboard extends Component {
     };
 
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
-        if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
-        }
+
     };
 
     componentDidMount() {
