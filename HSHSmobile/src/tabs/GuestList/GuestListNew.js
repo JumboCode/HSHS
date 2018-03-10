@@ -3,6 +3,7 @@
  *
  *
  */
+
 import React, {Component} from 'react';
 import {
     Platform,
@@ -21,7 +22,7 @@ import {
 import {connect} from 'react-redux';
 import {addNewGuest} from '../../redux/actions.js';
 
-import {FormLabel, FormInput, FormValidationMessage, Button} from 'react-native-elements';
+import {FormLabel, FormInput, FormValidationMessage, Button, ButtonGroup} from 'react-native-elements';
 
 // Redux functions
 function mapStateToProps(state, ownProps) {
@@ -57,34 +58,33 @@ class NewGuest extends Component<{}> {
             interactions: []
         };
         this.state = {
-            nameError: '',
-            genderError: '',
-            ageError: ''
-        }
+            name: "",
+            note: "",
+            ageIndex: -1,
+            genderIndex: -1
+        };
+
+        this.updateAgeIndex = this.updateAgeIndex.bind(this)
+        this.updateGenderIndex = this.updateGenderIndex.bind(this)
     }
 
+    submit = () => {
+        alert(this.state.name)
+    };
 
-    register(form) {
-        const nameError = (form.name == '' ? 'Required Field' : '')
-        const genderError = (form.gender == '' ? 'Required Field' : '')
-        const ageError = (form.age == '' ? 'Required Field' : '')
+    updateAgeIndex (ageIndex) {
+        this.setState({ageIndex})
+    }
 
-        this.setState({
-            nameError, genderError, ageError
-        })
-
-        if (!nameError && !genderError && !ageError) {
-            let timestamp =
-                this.props.addNewGuest(form.name, form.age, form.gender,
-                    form.description);
-            this.props.navigator.pop({
-                animated: true, // does the pop have transition animation or does it happen immediately (optional)
-                animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
-            });
-        }
+    updateGenderIndex (genderIndex) {
+        this.setState({genderIndex})
     }
 
     render() {
+        const ageButtons = ['Young', 'Middle', 'Old'];
+        const genderButtons = ['Male', 'Female', 'Others'];
+        const { ageIndex, genderIndex } = this.state;
+
         return (
             <ScrollView style={styles.wrapper}>
                 <View style={styles.firstView}>
@@ -93,20 +93,45 @@ class NewGuest extends Component<{}> {
                         <TextInput
                             placeholder={"Please input name"}
                             placeholderTextColor={"#770B16"}
-                            onChangeText={(desc) => this.setState({desc})}
+                            onChangeText={(name) => this.setState({name})}
                             borderBottomColor="#770B16"
                             borderBottomWidth={1}
+                            style={styles.textStyle}
                         />
                     </View>
                     <View style={styles.inputView}>
-                        <Text>Guest Name</Text>
-                        <TextInput
-                            placeholder={"Please input name"}
-                            placeholderTextColor={"#770B16"}
-                            onChangeText={(desc) => this.setState({desc})}
-                            borderBottomColor="#770B16"
-                            borderBottomWidth={1}
+                        <Text>Guest Age</Text>
+                        <ButtonGroup
+                            onPress={this.updateAgeIndex}
+                            selectedIndex={ageIndex}
+                            buttons={ageButtons}
+                            containerStyle={{height: 100}}
+                            selectedButtonStyle={styles.sellected}
+                            underlayColor="#770B16"
                         />
+                    </View>
+                    <View style={styles.inputView}>
+                        <Text>Guest Gender</Text>
+                        <ButtonGroup
+                            onPress={this.updateGenderIndex}
+                            selectedIndex={genderIndex}
+                            buttons={genderButtons}
+                            containerStyle={{height: 100}}
+                        />
+                    </View>
+                    <View style={styles.inputView}>
+                        <Text>Guest Note</Text>
+                        <View>
+                            <TextInput
+                                placeholder={"Please add notes"}
+                                placeholderTextColor={"#770B16"}
+                                onChangeText={(note) => this.setState({note})}
+                                borderBottomColor="#770B16"
+                                borderBottomWidth={1}
+                                multiline={true}
+                                style={styles.textStyle}
+                            />
+                        </View>
                     </View>
                     <View style={{marginTop: 20, marginBottom: 20}}>
                         <Button
@@ -269,6 +294,11 @@ const styles = StyleSheet.create({
     input: {
         height: 40
     },
+    horiButtonView: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
     modalContainer: {
         flex: 1,
         justifyContent: "flex-end",
@@ -296,11 +326,18 @@ const styles = StyleSheet.create({
         bottom: 40,
     },
     firstView: {
-        marginLeft : 20,
+        marginLeft: 20,
         marginRight: 20,
-        marginTop: 30
+        marginTop: 50
     },
     inputView: {
-        paddingLeft: 20
+        marginTop: 10
+    },
+    textStyle: {
+        color:"#770B16",
+        fontSize: 16,
+    },
+    sellected: {
+        backgroundColor: "#770B16",
     }
 });
