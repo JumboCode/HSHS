@@ -7,10 +7,13 @@ import {
     FlatList,
     TouchableHighlight,
     Linking,
-    Image
+    Image,
+    ImageBackground,
 } from 'react-native';
+import { SearchBar } from 'react-native-elements';
 import {connect} from 'react-redux';
 import renderLoader from "../../modules/UI/renderLoader";
+import dupNavFix from '../../dupNavFix';
 
 class Resources_menu extends Component {
     constructor(props) {
@@ -90,24 +93,25 @@ class Resources_menu extends Component {
             {"categoryName": "10"},
             {"categoryName": "11"},
             */
-            {"categoryName": null},
         ];
-
+        this.state = {searchInput: '', loaded: false};
     }
 
     renderHeader = () => {
         return (
             <View style = {styles.headerContainer}>
-                <Image
+                <ImageBackground
                       source = {require("./hshs_monochrome.jpg")}
                       style = {styles.headerImage}>
-                      <View>
+                      <View style={{backgroundColor: 'rgba(0, 0, 0, .3)'}}>
+                          <View style={{marginTop: 10, marginBottom: 10}}>
                             <Text style={styles.title}>HSHS</Text>
                             <Text style={styles.address}>Harvard Square Homeless Shelter</Text>
                             <Text style={styles.address}>66 Winthrop Street</Text>
                             <Text style={styles.address}>Cambridge, MA, 02138</Text>
+                          </View>
                       </View>
-                  </Image>
+                  </ImageBackground>
                   <View style = {{flex: 1, margin: "5%"}}>
                       <Button
                         onPress = {() => Linking.openURL("tel:1-875-364-2228")}
@@ -147,8 +151,7 @@ class Resources_menu extends Component {
     };
 
     screenResourcesList = (category_data) => {
-        console.log(category_data);
-        this.props.navigator.push({
+        this.props.navigateTo({
             title : category_data.categoryName,
             screen : "Resources_list",
             passProps : {
@@ -167,14 +170,24 @@ class Resources_menu extends Component {
             return renderLoader();
         */
         return(
+          <View>
+            <SearchBar
+              lightTheme
+              round
+              clearIcon = {this.state.searchInput !== ''}
+              onChangeText = {(str) => {this.setState({searchInput: str.toLowerCase()})}}
+              onClearText = {() => this.setState({searchInput: ''})}
+              placeholder = 'Search'
+            />
             <FlatList
               ListHeaderComponent={this.renderHeader}
-              data = {this.linkData}
+              data = {this.linkData.filter(item => item.categoryName.toLowerCase().includes(this.state.searchInput))}
               numColumns = {3}
-              renderItem = {({item, key}) => this.renderButton(item, key)}
-              keyExtractor = {(item, index) => (item.id + index)}
+              renderItem = { ({item, key}) => this.renderButton(item, key)}
+              keyExtractor = { (item, key) => item.categoryName }
               columnWrapperStyle = {{margin: "1%"}}
             />
+          </View>
         );
     }
 }
@@ -186,7 +199,6 @@ const styles = StyleSheet.create({
 
     headerImage: {
         flex : 7,
-        resizeMode : "cover",
         width : "100%",
         height : "100%",
 
@@ -199,14 +211,17 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         //color: '#000000',
-        color: "#FFF"
+        color: "#FFF",
+        marginTop: 5,
+        marginBottom: 5
     },
 
     address: {
         fontSize: 16,
         textAlign: 'center',
         //color: '#000000',
-        color: "#FFF"
+        color: "#FFF",
+        margin: 3
     },
 
     phoneNum: {
@@ -214,7 +229,7 @@ const styles = StyleSheet.create({
       textAlign: 'center',
       color: '#000000',
       marginTop: 10,
-      marginBottom: 10,
+      marginBottom: 5,
     },
 
     buttonContainer: {
@@ -234,4 +249,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Resources_menu
+export default dupNavFix(Resources_menu)

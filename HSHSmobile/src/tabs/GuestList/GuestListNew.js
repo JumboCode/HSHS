@@ -83,6 +83,7 @@ class NewGuest extends Component<{}> {
 
         if (this.state.note === "") {
             this.setState({note: "N/A"})
+
         }
 
         this.props.addNewGuest(this.state.name, ageButtons[this.state.ageIndex], gender, this.state.note);

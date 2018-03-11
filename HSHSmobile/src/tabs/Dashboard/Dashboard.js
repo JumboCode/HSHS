@@ -18,6 +18,7 @@ import MapView from 'react-native-maps';
 import {getGuests, getInteractions, getActionItems} from '../../redux/actions.js';
 import ActionItemList_module from '../../modules/ActionItemList_module';
 import {Icon} from 'react-native-elements'
+import renderSeperator from "../../modules/UI/renderSeperator";
 
 const {UIManager} = NativeModules;
 
@@ -44,25 +45,29 @@ function mapDispatchToProps(dispatch, ownProps) {
 class Dashboard extends Component {
     constructor(props) {
         super(props);
-        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+        this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.props.loading = true;
         this.state = {
-            isMapFullScreen: true
+            isMapFullScreen: true,
+            curLat: 42.371664,
+            curLong: -71.119837
         }
-
-
-    };
-
-    componentDidMount() {
     };
 
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
-        if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
-        }
+
     };
 
     componentDidMount() {
         this.makeRemoteRequest();
+        navigator.geolocation.watchPosition((pos) => {
+          this.setState({
+            curLat: pos.coords.latitude,
+            curLong: pos.coords.longitude
+          });
+        }, (error) => {
+          Alert.alert(error.message);
+        }, {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, distanceFilter: 20});
     };
 
     makeRemoteRequest = () => {
@@ -89,20 +94,28 @@ class Dashboard extends Component {
         var markers = [];
         if (this.props.actionItems) {
             for (var actionItemId in this.props.actionItems) {
-                let actionItem = this.props.actionItems[actionItemId];
-                let coordinate = {latitude: actionItem.locationCoord.lat, longitude: actionItem.locationCoord.lng};
-                markers.push(
-                    <MapView.Marker
-                        coordinate={coordinate}
-                        title={actionItem.title}
-                        description={actionItem.description}
-                        key={actionItemId}
-                    />
-                )
+              (function(id, self){
+                  let actionItem = self.props.actionItems[id];
+                  let coordinate = {latitude: actionItem.locationCoord.lat, longitude: actionItem.locationCoord.lng};
+                  markers.push(
+                      <MapView.Marker
+                          coordinate={coordinate}
+                          title={actionItem.title}
+                          description={actionItem.description}
+                          key={id}
+                          pinColor = {actionItem.color}
+                          onPress={()=>{self.setSelectActionItem(id)}}
+                      />
+                  )
+              })(actionItemId, this)
             }
         }
         return markers;
     };
+
+    setSelectActionItem = (id) => {
+      this.setState({selectedInteraction: id});
+    }
 
     // I'm not sure if this is the best way to have logical statements within renders, but it's not the worst way!
     render() {
@@ -113,29 +126,25 @@ class Dashboard extends Component {
 
             (!this.props.loading &&
                 <View>
+                {renderSeperator()}
                     <MapView
-                        region={this.state.region}
-                        // onRegionChange={(region) => {
-                        //     this.setState(previousState => {
-                        //         return {region: region};
-                        //     })
-                        // }}
+                        region={{
+                            latitude: this.state.curLat,
+                            longitude: this.state.curLong,
+                            latitudeDelta: 0.02,
+                            longitudeDelta: 0.01
+                        }}
                         style={{
                             height: this.state.isMapFullScreen ? Dimensions.get('window').height * 0.4 : Dimensions.get('window').height,
                             width: Dimensions.get('window').width,
                             margin: 0
                         }}
-                        initialRegion={{
-                            latitude: 42.405804,
-                            longitude: -71.11956,
-                            latitudeDelta: 0.02,
-                            longitudeDelta: 0.01,
-                        }}>
+                        >
                         {
                            this.props.actionItems && this.renderMarkers()
                         }
                     </MapView>
-
+                    {renderSeperator()}
 
                     <View style={{
                         position: 'absolute',
@@ -173,7 +182,8 @@ class Dashboard extends Component {
 
                         : <ActionItemList_module actionItems={this.props.actionItems}
                                           guests={this.props.guests}
-                                          showDueSoon={true}
+                                          dashboard={true}
+                                          selectedInteraction={this.state.selectedInteraction}
                                           navigator={this.props.navigator}/>
                     }
 

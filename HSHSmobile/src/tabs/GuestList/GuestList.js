@@ -11,6 +11,7 @@ import { List, ListItem, SearchBar } from "react-native-elements";
 import {connect} from 'react-redux';
 import renderSeperator from "../../modules/UI/renderSeperator";
 import renderLoader from "../../modules/UI/renderLoader";
+import dupNavFix from "../../dupNavFix";
 
 const Icon = require('react-native-vector-icons/Ionicons');
 
@@ -43,7 +44,6 @@ function guestObjectToArray(IdsToGuests, IdsToInteractions) {
             "actionItems": IdsToGuests[Id].actionItems
         });
     }
-
     guestList.sort((a, b) => {
         var nameA = a.name.toUpperCase(); // ignore upper and lowercase
         var nameB = b.name.toUpperCase(); // ignore upper and lowercase
@@ -87,7 +87,7 @@ time_diff = (utc_timestamp) => {
 class GuestList extends Component {
     constructor(props) {
         super(props);
-        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+        this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.Screen_GuestListProfile = this.Screen_GuestListProfile.bind(this);
         this.props.loading = true;
         this.state = {searchInput: ''};
@@ -118,7 +118,7 @@ class GuestList extends Component {
     };
 
     Screen_GuestListNew = () => {
-        this.props.navigator.push({
+        this.props.navigateTo({
             screen: 'GuestListNew', // unique ID registered with Navigation.registerScreen
             passProps: {}, // Object that will be passed as props to the pushed screen (optional)
             animated: true, // does the push have transition animation or does it happen immediately (optional)
@@ -130,11 +130,11 @@ class GuestList extends Component {
     };
 
     Screen_GuestListProfile = (guest) => {
-        this.props.navigator.push({
+        this.props.navigateTo({
             screen: 'GuestListProfile', // unique ID registered with Navigation.registerScreen
             passProps: {
                 Id: guest.Id,
-                name: "Hey I left this variable so stuff dosn't break but please don't use it!",
+                //name: "Hey I left this variable so stuff dosn't break but please don't use it!",
                 actionItems: "hello"
             }, // Object that will be passed as props to the pushed screen (optional)
             animated: true, // does the push have transition animation or does it happen immediately (optional)
@@ -169,15 +169,20 @@ class GuestList extends Component {
                 <ListItem
                     title = {
                         <View style={{flexDirection: 'row', justifyContent: 'space-between', marginLeft: 5}}>
-                            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                                <Text style={{width: 120, marginRight: 10}}>{item.name}</Text>
-                                <Text style={{marginRight: 10, width: 15}}>{item.gender}</Text>
-                                <Text>{item.age}</Text>
-                            </View>
-                            <Text style={{marginHorizontal: 'auto'}}>{item.lastInteractionString}</Text>
+                          <Text style={{marginRight: 10, fontWeight: 'bold', fontSize: 16}}>{item.name}</Text>
                         </View>
                     }
-                    subtitle = {<Text numberOfLines={2} style={{marginTop: 5, marginLeft: 10, fontSize: 12, color: '#757575', height: 30}}>{item.description}</Text>}
+                    subtitle = {
+                      <View style={{flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap'}}>
+                        <View style={{flex: 1, alignSelf: 'flex-start'}}>
+                          <Text numberOfLines={2} style={{marginTop: 5, marginLeft: 5, fontSize: 12, color: '#757575', height: 30}}>{item.description}</Text>
+                        </View>
+                        <View style={{flex: 0.4, flexDirection: 'column', alignSelf: 'flex-end', height: 30}}>
+                          <Text style={{fontSize: 12, color: '#1560BD', fontWeight: 'bold'}}>{item.gender} - {item.age}</Text>
+                          <Text numberOfLines={1} style={{fontSize: 12, color: '#1560BD', fontStyle: 'italic'}}>{item.lastInteractionString}</Text>
+                        </View>
+                      </View>
+                    }
                     containerStyle = {{ borderBottomWidth: 0, marginLeft: 10, backgroundColor:"#F5FCFF" }}
                     onPress = {() => this.Screen_GuestListProfile(item)}
                 />
@@ -242,4 +247,4 @@ function getRandomColor() {
     return color;
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(GuestList);
+export default connect(mapStateToProps, mapDispatchToProps)(dupNavFix(GuestList));

@@ -1,8 +1,7 @@
 /* GuestProfile */
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
+ * !!! this page does NOT use dupNavFix, because using it breaks clicking on action item
+ * and everything works as expected without it. Might have to revist later.
  */
 
 import React, { Component } from 'react';
@@ -22,13 +21,13 @@ import ActionItemList_module from '../../modules/ActionItemList_module';
 const Timestamp = require('react-timestamp');
 
 function mapStateToProps(state, ownProps) {
-    console.log(state.actionItems);
     return {
         guest: state.guests[ownProps.Id],
         guestId: ownProps.Id,
         allGuests: state.guests,
         loading: state.loading,
-        actionItems: state.actionItems
+        actionItems: state.actionItems,
+        actionItemIds: state.guestActionItemIds[ownProps.Id]
     };
 }
 
@@ -37,7 +36,7 @@ function mapDispatchToProps(dispatch, ownProps) { return {}; }
 class GuestProfile extends Component {
     constructor(props) {
         super(props);
-        // this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+        // this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.view_crud_note_page = this.view_crud_note_page.bind(this);
     };
 
@@ -180,7 +179,7 @@ class GuestProfile extends Component {
         var actionItems = this.props.actionItems;
         return (
             <ActionItemList_module actionItems={this.props.actionItems}
-                            selectedGuest={this.props.guest}
+                            guestActionItemIds={this.props.actionItemIds}
                             selectedGuestId={this.props.guestId}
                             guests={this.props.allGuests}
                             navigator={this.props.navigator} />

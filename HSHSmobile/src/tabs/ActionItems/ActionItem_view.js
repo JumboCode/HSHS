@@ -12,6 +12,7 @@ import {
     View
 } from 'react-native';
 import {connect} from 'react-redux';
+import dupNavFix from '../../dupNavFix';
 
 function mapStateToProps(state, ownProps) {
     return {
@@ -31,15 +32,48 @@ class ActionItem_view extends Component {
 
   constructor(props) {
       super(props);
-      this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+      this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
       this.state = {
       };
   };
 
-  onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
+  onNavigatorEvent = (event) => { // this is the onPress handler for the two buttons together
       if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
           if (event.id == 'edit_actionItem') { // this is the same id field from the static navigatorButtons definition
-              this.Screen_ActionItem_edit();
+            // TODO: geeze why is this longitude latitude and other places lat lng? cause google maps api sucks. please let's fix this later.
+                  var coords = this.props.actionItems[this.props.actionItemId].locationCoord ? {
+                    longitude: this.props.actionItems[this.props.actionItemId].locationCoord.lng,
+                    latitude: this.props.actionItems[this.props.actionItemId].locationCoord.lat,
+                  } : null;
+
+                  this.props.navigateTo({
+
+                      title: 'Edit Action Item',
+                      screen: 'ActionItem_edit', // unique ID registered with Navigation.registerScreen
+                      // TODO: consider to pass the id of this action item, edit screen will pull all the data there.
+                      passProps: {
+                        actionItemId: this.props.actionItemId,
+                        title: this.props.actionItems[this.props.actionItemId].title,
+
+                        actionItemId: this.props.actionItems[this.props.actionItemId].actionItemId,
+
+                        // make a copy
+                        taggedGuests: this.props.actionItems[this.props.actionItemId].guestIds ? this.props.actionItems[this.props.actionItemId].guestIds.slice() : null,
+
+                        locationCoord: coords,
+                        locationStr: this.props.actionItems[this.props.actionItemId].locationStr,
+                        selectedDate: this.props.actionItems[this.props.actionItemId].shiftDate,
+                        dateName: this.props.actionItems[this.props.actionItemId].dateName,
+                        description: this.props.actionItems[this.props.actionItemId].description,
+                        color: this.props.actionItems[this.props.actionItemId].color,
+                      }, // Object that will be passed as props to the pushed screen (optional)
+
+                      animated: true, // does the push have transition animation or does it happen immediately (optional)
+                      animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
+                      backButtonHidden: false, // hide the back button altogether (optional)
+                      navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
+                      navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
+                  })
           }
       }
   };
@@ -59,44 +93,6 @@ class ActionItem_view extends Component {
               }
           ]
       });
-  };
-
-  Screen_ActionItem_edit = () => {
-
-    // TODO: geeze why is this longitude latitude and other places lat lng? cause google maps api sucks. please let's fix this later.
-      var coords = this.props.actionItems[this.props.actionItemId].locationCoord ? {
-        longitude: this.props.actionItems[this.props.actionItemId].locationCoord.lng,
-        latitude: this.props.actionItems[this.props.actionItemId].locationCoord.lat,
-      } : null;
-
-      this.props.navigator.push({
-
-          title: 'Edit Action Item',
-          screen: 'ActionItem_edit', // unique ID registered with Navigation.registerScreen
-          // TODO: consider to pass the id of this action item, edit screen will pull all the data there.
-          passProps: {
-            actionItemId: this.props.actionItemId,
-            title: this.props.actionItems[this.props.actionItemId].title,
-
-            actionItemId: this.props.actionItems[this.props.actionItemId].actionItemId,
-
-            // make a copy
-            taggedGuests: this.props.actionItems[this.props.actionItemId].guestIds ? this.props.actionItems[this.props.actionItemId].guestIds.slice() : null,
-
-            locationCoord: coords,
-            locationStr: this.props.actionItems[this.props.actionItemId].locationStr,
-            selectedDate: this.props.actionItems[this.props.actionItemId].shiftDate,
-            dateName: this.props.actionItems[this.props.actionItemId].dateName,
-            description: this.props.actionItems[this.props.actionItemId].description,
-            color: this.props.actionItems[this.props.actionItemId].color,
-          }, // Object that will be passed as props to the pushed screen (optional)
-
-          animated: true, // does the push have transition animation or does it happen immediately (optional)
-          animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
-          backButtonHidden: false, // hide the back button altogether (optional)
-          navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
-          navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
-      })
   };
 
     render() {
@@ -125,4 +121,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ActionItem_view);
+export default connect(mapStateToProps, mapDispatchToProps)(dupNavFix(ActionItem_view));

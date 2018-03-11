@@ -8,6 +8,7 @@ import { List, ListItem, SearchBar } from "react-native-elements";
 import { Icon } from 'react-native-elements'
 import renderSeperator from "./UI/renderSeperator";
 import renderLoader from "./UI/renderLoader";
+import dupNavFix from "../dupNavFix";
 
 
 const oneDayInSeconds = 86400000;
@@ -25,7 +26,7 @@ class ActionItemList_module extends Component {
     }
 
     Screen_ActionItem_view = (item) => {
-        this.props.navigator.push({
+        this.props.navigateTo({
             screen: 'ActionItem_view', // unique ID registered with Navigation.registerScreen
             passProps: {
                 actionItemId: item.actionItemId,
@@ -46,7 +47,7 @@ class ActionItemList_module extends Component {
         var formatedString = "";
     	for (id of guestIds) {
 				// Prevent app from crashing when an inavlid guest is included
-				if (this.props.guests[id])
+				if (this.props.guests && this.props.guests[id])
     			formatedString = formatedString + this.props.guests[id].name + ", ";
 		}
 
@@ -56,7 +57,7 @@ class ActionItemList_module extends Component {
     };
 
 	render() {
-		var actionItems = getActionItems(this.props.actionItems, this.props.selectedGuestId);
+		var actionItems = getActionItems(this.props.actionItems, this.props.guestActionItemIds);
 		if (this.props.showDueSoon) {		// Show only actionItems due in 24 hours
 			let now = Date.now();
 			var dueSoon = [];
@@ -72,7 +73,7 @@ class ActionItemList_module extends Component {
 
 		return (
 			<View style={{height: '100%'}}>
-				{!this.props.showDueSoon &&
+				{!this.props.showDueSoon && !this.props.dashboard &&
 					<SearchBar
 						containerStyle={{backgroundColor: 'transparent'}}
 						lightTheme
@@ -84,9 +85,11 @@ class ActionItemList_module extends Component {
 					/>
 				}
 				<FlatList
-					data = {getActionItems(actionItems).filter(item => item.title.toLowerCase().includes(this.state.searchInput))}
+					data = {this.props.dashboard
+						? (this.props.selectedInteraction ? [this.props.actionItems[this.props.selectedInteraction]] : null)
+						: getActionItems(actionItems).filter(item => item.title.toLowerCase().includes(this.state.searchInput))}
 		            renderItem={({item}) => this.renderListItem(item)}
-		            keyExtractor = {item => item.id}
+		            keyExtractor = {item => item.actionItemId}
 								ItemSeparatorComponent = {() => {return(renderSeperator())}}
 		            ListHeaderComponent = {this.renderHeader}
 		            refreshing = {this.props.refreshing}
@@ -148,39 +151,40 @@ class ActionItemList_module extends Component {
 }
 
 // TODO: populate guests, color and ensure that deleting guests removes from these action items.
-function getActionItems(IdsToActionItems, selectedGuestId) {
+function getActionItems(IdsToActionItems, guestActionItemIds) {
 	var actionItems = [];
-	if (selectedGuestId) {
-		for (var Id in IdsToActionItems) {
-	    	var item = IdsToActionItems[Id];
-	    	if (item.guestIds && item.guestIds.includes(selectedGuestId)) {
-
-		        actionItems.push({
-		            title : item.title,
-		            guestIds: item.guestIds,
-		            color: item.color ? item.color : "transparent",
-		            locationStr: item.locationStr,
-		            id: Id,
-								actionItemId: item.actionItemId,
-		            shiftDate: item.shiftDate
-		        });
-	    	}
+	if (guestActionItemIds) {
+		for (var Id in guestActionItemIds) {
+	    	var item = IdsToActionItems[(guestActionItemIds[Id])];
+        actionItems.push({
+            title : item.title,
+            guestIds: item.guestIds,
+            color: item.color ? item.color : "transparent",
+            locationStr: item.locationStr,
+            id: Id,
+						actionItemId: item.actionItemId,
+            shiftDate: item.shiftDate
+        });
 	    }
 	} else {
 	    for (var Id in IdsToActionItems) {
 	    	var item = IdsToActionItems[Id];
-	        actionItems.push({
-	            title : item.title,
-	            guestIds: item.guestIds,
-	            color: item.color ? item.color : "transparent",
-	            locationStr: item.locationStr,
-	            id: Id,
-							actionItemId: item.actionItemId,
-	            shiftDate: item.shiftDate
-	        });
+	        actionItems.push(parseActionItem(item, Id));
 	    }
 	}
     return actionItems;
 }
 
-export default ActionItemList_module;
+parseActionItem = (item, Id) => {
+	return({
+			title : item.title,
+			guestIds: item.guestIds,
+			color: item.color ? item.color : "transparent",
+			locationStr: item.locationStr,
+			id: Id,
+			actionItemId: item.actionItemId,
+			shiftDate: item.shiftDate
+	});
+}
+
+export default dupNavFix(ActionItemList_module);
