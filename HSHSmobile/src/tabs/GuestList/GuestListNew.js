@@ -22,7 +22,9 @@ import {
 import {connect} from 'react-redux';
 import {addNewGuest} from '../../redux/actions.js';
 
-import {FormLabel, FormInput, FormValidationMessage, Button, ButtonGroup} from 'react-native-elements';
+import {Button, ButtonGroup} from 'react-native-elements';
+const ageButtons = ['Young', 'Middle', 'Old'];
+const genderButtons = ['Male', 'Female', 'Others'];
 
 // Redux functions
 function mapStateToProps(state, ownProps) {
@@ -49,14 +51,6 @@ function mapDispatchToProps(dispath, ownProps) {
 class NewGuest extends Component<{}> {
     constructor(props) {
         super(props);
-        this.formInput = {
-            name: '',
-            description: '',
-            gender: 'M',
-            age: 'Middle',
-            actionItems: [],
-            interactions: []
-        };
         this.state = {
             name: "",
             note: "",
@@ -64,12 +58,40 @@ class NewGuest extends Component<{}> {
             genderIndex: -1
         };
 
-        this.updateAgeIndex = this.updateAgeIndex.bind(this)
+        this.updateAgeIndex = this.updateAgeIndex.bind(this);
         this.updateGenderIndex = this.updateGenderIndex.bind(this)
     }
 
     submit = () => {
-        alert(this.state.name)
+        if (this.state.ageIndex === -1 || this.state.genderIndex === -1) {
+            alert("Please select ago and gender");
+            return;
+        }
+
+        if (this.state.name === "") {
+            alert("Please input name");
+            return;
+        }
+
+        let gender = "";
+        if (this.state.genderIndex === 0)
+            gender = "M";
+        else if (this.state.genderIndex === 1)
+            gender = "F";
+        else
+            gender = "O";
+
+        if (this.state.note === "") {
+            this.setState({note: "N/A"})
+        }
+
+        this.props.addNewGuest(this.state.name, ageButtons[this.state.ageIndex], gender, this.state.note);
+        this.props.navigator.pop({
+            animated: true, // does the pop have transition animation or does it happen immediately (optional)
+            animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
+        });
+
+
     };
 
     updateAgeIndex (ageIndex) {
@@ -81,8 +103,6 @@ class NewGuest extends Component<{}> {
     }
 
     render() {
-        const ageButtons = ['Young', 'Middle', 'Old'];
-        const genderButtons = ['Male', 'Female', 'Others'];
         const { ageIndex, genderIndex } = this.state;
 
         return (
@@ -102,21 +122,27 @@ class NewGuest extends Component<{}> {
                     <View style={styles.inputView}>
                         <Text>Guest Age</Text>
                         <ButtonGroup
-                            onPress={this.updateAgeIndex}
+                            onPress={(index) => this.updateAgeIndex(index)}
                             selectedIndex={ageIndex}
                             buttons={ageButtons}
-                            containerStyle={{height: 100}}
-                            selectedButtonStyle={styles.sellected}
+                            containerStyle={{backgroundColor: "#770B16", height: 100}}
+                            selectedButtonStyle={styles.selectedButton}
                             underlayColor="#770B16"
+                            selectedTextStyle={styles.selectedText}
+                            textStyle={{color: "#FFFFFF"}}
                         />
                     </View>
                     <View style={styles.inputView}>
                         <Text>Guest Gender</Text>
                         <ButtonGroup
-                            onPress={this.updateGenderIndex}
+                            onPress={(index) => this.updateGenderIndex(index)}
                             selectedIndex={genderIndex}
                             buttons={genderButtons}
-                            containerStyle={{height: 100}}
+                            containerStyle={{backgroundColor: "#770B16", height: 100}}
+                            selectedButtonStyle={styles.selectedButton}
+                            underlayColor="#770B16"
+                            selectedTextStyle={styles.selectedText}
+                            textStyle={{color: "#FFFFFF"}}
                         />
                     </View>
                     <View style={styles.inputView}>
@@ -152,135 +178,6 @@ export default connect(
 )(NewGuest)
 
 
-/*
- * FormInputField: props- label string
- *                        error string empty when no error
- *                        editable bool if you can edit forminput
- *                        onChangeText function (text) => { do something w it}
- * Defines a Form Field that allows for validation errors to be set by the
- * parent. In this case, error is a prop set to the parent's state.nameError
- * On form submit, the validation fn changes the state if its not properly set.
- */
-class FormInputField extends Component {
-    error() {
-        if (this.props.error) {
-            return <FormValidationMessage>{this.props.error}</FormValidationMessage>
-        }
-        return null
-    }
-
-    render() {
-        return (
-            <View>
-                <FormLabel>{this.props.label}</FormLabel>
-                <FormInput
-                    onChangeText={this.props.onChangeText}
-                    editable={this.props.editable}
-                    value={this.props.value}/>
-                {this.error()}
-            </View>
-        );
-    }
-}
-
-/*
- * PickerFormField - a FormField that triggers a Picker modal to populate field
- * props: label string - label for FormField
- *        value string - initial value for form field & picker (should be value w/in items)
- *        onValueChange fn - (selected) => do something with selected
- *        error string - used in FormField for validation (in parent state)
- *        items array  - [{label: STRING, value:STRING} ...] of picker items
- * TODO figure out how to not take up whole page, maybe change styling
- * TODO maybe put into own file
- */
-export class PickerFormField extends Component<{}> {
-    constructor(props) {
-        super(props);
-        this.state = {modalVisible: false, pickerVal: this.props.value}
-    }
-
-    render() {
-        if (Platform.OS === "android") {
-            return (
-                <View>
-                    <FormLabel>{this.props.label}</FormLabel>
-                    <Picker
-                        selectedValue={this.props.value || (this.state && this.state.pickerVal)}
-                        onValueChange={(val) => {
-                            this.setState({pickerVal: val});
-                            this.props.onValueChange(val);
-                        }}
-                    >
-                        {this.props.items.map((i, index) => (
-                            <Picker.Item key={index} label={i.label} value={i.value}/>
-                        ))}
-                    </Picker>
-                </View>
-            );
-        } else {
-            const selectedItem = this.props.items.find(
-                i => i.value === this.state.pickerVal
-            );
-            const selectedLabel = selectedItem ? selectedItem.label : "";
-
-            return (
-                <View>
-                    <TouchableOpacity
-                        onPress={() => this.setState({
-                            modalVisible: true
-                        })}
-                    >
-                        <FormInputField
-                            label={this.props.label}
-                            ref={input => this.input = input}
-                            editable={false}
-                            value={selectedLabel}
-                            error={this.props.error}
-                        />
-                    </TouchableOpacity>
-                    <Modal
-                        animationType="slide"
-                        transparent={true}
-                        visible={this.state.modalVisible}
-                        style={{margin: 4}}
-                    >
-                        <TouchableWithoutFeedback
-                            onPress={() => this.setState({modalVisible: false})}
-                        >
-                            <View style={styles.modalContainer}>
-                                <View style={styles.buttonContainer}>
-                                    <Text
-                                        style={{color: "blue"}}
-                                        onPress={() => this.setState({modalVisible: false})}
-                                    >
-                                        Done
-                                    </Text>
-                                </View>
-                                <View>
-                                    <Picker
-                                        selectedValue={(this.state && this.state.pickerVal)}
-                                        onValueChange={(val) => {
-                                            this.setState({pickerVal: val});
-                                            this.props.onValueChange(val);
-                                        }}
-                                    >
-                                        {this.props.items.map((i, index) => (
-                                            <Picker.Item
-                                                key={index}
-                                                label={i.label}
-                                                value={i.value}
-                                            />
-                                        ))}
-                                    </Picker>
-                                </View>
-                            </View>
-                        </TouchableWithoutFeedback>
-                    </Modal>
-                </View>
-            );
-        }
-    }
-}
 
 const styles = StyleSheet.create({
     inputContainer: {
@@ -328,7 +225,7 @@ const styles = StyleSheet.create({
     firstView: {
         marginLeft: 20,
         marginRight: 20,
-        marginTop: 50
+        marginTop: 10
     },
     inputView: {
         marginTop: 10
@@ -337,7 +234,14 @@ const styles = StyleSheet.create({
         color:"#770B16",
         fontSize: 16,
     },
-    sellected: {
+    selectedButton: {
         backgroundColor: "#770B16",
+        color: "#770B16",
+        borderColor: "#770B16",
+
+
+    },
+    selectedText: {
+        color: "#770B16"
     }
 });

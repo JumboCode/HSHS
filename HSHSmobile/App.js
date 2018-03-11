@@ -18,9 +18,9 @@ class App {
     startApp() {
         // this will start our app
 
-        // Navigation.registerComponent('Login', () => Login, store, Provider);
+        Navigation.registerComponent('Login', () => Login, store, Provider);
 
-        Navigation.registerComponent('Login', () => GuestListNew, store, Provider);
+        // Navigation.registerComponent('Login', () => GuestListNew, store, Provider);
 
         Navigation.startSingleScreenApp({
             screen: {
