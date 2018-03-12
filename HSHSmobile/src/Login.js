@@ -20,7 +20,7 @@ import GuestList from './tabs/GuestList/GuestList';
 import Dashboard from './tabs/Dashboard/Dashboard';
 import Info from './dummy/BoilerPlate/TemporaryTab';
 import Resources_menu from './tabs/Resources/Resources_menu';
-import Resources_list from './tabs/Resources/Resources_list';
+import Resources_search from './tabs/Resources/Resources_search';
 import GuestListNew from './tabs/GuestList/GuestListNew';
 import GuestListProfile from './tabs/GuestList/GuestListProfile';
 import ActionItem_view from './tabs/ActionItems/ActionItem_view';
@@ -127,7 +127,7 @@ export default class Login extends Component {
         Navigation.registerComponent('GuestList', () => GuestList, store, Provider);
         Navigation.registerComponent('GuestListProfile', () => GuestListProfile, store, Provider);
         Navigation.registerComponent('Resources_menu', () => Resources_menu, store, Provider);
-        Navigation.registerComponent('Resources_list', () => Resources_list, store, Provider);
+        Navigation.registerComponent('Resources_search', () => Resources_search, store, Provider);
         Navigation.registerComponent('Info', () => Info, store, Provider);
         Navigation.registerComponent('GuestListNew', () => GuestListNew, store, Provider);
         Navigation.registerComponent('ActionItem_list', () => ActionItem_list, store, Provider);
