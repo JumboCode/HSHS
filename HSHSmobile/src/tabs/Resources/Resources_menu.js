@@ -142,7 +142,7 @@ class Resources_menu extends Component {
                 <TouchableHighlight
                     style = {styles.button}
                     onPress = {() => (this.screenResourcesSearch(category))}
-                    underlayColor = {"rgba(119, 11, 22, .75)"}
+                    underlayColor = {"white"}
                 >
                     <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                         <Text style = {{textAlign: "center", fontSize: 10}}>

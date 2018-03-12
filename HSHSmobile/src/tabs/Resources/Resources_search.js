@@ -57,6 +57,7 @@ class Resources_search extends Component {
         } else {
             return(
                 <SearchBar
+                    containerStyle={{backgroundColor: 'transparent'}}
                     lightTheme
                     round
                     clearIcon = {this.state.searchInput !== ''}
