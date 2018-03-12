@@ -143,7 +143,6 @@ export default class Login extends Component {
                     screen: 'Dashboard',
                     title: 'Dashboard',
                     icon: homeIcon
-
                 },
                 {
                     label: 'action items',
@@ -173,7 +172,7 @@ export default class Login extends Component {
             tabsStyle: { // optional, **iOS Only** add this if you want to style the tab bar beyond the defaults
                 tabBarButtonColor: '#999999',
                 tabBarBackgroundColor: '#f6f7f5',
-                tabBarSelectedButtonColor: '#FFFFFF',
+                tabBarSelectedButtonColor: '#770B16',
                 tabBarShowLabels: 'hidden', // "Hey Jacob, why did you add this, this code doesn't wire up to anything!"
                                             // -- "Well, eventually we could follow
                                             // https://github.com/wix/react-native-navigation/issues/676 ,
