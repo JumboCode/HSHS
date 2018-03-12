@@ -25,6 +25,10 @@ function mapStateToProps(state, ownProps) {
       state.actionItems[id].actionItemId = id;
     }
 
+    for (var id in state.completedActionItems) {
+        state.completedActionItems[id].actionItemId = id;
+    }
+
     return {
         actionItems: state.actionItems,
         completedActionItems: state.completedActionItems,
@@ -117,8 +121,7 @@ class ActionItem_list extends Component {
             <ButtonGroup
                 onPress={(i) => {this.setState({selectedIndex: i})}}
                 selectedIndex={this.state.selectedIndex}
-                buttons={this.state.buttons}
-                
+                buttons={this.state.buttons}            
             />
 
             {this.state.selectedIndex === 1 ? 
