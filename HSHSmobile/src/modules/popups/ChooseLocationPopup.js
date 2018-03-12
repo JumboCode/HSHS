@@ -42,7 +42,7 @@ export default class ChooseLocationPopup extends Component {
         });
       }, (error) => {
         alert(error.message);
-      }, {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, distanceFilter: 20});
+      }, {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, distanceFilter: 50});
   };
 
   show = () => {
