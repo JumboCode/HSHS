@@ -32,6 +32,19 @@ export default class ChooseLocationPopup extends Component {
     Geocoder.setApiKey('AIzaSyBk97FJAbAoOnu1liyLAGAne9dcYAiJ8Co');
   }
 
+  componentDidMount() {
+      navigator.geolocation.watchPosition((pos) => {
+        this.setState({
+          locationCoord: {
+            latitude: pos.coords.latitude,
+            longitude: pos.coords.longitude
+          }
+        });
+      }, (error) => {
+        alert(error.message);
+      }, {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, distanceFilter: 50});
+  };
+
   show = () => {
     this.Popup.show()
   };
@@ -51,7 +64,7 @@ export default class ChooseLocationPopup extends Component {
                   width: "100%",
               }}
               showsUserLocation={true}
-              initialRegion={{
+              region={{
                   latitude: this.state.locationCoord.latitude,
                   longitude: this.state.locationCoord.longitude,
                   latitudeDelta: 0.02,

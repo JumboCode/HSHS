@@ -5,13 +5,15 @@ import {
     Text,
     View,
     FlatList,
-    ActivityIndicator
+    ActivityIndicator,
+    Alert
 } from 'react-native';
-import { List, ListItem, SearchBar } from "react-native-elements";
+import { List, ListItem, SearchBar, ButtonGroup } from "react-native-elements";
 import {connect} from 'react-redux';
 import ActionItemList_module from '../../modules/ActionItemList_module'
 import { Icon } from 'react-native-elements'
 import renderLoader from "../../modules/UI/renderLoader";
+import dupNavFix from "../../dupNavFix";
 
 // for navigation
 const IonIcon = require('react-native-vector-icons/Ionicons');
@@ -24,8 +26,13 @@ function mapStateToProps(state, ownProps) {
       state.actionItems[id].actionItemId = id;
     }
 
+    for (var id in state.completedActionItems) {
+        state.completedActionItems[id].actionItemId = id;
+    }
+
     return {
         actionItems: state.actionItems,
+        completedActionItems: state.completedActionItems,
         guests: state.guests,
         loading: state.loading,
         interactions: state.interactions
@@ -40,8 +47,13 @@ function mapDispatchToProps(dispath, ownProps) {
 class ActionItem_list extends Component {
     constructor(props) {
         super(props);
-        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+        this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.props.loading = true;
+
+        this.state = {
+            selectedIndex: 0,
+            buttons: ["To do", "Completed"]
+        }
     };
 
     static navigatorButtons = {
@@ -59,13 +71,26 @@ class ActionItem_list extends Component {
         ]
     };
 
-    onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
-        if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
-            if (event.id == 'new_actionItem') { // this is the same id field from the static navigatorButtons definition
-                this.Screen_ActionItem_new();
-            }
-        }
-    };
+    onNavigatorEvent = (event) => { // this is the onPress handler for the two buttons together
+           if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
+               if (event.id == 'new_actionItem') { // this is the same id field from the static navigatorButtons definition
+                 this.props.navigateTo({
+                           title: 'Add Action Item',
+                           screen: 'ActionItem_edit', // unique ID registered with Navigation.registerScreen
+
+                           // No pass props because new default
+                           passProps: {
+                           }, // Object that will be passed as props to the pushed screen (optional)
+
+                           animated: true, // does the push have transition animation or does it happen immediately (optional)
+                           animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
+                           backButtonHidden: false, // hide the back button altogether (optional)
+                           navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
+                           navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
+                       })
+               }
+           }
+       };
 
     componentDidMount() {
         IonIcon.getImageSource('md-create', 36).then((icon) => {
@@ -77,39 +102,32 @@ class ActionItem_list extends Component {
         });
     };
 
-    componentWillUpdate(nextProps, nextState) {
-
-    };
-
-    Screen_ActionItem_new = () => {
-        this.props.navigator.push({
-            title: 'Add Action Item',
-            screen: 'ActionItem_edit', // unique ID registered with Navigation.registerScreen
-
-            // No pass props because new default
-            passProps: {
-            }, // Object that will be passed as props to the pushed screen (optional)
-
-            animated: true, // does the push have transition animation or does it happen immediately (optional)
-            animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
-            backButtonHidden: false, // hide the back button altogether (optional)
-            navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
-            navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
-        })
-    };
-
     render() {
         // TODO : make it actually check if the action items are of a valid type
         if (this.props.loading == true || !this.props.actionItems || this.props.actionItems.length <= 1) {
             return renderLoader();
         }
+
         return (
           <View
           style={{height: '100%'}}>
-            <ActionItemList_module
-                actionItems={this.props.actionItems}
-                guests={this.props.guests}
-                navigator={this.props.navigator}/>
+            <ButtonGroup
+                onPress={(i) => {this.setState({selectedIndex: i})}}
+                selectedIndex={this.state.selectedIndex}
+                buttons={this.state.buttons}
+                selectedTextStyle={{color: '#007AFF'}}            
+            />
+
+            {this.state.selectedIndex === 1 ? 
+                (<ActionItemList_module
+                    actionItems={this.props.completedActionItems}
+                    guests={this.props.guests}
+                    navigator={this.props.navigator} />) : 
+                (<ActionItemList_module
+                    actionItems={this.props.actionItems}
+                    guests={this.props.guests}
+                    navigator={this.props.navigator} />)}
+            
           </View>
         );
     }
@@ -134,4 +152,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ActionItem_list);
+export default connect(mapStateToProps, mapDispatchToProps)(dupNavFix(ActionItem_list));

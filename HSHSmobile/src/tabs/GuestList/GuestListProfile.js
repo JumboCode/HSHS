@@ -1,8 +1,7 @@
 /* GuestProfile */
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
+ * !!! this page does NOT use dupNavFix, because using it breaks clicking on action item
+ * and everything works as expected without it. Might have to revist later.
  */
 
 import React, { Component } from 'react';
@@ -37,7 +36,7 @@ function mapDispatchToProps(dispatch, ownProps) { return {}; }
 class GuestProfile extends Component {
     constructor(props) {
         super(props);
-        // this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+        // this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.view_crud_note_page = this.view_crud_note_page.bind(this);
     };
 

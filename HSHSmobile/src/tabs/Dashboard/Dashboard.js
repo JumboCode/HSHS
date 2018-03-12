@@ -15,7 +15,7 @@ import {
 import {List, ListItem, SearchBar} from "react-native-elements";
 import {connect} from 'react-redux';
 import MapView from 'react-native-maps';
-import {getGuests, getInteractions, getActionItems} from '../../redux/actions.js';
+import {getGuests, getInteractions, getActionItems, getCompletedActionItems} from '../../redux/actions.js';
 import ActionItemList_module from '../../modules/ActionItemList_module';
 import {Icon} from 'react-native-elements'
 import renderSeperator from "../../modules/UI/renderSeperator";
@@ -38,38 +38,44 @@ function mapDispatchToProps(dispatch, ownProps) {
     return {
         getGuests: getGuests,
         getInteractions: getInteractions,
-        getActionItems: getActionItems
+        getActionItems: getActionItems,
+        getCompletedActionItems: getCompletedActionItems
     };
 }
 
 class Dashboard extends Component {
     constructor(props) {
         super(props);
-        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+        this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.props.loading = true;
         this.state = {
-            isMapFullScreen: true
+            isMapFullScreen: true,
+            curLat: 42.371664,
+            curLong: -71.119837
         }
-
-
-    };
-
-    componentDidMount() {
     };
 
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
-        if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
-        }
+
     };
 
     componentDidMount() {
         this.makeRemoteRequest();
+        navigator.geolocation.watchPosition((pos) => {
+          this.setState({
+            curLat: pos.coords.latitude,
+            curLong: pos.coords.longitude
+          });
+        }, (error) => {
+          Alert.alert(error.message);
+        }, {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, distanceFilter: 50});
     };
 
     makeRemoteRequest = () => {
         this.props.getInteractions();
         this.props.getGuests();
         this.props.getActionItems();
+        this.props.getCompletedActionItems();
     };
 
     componentWillUpdate(nextProps, nextState) {
@@ -124,22 +130,16 @@ class Dashboard extends Component {
                 <View>
                 {renderSeperator()}
                     <MapView
-                        region={this.state.region}
-                        // onRegionChange={(region) => {
-                        //     this.setState(previousState => {
-                        //         return {region: region};
-                        //     })
-                        // }}
+                        region={{
+                            latitude: this.state.curLat,
+                            longitude: this.state.curLong,
+                            latitudeDelta: 0.02,
+                            longitudeDelta: 0.01
+                        }}
                         style={{
                             height: this.state.isMapFullScreen ? Dimensions.get('window').height * 0.4 : Dimensions.get('window').height,
                             width: Dimensions.get('window').width,
                             margin: 0
-                        }}
-                        initialRegion={{
-                            latitude: 42.371664,
-                            longitude: -71.119837,
-                            latitudeDelta: 0.02,
-                            longitudeDelta: 0.01,
                         }}
                         >
                         {
@@ -174,7 +174,14 @@ class Dashboard extends Component {
                             underlayColor='transparent'
                             name='my-location'
                             onPress={() => {
-                                Alert.alert("", "This should do something!");
+                                navigator.geolocation.getCurrentPosition((pos) => {
+                                  this.setState({
+                                    curLat: pos.coords.latitude,
+                                    curLong: pos.coords.longitude
+                                  });
+                                }, (error) => {
+                                  Alert.alert(error.message);
+                                }, {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000});
                             }}
                         />
                     </View>
