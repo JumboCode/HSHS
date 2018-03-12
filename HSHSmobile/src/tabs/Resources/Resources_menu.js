@@ -15,147 +15,97 @@ import {connect} from 'react-redux';
 import renderLoader from "../../modules/UI/renderLoader";
 import dupNavFix from '../../dupNavFix';
 
+const Icon = require('react-native-vector-icons/Ionicons');
+
 class Resources_menu extends Component {
     constructor(props) {
         super(props);
-
+        this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.linkData = [
-            {categoryName: "Emergency Shelters",
-                links: [
-                    {name: "Dry Men's shelter",description: "dummy information about link",
-                        link: "www.fake.com/fake"},
-                    {name: "Dry Womens's shelter",description: "dummy information about link",
-                        link: "www.fake.com/fake"},
-                    {name: "Late Night Men's shelter",description: "dummy information about link",
-                        link: "www.fake.com/fake"},
-                    {name: "Late Night Women's shelter",description: "dummy information about link",
-                        link: "www.fake.com/fake"},
-                ]
-            },
-            {categoryName: "Permanent Housing",
-                links: [
-                    {name: "Furniture",description: "dummy information about link",
-                        link: "www.fake.com/fake"},
-                    {name: "Market Rate Appartment",description: "dummy information about link",
-                        link: "www.fake.com/fake"},
-                    {name: "Private Subsidized Housing",description: "dummy information about link",
-                        link: "www.fake.com/fake"},
-                    {name: "Public Housing",description: "dummy information about link",
-                        link: "www.fake.com/fake"},
-                ]
-            },
-            {categoryName: "Employment",
-                links: [
-                    {name: "Furniture",description: "dummy information about link",
-                        link: "www.fake.com/fake"},
-                    {name: "Market Rate Appartment",description: "dummy information about link",
-                        link: "www.fake.com/fake"},
-                    {name: "Private Subsidized Housing",description: "dummy information about link",
-                        link: "www.fake.com/fake"},
-                    {name: "Public Housing",description: "dummy information about link",
-                        link: "www.fake.com/fake"},
-                ]
-            },
-            {categoryName: "Drop in Centers",
-                links: [
-                    {name: "Furniture",description: "dummy information about link",
-                        link: "www.fake.com/fake"},
-                    {name: "Market Rate Appartment",description: "dummy information about link",
-                        link: "www.fake.com/fake"},
-                    {name: "Private Subsidized Housing",description: "dummy information about link",
-                        link: "www.fake.com/fake"},
-                    {name: "Public Housing",description: "dummy information about link",
-                        link: "www.fake.com/fake"},
-                ]
-            },
-            {categoryName: "Food Resources",
-                links: [
-                    {name: "Furniture",description: "dummy information about link",
-                        link: "www.fake.com/fake"},
-                    {name: "Market Rate Appartment",description: "dummy information about link",
-                        link: "www.fake.com/fake"},
-                    {name: "Private Subsidized Housing",description: "dummy information about link",
-                        link: "www.fake.com/fake"},
-                    {name: "Public Housing",description: "dummy information about link",
-                        link: "www.fake.com/fake"},
-                ]
-            },
-            /*
-            {"categoryName": "1"},
-            {"categoryName": "2"},
-            {"categoryName": "3"},
-            {"categoryName": "4"},
-            {"categoryName": "5"},
-            {"categoryName": "6"},
-            {"categoryName": "7"},
-            {"categoryName": "8"},
-            {"categoryName": "9"},
-            {"categoryName": "10"},
-            {"categoryName": "11"},
-            */
+            {name: "Dry Men's shelter",description: "dummy information about link",
+                link: "www.google.com", category: "Emergency Shelters"},
+            {name: "Dry Womens's shelter",description: "dummy information about link",
+                link: "www.fake.com/fake", category: "Emergency Shelters"},
+            {name: "Late Night Men's shelter",description: "dummy information about link",
+                link: "www.fake.com/fake", category: "Emergency Shelters"},
+            {name: "Late Night Women's shelter",description: "dummy information about link",
+                link: "www.fake.com/fake", category: "Emergency Shelters"},
+            {name: "DUMMY", description: "dummy info about link",
+                link: "https://google.com", category: "Transportation"},
+            {name: "DUMMY", description: "dummy info about link",
+                link: "https://google.com", category: "Crisis Hotlines"},
+            {name: "DUMMY", description: "dummy info about link",
+                link: "https://google.com", category: "Domestic Violence"},
+            {name: "DUMMY", description: "dummy info about link",
+                link: "https://google.com", category: "Housing"},
+            {name: "DUMMY", description: "dummy info about link",
+                link: "https://google.com", category: "Employment"},
+            {name: "DUMMY", description: "dummy info about link",
+                link: "https://google.com", category: "Food Resources"},
+            {name: "DUMMY", description: "dummy info about link",
+                link: "https://google.com", category: "Public Benefits"},
+            {name: "DUMMY", description: "dummy info about link",
+                link: "https://google.com", category: "Drop-in Centers"},
+            {name: "DUMMY", description: "dummy info about link",
+                link: "https://google.com", category: "Clothing"},
+            {name: "DUMMY", description: "dummy info about link",
+                link: "https://google.com", category: "Drop-in Laundry"},
+            {name: "DUMMY", description: "dummy info about link",
+                link: "https://google.com", category: "Education"},
+            {name: "DUMMY", description: "dummy info about link",
+                link: "https://google.com", category: "Healthcare"},
+            {name: "DUMMY", description: "dummy info about link",
+                link: "https://google.com", category: "Identification"},
+            {name: "DUMMY", description: "dummy info about link",
+                link: "https://google.com", category: "Legal Services"},
+            {name: "DUMMY", description: "dummy info about link",
+                link: "https://google.com", category: "Mailing"},
+            {name: "DUMMY", description: "dummy info about link",
+                link: "https://google.com", category: "Miscellaneous"},
+            {name: "DUMMY", description: "dummy info about link",
+                link: "https://google.com", category: "Phones & Voicemail"},
+            {name: "DUMMY", description: "dummy info about link",
+                link: "https://google.com", category: "Temporary Financial Assistance"},
+            {name: "DUMMY", description: "dummy info about link",
+                link: "https://google.com", category: "Veteran Services"},
+            {name: "DUMMY", description: "dummy info about link",
+                link: "https://google.com", category: "Work Contract"},
+
+
         ];
+        this.categoriesMain = ["Emergency Shelters", "Transportation",
+                            "Crisis Hotline", "Domestic Violence",
+                            "Housing", "Employment", "Food Resources",
+                            "Public Benefits", "Drop-in Centers"]
         this.state = {searchInput: '', loaded: false};
     }
 
-    renderHeader = () => {
-        return (
-            <View style = {styles.headerContainer}>
-                <ImageBackground
-                      source = {require("./hshs_monochrome.jpg")}
-                      style = {styles.headerImage}>
-                      <View style={{backgroundColor: 'rgba(0, 0, 0, .3)'}}>
-                          <View style={{marginTop: 10, marginBottom: 10}}>
-                            <Text style={styles.title}>HSHS</Text>
-                            <Text style={styles.address}>Harvard Square Homeless Shelter</Text>
-                            <Text style={styles.address}>66 Winthrop Street</Text>
-                            <Text style={styles.address}>Cambridge, MA, 02138</Text>
-                          </View>
-                      </View>
-                  </ImageBackground>
-                  <View style = {{flex: 1, margin: "5%"}}>
-                      <Button
-                        onPress = {() => Linking.openURL("tel:1-875-364-2228")}
-                        title = {"Call : 875-364-2228"}
-                        color = {"rgba(119, 11, 22, 1)"}
-                        accessibilityLabel = {"Call : 875-364-2228"}
-                        />
-                  </View>
-            </View>
-        );
+    componentDidMount() {
+        Icon.getImageSource('ios-search', 36).then((add) => {
+            this.props.navigator.setButtons({
+                rightButtons: [
+                    { id: 'searchResources', icon: add },
+                ]
+            });
+        });
     };
 
-// <Text style={styles.phoneNum} onPress = {() => Linking.openURL("tel:1-875-364-2228")}>875-364-2228</Text>
-
-    renderButton = (category, key) => {
-        if(category.categoryName === null) {
-            return (
-                <View style = {styles.buttonContainer}/>
-            );
-        } else {
-            return(
-                <View style = {styles.buttonContainer}>
-                    <TouchableHighlight
-                        style = {styles.button}
-                        onPress = {() => (this.screenResourcesList(category))}
-                        underlayColor = {"rgba(119, 11, 22, .75)"}
-                    >
-                        <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                            <Text style = {{textAlign: "center", fontSize: 10}}>
-                                {category.categoryName.split(" ").join("\n")}
-                            </Text>
-                        </View>
-                    </TouchableHighlight>
-                </View>
-            );
+    onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
+        if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
+            if (event.id == 'searchResources') { // this is the same id field from the static navigatorButtons definition
+                this.screenResourcesSearch("");
+            }
         }
     };
 
-    screenResourcesList = (category_data) => {
+    screenResourcesSearch = (catString) => {
         this.props.navigateTo({
-            title : category_data.categoryName,
-            screen : "Resources_list",
+            title : catString,
+            screen : "Resources_search",
             passProps : {
-                linkData : category_data
+                linkData : this.linkData,
+                categories : this.categoriesMain,
+                searchInit : catString
             },
             animated : true,
             animationType : 'slide-horizontal',
@@ -165,44 +115,86 @@ class Resources_menu extends Component {
         });
     };
 
-    render(){
-        /*if (this.props.loading == true)
-            return renderLoader();
-        */
+    renderHeader = () => {
+        return (
+            <View style = {styles.headerContainer}>
+                <ImageBackground
+                      source = {require("./hshs_monochrome.jpg")}
+                      style = {styles.headerImage}>
+                      <View style={{backgroundColor: 'rgba(0, 0, 0, .3)', width: "100%"}}>
+                          <View style={{marginTop: 10, marginBottom: 10, marginLeft: 10, marginRight: 10, width: "100%"}}>
+                            <Text style={styles.address}>Harvard Square Homeless Shelter</Text>
+                            <Text style={styles.address}>66 Winthrop Street</Text>
+                            <View style={{flexDirection: "row"}}>
+                                <Text style={styles.lastAddress}>Cambridge, MA, 02138</Text>
+                                <Text style={styles.phoneNum} onPress = {() => Linking.openURL("tel:1-875-364-2228")}>875-364-2228</Text>
+                            </View>
+                          </View>
+                      </View>
+                </ImageBackground>
+            </View>
+        );
+    };
+
+    renderButton = (category) => {
         return(
-          <View>
-            <SearchBar
-              lightTheme
-              round
-              clearIcon = {this.state.searchInput !== ''}
-              onChangeText = {(str) => {this.setState({searchInput: str.toLowerCase()})}}
-              onClearText = {() => this.setState({searchInput: ''})}
-              placeholder = 'Search'
-            />
-            <FlatList
-              ListHeaderComponent={this.renderHeader}
-              data = {this.linkData.filter(item => item.categoryName.toLowerCase().includes(this.state.searchInput))}
-              numColumns = {3}
-              renderItem = { ({item, key}) => this.renderButton(item, key)}
-              keyExtractor = { (item, key) => item.categoryName }
-              columnWrapperStyle = {{margin: "1%"}}
-            />
-          </View>
+            <View style = {styles.buttonContainer}>
+                <TouchableHighlight
+                    style = {styles.button}
+                    onPress = {() => (this.screenResourcesSearch(category))}
+                    underlayColor = {"rgba(119, 11, 22, .75)"}
+                >
+                    <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                        <Text style = {{textAlign: "center", fontSize: 10}}>
+                            {category.split(" ").join("\n")}
+                        </Text>
+                    </View>
+                </TouchableHighlight>
+            </View>
+        );
+    };
+
+    renderButtons = () => {
+        return(
+            <View style = {{flexDirection: "column", alignItems : "center", height: "65%", marginTop: "10%"}}>
+                <View style = {styles.buttonsContainer}>
+                    {this.renderButton(this.categoriesMain[0])}
+                    {this.renderButton(this.categoriesMain[1])}
+                    {this.renderButton(this.categoriesMain[2])}
+                    {this.renderButton(this.categoriesMain[3])}
+                    {this.renderButton(this.categoriesMain[4])}
+                    {this.renderButton(this.categoriesMain[5])}
+                    {this.renderButton(this.categoriesMain[6])}
+                    {this.renderButton(this.categoriesMain[7])}
+                    {this.renderButton(this.categoriesMain[8])}
+                </View>
+            </View>
+        );
+    }
+
+    render(){
+        return(
+            <View>
+                {this.renderHeader()}
+                {this.renderButtons()}
+            </View>
         );
     }
 }
 
+//{this.categoriesMain.map((elem) => {this.renderButton(elem)})}
+
 const styles = StyleSheet.create({
     headerContainer: {
-        height : 300,
+        height: "35%",
+        //height : 300,
     },
 
     headerImage: {
         flex : 7,
         width : "100%",
         height : "100%",
-
-        justifyContent: "center",
+        justifyContent: "flex-end",
         alignItems: "center",
     },
 
@@ -218,26 +210,46 @@ const styles = StyleSheet.create({
 
     address: {
         fontSize: 16,
-        textAlign: 'center',
+        textAlign: 'left',
         //color: '#000000',
         color: "#FFF",
-        margin: 3
+        margin: 3,
+    },
+
+    lastAddress: {
+        fontSize: 16,
+        textAlign: 'left',
+        //color: '#000000',
+        color: "#FFF",
+        margin: 3,
+        flex: 1,
     },
 
     phoneNum: {
-      fontSize: 20,
-      textAlign: 'center',
-      color: '#000000',
-      marginTop: 10,
-      marginBottom: 5,
+      fontSize: 16,
+      textAlign: 'right',
+      color: '#0dd5fc',
+      margin: 3,
+      marginRight: "10%",
+      flex: 1,
+    },
+
+    buttonsContainer: {
+        height: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "row",
+        flexWrap: "wrap"
     },
 
     buttonContainer: {
-        flex: 1,
-        width: 110,
-        height: 110,
-        marginLeft: "1%",
-        marginRight: "1%",
+        //flex: 1,
+        width: "27%",
+        aspectRatio: 1,
+        marginTop: "2%",
+        marginBottom: "2%",
+        marginLeft: "2%",
+        marginRight: "2%",
         borderStyle: "solid",
     },
 
