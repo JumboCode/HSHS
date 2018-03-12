@@ -114,7 +114,8 @@ class ActionItem_list extends Component {
             <ButtonGroup
                 onPress={(i) => {this.setState({selectedIndex: i})}}
                 selectedIndex={this.state.selectedIndex}
-                buttons={this.state.buttons}            
+                buttons={this.state.buttons}
+                selectedTextStyle={{color: '#007AFF'}}            
             />
 
             {this.state.selectedIndex === 1 ? 
