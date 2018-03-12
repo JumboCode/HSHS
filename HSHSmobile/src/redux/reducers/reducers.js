@@ -79,7 +79,20 @@ export function reducer(state, action) {
                   });
                   return guests;
                 }, new Object())
-            })}
+            })};
+
+        case 'GET_COMPLETED_ACTION_ITEMS_SUCCESS': 
+            console.log(action.payload)
+            return Object.assign({}, state, {
+                completedActionItems: action.payload,
+                guestCompletedActionItemIds: Object.keys(action.payload).reduce((guests, actionItemId) => {
+                  action.payload[actionItemId].guestIds && action.payload[actionItemId].guestIds.map(guestId => {
+                    !guests[guestId] && (guests[guestId] = []);
+                    guests[guestId].push(actionItemId);
+                  });
+                  return guests;
+                }, new Object())
+            })
 
 
         default:

@@ -18,7 +18,7 @@ import ChooseLocationPopup from '../../modules/popups/ChooseLocationPopup';
 import TagGuestPopup from "../../modules/popups/TagGuestPopup"
 import renderSeperator from '../../modules/UI/renderSeperator'
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {addNewActionItem, getActionItems, editActionItem, deleteActionItem} from "../../redux/actions";
+import {addNewActionItem, getActionItems, editActionItem, deleteActionItem, markActionItemAsDone} from "../../redux/actions";
 import DatePicker from 'react-native-datepicker';
 import Moment from 'moment';
 import dupNavFix from '../../dupNavFix';
@@ -161,7 +161,7 @@ class ActionItem_edit extends Component {
     }
 
     _handleDelete() {
-        deleteActionItem(this.state.actionItemId);
+        markActionItemAsDone(this.state.actionItemId);
         this.props.navigator.popToRoot({
           animated: true, // does the pop have transition animation or does it happen immediately (optional)
           animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
