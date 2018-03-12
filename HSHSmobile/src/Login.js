@@ -172,7 +172,7 @@ export default class Login extends Component {
             ],
             tabsStyle: { // optional, **iOS Only** add this if you want to style the tab bar beyond the defaults
                 tabBarButtonColor: '#999999',
-                tabBarBackgroundColor: '#770B16',
+                tabBarBackgroundColor: '#f6f7f5',
                 tabBarSelectedButtonColor: '#FFFFFF',
                 tabBarShowLabels: 'hidden', // "Hey Jacob, why did you add this, this code doesn't wire up to anything!"
                                             // -- "Well, eventually we could follow
@@ -181,16 +181,16 @@ export default class Login extends Component {
                                             // however, we would need to change our git pipeline slightly,
                                             // so let's make this a TODO!
                 tabBarLabelColor: '#999999',
-                tabBarSelectedLabelColor: '#FFFFFF',
+                tabBarSelectedLabelColor: '#000000',
             },
             appStyle: {
-                tabBarBackgroundColor: '#770B16',
-                tabBarButtonColor: '#FFFFFF',
-                tabBarSelectedButtonColor: '#ffffff',
+                tabBarBackgroundColor: '#f6f7f5',
+                tabBarButtonColor: '#000000',
+                tabBarSelectedButtonColor: '#000000',
                 navigationBarColor: '#000000',
-                navBarBackgroundColor: '#770B16',
-                navBarButtonColor: '#ffffff',
-                navBarTextColor: '#ffffff',
+                navBarBackgroundColor: '#f6f7f5',
+                navBarButtonColor: '#000000',
+                navBarTextColor: '#2a2a2a',
               }
         })
     }
