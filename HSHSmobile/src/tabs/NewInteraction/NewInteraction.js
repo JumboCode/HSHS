@@ -21,6 +21,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {addNewActionItem, getActionItems, editActionItem, deleteActionItem} from "../../redux/actions";
 import DatePicker from 'react-native-datepicker';
 import Moment from 'moment';
+import Counter from '../../modules/Counter'
 
 function mapStateToProps(state, ownProps) {
     var guests = guestObjectToArray(state.guests, state.interactions);
@@ -190,16 +191,37 @@ class ActionItem_edit extends Component {
                         multiline = {true}
                         onChangeText={(description) => {this.setState({description: description})}}
                     />
+                    <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
+                      <View style={{flex: 1}}>
+                        <Counter
+                          itemName="Cat"
+                          count={0}
+                          onValueChange={(val) => this.setState({PBJ: val}) }
+                          />
+                      </View>
+                      <View style={{flex: 1}}>
+                        <Counter
+                          itemName="Dog"
+                          count={0}
+                          onValueChange={(val) => this.setState({PBJ: val}) }
+                          />
+                      </View>
+                      <View style={{flex: 1}}>
+                        <Counter
+                          itemName="PB&J"
+                          count={0}
+                          onValueChange={(val) => this.setState({PBJ: val}) }
+                          />
+                      </View>
+                      <View style={{flex: 1}}>
+                        <Counter
+                          itemName="Big Name Item"
+                          count={0}
+                          onValueChange={(val) => this.setState({PBJ: val}) }
+                          />
+                      </View>
+                      </View>
                 </View>
-                <TagGuestPopup
-                    ref={(dialog) => {
-                        this.tagGuestDialog = dialog;
-                    }}
-                    initialGuests={this.state.taggedGuests}
-                    guests={this.props.guests}
-                    loading={this.props.loading}
-                    onConfirm={this.setSelectedGuests}
-                />
                 <ChooseLocationPopup
                   ref={(map) => {
                       this.ChooseLocationPopup = map;
@@ -207,6 +229,15 @@ class ActionItem_edit extends Component {
                   onConfirm={this.setChosenLocation}
                   locationStr={this.props.locationStr}
                   locationCoord={this.props.locationCoord}
+                />
+                <TagGuestPopup
+                    ref={(dialog) => {
+                        this.tagGuestDialog = dialog;
+                    }}
+                    initialGuests={this.state.taggedGuests}
+                    guests={this.props.guests}
+                    loading={this.props.loading}
+                    onConfirm={this._setTaggedGuests}
                 />
             </View>
         );

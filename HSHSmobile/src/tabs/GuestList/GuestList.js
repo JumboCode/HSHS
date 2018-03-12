@@ -166,7 +166,7 @@ class GuestList extends Component {
     renderListItem = (item) => {
         return(
             <View style={{backgroundColor: item.color}}>
-                <ListItem
+                 <ListItem
                     title = {
                         <View style={{flexDirection: 'row', justifyContent: 'space-between', marginLeft: 5}}>
                             <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
