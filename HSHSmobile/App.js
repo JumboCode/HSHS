@@ -1,6 +1,8 @@
 import {Navigation} from 'react-native-navigation';
 import {Provider} from 'react-redux';
 import {store} from './src/redux/store.js';
+import GuestListNew from './src/tabs/GuestList/GuestListNew';
+
 
 import Login from './src/Login';
 
@@ -15,8 +17,10 @@ class App {
 
     startApp() {
         // this will start our app
-        // we only register login here, and register the rest of the app in login so that the navigations are mutually exclusive
+
         Navigation.registerComponent('Login', () => Login, store, Provider);
+
+        // Navigation.registerComponent('Login', () => GuestListNew, store, Provider);
 
         Navigation.startSingleScreenApp({
             screen: {

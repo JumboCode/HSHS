@@ -8,7 +8,8 @@ let middleware = [thunk, logger];
 
 const initialState = {
 	guests: [],
-	actionItems: []
+	actionItems: [],
+	completedActionItems: []
 };
 
 export const store = createStore(reducer, initialState, applyMiddleware(...middleware));
