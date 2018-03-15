@@ -9,7 +9,8 @@ import {
     Alert,
     TextInput,
     TouchableHighlight,
-    TouchableOpacity
+    TouchableOpacity,
+    ScrollView
 } from 'react-native';
 import { Icon, List, ListItem, SearchBar, CheckBox } from "react-native-elements";
 import {connect} from 'react-redux';
@@ -111,6 +112,7 @@ class ActionItem_edit extends Component {
     render() {
         return (
             <View style = {styles.container}>
+            <ScrollView style={{width: "100%"}}>
                 <View style = {styles.back}>
                     <TextInput
                         value = {this.state.title}
@@ -191,37 +193,78 @@ class ActionItem_edit extends Component {
                         multiline = {true}
                         onChangeText={(description) => {this.setState({description: description})}}
                     />
-                    <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
-                      <View style={{flex: 1}}>
-                        <Counter
-                          itemName="Cat"
-                          count={0}
-                          onValueChange={(val) => this.setState({PBJ: val}) }
-                          />
+                    {renderSeperator()}
+                      <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
+                        <View style={{flex: 1}}>
+                          <Counter
+                            itemName="PB&J"
+                            count={0}
+                            onValueChange={(val) => this.setState({pbj_sandwich: val}) }
+                            />
+                        </View>
+                        <View style={{flex: 1}}>
+                          <Counter
+                            itemName="Blankets"
+                            count={0}
+                            onValueChange={(val) => this.setState({blankets: val}) }
+                            />
+                        </View>
+                        <View style={{flex: 1}}>
+                          <Counter
+                            itemName="Socks"
+                            count={0}
+                            onValueChange={(val) => this.setState({socks: val}) }
+                            />
+                        </View>
                       </View>
-                      <View style={{flex: 1}}>
-                        <Counter
-                          itemName="Dog"
-                          count={0}
-                          onValueChange={(val) => this.setState({PBJ: val}) }
-                          />
+                      <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
+                        <View style={{flex: 1}}>
+                          <Counter
+                            itemName="PB&J"
+                            count={0}
+                            onValueChange={(val) => this.setState({pbj_sandwich: val}) }
+                            />
+                        </View>
+                        <View style={{flex: 1}}>
+                          <Counter
+                            itemName="Blankets"
+                            count={0}
+                            onValueChange={(val) => this.setState({blankets: val}) }
+                            />
+                        </View>
+                        <View style={{flex: 1}}>
+                          <Counter
+                            itemName="Socks"
+                            count={0}
+                            onValueChange={(val) => this.setState({socks: val}) }
+                            />
+                        </View>
                       </View>
-                      <View style={{flex: 1}}>
-                        <Counter
-                          itemName="PB&J"
-                          count={0}
-                          onValueChange={(val) => this.setState({PBJ: val}) }
-                          />
-                      </View>
-                      <View style={{flex: 1}}>
-                        <Counter
-                          itemName="Big Name Item"
-                          count={0}
-                          onValueChange={(val) => this.setState({PBJ: val}) }
-                          />
-                      </View>
+                      <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
+                        <View style={{flex: 1}}>
+                          <Counter
+                            itemName="PB&J"
+                            count={0}
+                            onValueChange={(val) => this.setState({pbj_sandwich: val}) }
+                            />
+                        </View>
+                        <View style={{flex: 1}}>
+                          <Counter
+                            itemName="Blankets"
+                            count={0}
+                            onValueChange={(val) => this.setState({blankets: val}) }
+                            />
+                        </View>
+                        <View style={{flex: 1}}>
+                          <Counter
+                            itemName="Socks"
+                            count={0}
+                            onValueChange={(val) => this.setState({socks: val}) }
+                            />
+                        </View>
                       </View>
                 </View>
+                </ScrollView>
                 <ChooseLocationPopup
                   ref={(map) => {
                       this.ChooseLocationPopup = map;
