@@ -233,6 +233,25 @@ class GuestProfile extends Component {
     //     </View>
     // );
 
+    renderDetail(rowData, _sectionID, _rowID) {
+        let title = <Text style={[styles.title]}>{rowData.title}</Text>
+        var desc = null
+        if(rowData.isActionItem)
+          desc = (
+            <View style={styles.descriptionContainer}>
+              <Text style={[styles.title]}>{rowData.time}</Text>
+              <Text style={[styles.textDescription]}>{rowData.description}</Text>
+            </View>
+          )
+        if ()
+
+        return (
+          <View style={{flex:1}}>
+            {title}
+            {desc}
+          </View>
+        )
+      }
 
     // Once interactions are added to Guest schema, interpolate w/ actionItems
     // and render in the list.
@@ -260,6 +279,7 @@ class GuestProfile extends Component {
         }
         let data = relatedActionItems.map((i) =>
                       {
+                        if (i.creationTime)
                         let date = new Date(i.creationTimestamp).toDateString();
 
                         let color;
@@ -270,10 +290,12 @@ class GuestProfile extends Component {
                         }
 
                         return ({time: date,
-                                title: date,
+                                title: i.title,
                                 description: i.description,
-                                circleColor: color})
-                      })
+                                circleColor: color,
+                                isActionItem: true,
+                                isDone: i.isDone})
+                        })
 
         return (
           <Timeline
