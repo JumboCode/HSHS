@@ -119,7 +119,7 @@ class GuestList extends Component {
 
     Screen_GuestListNew = () => {
         this.props.navigateTo({
-            screen: 'GuestListNew', // unique ID registered with Navigation.registerScreen
+            screen: 'Guest_edit', // unique ID registered with Navigation.registerScreen
             passProps: {}, // Object that will be passed as props to the pushed screen (optional)
             animated: true, // does the push have transition animation or does it happen immediately (optional)
             animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
@@ -131,7 +131,7 @@ class GuestList extends Component {
 
     Screen_GuestListProfile = (guest) => {
         this.props.navigateTo({
-            screen: 'GuestListProfile', // unique ID registered with Navigation.registerScreen
+            screen: 'Guest_view', // unique ID registered with Navigation.registerScreen
             passProps: {
                 Id: guest.Id,
                 //name: "Hey I left this variable so stuff dosn't break but please don't use it!",
