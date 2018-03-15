@@ -14,22 +14,32 @@ import {
     TextInput,
     Alert
 } from 'react-native';
-import { List, ListItem, SearchBar } from "react-native-elements";
 
-import GuestList from './tabs/GuestList/GuestList';
+// Dashboard
 import Dashboard from './tabs/Dashboard/Dashboard';
-import Info from './dummy/BoilerPlate/TemporaryTab';
-import Resources_menu from './tabs/Resources/Resources_menu';
-import Resources_list from './tabs/Resources/Resources_list';
-import GuestListNew from './tabs/GuestList/GuestListNew';
-import GuestListProfile from './tabs/GuestList/GuestListProfile';
+
+// Guests
+import Guest_list from './tabs/Guests/Guest_list';
+import Guest_edit from './tabs/Guests/Guest_edit';
+import Guest_view from './tabs/Guests/Guest_view';
+
+// ActionItem
 import ActionItem_view from './tabs/ActionItems/ActionItem_view';
 import ActionItem_edit from './tabs/ActionItems/ActionItem_edit';
 import ActionItem_list from './tabs/ActionItems/ActionItem_list';
-import NewInteraction from './tabs/NewInteraction/NewInteraction';
 
+// Interaction
+import Interaction_new from './tabs/Interactions/Interaction_new';
+
+
+// Resources
+import Resources_menu from './tabs/Resources/Resources_menu';
+import Resources_list from './tabs/Resources/Resources_list';
+
+// UI
 import Icon from 'react-native-vector-icons/Ionicons';
 import renderLoader from './modules/UI/renderLoader'
+import { List, ListItem, SearchBar } from "react-native-elements";
 
 const Icons = require('react-native-vector-icons/Ionicons');
 
@@ -124,16 +134,16 @@ export default class Login extends Component {
     startApp() {
         // this will start our app
         Navigation.registerComponent('Dashboard', () => Dashboard, store, Provider);
-        Navigation.registerComponent('GuestList', () => GuestList, store, Provider);
-        Navigation.registerComponent('GuestListProfile', () => GuestListProfile, store, Provider);
+        Navigation.registerComponent('Guest_list', () => Guest_list, store, Provider);
+        Navigation.registerComponent('Guest_view', () => Guest_view, store, Provider);
         Navigation.registerComponent('Resources_menu', () => Resources_menu, store, Provider);
         Navigation.registerComponent('Resources_list', () => Resources_list, store, Provider);
         Navigation.registerComponent('Info', () => Info, store, Provider);
-        Navigation.registerComponent('GuestListNew', () => GuestListNew, store, Provider);
+        Navigation.registerComponent('Guest_edit', () => Guest_edit, store, Provider);
         Navigation.registerComponent('ActionItem_list', () => ActionItem_list, store, Provider);
         Navigation.registerComponent('ActionItem_edit', () => ActionItem_edit, store, Provider);
         Navigation.registerComponent('ActionItem_view', () => ActionItem_view, store, Provider);
-        Navigation.registerComponent('NewInteraction', () => NewInteraction, store, Provider);
+        Navigation.registerComponent('Interaction_new', () => Interaction_new, store, Provider);
 
         // TODO: make the tabs link to real pages
         Navigation.startTabBasedApp({
@@ -152,13 +162,13 @@ export default class Login extends Component {
                 },
                 {
                     label: 'interaction',
-                    screen: 'NewInteraction',
+                    screen: 'Interaction_new',
                     title: 'Add Interaction',
                     icon: checkinIcon,
                 },
                 {
                     label: 'guests',
-                    screen: 'GuestList',
+                    screen: 'Guest_list',
                     title: 'Guests',
                     icon: guestsIcon,
                 },
