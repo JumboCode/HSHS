@@ -167,13 +167,18 @@ class GuestList extends Component {
         return(
             <View style={{backgroundColor: item.color}}>
                  <ListItem
+<<<<<<< HEAD
                     title = {
                         <View style={{flexDirection: 'row', justifyContent: 'space-between', marginLeft: 5}}>
                           <Text style={{marginRight: 10, fontWeight: 'bold', fontSize: 16}}>{item.name}</Text>
                         </View>
                     }
+=======
+                    title = {item.name}
+                    titleStyle = {{marginLeft: 0, fontWeight: 'bold'}}
+>>>>>>> cbf3f20e2069af709fc8e826604643673b012f2a
                     subtitle = {
-                      <View style={{flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap'}}>
+                      <View style={{flexDirectio  n: 'row', justifyContent: 'space-between', flexWrap: 'wrap'}}>
                         <View style={{flex: 1, alignSelf: 'flex-start'}}>
                           <Text numberOfLines={2} style={{marginTop: 5, marginLeft: 5, fontSize: 12, color: '#757575', height: 30}}>{item.description}</Text>
                         </View>
