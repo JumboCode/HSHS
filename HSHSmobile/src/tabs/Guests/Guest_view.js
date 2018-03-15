@@ -17,6 +17,8 @@ import { List, ListItem } from "react-native-elements";
 import nodeEmoji from 'node-emoji';
 import {connect} from 'react-redux';
 import ActionItemList_module from '../../modules/ActionItemList_module';
+import Icon from 'react-native-vector-icons/Feather';
+import Timeline from 'react-native-timeline-listview';
 
 const Timestamp = require('react-timestamp');
 
@@ -205,26 +207,50 @@ class GuestProfile extends Component {
         )
     }
 
-    _renderHistoryListItem(id) {
-        let actionItem = this.props.actionItems[id];
-        // TODO add visual flair to view (create wrapper View w/ flexDir 'row')
-        // TODO Add live timestamps to action items
-        return (
-            <View style={{flexDirection:'column'}}>
-                <Text style={{marginLeft:10, fontWeight:200}}> Monday, June 6, 1966</Text>
-                <Text>{ actionItem.isDone ? "Completed" : "Incomplete" }</Text>
-                <View>
-                    <Text style={{marginLeft:10, paddingLeft:5}}>{actionItem.title}</Text>
-                </View>
-            </View>
-        );
+    _renderHistoryListItem(item) {
+
     }
+
+    // let date = new Date(item.item.creationTimestamp).toDateString();
+    // let color = (item.color == undefined ? 'red' : item.color);
+    // return (
+    //     <View style={{flexDirection:'row'}}>
+    //       <View style={{borderRightWidth: 1}}>
+    //       <View style={{
+    //         alignItems: 'center',
+    //         backgroundColor: color,
+    //         width: 5,
+    //         height: 5,
+    //         borderRadius: 5/2}}></View>
+    //     </View>
+    //     <View style={{flexDirection:'column', paddingLeft: 25}}>
+    //         <Text style={{marginLeft:10}}>{date}</Text>
+    //         <Text>{ item.isDone ? "Completed" : "Incomplete" }</Text>
+    //         <View>
+    //             <Text style={{marginLeft:10, paddingLeft:5}}>{item.item.title}</Text>
+    //         </View>
+    //     </View>
+    //     </View>
+    // );
+
 
     // Once interactions are added to Guest schema, interpolate w/ actionItems
     // and render in the list.
     _renderHistory() {
-        let actionItems = this.props.guest.actionItems;
-        if (actionItems == undefined) {
+        let allActionItems = Object.values(this.props.actionItems);
+        console.log("ALL ITEMS")
+        console.log(allActionItems)
+
+        let relatedActionItems = allActionItems.filter((actionItem) =>
+                     { // Filter list to only include action items related to guest
+                        if (actionItem.guestIds != undefined) {
+                          return actionItem.guestIds.includes(this.props.guestId)
+                        }
+                      });
+        // TODO this doesn't work
+        console.log("related items")
+        console.log(relatedActionItems)
+        if (relatedActionItems.length == 0) {
             return (
                 <View style={styles.historyContainer}>
                     <Text style={styles.historyHeader}>Guest History</Text>
@@ -232,18 +258,37 @@ class GuestProfile extends Component {
                 </View>
             );
         }
+        let data = relatedActionItems.map((i) =>
+                      {
+                        let date = new Date(i.creationTimestamp).toDateString();
+                        let color;
+                        if (i.color) {
+                          color = 'red'; //hexToRgb(i.color);
+                        } else {
+                          color = 'red';
+                        }
+                        console.log("COLOR: "+ color)
+                        return ({time: date,
+                                title: i.title,
+                                description: i.description,
+                                circleColor: color,
+                                lineColor: '#000000'})
+                      })
+        console.log(data)
+
         return (
-            <View style={styles.historyContainer}>
-                <Text style={styles.historyHeader}>Guest History</Text>
-                <FlatList
-                    data = {actionItems}
-                    renderItem={this._renderHistoryListItem}
-                    keyExtractor = {item => item.Id}
-                    ItemSeparatorComponent = {() => {}}
-                    ListFooterComponent = {() => {}}
-                />
-            </View>
-        )
+          <Timeline
+            data={data}
+            showTime={false}
+            lineColor='#000000'
+            timeContainerStyle={{minWidth:52, marginTop: -5}}
+            descriptionStyle={{color:'gray'}}
+            options={{
+              style:{paddingTop:5}
+            }}
+          />
+        );
+
     }
 
     render() {
@@ -259,7 +304,7 @@ class GuestProfile extends Component {
                     </View>
                 </View>
                 <View style={{flex: .5}}>
-                    {this._renderActionItems()}
+                    {/*this._renderActionItems()*/}
                     {this._renderButtons()}
                     {this._renderHistory()}
                 </View>

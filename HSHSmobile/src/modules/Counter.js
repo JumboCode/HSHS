@@ -4,7 +4,7 @@
 //        onValueChange - (val) => {}
 // Example usage:
 // <Counter
-//   title="PB&J"
+//   itemName="PB&J"
 //   count=0
 //   onValueChange={(val) => this.setState({PB&J: val}); }
 //   />
