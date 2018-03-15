@@ -9,7 +9,8 @@
 //   onValueChange={(val) => this.setState({PB&J: val}); }
 //   />
 // TODO: Figure out uniform sizing for counters. (ie text should wrap etc)
-// TODO: change circle rendering @jacob?
+// TODO: change circle rendering to Flex attribute
+//          sometimes middle counter circles get cut off
 import React, { Component } from 'react';
 import {
         StyleSheet,

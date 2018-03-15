@@ -247,9 +247,7 @@ class GuestProfile extends Component {
                           return actionItem.guestIds.includes(this.props.guestId)
                         }
                       });
-        // TODO this doesn't work
-        console.log("related items")
-        console.log(relatedActionItems)
+
         if (relatedActionItems.length == 0) {
             return (
                 <View style={styles.historyContainer}>
@@ -261,30 +259,30 @@ class GuestProfile extends Component {
         let data = relatedActionItems.map((i) =>
                       {
                         let date = new Date(i.creationTimestamp).toDateString();
+
                         let color;
                         if (i.color) {
                           color = 'red'; //hexToRgb(i.color);
                         } else {
                           color = 'red';
                         }
-                        console.log("COLOR: "+ color)
+
                         return ({time: date,
-                                title: i.title,
+                                title: date,
                                 description: i.description,
-                                circleColor: color,
-                                lineColor: '#000000'})
+                                circleColor: color})
                       })
-        console.log(data)
 
         return (
           <Timeline
             data={data}
             showTime={false}
-            lineColor='#000000'
-            timeContainerStyle={{minWidth:52, marginTop: -5}}
+            lineColor='#808080'
             descriptionStyle={{color:'gray'}}
+            detailContainerStyle={styles.timelineDetailContainer}
+            columnFormat='single-column-left'
             options={{
-              style:{paddingTop:5}
+              style:{paddingTop:10}
             }}
           />
         );
@@ -427,7 +425,22 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         fontWeight: 'bold',
         fontSize: 15
-    }
+    },
+    timelineDetailContainer: {
+      marginBottom: 20,
+      paddingLeft: 5,
+      paddingRight: 5,
+      backgroundColor: "#D3D3D3",
+      borderRadius: 3,
+      shadowColor: '#000111',
+      shadowOffset: {
+        width: 0,
+        height: 2 },
+      shadowOpacity: 0.8,
+      shadowRadius: 2,
+      elevation: 1,
+      marginRight: 10,
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GuestProfile);
