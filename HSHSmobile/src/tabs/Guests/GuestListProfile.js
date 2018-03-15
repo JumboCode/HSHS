@@ -237,16 +237,11 @@ class GuestProfile extends Component {
         let title = <Text>{rowData.time}</Text>
         var desc = null
         if(rowData.isActionItem) {
-          let completionText = (rowData.isDone ? "Complete Task" :
-                                                  "Incomplete Task");
+          //let completionText = (rowData.isDone ? (<Text>Completed Task</Text>) : (<Text>Incomplete Task</Text>))
           desc = (
-            <View style={{flexDirection: 'column', marginLeft:10}}>
-              <Text style={{fontWeight: 'bold'}}>{completionText}</Text>
-              <View style={{flexDirection: 'row'}}>
-                <TouchableOpacity style={{flex:99, borderColor: '#464646', borderLeftColor: 'blue', padding: 5, borderWidth: 1, borderLeftWidth: 10, borderRightWidth: 0}}>
-                  <Text>{rowData.title}</Text>
-                </TouchableOpacity>
-              </View>
+            <View style={styles.descriptionContainer}>
+              {completionText}
+              <Text>{rowData.description}</Text>
             </View>
           )
         } //else if ()
@@ -285,13 +280,10 @@ class GuestProfile extends Component {
         }
         let data = relatedActionItems.map((i) =>
                       {
-                        // check date
                         let date = new Date(i.creationTimestamp).toDateString();
-                        // re add color
-
+                        // bring back color
                         return ({time: date,
                                 title: i.title,
-                                color: i.color,
                                 description: i.description,
                                 isActionItem: true,
                                 isDone: i.isDone})
@@ -302,13 +294,11 @@ class GuestProfile extends Component {
             data={data}
             showTime={false}
             lineColor='#808080'
-            circleColor='red'
             descriptionStyle={{color:'gray'}}
             detailContainerStyle={styles.timelineDetailContainer}
             columnFormat='single-column-left'
-            renderDetail={this.renderDetail}
             options={{
-              style:{paddingTop:10, flex:1}
+              style:{paddingTop:10}
             }}
           />
         );
@@ -328,7 +318,7 @@ class GuestProfile extends Component {
                     </View>
                 </View>
                 <View style={{flex: .5}}>
-                    {this._renderActionItems()}
+                    {/*this._renderActionItems()*/}
                     {this._renderButtons()}
                     {this._renderHistory()}
                 </View>
@@ -461,8 +451,8 @@ const styles = StyleSheet.create({
       shadowColor: '#000111',
       shadowOffset: {
         width: 0,
-        height: 1 },
-      shadowOpacity: 0.5,
+        height: 2 },
+      shadowOpacity: 0.8,
       shadowRadius: 2,
       elevation: 1,
       marginRight: 10,
