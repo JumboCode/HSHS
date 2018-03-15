@@ -238,8 +238,6 @@ class GuestProfile extends Component {
     // and render in the list.
     _renderHistory() {
         let allActionItems = Object.values(this.props.actionItems);
-        console.log("ALL ITEMS")
-        console.log(allActionItems)
 
         let relatedActionItems = allActionItems.filter((actionItem) =>
                      { // Filter list to only include action items related to guest
@@ -248,11 +246,15 @@ class GuestProfile extends Component {
                         }
                       });
 
+        // background color - d7d7d7
+        // date color- 464646
+        // link color- 31a7f8
+
         if (relatedActionItems.length == 0) {
             return (
                 <View style={styles.historyContainer}>
                     <Text style={styles.historyHeader}>Guest History</Text>
-                    <Text>No action items or notes to display!</Text>
+                    <Text>No action items or interactions to display!</Text>
                 </View>
             );
         }
