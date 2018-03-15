@@ -55,7 +55,7 @@ function guestObjectToArray(IdsToGuests, IdsToInteractions) {
 class ActionItem_edit extends Component {
     constructor(props) {
         super(props);
-        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+        this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
 
         this.state = {
             title: '',
@@ -64,6 +64,7 @@ class ActionItem_edit extends Component {
             locationStr: null,
             date: Moment().format('YYYY-MM-DD'),
             description: "",
+            items: {}
         };
     };
 
@@ -108,6 +109,26 @@ class ActionItem_edit extends Component {
             locationCoord: locationCoord,
         });
     };
+
+    _renderCounter = (_itemName) => {
+      var self = this;
+      return (
+        <View style={{flex: 1}}>
+          <Counter
+            itemName={_itemName}
+            count={0}
+            onValueChange= {(val) => {self._setItem(_itemName, val)}}
+            />
+        </View>
+      )
+    };
+
+    _setItem = (itemName, count) => {
+      let items = this.state.items;
+      items[itemName] = count;
+      this.setState({items: items});
+      console.log(this.state.items);
+    }
 
     render() {
         return (
@@ -195,73 +216,19 @@ class ActionItem_edit extends Component {
                     />
                     {renderSeperator()}
                       <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
-                        <View style={{flex: 1}}>
-                          <Counter
-                            itemName="PB&J"
-                            count={0}
-                            onValueChange={(val) => this.setState({pbj_sandwich: val}) }
-                            />
-                        </View>
-                        <View style={{flex: 1}}>
-                          <Counter
-                            itemName="Blankets"
-                            count={0}
-                            onValueChange={(val) => this.setState({blankets: val}) }
-                            />
-                        </View>
-                        <View style={{flex: 1}}>
-                          <Counter
-                            itemName="Socks"
-                            count={0}
-                            onValueChange={(val) => this.setState({socks: val}) }
-                            />
-                        </View>
+                        {this._renderCounter("Item 1")}
+                        {this._renderCounter("Item 2")}
+                        {this._renderCounter("Item 3")}
                       </View>
                       <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
-                        <View style={{flex: 1}}>
-                          <Counter
-                            itemName="PB&J"
-                            count={0}
-                            onValueChange={(val) => this.setState({pbj_sandwich: val}) }
-                            />
-                        </View>
-                        <View style={{flex: 1}}>
-                          <Counter
-                            itemName="Blankets"
-                            count={0}
-                            onValueChange={(val) => this.setState({blankets: val}) }
-                            />
-                        </View>
-                        <View style={{flex: 1}}>
-                          <Counter
-                            itemName="Socks"
-                            count={0}
-                            onValueChange={(val) => this.setState({socks: val}) }
-                            />
-                        </View>
+                        {this._renderCounter("Item 4")}
+                        {this._renderCounter("Item 5")}
+                        {this._renderCounter("Item 6")}
                       </View>
                       <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
-                        <View style={{flex: 1}}>
-                          <Counter
-                            itemName="PB&J"
-                            count={0}
-                            onValueChange={(val) => this.setState({pbj_sandwich: val}) }
-                            />
-                        </View>
-                        <View style={{flex: 1}}>
-                          <Counter
-                            itemName="Blankets"
-                            count={0}
-                            onValueChange={(val) => this.setState({blankets: val}) }
-                            />
-                        </View>
-                        <View style={{flex: 1}}>
-                          <Counter
-                            itemName="Socks"
-                            count={0}
-                            onValueChange={(val) => this.setState({socks: val}) }
-                            />
-                        </View>
+                        {this._renderCounter("Item 7")}
+                        {this._renderCounter("Item 8")}
+                        {this._renderCounter("Item 9")}
                       </View>
                 </View>
                 </ScrollView>
