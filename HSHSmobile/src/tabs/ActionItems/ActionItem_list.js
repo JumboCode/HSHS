@@ -41,6 +41,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispath, ownProps) {
     return {
+        markActionItemAsDone: markActionItemAsDone
     };
 }
 
