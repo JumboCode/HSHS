@@ -19,7 +19,7 @@ import ChooseLocationPopup from '../../modules/popups/ChooseLocationPopup';
 import TagGuestPopup from "../../modules/popups/TagGuestPopup"
 import renderSeperator from '../../modules/UI/renderSeperator'
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {addNewActionItem, getActionItems, editActionItem, deleteActionItem} from "../../redux/actions";
+import {addInteractionItem, getActionItems} from "../../redux/actions";
 import DatePicker from 'react-native-datepicker';
 import Moment from 'moment';
 import Counter from '../../modules/Counter'
@@ -35,8 +35,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispath, ownProps) {
     return {
-        addNewActionItem: addNewActionItem,
-        editActionItem: editActionItem,
+        addInteractionItem: addInteractionItem,
         getActionItems: getActionItems
     };
 }
@@ -60,9 +59,13 @@ class ActionItem_edit extends Component {
         this.state = {
             title: '',
             taggedGuests: [],
-            locationCoord: null,
-            locationStr: null,
+            locationCoord: this.props.locationCoord ? this.props.locationCoord : {
+            	longitude: 0,
+            	latitude: 0,
+            },
+            locationStr: this.props.locationStr ? this.props.locationStr : null,
             date: Moment().format('YYYY-MM-DD'),
+            interactionTimeStamp: Moment().format('YYYY-MM-DD'),
             description: "",
             items: {}
         };
@@ -92,10 +95,17 @@ class ActionItem_edit extends Component {
             		alert("Title cannot be empty");
             		return;
             	}
-              alert("This should have functionality!");
+              this._save();;
             }
         }
     };
+
+    _save = () => {
+        addInteractionItem(this.state.title, this.state.interactionTimeStamp,
+          this.state.date, this.state.locationCoord,
+          this.state.locationStr, this.state.description, this.state.taggedGuests,
+          "[Volunteer ID: See Interaction_new.js]", this.state.items);
+    }
 
     _setTaggedGuests = (guests) => {
       this.setState({
@@ -236,7 +246,7 @@ class ActionItem_edit extends Component {
                   ref={(map) => {
                       this.ChooseLocationPopup = map;
                   }}
-                  onConfirm={this.setChosenLocation}
+                  onConfirm={this._setChosenLocation}
                   locationStr={this.props.locationStr}
                   locationCoord={this.props.locationCoord}
                 />
