@@ -11,7 +11,8 @@ import {
     View,
     Image,
     FlatList,
-    TouchableOpacity
+    TouchableOpacity,
+    ScrollView
 } from 'react-native';
 import { List, ListItem } from "react-native-elements";
 import nodeEmoji from 'node-emoji';
@@ -206,33 +207,7 @@ class GuestProfile extends Component {
             </View>
         )
     }
-
-    _renderHistoryListItem(item) {
-
-    }
-
-    // let date = new Date(item.item.creationTimestamp).toDateString();
-    // let color = (item.color == undefined ? 'red' : item.color);
-    // return (
-    //     <View style={{flexDirection:'row'}}>
-    //       <View style={{borderRightWidth: 1}}>
-    //       <View style={{
-    //         alignItems: 'center',
-    //         backgroundColor: color,
-    //         width: 5,
-    //         height: 5,
-    //         borderRadius: 5/2}}></View>
-    //     </View>
-    //     <View style={{flexDirection:'column', paddingLeft: 25}}>
-    //         <Text style={{marginLeft:10}}>{date}</Text>
-    //         <Text>{ item.isDone ? "Completed" : "Incomplete" }</Text>
-    //         <View>
-    //             <Text style={{marginLeft:10, paddingLeft:5}}>{item.item.title}</Text>
-    //         </View>
-    //     </View>
-    //     </View>
-    // );
-
+    
     renderDetail(rowData, _sectionID, _rowID) {
         let title = <Text>{rowData.time}</Text>
         var desc = null
@@ -298,19 +273,22 @@ class GuestProfile extends Component {
                         })
 
         return (
-          <Timeline
-            data={data}
-            showTime={false}
-            lineColor='#808080'
-            circleColor='red'
-            descriptionStyle={{color:'gray'}}
-            detailContainerStyle={styles.timelineDetailContainer}
-            columnFormat='single-column-left'
-            renderDetail={this.renderDetail}
-            options={{
-              style:{paddingTop:10, flex:1}
-            }}
-          />
+          <View>
+            <Text style={styles.historyHeader}>Guest History</Text>
+            <Timeline
+              data={data}
+              showTime={false}
+              lineColor='#808080'
+              circleColor='red'
+              descriptionStyle={{color:'gray'}}
+              detailContainerStyle={styles.timelineDetailContainer}
+              columnFormat='single-column-left'
+              renderDetail={this.renderDetail}
+              options={{
+                style:{paddingTop:10, flex:1}
+              }}
+            />
+          </View>
         );
 
     }
@@ -328,9 +306,11 @@ class GuestProfile extends Component {
                     </View>
                 </View>
                 <View style={{flex: .5}}>
+                  <ScrollView style={{flex: 1}}>
                     {this._renderActionItems()}
                     {this._renderButtons()}
                     {this._renderHistory()}
+                  </ScrollView>
                 </View>
             </View>
         );
