@@ -166,12 +166,9 @@ class GuestList extends Component {
     renderListItem = (item) => {
         return(
             <View style={{backgroundColor: item.color}}>
-                <ListItem
-                    title = {
-                        <View style={{flexDirection: 'row', justifyContent: 'space-between', marginLeft: 5}}>
-                          <Text style={{marginRight: 10, fontWeight: 'bold', fontSize: 16}}>{item.name}</Text>
-                        </View>
-                    }
+                 <ListItem
+                    title = {item.name}
+                    titleStyle = {{marginLeft: 0, fontWeight: 'bold'}}
                     subtitle = {
                       <View style={{flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap'}}>
                         <View style={{flex: 1, alignSelf: 'flex-start'}}>
