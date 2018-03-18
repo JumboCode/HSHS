@@ -11,7 +11,8 @@ import {
     View,
     Image,
     FlatList,
-    TouchableOpacity
+    TouchableOpacity,
+    ScrollView
 } from 'react-native';
 import { List, ListItem } from "react-native-elements";
 import nodeEmoji from 'node-emoji';
@@ -298,19 +299,22 @@ class GuestProfile extends Component {
                         })
 
         return (
-          <Timeline
-            data={data}
-            showTime={false}
-            lineColor='#808080'
-            circleColor='red'
-            descriptionStyle={{color:'gray'}}
-            detailContainerStyle={styles.timelineDetailContainer}
-            columnFormat='single-column-left'
-            renderDetail={this.renderDetail}
-            options={{
-              style:{paddingTop:10, flex:1}
-            }}
-          />
+          <View>
+            <Text style={styles.historyHeader}>Guest History</Text>
+            <Timeline
+              data={data}
+              showTime={false}
+              lineColor='#808080'
+              circleColor='red'
+              descriptionStyle={{color:'gray'}}
+              detailContainerStyle={styles.timelineDetailContainer}
+              columnFormat='single-column-left'
+              renderDetail={this.renderDetail}
+              options={{
+                style:{paddingTop:10, flex:1}
+              }}
+            />
+          </View>
         );
 
     }
@@ -328,9 +332,11 @@ class GuestProfile extends Component {
                     </View>
                 </View>
                 <View style={{flex: .5}}>
+                  <ScrollView style={{flex: 1}}>
                     {this._renderActionItems()}
                     {this._renderButtons()}
                     {this._renderHistory()}
+                  </ScrollView>
                 </View>
             </View>
         );
