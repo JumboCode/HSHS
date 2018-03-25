@@ -14,7 +14,7 @@ import ActionItemList_module from '../../modules/ActionItemList_module'
 import { Icon } from 'react-native-elements'
 import renderLoader from "../../modules/UI/renderLoader";
 import dupNavFix from "../../dupNavFix";
-
+import markActionItemAsDone from "../../redux/actions"
 // for navigation
 const IonIcon = require('react-native-vector-icons/Ionicons');
 
@@ -116,19 +116,19 @@ class ActionItem_list extends Component {
                 onPress={(i) => {this.setState({selectedIndex: i})}}
                 selectedIndex={this.state.selectedIndex}
                 buttons={this.state.buttons}
-                selectedTextStyle={{color: '#007AFF'}}            
+                selectedTextStyle={{color: '#007AFF'}}
             />
 
-            {this.state.selectedIndex === 1 ? 
+            {this.state.selectedIndex === 1 ?
                 (<ActionItemList_module
                     actionItems={this.props.completedActionItems}
                     guests={this.props.guests}
-                    navigator={this.props.navigator} />) : 
+                    navigator={this.props.navigator} />) :
                 (<ActionItemList_module
                     actionItems={this.props.actionItems}
                     guests={this.props.guests}
                     navigator={this.props.navigator} />)}
-            
+
           </View>
         );
     }
