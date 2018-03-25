@@ -90,10 +90,12 @@ class GuestList extends Component {
         super(props);
         this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.Screen_GuestListProfile = this.Screen_GuestListProfile.bind(this);
+        this.filterGuestData = this.filterGuestData.bind(this);
         this.props.loading = true;
         this.state = {
             searchInput: '',
             searchFilters: {'Old': false, 'Middle': false, 'Young': false, 'M': false, 'F': false},
+            filterSelected: 0
         };
     };
 
@@ -171,7 +173,7 @@ class GuestList extends Component {
         this.setState(prevState => {
           newSearchFilters = prevState.searchFilters;
           newSearchFilters[filterName] = !prevState.searchFilters[filterName];
-          return {searchFilters: newSearchFilters};
+          return {searchFilters: newSearchFilters, filterSelected: newSearchFilters[filterName] ? prevState.filterSelected + 1 : prevState.filterSelected - 1};
         }, () => {
             console.log(this.state);
         });
@@ -223,6 +225,11 @@ class GuestList extends Component {
         );
     };
 
+    filterGuestData = (guests) => {
+      return guests.filter(item => (item.name.toLowerCase().includes(this.state.searchInput) || item.description.toLowerCase().includes(this.state.searchInput))
+                                      && (this.state.filterSelected == 0 || this.state.searchFilters[item.age] || this.state.searchFilters[item.gender]));
+    }
+
     render() {
         if (this.props.loading == true) {
             return renderLoader();
@@ -261,7 +268,7 @@ class GuestList extends Component {
                 </View>
                 <View style={{justifyContent: 'center'}}>
                   <FlatList
-                      data = {this.props.guests.filter(item => item.name.toLowerCase().includes(this.state.searchInput) || item.description.toLowerCase().includes(this.state.searchInput))}
+                      data = {this.filterGuestData(this.props.guests)}
                       renderItem={({item}) => this.renderListItem(item)}
                       keyExtractor = {item => item.Id}
                       ItemSeparatorComponent = {() => {return(renderSeperator())}}
