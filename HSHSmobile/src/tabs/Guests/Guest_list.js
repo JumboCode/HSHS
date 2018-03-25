@@ -91,7 +91,10 @@ class GuestList extends Component {
         this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.Screen_GuestListProfile = this.Screen_GuestListProfile.bind(this);
         this.props.loading = true;
-        this.state = { searchInput: '', searchFilters: {'Old': false, 'Middle': false, 'Young': false, 'M': false, 'F': false} };
+        this.state = {
+            searchInput: '',
+            searchFilters: {'Old': false, 'Middle': false, 'Young': false, 'M': false, 'F': false},
+        };
     };
 
     static navigatorButtons = {
@@ -176,16 +179,20 @@ class GuestList extends Component {
     }
 
     renderFilterButtons = (filterName) => {
-        console.log(filterName);
-
         return (
           <View style={styles.buttonContainer}>
-            <TouchableHighlight style={styles.button}
-                underlayColor = {"rgba(119, 11, 22, .75)"}
+            <TouchableHighlight
+                style = {[styles.button, {backgroundColor: this.state.searchFilters[filterName] ? 'rgba(119, 11, 22, 1)' : 'transparent'}]}
+                underlayColor = {this.state.searchFilters[filterName] ? 'white' : 'rgba(119, 11, 22, 1)'}
                 onPress = {() => this.setFilter(filterName)}
             >
                 <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                    <Text style = {{textAlign: "center", color: 'rgba(119, 11, 22, 1)', fontSize: 12}}> {filterName} </Text>
+                    <Text style = {
+                          { textAlign: "center",
+                            color: this.state.searchFilters[filterName] ? 'white' : 'rgba(119, 11, 22, 1)',
+                            fontSize: 12 }}>
+                       {filterName}
+                    </Text>
                 </View>
             </TouchableHighlight>
           </View>
