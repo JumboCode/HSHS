@@ -127,7 +127,7 @@ class Resources_menu extends Component {
                             <Text style={styles.address}>66 Winthrop Street</Text>
                             <View style={{flexDirection: "row"}}>
                                 <Text style={styles.lastAddress}>Cambridge, MA, 02138</Text>
-                                <Text style={styles.phoneNum} onPress = {() => Linking.openURL("tel:1-875-364-2228")}>875-364-2228</Text>
+                                <Text style={styles.phoneNum} onPress = {() => Linking.openURL("tel:1-857-364-2228")}>875-364-2228</Text>
                             </View>
                           </View>
                       </View>
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         //flex: 1,
         width: "27%",
-        aspectRatio: 1,
+        height: "20%",
         marginTop: "2%",
         marginBottom: "2%",
         marginLeft: "2%",
