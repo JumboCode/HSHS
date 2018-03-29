@@ -260,7 +260,7 @@ export const addInteractionItem = (title, creationTimestamp, interactionTimeStam
 							})
 					}
 			});
-}
+};
 
 export const markActionItemAsDone = (id) => {
 	firebase.database().ref('actionItems').child(id).once('value', snapshot => {

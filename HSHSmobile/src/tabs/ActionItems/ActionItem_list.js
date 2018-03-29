@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { List, ListItem, SearchBar, ButtonGroup } from "react-native-elements";
 import {connect} from 'react-redux';
+import { markActionItemAsDone } from '../../redux/actions.js';
 import ActionItemList_module from '../../modules/ActionItemList_module'
 import { Icon } from 'react-native-elements'
 import renderLoader from "../../modules/UI/renderLoader";
@@ -123,11 +124,13 @@ class ActionItem_list extends Component {
                 (<ActionItemList_module
                     actionItems={this.props.completedActionItems}
                     guests={this.props.guests}
-                    navigator={this.props.navigator} />) : 
+                    navigator={this.props.navigator}
+                    doneFunction={this.props.markActionItemAsDone}/>) :
                 (<ActionItemList_module
                     actionItems={this.props.actionItems}
                     guests={this.props.guests}
-                    navigator={this.props.navigator} />)}
+                    navigator={this.props.navigator}
+                    doneFunction={ this.props.markActionItemAsDone}/>)}
             
           </View>
         );

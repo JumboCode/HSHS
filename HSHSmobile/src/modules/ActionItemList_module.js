@@ -106,8 +106,10 @@ class ActionItemList_module extends Component {
     }
 
     actionDone = (item) => {
-        console.log(item);
-        this.props.markActionItemAsDone(item.id)
+        // console.log(item);
+        // this.props.markActionItemAsDone(item.id)
+        this.props.doneFunction(item.actionItemId);
+        console.log(item)
     };
 
     renderListItem(item) {
