@@ -207,7 +207,7 @@ class GuestProfile extends Component {
             </View>
         )
     }
-    
+
     renderDetail(rowData, _sectionID, _rowID) {
         let title = <Text>{rowData.time}</Text>
         var desc = null
@@ -295,7 +295,7 @@ class GuestProfile extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
                 <View style={styles.top}>
                     <View style={styles.profile_info}>
                         {this.render_name()}
@@ -305,14 +305,14 @@ class GuestProfile extends Component {
                         {/*{this.render_receptive()}*/}
                     </View>
                 </View>
-                <View style={{flex: .5}}>
-                  <ScrollView style={{flex: 1}}>
+                <View style={{flex: .3}}>
                     {this._renderActionItems()}
                     {this._renderButtons()}
-                    {this._renderHistory()}
-                  </ScrollView>
                 </View>
-            </View>
+                <View style={{flex: .2}}>
+                  {this._renderHistory()}
+                </View>
+            </ScrollView>
         );
     }
 }
