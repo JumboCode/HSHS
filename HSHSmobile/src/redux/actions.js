@@ -233,17 +233,33 @@ export const addNewInteractionSuccess = () => ({
         type: 'ADD_NEW_INTERACTIONS_SUCCESS'
 })
 
-export const addInteractionItem = (description, details, location, receptiveness, resources, timestamp, volunteers) => {
-                store.dispatch(addNewActionItemStart);
-                firebase.database().ref('interactions').push().set({
-                        description: description,
-                        details: details,
-                        location: location,
-                        receptiveness: receptiveness,
-                        resources: resources,
-                        timestamp: timestamp,
-                        volunteers: volunteers
-                })
+export const addInteractionItem = (title, creationTimestamp, interactionTimeStamp, locationCoord, locationStr, description, guestIds, volunteerId, resources) => {
+			store.dispatch(addNewInteractionStart);
+			//var ref = firebase.database().ref('/');
+			let newInteractionKey = firebase.database().ref('actionItems').push().key;
+			let ref = firebase.database().ref('/interactions/' + newInteractionKey);
+
+			ref.update({
+				title: title,
+				creationTimestamp: creationTimestamp,
+				interactionTimeStamp: interactionTimeStamp,
+				locationCoord: {
+						lat: locationCoord.latitude,
+						lng: locationCoord.longitude,
+				},
+				locationStr: locationStr,
+				description: description,
+				volunteerId: volunteerId,
+				resources: resources,
+		  }, error => {
+					if (error) {
+							Alert.alert("Failed to save interaction. Please try again.");
+					} else if (guestIds && guestIds.length != 0) {
+							ref.update({guestIds: guestIds}, err => {
+									err && Alert.alert("Failed to tag guests in the interaction you just created. Please try again.")
+							})
+					}
+			});
 }
 
 export const markActionItemAsDone = (id) => {

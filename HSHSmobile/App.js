@@ -1,9 +1,6 @@
 import {Navigation} from 'react-native-navigation';
 import {Provider} from 'react-redux';
 import {store} from './src/redux/store.js';
-import GuestListNew from './src/tabs/GuestList/GuestListNew';
-
-
 import Login from './src/Login';
 
 export default () => {

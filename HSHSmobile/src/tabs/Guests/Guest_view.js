@@ -11,12 +11,15 @@ import {
     View,
     Image,
     FlatList,
-    TouchableOpacity
+    TouchableOpacity,
+    ScrollView
 } from 'react-native';
 import { List, ListItem } from "react-native-elements";
 import nodeEmoji from 'node-emoji';
 import {connect} from 'react-redux';
 import ActionItemList_module from '../../modules/ActionItemList_module';
+import Icon from 'react-native-vector-icons/Feather';
+import Timeline from 'react-native-timeline-listview';
 
 const Timestamp = require('react-timestamp');
 
@@ -174,6 +177,7 @@ class GuestProfile extends Component {
         }
     };
 
+    // Commented out because it crashes probably bc Jacob Jaffe messed it up
     // Creates a list of actions items in which this guest is tagged
     _renderActionItems() {
         var actionItems = this.props.actionItems;
@@ -203,8 +207,89 @@ class GuestProfile extends Component {
             </View>
         )
     }
+    
+    renderDetail(rowData, _sectionID, _rowID) {
+        let title = <Text>{rowData.time}</Text>
+        var desc = null
+        if(rowData.isActionItem) {
+          let completionText = (rowData.isDone ? "Complete Task" :
+                                                  "Incomplete Task");
+          desc = (
+            <View style={{flexDirection: 'column', marginLeft:10}}>
+              <Text style={{fontWeight: 'bold'}}>{completionText}</Text>
+              <View style={{flexDirection: 'row'}}>
+                <TouchableOpacity style={{flex:99, borderColor: '#464646', borderLeftColor: 'blue', padding: 5, borderWidth: 1, borderLeftWidth: 10, borderRightWidth: 0}}>
+                  <Text>{rowData.title}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )
+        } //else if ()
 
+        return (
+          <View style={{flex:1}}>
+            {title}
+            {desc}
+          </View>
+        )
+      }
+
+    // Once interactions are added to Guest schema, interpolate w/ actionItems
+    // and render in the list.
     _renderHistory() {
+        let allActionItems = Object.values(this.props.actionItems);
+
+        let relatedActionItems = allActionItems.filter((actionItem) =>
+                     { // Filter list to only include action items related to guest
+                        if (actionItem.guestIds != undefined) {
+                          return actionItem.guestIds.includes(this.props.guestId)
+                        }
+                      });
+
+        // background color - d7d7d7
+        // date color- 464646
+        // link color- 31a7f8
+
+        if (relatedActionItems.length == 0) {
+            return (
+                <View style={styles.historyContainer}>
+                    <Text style={styles.historyHeader}>Guest History</Text>
+                    <Text>No action items or interactions to display!</Text>
+                </View>
+            );
+        }
+        let data = relatedActionItems.map((i) =>
+                      {
+                        // check date
+                        let date = new Date(i.creationTimestamp).toDateString();
+                        // re add color
+
+                        return ({time: date,
+                                title: i.title,
+                                color: i.color,
+                                description: i.description,
+                                isActionItem: true,
+                                isDone: i.isDone})
+                        })
+
+        return (
+          <View>
+            <Text style={styles.historyHeader}>Guest History</Text>
+            <Timeline
+              data={data}
+              showTime={false}
+              lineColor='#808080'
+              circleColor='red'
+              descriptionStyle={{color:'gray'}}
+              detailContainerStyle={styles.timelineDetailContainer}
+              columnFormat='single-column-left'
+              renderDetail={this.renderDetail}
+              options={{
+                style:{paddingTop:10, flex:1}
+              }}
+            />
+          </View>
+        );
 
     }
 
@@ -221,10 +306,12 @@ class GuestProfile extends Component {
                     </View>
                 </View>
                 <View style={{flex: .5}}>
+                  <ScrollView style={{flex: 1}}>
                     {this._renderActionItems()}
                     {this._renderButtons()}
+                    {this._renderHistory()}
+                  </ScrollView>
                 </View>
-                {/*{this.render_notes()}*/}
             </View>
         );
     }
@@ -334,7 +421,32 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flex: 1,
         paddingHorizontal: 10
-    }
+    },
+    historyContainer: {
+        flexDirection: 'column',
+        padding: 10
+    },
+    historyHeader: {
+        marginLeft: 15,
+        marginBottom: 10,
+        fontWeight: 'bold',
+        fontSize: 15
+    },
+    timelineDetailContainer: {
+      marginBottom: 20,
+      paddingLeft: 5,
+      paddingRight: 5,
+      backgroundColor: "#D3D3D3",
+      borderRadius: 3,
+      shadowColor: '#000111',
+      shadowOffset: {
+        width: 0,
+        height: 1 },
+      shadowOpacity: 0.5,
+      shadowRadius: 2,
+      elevation: 1,
+      marginRight: 10,
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GuestProfile);
