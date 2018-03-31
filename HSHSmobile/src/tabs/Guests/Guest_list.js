@@ -182,7 +182,7 @@ class GuestList extends Component {
 
     renderFilterButtons = (filterName) => {
         return (
-          <View style={styles.buttonContainer}>
+          <View key={filterName} style={styles.buttonContainer}>
             <TouchableHighlight
                 style = {[styles.button, {backgroundColor: this.state.searchFilters[filterName] ? 'rgba(119, 11, 22, 1)' : 'transparent'}]}
                 underlayColor = {this.state.searchFilters[filterName] ? 'white' : 'rgba(119, 11, 22, 1)'}
