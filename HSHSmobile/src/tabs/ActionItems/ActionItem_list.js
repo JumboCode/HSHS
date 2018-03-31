@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import { List, ListItem, SearchBar, ButtonGroup } from "react-native-elements";
 import {connect} from 'react-redux';
-import { markActionItemAsDone } from '../../redux/actions.js';
 import ActionItemList_module from '../../modules/ActionItemList_module'
 import { Icon } from 'react-native-elements'
 import renderLoader from "../../modules/UI/renderLoader";
