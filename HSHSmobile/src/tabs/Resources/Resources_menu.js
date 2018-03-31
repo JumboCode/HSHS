@@ -127,7 +127,7 @@ class Resources_menu extends Component {
                             <Text style={styles.address}>66 Winthrop Street</Text>
                             <View style={{flexDirection: "row"}}>
                                 <Text style={styles.lastAddress}>Cambridge, MA, 02138</Text>
-                                <Text style={styles.phoneNum} onPress = {() => Linking.openURL("tel:1-857-364-2228")}>875-364-2228</Text>
+                                <Text style={styles.phoneNum} onPress = {() => Linking.openURL("tel:1-857-364-2228")}>857-364-2228</Text>
                             </View>
                           </View>
                       </View>
