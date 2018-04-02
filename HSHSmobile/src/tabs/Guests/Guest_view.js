@@ -30,6 +30,7 @@ function mapStateToProps(state, ownProps) {
         allGuests: state.guests,
         loading: state.loading,
         actionItems: state.actionItems,
+        completedActionItems: state.completedActionItems,
         actionItemIds: state.guestActionItemIds[ownProps.Id]
     };
 }
@@ -225,7 +226,7 @@ class GuestProfile extends Component {
     }
 
     renderDetail = (rowData, _sectionID, _rowID) => {
-        let title = <Text>{rowData.time}</Text>
+        let title = <Text>{rowData.date}</Text>
         var desc = null
         if(rowData.isActionItem) {
           let completionText = (rowData.isDone ? "Complete Task" :
@@ -277,13 +278,13 @@ class GuestProfile extends Component {
                 </View>
             );
         }
+        // Format incomplete action items
         let data = relatedActionItems.map((i) =>
                       {
-                        // check date
                         let date = new Date(i.creationTimestamp).toDateString();
                         // re add color
-
-                        return ({time: date,
+                        return ({timestamp: i.creationTimestamp,
+                                date: date,
                                 title: i.title,
                                 color: i.color,
                                 description: i.description,
@@ -299,7 +300,7 @@ class GuestProfile extends Component {
               data={data}
               showTime={false}
               lineColor='#808080'
-              circleColor='red'
+              circleColor='#808080'
               descriptionStyle={{color:'gray'}}
               detailContainerStyle={styles.timelineDetailContainer}
               columnFormat='single-column-left'
