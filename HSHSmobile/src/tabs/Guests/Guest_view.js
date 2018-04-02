@@ -41,6 +41,7 @@ class GuestProfile extends Component {
         super(props);
         // this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.view_crud_note_page = this.view_crud_note_page.bind(this);
+        this.view_actionitem_page = this.view_actionitem_page.bind(this);
     };
 
     // matching receptivity to emojis {0-4} where 4 is the best and 0 is the worst
@@ -51,6 +52,21 @@ class GuestProfile extends Component {
     // gets emoji from receptive value
     get_receptive = () => {
         return(nodeEmoji.get(this.id_to_emoji[this.profile_data.receptive]));
+    };
+
+
+    view_actionitem_page = (actionItemId) => {
+        this.props.navigator.push({
+            screen: 'ActionItem_view', // unique ID registered with Navigation.registerScreen
+            passProps: {
+                actionItemId: actionItemId,
+            }, // Object that will be passed as props to the pushed screen (optional)
+            animated: true, // does the push have transition animation or does it happen immediately (optional)
+            animationType: 'slide-horizontal', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
+            backButtonHidden: false, // hide the back button altogether (optional)
+            navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
+            navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
+        });
     };
 
     //
@@ -208,7 +224,7 @@ class GuestProfile extends Component {
         )
     }
 
-    renderDetail(rowData, _sectionID, _rowID) {
+    renderDetail = (rowData, _sectionID, _rowID) => {
         let title = <Text>{rowData.time}</Text>
         var desc = null
         if(rowData.isActionItem) {
@@ -218,7 +234,10 @@ class GuestProfile extends Component {
             <View style={{flexDirection: 'column', marginLeft:10}}>
               <Text style={{fontWeight: 'bold'}}>{completionText}</Text>
               <View style={{flexDirection: 'row'}}>
-                <TouchableOpacity style={{flex:99, borderColor: '#464646', borderLeftColor: 'blue', padding: 5, borderWidth: 1, borderLeftWidth: 10, borderRightWidth: 0}}>
+                <TouchableOpacity
+                style={{flex:99, borderColor: '#464646', borderLeftColor: 'blue', padding: 5, borderWidth: 1, borderLeftWidth: 10, borderRightWidth: 0}}
+                onPress={() => this.view_actionitem_page(rowData.actionItemId)}
+                >
                   <Text>{rowData.title}</Text>
                 </TouchableOpacity>
               </View>
@@ -236,7 +255,7 @@ class GuestProfile extends Component {
 
     // Once interactions are added to Guest schema, interpolate w/ actionItems
     // and render in the list.
-    _renderHistory() {
+    renderHistory = () => {
         let allActionItems = Object.values(this.props.actionItems);
 
         let relatedActionItems = allActionItems.filter((actionItem) =>
@@ -269,6 +288,7 @@ class GuestProfile extends Component {
                                 color: i.color,
                                 description: i.description,
                                 isActionItem: true,
+                                actionItemId: i.actionItemId,
                                 isDone: i.isDone})
                         })
 
@@ -310,7 +330,7 @@ class GuestProfile extends Component {
                     {this._renderButtons()}
                 </View>
                 <View style={{flex: .2}}>
-                  {this._renderHistory()}
+                  {this.renderHistory()}
                 </View>
             </ScrollView>
         );
