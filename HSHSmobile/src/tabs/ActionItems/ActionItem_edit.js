@@ -161,7 +161,7 @@ class ActionItem_edit extends Component {
     }
 
     _handleDelete() {
-        markActionItemAsDone(this.state.actionItemId);
+        deleteActionItem(this.state.actionItemId);
         this.props.navigator.popToRoot({
           animated: true, // does the pop have transition animation or does it happen immediately (optional)
           animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)

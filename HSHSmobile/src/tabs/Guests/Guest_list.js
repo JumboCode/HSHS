@@ -144,7 +144,7 @@ class GuestList extends Component {
                 actionItems: "hello"
             }, // Object that will be passed as props to the pushed screen (optional)
             animated: true, // does the push have transition animation or does it happen immediately (optional)
-            animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
+            animationType: 'slide-horizontal', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
             backButtonHidden: false, // hide the back button altogether (optional)
             navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
             navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
@@ -248,7 +248,7 @@ class GuestList extends Component {
         const filterButtons = Object.keys(this.state.searchFilters).map(filter => this.renderFilterButtons(filter));
 
         return (
-            <View style={{height: '100%'}}>
+            <View style={{flex: 1}}>
                 <SearchBar
                     placeholder="Search (Ex. Phil Wang)"
                     containerStyle={{backgroundColor: 'transparent'}}
@@ -267,16 +267,16 @@ class GuestList extends Component {
                     {filterButtons}
                   </View>
                 </View>
-                <View style={{justifyContent: 'center'}}>
-                  <FlatList
-                      data = {this.filterGuestData(this.props.guests)}
-                      renderItem={({item}) => this.renderListItem(item)}
-                      keyExtractor = {item => item.Id}
-                      ItemSeparatorComponent = {() => {return(renderSeperator())}}
-                      refreshing = {this.props.refreshing}
-                      onEndReached = {this.handleLoadMore}
-                      onEndReachedThreshold = {50}
-                  />
+                <View style={{flex: 1}}>
+                    <FlatList
+                        data = {this.filterGuestData(this.props.guests)}
+                        renderItem={({item}) => this.renderListItem(item)}
+                        keyExtractor = {item => item.Id}
+                        ItemSeparatorComponent = {() => {return(renderSeperator())}}
+                        refreshing = {this.props.refreshing}
+                        onEndReached={this.handleLoadMore}
+                        onEndReachedThreshold={50}
+                    />
                 </View>
             </View>
         );
