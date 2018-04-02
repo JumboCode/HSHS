@@ -19,7 +19,7 @@
     "react-native-collapsible": "^0.10.0",
     "react-native-datepicker": "^1.6.0",
     "react-native-datepicker-dialog": "0.0.8",
-    "react-native-elements": "^0.17.0",
+    "react-native-elements": "latest",
     "react-native-fab": "^1.0.6",
     "react-native-geocoding": "^0.2.0",
     "react-native-maps": "^0.17.1",

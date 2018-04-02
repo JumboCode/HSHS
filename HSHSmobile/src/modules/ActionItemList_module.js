@@ -83,6 +83,7 @@ class ActionItemList_module extends Component {
                     onChangeText={(str) => {
                         this.setState({searchInput: str.toLowerCase()})
                     }}
+                    value={this.state.searchInput}
                     onClearText={() => this.setState({searchInput: ''})}
                     placeholder='Search'
                 />

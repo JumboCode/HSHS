@@ -254,6 +254,7 @@ class GuestList extends Component {
                     containerStyle={{backgroundColor: 'transparent'}}
                     onChangeText={(str) => {this.setState({searchInput: str.toLowerCase()})}}
                     onClearText={() => this.setState({searchInput: ''})}
+                    value={this.state.searchInput}
                     lightTheme
                     clearIcon={this.state.searchInput !== ''}
                     round

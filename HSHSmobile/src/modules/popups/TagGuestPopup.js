@@ -54,6 +54,7 @@ export default class TagGuestDialog extends Component {
             onClearText={() => this.setState({searchInput: ''})}
             lightTheme
             clearIcon={this.state.searchInput !== ''}
+            value={this.state.searchInput}
             round
           />
           <FlatList
