@@ -34,7 +34,7 @@ import Interaction_new from './tabs/Interactions/Interaction_new';
 
 // Resources
 import Resources_menu from './tabs/Resources/Resources_menu';
-import Resources_list from './tabs/Resources/Resources_list';
+import Resources_search from './tabs/Resources/Resources_search';
 
 // UI
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -137,7 +137,7 @@ export default class Login extends Component {
         Navigation.registerComponent('Guest_list', () => Guest_list, store, Provider);
         Navigation.registerComponent('Guest_view', () => Guest_view, store, Provider);
         Navigation.registerComponent('Resources_menu', () => Resources_menu, store, Provider);
-        Navigation.registerComponent('Resources_list', () => Resources_list, store, Provider);
+        Navigation.registerComponent('Resources_search', () => Resources_search, store, Provider);
         Navigation.registerComponent('Info', () => Info, store, Provider);
         Navigation.registerComponent('Guest_edit', () => Guest_edit, store, Provider);
         Navigation.registerComponent('ActionItem_list', () => ActionItem_list, store, Provider);

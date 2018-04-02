@@ -10,12 +10,11 @@ import {
 } from 'react-native';
 import { List, ListItem, SearchBar, ButtonGroup } from "react-native-elements";
 import {connect} from 'react-redux';
-import { markActionItemAsDone } from '../../redux/actions.js';
 import ActionItemList_module from '../../modules/ActionItemList_module'
 import { Icon } from 'react-native-elements'
 import renderLoader from "../../modules/UI/renderLoader";
 import dupNavFix from "../../dupNavFix";
-
+import markActionItemAsDone from "../../redux/actions"
 // for navigation
 const IonIcon = require('react-native-vector-icons/Ionicons');
 
@@ -117,10 +116,10 @@ class ActionItem_list extends Component {
                 onPress={(i) => {this.setState({selectedIndex: i})}}
                 selectedIndex={this.state.selectedIndex}
                 buttons={this.state.buttons}
-                selectedTextStyle={{color: '#007AFF'}}            
+                selectedTextStyle={{color: '#007AFF'}}
             />
 
-            {this.state.selectedIndex === 1 ? 
+            {this.state.selectedIndex === 1 ?
                 (<ActionItemList_module
                     actionItems={this.props.completedActionItems}
                     guests={this.props.guests}
@@ -131,7 +130,7 @@ class ActionItem_list extends Component {
                     guests={this.props.guests}
                     navigator={this.props.navigator}
                     doneFunction={ this.props.markActionItemAsDone}/>)}
-            
+
           </View>
         );
     }

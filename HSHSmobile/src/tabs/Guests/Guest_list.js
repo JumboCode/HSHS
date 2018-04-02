@@ -5,7 +5,9 @@ import {
     Text,
     View,
     FlatList,
-    ActivityIndicator
+    ActivityIndicator,
+    Button,
+    TouchableHighlight
 } from 'react-native';
 import { List, ListItem, SearchBar } from "react-native-elements";
 import {connect} from 'react-redux';
@@ -29,7 +31,6 @@ function mapDispatchToProps(dispatch, ownProps) {
     };
 }
 
-//TODO sort by name
 function guestObjectToArray(IdsToGuests, IdsToInteractions) {
     var guestList = []
     for (var Id in IdsToGuests) {
@@ -89,8 +90,13 @@ class GuestList extends Component {
         super(props);
         this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.Screen_GuestListProfile = this.Screen_GuestListProfile.bind(this);
+        this.filterGuestData = this.filterGuestData.bind(this);
         this.props.loading = true;
-        this.state = {searchInput: ''};
+        this.state = {
+            searchInput: '',
+            searchFilters: {'Old': false, 'Middle': false, 'Young': false, 'M': false, 'F': false},
+            filterSelected: 0
+        };
     };
 
     static navigatorButtons = {
@@ -163,6 +169,38 @@ class GuestList extends Component {
         return ;
     };
 
+    setFilter = (filterName) => {
+        this.setState(prevState => {
+          newSearchFilters = prevState.searchFilters;
+          newSearchFilters[filterName] = !prevState.searchFilters[filterName];
+          return {searchFilters: newSearchFilters, filterSelected: newSearchFilters[filterName] ? prevState.filterSelected + 1 : prevState.filterSelected - 1};
+        }, () => {
+            console.log(this.state);
+        });
+
+    }
+
+    renderFilterButtons = (filterName) => {
+        return (
+          <View key={filterName} style={styles.buttonContainer}>
+            <TouchableHighlight
+                style = {[styles.button, {backgroundColor: this.state.searchFilters[filterName] ? 'rgba(119, 11, 22, 1)' : 'transparent'}]}
+                underlayColor = {this.state.searchFilters[filterName] ? 'white' : 'rgba(119, 11, 22, 1)'}
+                onPress = {() => this.setFilter(filterName)}
+            >
+                <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style = {
+                          { textAlign: "center",
+                            color: this.state.searchFilters[filterName] ? 'white' : 'rgba(119, 11, 22, 1)',
+                            fontSize: 12 }}>
+                       {filterName}
+                    </Text>
+                </View>
+            </TouchableHighlight>
+          </View>
+        );
+    };
+
     renderListItem = (item) => {
         return(
             <View style={{backgroundColor: item.color}}>
@@ -187,6 +225,11 @@ class GuestList extends Component {
         );
     };
 
+    filterGuestData = (guests) => {
+      return guests.filter(item => (item.name.toLowerCase().includes(this.state.searchInput) || item.description.toLowerCase().includes(this.state.searchInput))
+                                      && (this.state.filterSelected == 0 || this.state.searchFilters[item.age] || this.state.searchFilters[item.gender]));
+    }
+
     render() {
         if (this.props.loading == true) {
             return renderLoader();
@@ -201,11 +244,13 @@ class GuestList extends Component {
 
             )
         }
-        return (
 
+        const filterButtons = Object.keys(this.state.searchFilters).map(filter => this.renderFilterButtons(filter));
+
+        return (
             <View style={{height: '100%'}}>
                 <SearchBar
-                    placeholder="Search"
+                    placeholder="Search (Ex. Phil Wang)"
                     containerStyle={{backgroundColor: 'transparent'}}
                     onChangeText={(str) => {this.setState({searchInput: str.toLowerCase()})}}
                     onClearText={() => this.setState({searchInput: ''})}
@@ -213,15 +258,25 @@ class GuestList extends Component {
                     clearIcon={this.state.searchInput !== ''}
                     round
                 />
-                <FlatList
-                    data = {this.props.guests.filter(item => item.name.toLowerCase().includes(this.state.searchInput) || item.description.toLowerCase().includes(this.state.searchInput))}
-                    renderItem={({item}) => this.renderListItem(item)}
-                    keyExtractor = {item => item.Id}
-                    ItemSeparatorComponent = {() => {return(renderSeperator())}}
-                    refreshing = {this.props.refreshing}
-                    onEndReached = {this.handleLoadMore}
-                    onEndReachedThreshold = {50}
-                />
+                <View style={{flexDirection: 'row', marginLeft: '1%', height: 70, justifyContent: 'space-between'}}>
+                  <View style={{justifyContent: 'center', alignItems: 'flex-start'}} >
+                    <Text style={{color: 'rgba(119, 11, 22, 1)', fontSize: 12}}> Filters: </Text>
+                  </View>
+                  <View style={{flexDirection: 'row', flexWrap: 'nowrap', justifyContent: 'space-around'}}>
+                    {filterButtons}
+                  </View>
+                </View>
+                <View style={{justifyContent: 'center'}}>
+                  <FlatList
+                      data = {this.filterGuestData(this.props.guests)}
+                      renderItem={({item}) => this.renderListItem(item)}
+                      keyExtractor = {item => item.Id}
+                      ItemSeparatorComponent = {() => {return(renderSeperator())}}
+                      refreshing = {this.props.refreshing}
+                      onEndReached = {this.handleLoadMore}
+                      onEndReachedThreshold = {50}
+                  />
+                </View>
             </View>
         );
     }
@@ -232,6 +287,20 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    buttonContainer: {
+        height: 30,
+        width: 55,
+        marginLeft: '1%',
+        marginRight: '1%',
+        alignSelf: 'center',
+    },
+    button: {
+        flex: 1,
+        borderStyle: "solid",
+        borderWidth: 1,
+        borderRadius: 40,
+        borderColor: 'rgba(119, 11, 22, 1)',
     }
 });
 
