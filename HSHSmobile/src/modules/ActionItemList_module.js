@@ -73,7 +73,7 @@ class ActionItemList_module extends Component {
         }
 
         return (
-            <View style={{height: '100%'}}>
+            <View>
                 {!this.props.showDueSoon && !this.props.dashboard &&
                 <SearchBar
                     containerStyle={{backgroundColor: 'transparent'}}
