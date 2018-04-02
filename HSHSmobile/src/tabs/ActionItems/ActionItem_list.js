@@ -14,7 +14,7 @@ import ActionItemList_module from '../../modules/ActionItemList_module'
 import { Icon } from 'react-native-elements'
 import renderLoader from "../../modules/UI/renderLoader";
 import dupNavFix from "../../dupNavFix";
-import markActionItemAsDone from "../../redux/actions"
+import {markActionItemAsDone} from "../../redux/actions";
 // for navigation
 const IonIcon = require('react-native-vector-icons/Ionicons');
 
@@ -101,6 +101,8 @@ class ActionItem_list extends Component {
                 ]
             });
         });
+
+        console.log(this.props.markActionItemAsDone);
     };
 
     render() {
