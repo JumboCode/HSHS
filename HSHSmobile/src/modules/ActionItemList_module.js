@@ -73,7 +73,7 @@ class ActionItemList_module extends Component {
         }
 
         return (
-            <View style={{height: '100%'}}>
+            <View>
                 {!this.props.showDueSoon && !this.props.dashboard &&
                 <SearchBar
                     containerStyle={{backgroundColor: 'transparent'}}
@@ -109,8 +109,9 @@ class ActionItemList_module extends Component {
     actionDone = (item) => {
         // console.log(item);
         // this.props.markActionItemAsDone(item.id)
+        // console.log(this.props);
         this.props.doneFunction(item.actionItemId);
-        console.log(item)
+        // console.log(item)
     };
 
     renderListItem(item) {
