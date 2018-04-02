@@ -73,7 +73,7 @@ class ActionItemList_module extends Component {
         }
 
         return (
-            <View style={{height: '100%'}}>
+            <View style={{flex: 1}}>
                 {!this.props.showDueSoon && !this.props.dashboard &&
                 <SearchBar
                     containerStyle={{backgroundColor: 'transparent'}}
@@ -87,20 +87,22 @@ class ActionItemList_module extends Component {
                     placeholder='Search'
                 />
                 }
-                <FlatList
-                    data={this.props.dashboard
-                        ? (this.props.selectedInteraction ? [this.props.actionItems[this.props.selectedInteraction]] : null)
-                        : getActionItems(actionItems).filter(item => item.title.toLowerCase().includes(this.state.searchInput))}
-                    renderItem={({item}) => this.renderListItem(item)}
-                    keyExtractor={item => item.actionItemId}
-                    ItemSeparatorComponent={() => {
-                        return (renderSeperator())
-                    }}
-                    ListHeaderComponent={this.renderHeader}
-                    refreshing={this.props.refreshing}
-                    onEndReached={this.handleLoadMore}
-                    onEndReachedThreshold={50}
-                />
+                <View style={{flex: 1}}>
+                    <FlatList
+                        data={this.props.dashboard
+                            ? (this.props.selectedInteraction ? [this.props.actionItems[this.props.selectedInteraction]] : null)
+                            : getActionItems(actionItems).filter(item => item.title.toLowerCase().includes(this.state.searchInput))}
+                        renderItem={({item}) => this.renderListItem(item)}
+                        keyExtractor={item => item.actionItemId}
+                        ItemSeparatorComponent={() => {
+                            return (renderSeperator())
+                        }}
+                        ListHeaderComponent={this.renderHeader}
+                        refreshing={this.props.refreshing}
+                        onEndReached={this.handleLoadMore}
+                        onEndReachedThreshold={50}
+                    />
+                </View>
             </View>
         )
     }
