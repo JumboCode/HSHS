@@ -69,6 +69,10 @@ class Resources_search extends Component {
         }
     }
 
+    _keyExtractor = (link) => {
+      return link.name.toLowerCase();
+    }
+
     render() {
         return (
             <View style = {{backgroundColor : "#F7F7F7", height : "100%"}}>
@@ -82,8 +86,8 @@ class Resources_search extends Component {
                             )
                         }
                     )}
-                    renderItem = {this.renderListItem.bind(this)}
-                    keyExtractor = {(link) => {link.name.toLowerCase()}}
+                    renderItem = {(link) => this.renderListItem(link)}
+                    keyExtractor = {(link) => this._keyExtractor(link)}
                 />
             </View>
         );
