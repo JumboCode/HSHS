@@ -162,7 +162,7 @@ class GuestProfile extends Component {
         return (
             <View style={styles.descriptionContainer}>
               <View style={styles.descriptionScroll}>
-                <ScrollView >
+                <ScrollView>
                   <Text>
                     {this.props.guest.description}
                   </Text>
