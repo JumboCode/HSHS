@@ -88,7 +88,7 @@ class GuestProfile extends Component {
     // renders name on profile page
     render_name = () => {
         return (
-            <Text numberOfLines={2} style={styles.name}>
+            <Text style={styles.name}>
                 {this.props.guest.name}
             </Text>
         );
@@ -161,13 +161,9 @@ class GuestProfile extends Component {
     render_description = () => {
         return (
             <View style={styles.descriptionContainer}>
-              <View style={styles.descriptionScroll}>
-                <ScrollView>
-                  <Text>
+                  <Text style={styles.descriptionScroll}>
                     {this.props.guest.description}
                   </Text>
-                </ScrollView>
-              </View>
             </View>
         );
     };
@@ -447,9 +443,10 @@ const styles = StyleSheet.create({
     descriptionContainer: {
         flexDirection: 'row',
         flex: 1,
+        marginTop: 5,
+        marginBottom: 5,
         paddingHorizontal: 10,
     },
-
     historyContainer: {
         flexDirection: 'column',
         padding: 10
