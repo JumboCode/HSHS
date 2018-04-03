@@ -88,7 +88,7 @@ class GuestProfile extends Component {
     // renders name on profile page
     render_name = () => {
         return (
-            <Text style={styles.name}>
+            <Text numberOfLines={2} style={styles.name}>
                 {this.props.guest.name}
             </Text>
         );
@@ -161,9 +161,13 @@ class GuestProfile extends Component {
     render_description = () => {
         return (
             <View style={styles.descriptionContainer}>
-                <Text style={styles.description}>
+              <View style={styles.descriptionScroll}>
+                <ScrollView >
+                  <Text>
                     {this.props.guest.description}
-                </Text>
+                  </Text>
+                </ScrollView>
+              </View>
             </View>
         );
     };
@@ -365,7 +369,7 @@ const styles = StyleSheet.create({
         borderTopColor: '#D3D3D3',
     },
     top: {
-        flex: 0.33,
+        flex: 0.38,
         flexDirection: "column",
         flexWrap: "nowrap",
         padding: 10,
@@ -388,10 +392,10 @@ const styles = StyleSheet.create({
         fontSize: 15,
     },
     name: {
-        fontSize: 35,
+        fontSize: 28,
         textDecorationColor:'#686868',
         fontFamily: 'Times New Roman',
-
+        textAlign: 'center',
     },
     profile_image: {
         flex: 0.55,
@@ -430,18 +434,22 @@ const styles = StyleSheet.create({
     age: {
         paddingLeft: 20,
     },
-    description: {
-        borderWidth: 0.3,
-        borderColor: "#000000",
-        borderRadius: 4,
-        marginTop: 10,
-        padding: 5
+    descriptionScroll: {
+      borderWidth: 0.3,
+      borderColor: "#000000",
+      borderRadius: 4,
+      marginTop: 10,
+      marginBottom: 5,
+      padding: 10,
+      width: '90%',
+      alignSelf: 'center',
     },
     descriptionContainer: {
         flexDirection: 'row',
         flex: 1,
-        paddingHorizontal: 10
+        paddingHorizontal: 10,
     },
+
     historyContainer: {
         flexDirection: 'column',
         padding: 10
