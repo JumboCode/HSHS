@@ -251,10 +251,13 @@ class GuestList extends Component {
         return (
             <View style={{flex: 1}}>
                 <SearchBar
+                    showLoading
+                    cancelButtonTitle="Cancel"
                     placeholder="Search (Ex. Phil Wang)"
                     containerStyle={{backgroundColor: 'transparent'}}
                     onCancel={() => this.setState({searchBarOn: false})}
-                    onChangeText={(str) => {this.setState({searchInput: str.toLowerCase(), searchBarOn: 'true'})}}
+                    onFocus={() => this.setState({searchBarOn: true})}
+                    onChangeText={(str) => {this.setState({searchInput: str.toLowerCase()})}}
                     onClearText={() => this.setState({searchInput: ''})}
                     value={this.state.searchInput}
                     lightTheme
