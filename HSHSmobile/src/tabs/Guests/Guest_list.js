@@ -95,7 +95,8 @@ class GuestList extends Component {
         this.state = {
             searchInput: '',
             searchFilters: {'Old': false, 'Middle': false, 'Young': false, 'M': false, 'F': false},
-            filterSelected: 0
+            filterSelected: 0,
+            searchBarOn: false,
         };
     };
 
@@ -252,21 +253,24 @@ class GuestList extends Component {
                 <SearchBar
                     placeholder="Search (Ex. Phil Wang)"
                     containerStyle={{backgroundColor: 'transparent'}}
-                    onChangeText={(str) => {this.setState({searchInput: str.toLowerCase()})}}
+                    onCancel={() => this.setState({searchBarOn: false})}
+                    onChangeText={(str) => {this.setState({searchInput: str.toLowerCase(), searchBarOn: 'true'})}}
                     onClearText={() => this.setState({searchInput: ''})}
                     value={this.state.searchInput}
                     lightTheme
                     clearIcon={this.state.searchInput !== ''}
                     round
                 />
-                <View style={{flexDirection: 'row', marginLeft: '1%', height: 70, justifyContent: 'space-between'}}>
-                  <View style={{justifyContent: 'center', alignItems: 'flex-start'}} >
-                    <Text style={{color: 'rgba(119, 11, 22, 1)', fontSize: 12}}> Filters: </Text>
+                { this.state.searchBarOn &&
+                  <View style={{flexDirection: 'row', marginLeft: '1%', height: 70, justifyContent: 'space-between'}}>
+                    <View style={{justifyContent: 'center', alignItems: 'flex-start'}} >
+                      <Text style={{color: 'rgba(119, 11, 22, 1)', fontSize: 12}}> Filters: </Text>
+                    </View>
+                    <View style={{flexDirection: 'row', flexWrap: 'nowrap', justifyContent: 'space-around'}}>
+                      {filterButtons}
+                    </View>
                   </View>
-                  <View style={{flexDirection: 'row', flexWrap: 'nowrap', justifyContent: 'space-around'}}>
-                    {filterButtons}
-                  </View>
-                </View>
+                }
                 <View style={{flex: 1}}>
                     <FlatList
                         data = {this.filterGuestData(this.props.guests)}
