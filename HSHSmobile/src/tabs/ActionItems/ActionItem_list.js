@@ -124,7 +124,7 @@ class ActionItem_list extends Component {
             {this.state.selectedIndex === 1 ?
                 (<ActionItemList_module
                     actionItems={this.props.completedActionItems}
-                    completed={true}
+                    completed={true}    // needed so ActionItem_view knows where to pull data from
                     guests={this.props.guests}
                     navigator={this.props.navigator}
                     doneFunction={this.props.markActionItemAsDone}/>) :
