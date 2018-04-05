@@ -98,6 +98,7 @@ class GuestList extends Component {
             searchFilters  : {'Old': false, 'Middle': false, 'Young': false, 'M': false, 'F': false},
             filterSelected : 0,
             animation      : new Animated.Value(0),
+            filterSet      : false
         };
     };
 
@@ -228,15 +229,18 @@ class GuestList extends Component {
 
     // Animated dropdown filter bar
     expandFilter = () => {
-        // Set initial height
-        this.state.animation.setValue(0);
-        // Calculate frames from initial height to final height
-        Animated.spring(
-          this.state.animation,
-          {
-            toValue: this.state.maxHeight
-          }
-        ).start();
+        if (!this.state.filterOn) {
+          this.setState({filterOn:true});
+          // Set initial height
+          this.state.animation.setValue(0);
+          // Calculate frames from initial height to final height
+          Animated.spring(
+            this.state.animation,
+            {
+              toValue: this.state.maxHeight
+            }
+          ).start();
+      }
     }
 
     filterGuestData = (guests) => {
@@ -279,6 +283,7 @@ class GuestList extends Component {
                   lightTheme
                   clearIcon={this.state.searchInput !== ''}
               />
+              {(this.state.filterOn) &&
               <Animated.View style={{height: this.state.animation}}>
                 <View
                   style={{flexDirection: 'row', marginLeft: '1%', height: 70, justifyContent: 'space-between'}}
@@ -292,6 +297,7 @@ class GuestList extends Component {
                   </View>
                 </View>
               </Animated.View>
+              }
               <View style={{flex: 1}}>
                   <FlatList
                       data = {this.filterGuestData(this.props.guests)}
