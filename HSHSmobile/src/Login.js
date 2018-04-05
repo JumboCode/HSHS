@@ -56,9 +56,24 @@ export default class Login extends Component {
         this.state = {
           username: '',
           password: '',
-          isLoggingIn: false,
+          user: null,
+          isLoggingIn: true
         };
         this.autenticate = this.authenticate.bind(this);
+    }
+
+    componentDidMount = () => {
+      firebase.auth().onAuthStateChanged((user) => {
+        this.setState({isLoggingIn: false});
+        console.log("here");
+        if (user) {
+          console.log(user);
+          this.setState({user: user});
+          this.openApp();
+        } else {
+          console.log("not loggedIn");
+        }
+      })
     }
 
     openApp () {
@@ -79,7 +94,7 @@ export default class Login extends Component {
         //const { email, password } = this.state;
         firebase.auth().signInWithEmailAndPassword(this.state.username, this.state.password)
             .then(() => {
-                this.openApp();
+                //this.openApp();
                 this.setState({
                   isLoggingIn: false
                 });
@@ -87,14 +102,14 @@ export default class Login extends Component {
             .catch(() => {
                 // TODO: IMPORTANT! ALERT!
                 // This is just so we don't have to login every time------ DO NOT SHIP THIS
-                if (this.state.username == "" && this.state.password == "") {
-                  this.openApp();
-                } else {
+                //if (this.state.username == "" && this.state.password == "") {
+                //  this.openApp();
+                //} else {
                   Alert.alert(
                     'Login failed',
                     'Unable to login. Username or password is incorrect',
                   );
-                }
+                //}
                 this.setState({
                   isLoggingIn: false
                 });
