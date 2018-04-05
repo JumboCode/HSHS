@@ -19,15 +19,16 @@ import MapView from 'react-native-maps';
 
 
 function mapStateToProps(state, ownProps) {
+
     return {
-        actionItems: state.actionItems,
+        actionItems: ownProps.completed ? state.completedActionItems : state.actionItems,
         guests: state.guests,
         loading: state.loading,
         interactions: state.interactions
     };
 }
 
-function mapDispatchToProps(dispath, ownProps) {
+function mapDispatchToProps(dispatch, ownProps) {
     return {
     };
 }
@@ -37,6 +38,7 @@ class ActionItem_view extends Component {
   constructor(props) {
       super(props);
       this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+      console.log(props);
 
       // TODO: geeze why is this longitude latitude and other places lat lng? cause google maps api sucks. please let's fix this later.
       var coords = this.props.actionItems[this.props.actionItemId].locationCoord ? {

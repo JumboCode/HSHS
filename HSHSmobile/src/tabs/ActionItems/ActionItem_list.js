@@ -124,6 +124,7 @@ class ActionItem_list extends Component {
             {this.state.selectedIndex === 1 ?
                 (<ActionItemList_module
                     actionItems={this.props.completedActionItems}
+                    completed={true}
                     guests={this.props.guests}
                     navigator={this.props.navigator}
                     doneFunction={this.props.markActionItemAsDone}/>) :
