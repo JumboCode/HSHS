@@ -20,14 +20,14 @@ import MapView from 'react-native-maps';
 
 function mapStateToProps(state, ownProps) {
     return {
-        actionItems: state.actionItems,
+        actionItems: ownProps.completed ? state.completedActionItems : state.actionItems,
         guests: state.guests,
         loading: state.loading,
         interactions: state.interactions
     };
 }
 
-function mapDispatchToProps(dispath, ownProps) {
+function mapDispatchToProps(dispatch, ownProps) {
     return {
     };
 }
