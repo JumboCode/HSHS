@@ -35,7 +35,10 @@ class Resources_search extends Component {
     renderAccordionHeader(link) {
         return (
             <View>
-                <Text>{link.item.name}</Text>
+                <ListItem
+                    title = {link.name}
+                    subtitle = {link.category}
+                />
             </View>
         )
     }
@@ -44,13 +47,13 @@ class Resources_search extends Component {
         return (
             <View>
                 <View>
-                    <Text>{link.item.description}</Text>
+                    <Text>{link.description}</Text>
                 </View>
                 <View>
                     <Text
-                        onPress={() => {this.goToURL(link.item.link)}}
+                        onPress={() => {this.goToURL(link.link)}}
                     >
-                        {link.item.link}
+                        {link.link}
                     </Text>
                 </View>
             </View>
@@ -96,6 +99,7 @@ class Resources_search extends Component {
                     )}
                     renderHeader = {(link) => this.renderAccordionHeader(link)}
                     renderContent = {(link) => this.renderAccordionContent(link)}
+                    underlayColor = "white"
                 />
             </View>
         );

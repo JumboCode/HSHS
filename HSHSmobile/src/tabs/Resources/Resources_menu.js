@@ -245,11 +245,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         //flex: 1,
         width: "27%",
-<<<<<<< HEAD
-        aspectRatio: 1,
-=======
         height: "20%",
->>>>>>> master
         marginTop: "2%",
         marginBottom: "2%",
         marginLeft: "2%",
