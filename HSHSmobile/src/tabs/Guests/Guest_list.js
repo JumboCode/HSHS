@@ -7,7 +7,8 @@ import {
     FlatList,
     ActivityIndicator,
     Button,
-    TouchableHighlight
+    TouchableHighlight,
+    Animated,
 } from 'react-native';
 import { List, ListItem, SearchBar } from "react-native-elements";
 import {connect} from 'react-redux';
@@ -93,9 +94,9 @@ class GuestList extends Component {
         this.filterGuestData = this.filterGuestData.bind(this);
         this.props.loading = true;
         this.state = {
-            searchInput: '',
-            searchFilters: {'Old': false, 'Middle': false, 'Young': false, 'M': false, 'F': false},
-            filterSelected: 0
+            searchInput    : '',
+            searchFilters  : {'Old': false, 'Middle': false, 'Young': false, 'M': false, 'F': false},
+            filterSelected : 0,
         };
     };
 
@@ -144,7 +145,7 @@ class GuestList extends Component {
                 actionItems: "hello"
             }, // Object that will be passed as props to the pushed screen (optional)
             animated: true, // does the push have transition animation or does it happen immediately (optional)
-            animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
+            animationType: 'slide-horizontal', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
             backButtonHidden: false, // hide the back button altogether (optional)
             navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
             navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
@@ -167,38 +168,6 @@ class GuestList extends Component {
 
     renderHeader = () => {
         return ;
-    };
-
-    setFilter = (filterName) => {
-        this.setState(prevState => {
-          newSearchFilters = prevState.searchFilters;
-          newSearchFilters[filterName] = !prevState.searchFilters[filterName];
-          return {searchFilters: newSearchFilters, filterSelected: newSearchFilters[filterName] ? prevState.filterSelected + 1 : prevState.filterSelected - 1};
-        }, () => {
-            console.log(this.state);
-        });
-
-    }
-
-    renderFilterButtons = (filterName) => {
-        return (
-          <View key={filterName} style={styles.buttonContainer}>
-            <TouchableHighlight
-                style = {[styles.button, {backgroundColor: this.state.searchFilters[filterName] ? 'rgba(119, 11, 22, 1)' : 'transparent'}]}
-                underlayColor = {this.state.searchFilters[filterName] ? 'white' : 'rgba(119, 11, 22, 1)'}
-                onPress = {() => this.setFilter(filterName)}
-            >
-                <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                    <Text style = {
-                          { textAlign: "center",
-                            color: this.state.searchFilters[filterName] ? 'white' : 'rgba(119, 11, 22, 1)',
-                            fontSize: 12 }}>
-                       {filterName}
-                    </Text>
-                </View>
-            </TouchableHighlight>
-          </View>
-        );
     };
 
     renderListItem = (item) => {
@@ -225,6 +194,37 @@ class GuestList extends Component {
         );
     };
 
+    renderFilterButtons = (filterName) => {
+        return (
+          <View key={filterName} style={styles.buttonContainer}>
+            <TouchableHighlight
+                style = {[styles.button, {backgroundColor: this.state.searchFilters[filterName] ? 'rgba(119, 11, 22, 1)' : 'transparent'}]}
+                underlayColor = {this.state.searchFilters[filterName] ? 'white' : 'rgba(119, 11, 22, 1)'}
+                onPress = {() => this.setFilter(filterName)}
+            >
+                <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style = {
+                          { textAlign: "center",
+                            color: this.state.searchFilters[filterName] ? 'white' : 'rgba(119, 11, 22, 1)',
+                            fontSize: 12 }}>
+                       {filterName}
+                    </Text>
+                </View>
+            </TouchableHighlight>
+          </View>
+        );
+    };
+
+    setFilter = (filterName) => {
+        this.setState(prevState => {
+          newSearchFilters = prevState.searchFilters;
+          newSearchFilters[filterName] = !prevState.searchFilters[filterName];
+          return {searchFilters: newSearchFilters, filterSelected: newSearchFilters[filterName] ? prevState.filterSelected + 1 : prevState.filterSelected - 1};
+        }, () => {
+            console.log(this.state);
+        });
+    }
+
     filterGuestData = (guests) => {
       return guests.filter(item => (item.name.toLowerCase().includes(this.state.searchInput) || item.description.toLowerCase().includes(this.state.searchInput))
                                       && (this.state.filterSelected == 0 || this.state.searchFilters[item.age] || this.state.searchFilters[item.gender]));
@@ -234,6 +234,7 @@ class GuestList extends Component {
         if (this.props.loading == true) {
             return renderLoader();
         }
+
         if (this.props.guests.length < 1) {
           return (
             <View style={styles.container}>
@@ -241,42 +242,45 @@ class GuestList extends Component {
                 {'No guests in database.'}
                 </Text>
             </View>
-
             )
         }
 
         const filterButtons = Object.keys(this.state.searchFilters).map(filter => this.renderFilterButtons(filter));
 
         return (
-            <View style={{height: '100%'}}>
-                <SearchBar
-                    placeholder="Search (Ex. Phil Wang)"
-                    containerStyle={{backgroundColor: 'transparent'}}
-                    onChangeText={(str) => {this.setState({searchInput: str.toLowerCase()})}}
-                    onClearText={() => this.setState({searchInput: ''})}
-                    lightTheme
-                    clearIcon={this.state.searchInput !== ''}
-                    round
-                />
-                <View style={{flexDirection: 'row', marginLeft: '1%', height: 70, justifyContent: 'space-between'}}>
-                  <View style={{justifyContent: 'center', alignItems: 'flex-start'}} >
-                    <Text style={{color: 'rgba(119, 11, 22, 1)', fontSize: 12}}> Filters: </Text>
-                  </View>
-                  <View style={{flexDirection: 'row', flexWrap: 'nowrap', justifyContent: 'space-around'}}>
-                    {filterButtons}
-                  </View>
+            <View style={{flex: 1}}>
+              <SearchBar
+                  cancelButtonTitle="Cancel"
+                  placeholder="Search (Ex. Phil Wang)"
+                  containerStyle={{backgroundColor: 'transparent'}}
+                  onFocus={() => this.expandFilter()}
+                  onChangeText={(str) => {this.setState({searchInput: str.toLowerCase()})}}
+                  onClearText={() => this.setState({searchInput: ''})}
+                  value={this.state.searchInput}
+                  lightTheme
+                  clearIcon={this.state.searchInput !== ''}
+              />
+              <View
+                style={{flexDirection: 'row', marginLeft: '1%', height: 70, justifyContent: 'space-between'}}
+              >
+                <View style={{justifyContent: 'center', alignItems: 'flex-start'}} >
+                  <Text style={{color: 'rgba(119, 11, 22, 1)', fontSize: 12}}> Filters: </Text>
                 </View>
-                <View style={{justifyContent: 'center'}}>
+                <View style={{flexDirection: 'row', flexWrap: 'nowrap', justifyContent: 'space-around'}}>
+                  {filterButtons}
+                </View>
+              </View>
+              <View style={{flex: 1}}>
                   <FlatList
                       data = {this.filterGuestData(this.props.guests)}
                       renderItem={({item}) => this.renderListItem(item)}
                       keyExtractor = {item => item.Id}
                       ItemSeparatorComponent = {() => {return(renderSeperator())}}
                       refreshing = {this.props.refreshing}
-                      onEndReached = {this.handleLoadMore}
-                      onEndReachedThreshold = {50}
+                      onEndReached={this.handleLoadMore}
+                      onEndReachedThreshold={50}
                   />
-                </View>
+              </View>
             </View>
         );
     }

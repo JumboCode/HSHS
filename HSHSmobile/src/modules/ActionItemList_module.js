@@ -16,6 +16,7 @@ const oneDayInSeconds = 86400000;
 
 
 // YOU GOTTA PASS THE NAVIGATOR AS A PROP FOR THIS TO WORK
+// 'completed' prop passed to this module is used if the actionItems we're dealing with are completed
 class ActionItemList_module extends Component {
     constructor(props) {
         super(props);
@@ -31,6 +32,7 @@ class ActionItemList_module extends Component {
             screen: 'ActionItem_view', // unique ID registered with Navigation.registerScreen
             passProps: {
                 actionItemId: item.actionItemId,
+                completed: this.props.completed // are the actionItems completed?
             }, // Object that will be passed as props to the pushed screen (optional)
             animated: true, // does the push have transition animation or does it happen immediately (optional)
             animationType: 'slide-horizontal', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
@@ -73,7 +75,7 @@ class ActionItemList_module extends Component {
         }
 
         return (
-            <View>
+            <View style={{flex: 1}}>
                 {!this.props.showDueSoon && !this.props.dashboard &&
                 <SearchBar
                     containerStyle={{backgroundColor: 'transparent'}}
@@ -83,24 +85,27 @@ class ActionItemList_module extends Component {
                     onChangeText={(str) => {
                         this.setState({searchInput: str.toLowerCase()})
                     }}
+                    value={this.state.searchInput}
                     onClearText={() => this.setState({searchInput: ''})}
                     placeholder='Search'
                 />
                 }
-                <FlatList
-                    data={this.props.dashboard
-                        ? (this.props.selectedInteraction ? [this.props.actionItems[this.props.selectedInteraction]] : null)
-                        : getActionItems(actionItems).filter(item => item.title.toLowerCase().includes(this.state.searchInput))}
-                    renderItem={({item}) => this.renderListItem(item)}
-                    keyExtractor={item => item.actionItemId}
-                    ItemSeparatorComponent={() => {
-                        return (renderSeperator())
-                    }}
-                    ListHeaderComponent={this.renderHeader}
-                    refreshing={this.props.refreshing}
-                    onEndReached={this.handleLoadMore}
-                    onEndReachedThreshold={50}
-                />
+                <View style={{flex: 1}}>
+                    <FlatList
+                        data={this.props.dashboard
+                            ? (this.props.selectedInteraction ? [this.props.actionItems[this.props.selectedInteraction]] : null)
+                            : getActionItems(actionItems).filter(item => item.title.toLowerCase().includes(this.state.searchInput))}
+                        renderItem={({item}) => this.renderListItem(item)}
+                        keyExtractor={item => item.actionItemId}
+                        ItemSeparatorComponent={() => {
+                            return (renderSeperator())
+                        }}
+                        ListHeaderComponent={this.renderHeader}
+                        refreshing={this.props.refreshing}
+                        onEndReached={this.handleLoadMore}
+                        onEndReachedThreshold={50}
+                    />
+                </View>
             </View>
         )
     }
