@@ -198,37 +198,37 @@ class Dashboard extends Component {
                     }
 
 
-                    {/* Commented out until we figure out lottery number implementation
                     <View style={{flexDirection: 'column', alignItems: 'center'}}>
+                      <View style={{margin: 30}}>
+                        <Text>Status: Countdown till lottery</Text>
+                      </View>
 
-                    <Text>
-                        Lottery Status: Number not given out
-                    </Text>
 
-                    <View style={{flexDirection: 'row'}}>
-                        <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
-                        <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
-                        <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
+                      {
+                      /* Page displays lottery numbers after 9:30
+                      <View style={{flexDirection: 'row'}}>
+                          <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
+                          <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
+                          <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
+                      </View>
+
+                      <View style={{flexDirection: 'row'}}>
+                          <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
+                          <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
+                          <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
+                      </View>
+                      */
+                      }
+
+                      <Button
+                          title={"Call on Lottery"}
+                          color="#841584"
+                          accessibilityLabel="Learn more about this purple button"
+                          onPress={() => {
+                              Alert.alert("", "Call on Lottery Button Pressed");
+                          }}
+                      />
                     </View>
-
-                    <View style={{flexDirection: 'row'}}>
-                        <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
-                        <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
-                        <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
-                    </View>
-
-                    <Button
-                        title={"Call on Lottery"}
-                        color="#841584"
-                        accessibilityLabel="Learn more about this purple button"
-                        onPress={() => {
-                            Alert.alert("", "Call on Lottery Button Pressed");
-                        }}
-                    />
-
-
-                </View> */}
-
                 </View>
             )
         );
