@@ -32,17 +32,25 @@ class Resources_search extends Component {
         );
     }
 
+    renderAccordionHeader(link) {
+        return (
+            <View>
+                <Text>{link.item.name}</Text>
+            </View>
+        )
+    }
+
     renderAccordionContent(link) {
         return (
             <View>
                 <View>
-                    <Text>{link.description}</Text>
+                    <Text>{link.item.description}</Text>
                 </View>
                 <View>
                     <Text
-                        onPress={() => {this.goToURL(link.link)}}
+                        onPress={() => {this.goToURL(link.item.link)}}
                     >
-                        {link.link}
+                        {link.item.link}
                     </Text>
                 </View>
             </View>
@@ -77,8 +85,8 @@ class Resources_search extends Component {
         return (
             <View style = {{backgroundColor : "#F7F7F7", height : "100%"}}>
                 {this.renderSearchBar()}
-                <FlatList
-                    data = {this.props.linkData.filter(
+                <Accordion
+                    sections = {this.props.linkData.filter(
                         (link) => {
                             return(
                                 link.category.toLowerCase().includes(this.state.searchInput.toLowerCase()) ||
@@ -86,8 +94,8 @@ class Resources_search extends Component {
                             )
                         }
                     )}
-                    renderItem = {(link) => this.renderListItem(link)}
-                    keyExtractor = {(link) => this._keyExtractor(link)}
+                    renderHeader = {(link) => this.renderAccordionHeader(link)}
+                    renderContent = {(link) => this.renderAccordionContent(link)}
                 />
             </View>
         );
