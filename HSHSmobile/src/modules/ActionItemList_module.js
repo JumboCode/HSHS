@@ -4,8 +4,7 @@ import {
     View,
     Text
 } from 'react-native';
-import {List, ListItem, SearchBar} from "react-native-elements";
-import {Icon} from 'react-native-elements'
+import {List, ListItem, Icon, SearchBar} from "react-native-elements";
 import renderSeperator from "./UI/renderSeperator";
 import renderLoader from "./UI/renderLoader";
 import dupNavFix from "../dupNavFix";
