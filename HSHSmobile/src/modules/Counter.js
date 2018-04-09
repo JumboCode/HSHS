@@ -4,12 +4,13 @@
 //        onValueChange - (val) => {}
 // Example usage:
 // <Counter
-//   title="PB&J"
+//   itemName="PB&J"
 //   count=0
 //   onValueChange={(val) => this.setState({PB&J: val}); }
 //   />
 // TODO: Figure out uniform sizing for counters. (ie text should wrap etc)
-// TODO: change circle rendering @jacob?
+// TODO: change circle rendering to Flex attribute
+//          sometimes middle counter circles get cut off
 import React, { Component } from 'react';
 import {
         StyleSheet,
@@ -50,13 +51,13 @@ export default class Counter extends Component {
 		return (
       <View style={styles.container}>
         <TouchableOpacity onPress={this.incrementCount}>
-            <Icon name="chevron-up" size={30} color="#900" />
+            <Icon name="chevron-up" size={20} color="#900" />
         </TouchableOpacity>
         <View style={styles.circle}>
             <Text style={styles.text}>{this.state.count.toString()}</Text>
         </View>
         <TouchableOpacity onPress={this.decrementCount}>
-            <Icon name="chevron-down" size={30} color="#900" />
+            <Icon name="chevron-down" size={20} color="#900" />
         </TouchableOpacity>
         <Text style={styles.text}>{this.props.itemName}</Text>
       </View>
@@ -76,9 +77,9 @@ const styles = StyleSheet.create({
       justifyContent:'center',
       alignItems:'center',
       backgroundColor: 'gray',
-      width: 50,
-      height: 50,
-      borderRadius: 50/2,
+      width: 45,
+      height: 45,
+      borderRadius: 45/2,
       borderWidth: 1.5,
     },
     text: {

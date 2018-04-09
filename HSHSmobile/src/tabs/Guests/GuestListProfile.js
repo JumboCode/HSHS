@@ -17,6 +17,8 @@ import { List, ListItem } from "react-native-elements";
 import nodeEmoji from 'node-emoji';
 import {connect} from 'react-redux';
 import ActionItemList_module from '../../modules/ActionItemList_module';
+import Icon from 'react-native-vector-icons/Feather';
+import Timeline from 'react-native-timeline-listview';
 
 const Timestamp = require('react-timestamp');
 
@@ -174,6 +176,7 @@ class GuestProfile extends Component {
         }
     };
 
+    // Commented out because it crashes probably bc Jacob Jaffe messed it up
     // Creates a list of actions items in which this guest is tagged
     _renderActionItems() {
         var actionItems = this.props.actionItems;
@@ -204,7 +207,101 @@ class GuestProfile extends Component {
         )
     }
 
+    _renderHistoryListItem(item) {
+
+    }
+
+    // let date = new Date(item.item.creationTimestamp).toDateString();
+    // let color = (item.color == undefined ? 'red' : item.color);
+    // return (
+    //     <View style={{flexDirection:'row'}}>
+    //       <View style={{borderRightWidth: 1}}>
+    //       <View style={{
+    //         alignItems: 'center',
+    //         backgroundColor: color,
+    //         width: 5,
+    //         height: 5,
+    //         borderRadius: 5/2}}></View>
+    //     </View>
+    //     <View style={{flexDirection:'column', paddingLeft: 25}}>
+    //         <Text style={{marginLeft:10}}>{date}</Text>
+    //         <Text>{ item.isDone ? "Completed" : "Incomplete" }</Text>
+    //         <View>
+    //             <Text style={{marginLeft:10, paddingLeft:5}}>{item.item.title}</Text>
+    //         </View>
+    //     </View>
+    //     </View>
+    // );
+
+    renderDetail(rowData, _sectionID, _rowID) {
+        let title = <Text>{rowData.time}</Text>
+        var desc = null
+        if(rowData.isActionItem) {
+          //let completionText = (rowData.isDone ? (<Text>Completed Task</Text>) : (<Text>Incomplete Task</Text>))
+          desc = (
+            <View style={styles.descriptionContainer}>
+              {completionText}
+              <Text>{rowData.description}</Text>
+            </View>
+          )
+        } //else if ()
+
+        return (
+          <View style={{flex:1}}>
+            {title}
+            {desc}
+          </View>
+        )
+      }
+
+    // Once interactions are added to Guest schema, interpolate w/ actionItems
+    // and render in the list.
     _renderHistory() {
+        let allActionItems = Object.values(this.props.actionItems);
+
+        let relatedActionItems = allActionItems.filter((actionItem) =>
+                     { // Filter list to only include action items related to guest
+                        if (actionItem.guestIds != undefined) {
+                          return actionItem.guestIds.includes(this.props.guestId)
+                        }
+                      });
+
+        // background color - d7d7d7
+        // date color- 464646
+        // link color- 31a7f8
+
+        if (relatedActionItems.length == 0) {
+            return (
+                <View style={styles.historyContainer}>
+                    <Text style={styles.historyHeader}>Guest History</Text>
+                    <Text>No action items or interactions to display!</Text>
+                </View>
+            );
+        }
+        let data = relatedActionItems.map((i) =>
+                      {
+                        let date = new Date(i.creationTimestamp).toDateString();
+                        // bring back color
+                        return ({time: date,
+                                title: i.title,
+                                description: i.description,
+                                isActionItem: true,
+                                isDone: i.isDone})
+                        })
+
+        return (
+          <Timeline
+            data={data}
+            showTime={false}
+            lineColor='#808080'
+            descriptionStyle={{color:'gray'}}
+            detailContainerStyle={styles.timelineDetailContainer}
+            columnFormat='single-column-left'
+            options={{
+              style:{paddingTop:10}
+            }}
+          />
+        );
 
     }
 
@@ -221,10 +318,10 @@ class GuestProfile extends Component {
                     </View>
                 </View>
                 <View style={{flex: .5}}>
-                    {this._renderActionItems()}
+                    {/*this._renderActionItems()*/}
                     {this._renderButtons()}
+                    {this._renderHistory()}
                 </View>
-                {/*{this.render_notes()}*/}
             </View>
         );
     }
@@ -334,7 +431,32 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flex: 1,
         paddingHorizontal: 10
-    }
+    },
+    historyContainer: {
+        flexDirection: 'column',
+        padding: 10
+    },
+    historyHeader: {
+        marginLeft: 15,
+        marginBottom: 10,
+        fontWeight: 'bold',
+        fontSize: 15
+    },
+    timelineDetailContainer: {
+      marginBottom: 20,
+      paddingLeft: 5,
+      paddingRight: 5,
+      backgroundColor: "#D3D3D3",
+      borderRadius: 3,
+      shadowColor: '#000111',
+      shadowOffset: {
+        width: 0,
+        height: 2 },
+      shadowOpacity: 0.8,
+      shadowRadius: 2,
+      elevation: 1,
+      marginRight: 10,
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GuestProfile);

@@ -9,7 +9,8 @@ import {
     Alert,
     TextInput,
     TouchableHighlight,
-    TouchableOpacity
+    TouchableOpacity,
+    ScrollView
 } from 'react-native';
 import { Icon, List, ListItem, SearchBar, CheckBox } from "react-native-elements";
 import {connect} from 'react-redux';
@@ -18,10 +19,10 @@ import ChooseLocationPopup from '../../modules/popups/ChooseLocationPopup';
 import TagGuestPopup from "../../modules/popups/TagGuestPopup"
 import renderSeperator from '../../modules/UI/renderSeperator'
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {addNewActionItem, getActionItems, editActionItem, deleteActionItem, markActionItemAsDone} from "../../redux/actions";
+import {addInteractionItem, getActionItems} from "../../redux/actions";
 import DatePicker from 'react-native-datepicker';
 import Moment from 'moment';
-import dupNavFix from '../../dupNavFix';
+import Counter from '../../modules/Counter'
 
 function mapStateToProps(state, ownProps) {
     var guests = guestObjectToArray(state.guests, state.interactions);
@@ -34,8 +35,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispath, ownProps) {
     return {
-        addNewActionItem: addNewActionItem,
-        editActionItem: editActionItem,
+        addInteractionItem: addInteractionItem,
         getActionItems: getActionItems
     };
 }
@@ -57,21 +57,17 @@ class ActionItem_edit extends Component {
         this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
 
         this.state = {
-            actionItemId: this.props.actionItemId ? this.props.actionItemId : null,
-            title: this.props.title ? this.props.title : '',
-            taggedGuests: this.props.taggedGuests ? this.props.taggedGuests : [],
-
-            // TODO: geeze why is this longitude latitude and other places lat lng? cause google maps api sucks. please let's fix this later.
+            title: '',
+            taggedGuests: [],
             locationCoord: this.props.locationCoord ? this.props.locationCoord : {
             	longitude: 0,
             	latitude: 0,
             },
             locationStr: this.props.locationStr ? this.props.locationStr : null,
-            selectedDate: this.props.selectedDate ? this.props.selectedDate : Moment().format('YYYY-MM-DD'),
-            description: this.props.description ? this.props.description : "",
-            color: this.props.color ? this.props.color : null,
-            creationTimestamp: this.props.creationTimestamp ? this.props.creationTimestamp : Moment().format(),
-            disabled: false
+            date: Moment().format('YYYY-MM-DD'),
+            interactionTimeStamp: Moment().format('YYYY-MM-DD'),
+            description: "",
+            items: {}
         };
     };
 
@@ -80,7 +76,7 @@ class ActionItem_edit extends Component {
             rightButtons: [
                 {
                     title: 'Save', // for a textual button, provide the button title (label)
-                    id: 'save_actionItem', // id for this button, given in onNavigatorEvent(event) to help understand which button was clicked
+                    id: 'save_interaction', // id for this button, given in onNavigatorEvent(event) to help understand which button was clicked
                     disabled: false, // optional, used to disable the button (appears faded and doesn't interact)
                     disableIconTint: true, // optional, by default the image colors are overridden and tinted to navBarButtonColor, set to true to keep the original image colors
                     showAsAction: 'ifRoom', // optional, Android only. Control how the button is displayed in the Toolbar.
@@ -91,99 +87,63 @@ class ActionItem_edit extends Component {
         });
     };
 
-    onNavigatorEvent = (event) => { // this is the onPress handler for the two buttons together
+    onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
         if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
-            if (event.id == 'save_actionItem' && !this.state.disabled) { // this is the same id field from the static navigatorButtons definition
-                // Don't allow empty fields
-                if (this.state.title == "") {
-                    Alert.alert("Title cannot be empty");
-                    return;
-                }
-                this.setState({disabled: true});
-                setTimeout(()=>{
-                    this.setState({
-                        disabled: false,
-                    });
-                }, 3000)
-                // It's new if there is no ID
-                if (!this.state.actionItemId) {
-                addNewActionItem(false, this.state.title, this.state.creationTimestamp, this.state.locationCoord, this.state.locationStr, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
-              } else {
-                editActionItem(this.state.actionItemId, false, this.state.title, this.state.creationTimestamp, this.state.locationCoord, this.state.locationStr, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
-              }
-                getActionItems();
-                this.props.navigator.pop({
-                  animated: true, // does the pop have transition animation or does it happen immediately (optional)
-                  animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
-                });
+            if (event.id == 'save_interaction') { // this is the same id field from the static navigatorButtons definition
+            	// Don't allow empty fields
+            	if (this.state.title == "") {
+            		Alert.alert("Title cannot be empty");
+            		return;
+            	}
+              this._save();;
             }
         }
     };
 
-    setSelectedGuests = (guests) => {
+    _save = () => {
+        addInteractionItem(this.state.title, this.state.interactionTimeStamp,
+          this.state.date, this.state.locationCoord,
+          this.state.locationStr, this.state.description, this.state.taggedGuests,
+          "[Volunteer ID: See Interaction_new.js]", this.state.items);
+    }
+
+    _setTaggedGuests = (guests) => {
       this.setState({
         taggedGuests: guests
       });
     }
 
-    setChosenLocation = (locationStr, locationCoord) => {
+    _setChosenLocation = (locationStr, locationCoord) => {
         this.setState({
             locationStr: locationStr,
             locationCoord: locationCoord,
         });
     };
 
-    renderColorButton = (c) =>
-    (
-        <TouchableOpacity
-          onPress={() => {
-                let stateColor = this.state.color == c ? null : c;
-                this.setState({color: stateColor });
-            }
-          }
-          style={{flex: 1}}
-          >
-          <View style={this.state.color == c ? [styles.button, {backgroundColor: c}] : [styles.button, styles.disabled, {backgroundColor: c}]}>
-          </View>
-        </TouchableOpacity>
-    )
+    _renderCounter = (_itemName) => {
+      var self = this;
+      return (
+        <View style={{flex: 1}}>
+          <Counter
+            itemName={_itemName}
+            count={0}
+            onValueChange= {(val) => {self._setItem(_itemName, val)}}
+            />
+        </View>
+      )
+    };
 
-    _confirmDelete(){
-      Alert.alert(
-        'Really Delete this Action Item?',
-        'This will remove this Action Item from history; consider marking the item as completed',
-        [
-          {text: 'Cancel', onPress: () => {style: 'cancel'}},
-          {text: 'Okay', onPress: () => {this._handleDelete();}},
-        ],
-        { cancelable: true }
-      );
-    }
-
-    _handleDelete() {
-        deleteActionItem(this.state.actionItemId);
-        this.props.navigator.popToRoot({
-          animated: true, // does the pop have transition animation or does it happen immediately (optional)
-          animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
-        });
-    }
-
-    _renderDeleteButton() {
-        if (!this.state.actionItemId) return;
-        return (
-            <View style={styles.deleteButtonContainer}>
-                <TouchableOpacity
-                    style={styles.deleteButton}
-                    onPress={() => {this._confirmDelete()}}>
-                    <Text style={{color: 'white', fontWeight: 'bold'}}>DELETE</Text>
-                </TouchableOpacity>
-            </View>
-        )
+    _setItem = (itemName, count) => {
+      let items = this.state.items;
+      items[itemName] = count;
+      this.setState({items: items});
+      console.log(this.state.items);
     }
 
     render() {
         return (
             <View style = {styles.container}>
+            <ScrollView style={{width: "100%"}}>
                 <View style = {styles.back}>
                     <TextInput
                         value = {this.state.title}
@@ -228,9 +188,8 @@ class ActionItem_edit extends Component {
                     </View>
                     <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
                         <View style = {styles.icon}>
-
                                 <DatePicker
-                                    date={this.state.selectedDate}
+                                    date={this.state.date}
                                     mode="date"
                                     placeholder="select date"
                                     format="YYYY-MM-DD"
@@ -248,12 +207,12 @@ class ActionItem_edit extends Component {
                                         width: 50
                                       }
                                     }}
-                                    onDateChange={(date) => {this.setState({selectedDate: date})}}
+                                    onDateChange={(date) => {this.setState({date: date})}}
                                   />
                         </View>
                         <View style={{flex: 1}}>
                             <Text numberOfLines={1}
-                                  style={{textAlign: 'right', margin: 10}}>Due on: {this.state.selectedDate}</Text>
+                                  style={{textAlign: 'right', margin: 10}}>Date: {this.state.date}</Text>
 
                         </View>
                     </View>
@@ -265,15 +224,32 @@ class ActionItem_edit extends Component {
                         multiline = {true}
                         onChangeText={(description) => {this.setState({description: description})}}
                     />
-                    <View style={{flexDirection: 'row', alignItems: 'stretch', justifyContent: 'space-between', zIndex: 0, paddingLeft: 15, paddingRight: 15}}>
-                      {this.renderColorButton('#659B7F')}
-                      {this.renderColorButton('#818DC7')}
-                      {this.renderColorButton('#B65E68')}
-                      {this.renderColorButton('#D0AF55')}
-                      {this.renderColorButton('#C19FC7')}
-                    </View>
+                    {renderSeperator()}
+                      <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
+                        {this._renderCounter("Item 1")}
+                        {this._renderCounter("Item 2")}
+                        {this._renderCounter("Item 3")}
+                      </View>
+                      <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
+                        {this._renderCounter("Item 4")}
+                        {this._renderCounter("Item 5")}
+                        {this._renderCounter("Item 6")}
+                      </View>
+                      <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
+                        {this._renderCounter("Item 7")}
+                        {this._renderCounter("Item 8")}
+                        {this._renderCounter("Item 9")}
+                      </View>
                 </View>
-                {this._renderDeleteButton()}
+                </ScrollView>
+                <ChooseLocationPopup
+                  ref={(map) => {
+                      this.ChooseLocationPopup = map;
+                  }}
+                  onConfirm={this._setChosenLocation}
+                  locationStr={this.props.locationStr}
+                  locationCoord={this.props.locationCoord}
+                />
                 <TagGuestPopup
                     ref={(dialog) => {
                         this.tagGuestDialog = dialog;
@@ -281,15 +257,7 @@ class ActionItem_edit extends Component {
                     initialGuests={this.state.taggedGuests}
                     guests={this.props.guests}
                     loading={this.props.loading}
-                    onConfirm={this.setSelectedGuests}
-                />
-                <ChooseLocationPopup
-                  ref={(map) => {
-                      this.ChooseLocationPopup = map;
-                  }}
-                  onConfirm={this.setChosenLocation}
-                  locationStr={this.props.locationStr}
-                  locationCoord={this.props.locationCoord}
+                    onConfirm={this._setTaggedGuests}
                 />
             </View>
         );
@@ -378,4 +346,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(dupNavFix(ActionItem_edit) );
+export default connect(mapStateToProps, mapDispatchToProps)(ActionItem_edit );

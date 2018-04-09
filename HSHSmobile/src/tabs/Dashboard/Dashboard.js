@@ -68,7 +68,7 @@ class Dashboard extends Component {
           });
         }, (error) => {
           Alert.alert(error.message);
-        }, {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, distanceFilter: 20});
+        }, {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, distanceFilter: 50});
     };
 
     makeRemoteRequest = () => {
@@ -130,6 +130,7 @@ class Dashboard extends Component {
                 <View>
                 {renderSeperator()}
                     <MapView
+                        showsUserLocation={true}
                         region={{
                             latitude: this.state.curLat,
                             longitude: this.state.curLong,
@@ -174,7 +175,14 @@ class Dashboard extends Component {
                             underlayColor='transparent'
                             name='my-location'
                             onPress={() => {
-                                Alert.alert("", "This should do something!");
+                                navigator.geolocation.getCurrentPosition((pos) => {
+                                  this.setState({
+                                    curLat: pos.coords.latitude,
+                                    curLong: pos.coords.longitude
+                                  });
+                                }, (error) => {
+                                  Alert.alert(error.message);
+                                }, {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000});
                             }}
                         />
                     </View>

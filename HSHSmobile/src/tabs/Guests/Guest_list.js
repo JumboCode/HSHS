@@ -5,7 +5,10 @@ import {
     Text,
     View,
     FlatList,
-    ActivityIndicator
+    ActivityIndicator,
+    Button,
+    TouchableHighlight,
+    Animated,
 } from 'react-native';
 import { List, ListItem, SearchBar } from "react-native-elements";
 import {connect} from 'react-redux';
@@ -29,7 +32,6 @@ function mapDispatchToProps(dispatch, ownProps) {
     };
 }
 
-//TODO sort by name
 function guestObjectToArray(IdsToGuests, IdsToInteractions) {
     var guestList = []
     for (var Id in IdsToGuests) {
@@ -89,8 +91,13 @@ class GuestList extends Component {
         super(props);
         this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.Screen_GuestListProfile = this.Screen_GuestListProfile.bind(this);
+        this.filterGuestData = this.filterGuestData.bind(this);
         this.props.loading = true;
-        this.state = {searchInput: ''};
+        this.state = {
+            searchInput    : '',
+            searchFilters  : {'Old': false, 'Middle': false, 'Young': false, 'M': false, 'F': false},
+            filterSelected : 0,
+        };
     };
 
     static navigatorButtons = {
@@ -119,7 +126,7 @@ class GuestList extends Component {
 
     Screen_GuestListNew = () => {
         this.props.navigateTo({
-            screen: 'GuestListNew', // unique ID registered with Navigation.registerScreen
+            screen: 'Guest_edit', // unique ID registered with Navigation.registerScreen
             passProps: {}, // Object that will be passed as props to the pushed screen (optional)
             animated: true, // does the push have transition animation or does it happen immediately (optional)
             animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
@@ -131,14 +138,14 @@ class GuestList extends Component {
 
     Screen_GuestListProfile = (guest) => {
         this.props.navigateTo({
-            screen: 'GuestListProfile', // unique ID registered with Navigation.registerScreen
+            screen: 'Guest_view', // unique ID registered with Navigation.registerScreen
             passProps: {
                 Id: guest.Id,
                 //name: "Hey I left this variable so stuff dosn't break but please don't use it!",
                 actionItems: "hello"
             }, // Object that will be passed as props to the pushed screen (optional)
             animated: true, // does the push have transition animation or does it happen immediately (optional)
-            animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
+            animationType: 'slide-horizontal', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
             backButtonHidden: false, // hide the back button altogether (optional)
             navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
             navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
@@ -166,12 +173,9 @@ class GuestList extends Component {
     renderListItem = (item) => {
         return(
             <View style={{backgroundColor: item.color}}>
-                <ListItem
-                    title = {
-                        <View style={{flexDirection: 'row', justifyContent: 'space-between', marginLeft: 5}}>
-                          <Text style={{marginRight: 10, fontWeight: 'bold', fontSize: 16}}>{item.name}</Text>
-                        </View>
-                    }
+                 <ListItem
+                    title = {item.name}
+                    titleStyle = {{marginLeft: 0, fontWeight: 'bold'}}
                     subtitle = {
                       <View style={{flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap'}}>
                         <View style={{flex: 1, alignSelf: 'flex-start'}}>
@@ -190,10 +194,47 @@ class GuestList extends Component {
         );
     };
 
+    renderFilterButtons = (filterName) => {
+        return (
+          <View key={filterName} style={styles.buttonContainer}>
+            <TouchableHighlight
+                style = {[styles.button, {backgroundColor: this.state.searchFilters[filterName] ? 'rgba(119, 11, 22, 1)' : 'transparent'}]}
+                underlayColor = {this.state.searchFilters[filterName] ? 'white' : 'rgba(119, 11, 22, 1)'}
+                onPress = {() => this.setFilter(filterName)}
+            >
+                <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style = {
+                          { textAlign: "center",
+                            color: this.state.searchFilters[filterName] ? 'white' : 'rgba(119, 11, 22, 1)',
+                            fontSize: 12 }}>
+                       {filterName}
+                    </Text>
+                </View>
+            </TouchableHighlight>
+          </View>
+        );
+    };
+
+    setFilter = (filterName) => {
+        this.setState(prevState => {
+          newSearchFilters = prevState.searchFilters;
+          newSearchFilters[filterName] = !prevState.searchFilters[filterName];
+          return {searchFilters: newSearchFilters, filterSelected: newSearchFilters[filterName] ? prevState.filterSelected + 1 : prevState.filterSelected - 1};
+        }, () => {
+            console.log(this.state);
+        });
+    }
+
+    filterGuestData = (guests) => {
+      return guests.filter(item => (item.name.toLowerCase().includes(this.state.searchInput) || item.description.toLowerCase().includes(this.state.searchInput))
+                                      && (this.state.filterSelected == 0 || this.state.searchFilters[item.age] || this.state.searchFilters[item.gender]));
+    }
+
     render() {
         if (this.props.loading == true) {
             return renderLoader();
         }
+
         if (this.props.guests.length < 1) {
           return (
             <View style={styles.container}>
@@ -201,30 +242,45 @@ class GuestList extends Component {
                 {'No guests in database.'}
                 </Text>
             </View>
-
             )
         }
-        return (
 
-            <View style={{height: '100%'}}>
-                <SearchBar
-                    placeholder="Search"
-                    containerStyle={{backgroundColor: 'transparent'}}
-                    onChangeText={(str) => {this.setState({searchInput: str.toLowerCase()})}}
-                    onClearText={() => this.setState({searchInput: ''})}
-                    lightTheme
-                    clearIcon={this.state.searchInput !== ''}
-                    round
-                />
-                <FlatList
-                    data = {this.props.guests.filter(item => item.name.toLowerCase().includes(this.state.searchInput) || item.description.toLowerCase().includes(this.state.searchInput))}
-                    renderItem={({item}) => this.renderListItem(item)}
-                    keyExtractor = {item => item.Id}
-                    ItemSeparatorComponent = {() => {return(renderSeperator())}}
-                    refreshing = {this.props.refreshing}
-                    onEndReached = {this.handleLoadMore}
-                    onEndReachedThreshold = {50}
-                />
+        const filterButtons = Object.keys(this.state.searchFilters).map(filter => this.renderFilterButtons(filter));
+
+        return (
+            <View style={{flex: 1}}>
+              <SearchBar
+                  cancelButtonTitle="Cancel"
+                  placeholder="Search (Ex. Phil Wang)"
+                  containerStyle={{backgroundColor: 'transparent'}}
+                  onFocus={() => this.expandFilter()}
+                  onChangeText={(str) => {this.setState({searchInput: str.toLowerCase()})}}
+                  onClearText={() => this.setState({searchInput: ''})}
+                  value={this.state.searchInput}
+                  lightTheme
+                  clearIcon={this.state.searchInput !== ''}
+              />
+              <View
+                style={{flexDirection: 'row', marginLeft: '1%', height: 70, justifyContent: 'space-between'}}
+              >
+                <View style={{justifyContent: 'center', alignItems: 'flex-start'}} >
+                  <Text style={{color: 'rgba(119, 11, 22, 1)', fontSize: 12}}> Filters: </Text>
+                </View>
+                <View style={{flexDirection: 'row', flexWrap: 'nowrap', justifyContent: 'space-around'}}>
+                  {filterButtons}
+                </View>
+              </View>
+              <View style={{flex: 1}}>
+                  <FlatList
+                      data = {this.filterGuestData(this.props.guests)}
+                      renderItem={({item}) => this.renderListItem(item)}
+                      keyExtractor = {item => item.Id}
+                      ItemSeparatorComponent = {() => {return(renderSeperator())}}
+                      refreshing = {this.props.refreshing}
+                      onEndReached={this.handleLoadMore}
+                      onEndReachedThreshold={50}
+                  />
+              </View>
             </View>
         );
     }
@@ -235,6 +291,20 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    buttonContainer: {
+        height: 30,
+        width: 55,
+        marginLeft: '1%',
+        marginRight: '1%',
+        alignSelf: 'center',
+    },
+    button: {
+        flex: 1,
+        borderStyle: "solid",
+        borderWidth: 1,
+        borderRadius: 40,
+        borderColor: 'rgba(119, 11, 22, 1)',
     }
 });
 

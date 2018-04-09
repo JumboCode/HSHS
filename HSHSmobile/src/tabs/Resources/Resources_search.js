@@ -62,10 +62,15 @@ class Resources_search extends Component {
                     clearIcon = {this.state.searchInput !== ''}
                     onChangeText = {(str) => {this.setState({searchInput: str.toLowerCase()})}}
                     onClearText = {() => this.setState({searchInput: ''})}
+                    value={this.state.searchInput}
                     placeholder = "Search"
                 />
             );
         }
+    }
+
+    _keyExtractor = (link) => {
+      return link.name.toLowerCase();
     }
 
     render() {
@@ -81,8 +86,8 @@ class Resources_search extends Component {
                             )
                         }
                     )}
-                    renderItem = {this.renderListItem.bind(this)}
-                    keyExtractor = {(link) => {link.name.toLowerCase()}}
+                    renderItem = {(link) => this.renderListItem(link)}
+                    keyExtractor = {(link) => this._keyExtractor(link)}
                 />
             </View>
         );

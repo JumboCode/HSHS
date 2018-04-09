@@ -14,7 +14,7 @@ import ActionItemList_module from '../../modules/ActionItemList_module'
 import { Icon } from 'react-native-elements'
 import renderLoader from "../../modules/UI/renderLoader";
 import dupNavFix from "../../dupNavFix";
-
+import {markActionItemAsDone} from "../../redux/actions";
 // for navigation
 const IonIcon = require('react-native-vector-icons/Ionicons');
 
@@ -41,6 +41,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispath, ownProps) {
     return {
+        markActionItemAsDone: markActionItemAsDone
     };
 }
 
@@ -100,6 +101,8 @@ class ActionItem_list extends Component {
                 ]
             });
         });
+
+        console.log(this.props.markActionItemAsDone);
     };
 
     render() {
@@ -115,19 +118,22 @@ class ActionItem_list extends Component {
                 onPress={(i) => {this.setState({selectedIndex: i})}}
                 selectedIndex={this.state.selectedIndex}
                 buttons={this.state.buttons}
-                selectedTextStyle={{color: '#007AFF'}}            
+                selectedTextStyle={{color: '#007AFF'}}
             />
 
-            {this.state.selectedIndex === 1 ? 
+            {this.state.selectedIndex === 1 ?
                 (<ActionItemList_module
                     actionItems={this.props.completedActionItems}
+                    completed={true}    // needed so ActionItem_view knows where to pull data from
                     guests={this.props.guests}
-                    navigator={this.props.navigator} />) : 
+                    navigator={this.props.navigator}
+                    doneFunction={this.props.markActionItemAsDone}/>) :
                 (<ActionItemList_module
                     actionItems={this.props.actionItems}
                     guests={this.props.guests}
-                    navigator={this.props.navigator} />)}
-            
+                    navigator={this.props.navigator}
+                    doneFunction={ this.props.markActionItemAsDone}/>)}
+
           </View>
         );
     }

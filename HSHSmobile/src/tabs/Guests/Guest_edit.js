@@ -64,12 +64,12 @@ class NewGuest extends Component<{}> {
 
     submit = () => {
         if (this.state.ageIndex === -1 || this.state.genderIndex === -1) {
-            alert("Please select ago and gender");
+            Alert.alert("Please select ago and gender");
             return;
         }
 
         if (this.state.name === "") {
-            alert("Please input name");
+            Alert.alert("Please input name");
             return;
         }
 
