@@ -12,7 +12,8 @@ import {
     ActivityIndicator,
     TextInput,
     Alert,
-    Dimensions
+    Dimensions,
+    KeyboardAvoidingView
 } from 'react-native';
 
 import {Button} from 'react-native-elements';
@@ -56,14 +57,29 @@ export default class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: '',
-            password: '',
-            isLoggingIn: false,
+          username: '',
+          password: '',
+          user: null,
+          isLoggingIn: true
         };
         this.autenticate = this.authenticate.bind(this);
     }
 
-    openApp() {
+    componentDidMount = () => {
+      firebase.auth().onAuthStateChanged((user) => {
+        this.setState({isLoggingIn: false});
+        console.log("here");
+        if (user) {
+          console.log(user);
+          this.setState({user: user});
+          this.openApp();
+        } else {
+          console.log("not loggedIn");
+        }
+      })
+    }
+
+    openApp () {
         this._populateIcons().then(() => {
             // Start app only if all icons are loaded
             this.startApp();
@@ -81,7 +97,7 @@ export default class Login extends Component {
         //const { email, password } = this.state;
         firebase.auth().signInWithEmailAndPassword(this.state.username, this.state.password)
             .then(() => {
-                this.openApp();
+                //this.openApp();
                 this.setState({
                     isLoggingIn: false
                 });
@@ -89,14 +105,14 @@ export default class Login extends Component {
             .catch(() => {
                 // TODO: IMPORTANT! ALERT!
                 // This is just so we don't have to login every time------ DO NOT SHIP THIS
-                if (this.state.username == "" && this.state.password == "") {
-                    this.openApp();
-                } else {
-                    Alert.alert(
-                        'Login failed',
-                        'Unable to login. Username or password is incorrect',
-                    );
-                }
+                //if (this.state.username == "" && this.state.password == "") {
+                //  this.openApp();
+                //} else {
+                  Alert.alert(
+                    'Login failed',
+                    'Unable to login. Username or password is incorrect',
+                  );
+                //}
                 this.setState({
                     isLoggingIn: false
                 });
@@ -209,7 +225,7 @@ export default class Login extends Component {
     render() {
         //console.log(this.props.data);
         return (
-            <View style={styles.container}>
+            <KeyboardAvoidingView style={styles.container} behavior="padding">
                     <Text style={styles.title}> Harvard Square </Text>
                     <Text style={styles.title}> Homeless Shelter </Text>
                     <Text style={styles.title}> Volunteer App </Text>
@@ -248,13 +264,14 @@ export default class Login extends Component {
                             title='Log In'
                             buttonStyle={{width: width * 0.8}}
                         />
-
-                        <Text onPress={this.forgotPassword} style={styles.forgotPassword}>
-                            Forgot your password?
-                        </Text>
+                        <View style={styles.forgetView}>
+                            <Text onPress={this.forgotPassword} style={styles.forgotPassword}>
+                                Forgot your password?
+                            </Text>
+                        </View>
                     </View>
                 }
-            </View>
+            </KeyboardAvoidingView>
         );
     }
 }
@@ -291,7 +308,7 @@ const styles = StyleSheet.create({
     forgotPassword: {
         fontSize: 12,
         color: "#FFFFFF",
-        marginTop: 15
+        marginTop: 15,
     },
     textInput: {
         color: "#FFFFFF",
@@ -309,5 +326,9 @@ const styles = StyleSheet.create({
     inputBlock: {
         marginBottom: 20,
         marginTop: 20
+    },
+    forgetView: {
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 });
