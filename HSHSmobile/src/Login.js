@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {store} from './redux/store.js';
 import {Provider} from 'react-redux';
 import {Navigation} from 'react-native-navigation';
@@ -15,7 +15,7 @@ import {
     Dimensions
 } from 'react-native';
 
-import { Button } from 'react-native-elements';
+import {Button} from 'react-native-elements';
 // Dashboard
 import Dashboard from './tabs/Dashboard/Dashboard';
 
@@ -40,7 +40,7 @@ import Resources_search from './tabs/Resources/Resources_search';
 // UI
 import Icon from 'react-native-vector-icons/Ionicons';
 import renderLoader from './modules/UI/renderLoader'
-import { List, ListItem, SearchBar } from "react-native-elements";
+import {List, ListItem, SearchBar} from "react-native-elements";
 
 const {height, width} = Dimensions.get('window');
 const Icons = require('react-native-vector-icons/Ionicons');
@@ -56,16 +56,16 @@ export default class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          username: '',
-          password: '',
-          isLoggingIn: false,
+            username: '',
+            password: '',
+            isLoggingIn: false,
         };
         this.autenticate = this.authenticate.bind(this);
     }
 
-    openApp () {
+    openApp() {
         this._populateIcons().then(() => {
-        // Start app only if all icons are loaded
+            // Start app only if all icons are loaded
             this.startApp();
         }).catch((error) => {
             console.error(error);
@@ -75,7 +75,7 @@ export default class Login extends Component {
     authenticate = () => {
         //console.log(this.state.username + " " + this.state.password);
         this.setState({
-          isLoggingIn: true
+            isLoggingIn: true
         });
 
         //const { email, password } = this.state;
@@ -83,22 +83,22 @@ export default class Login extends Component {
             .then(() => {
                 this.openApp();
                 this.setState({
-                  isLoggingIn: false
+                    isLoggingIn: false
                 });
             })
             .catch(() => {
                 // TODO: IMPORTANT! ALERT!
                 // This is just so we don't have to login every time------ DO NOT SHIP THIS
                 if (this.state.username == "" && this.state.password == "") {
-                  this.openApp();
+                    this.openApp();
                 } else {
-                  Alert.alert(
-                    'Login failed',
-                    'Unable to login. Username or password is incorrect',
-                  );
+                    Alert.alert(
+                        'Login failed',
+                        'Unable to login. Username or password is incorrect',
+                    );
                 }
                 this.setState({
-                  isLoggingIn: false
+                    isLoggingIn: false
                 });
             });
     };
@@ -109,27 +109,27 @@ export default class Login extends Component {
 
     _populateIcons = function () {
         return new Promise(function (resolve, reject) {
-          Promise.all(
-            [
-                Icons.getImageSource('ios-home-outline', 30),
-                Icons.getImageSource('ios-checkbox-outline', 30),
-                Icons.getImageSource('ios-add-circle', 30),
-                Icons.getImageSource('ios-people-outline', 30),
-                Icons.getImageSource('ios-help-circle-outline', 30),
-                Icons.getImageSource('ios-add-circle-outline', 30),
-            ]
-          ).then((values) => {
-            homeIcon = values[0];
-            actionItemIcon = values[1];
-            checkinIcon = values[2];
-            guestsIcon = values[3];
-            resourcesIcon = values[4];
-            addIcon = values[5];
-            resolve(true);
-          }).catch((error) => {
-            console.log(error);
-            reject(error);
-          }).done();
+            Promise.all(
+                [
+                    Icons.getImageSource('ios-home-outline', 30),
+                    Icons.getImageSource('ios-checkbox-outline', 30),
+                    Icons.getImageSource('ios-add-circle', 30),
+                    Icons.getImageSource('ios-people-outline', 30),
+                    Icons.getImageSource('ios-help-circle-outline', 30),
+                    Icons.getImageSource('ios-add-circle-outline', 30),
+                ]
+            ).then((values) => {
+                homeIcon = values[0];
+                actionItemIcon = values[1];
+                checkinIcon = values[2];
+                guestsIcon = values[3];
+                resourcesIcon = values[4];
+                addIcon = values[5];
+                resolve(true);
+            }).catch((error) => {
+                console.log(error);
+                reject(error);
+            }).done();
         });
     };
 
@@ -151,7 +151,7 @@ export default class Login extends Component {
         Navigation.startTabBasedApp({
             tabs: [
                 {
-                    label:'dashboard',
+                    label: 'dashboard',
                     screen: 'Dashboard',
                     title: 'Dashboard',
                     icon: homeIcon
@@ -202,61 +202,59 @@ export default class Login extends Component {
                 navBarBackgroundColor: '#f6f7f5',
                 navBarButtonColor: '#000000',
                 navBarTextColor: '#2a2a2a',
-              }
+            }
         })
     }
 
     render() {
         //console.log(this.props.data);
         return (
-            <View style = {styles.container}>
-            <Text style = {styles.title}> Harvard Square </Text>
-            <Text style = {styles.title}> Homeless Shelter </Text>
-            <Text style = {styles.title}> Volunteer App </Text>
-            <View style = {styles.space}></View>
-            <View style = {styles.space}></View>
-            <View style = {styles.row} >
-                <Icon style = {styles.icon}
-                      name="ios-mail-outline"
-                      size={25}
-                      color="#FFFFFF"
-                />
-                <TextInput
-                    style={styles.textInput}
-                    placeholder='Username'
-                    placeholderTextColor = "#FFFFFF"
-                    onChangeText= {(text) => this.state.username = text}
-                />
-            </View>
-            <View style = {styles.row} >
-                <Icon style = {styles.icon}
-                    name="ios-lock-outline"
-                    size={25} color="#FFFFFF" />
-                <TextInput style={styles.textInput}
-                    placeholder='Password'
-                    secureTextEntry = {true}
-                    placeholderTextColor = "#FFFFFF"
-                    onChangeText= {(text) => this.state.password = text}
-                />
-            </View>
-            <View style = {styles.space}></View>
-            <View style = {styles.space}></View>
-            {this.state.isLoggingIn ? renderLoader() :
-              <View>
-                  <Button
-                      small
-                      backgroundColor="#556A5B"
-                      onPress={this.authenticate}
-                      title='Log In'
-                      buttonStyle={{width: width * 0.8}}
-                  />
-
-                  <Text onPress={this.forgotPassword} style = {styles.forgotPassword}>
-                        Forgot your password?
-                  </Text>
+            <View style={styles.container}>
+                    <Text style={styles.title}> Harvard Square </Text>
+                    <Text style={styles.title}> Homeless Shelter </Text>
+                    <Text style={styles.title}> Volunteer App </Text>
+                <View style={styles.inputBlock}>
+                    <View style={styles.row}>
+                        <Icon style={styles.icon}
+                              name="ios-mail-outline"
+                              size={25}
+                              color="#FFFFFF"
+                        />
+                        <TextInput
+                            style={styles.textInput}
+                            placeholder='Username'
+                            placeholderTextColor="#FFFFFF"
+                            onChangeText={(text) => this.state.username = text}
+                        />
+                    </View>
+                    <View style={styles.row}>
+                        <Icon style={styles.icon}
+                              name="ios-lock-outline"
+                              size={25} color="#FFFFFF"/>
+                        <TextInput style={styles.textInput}
+                                   placeholder='Password'
+                                   secureTextEntry={true}
+                                   placeholderTextColor="#FFFFFF"
+                                   onChangeText={(text) => this.state.password = text}
+                        />
+                    </View>
                 </View>
-              }
-              </View>
+                {this.state.isLoggingIn ? renderLoader() :
+                    <View>
+                        <Button
+                            small
+                            backgroundColor="#556A5B"
+                            onPress={this.authenticate}
+                            title='Log In'
+                            buttonStyle={{width: width * 0.8}}
+                        />
+
+                        <Text onPress={this.forgotPassword} style={styles.forgotPassword}>
+                            Forgot your password?
+                        </Text>
+                    </View>
+                }
+            </View>
         );
     }
 }
@@ -277,25 +275,23 @@ const styles = StyleSheet.create({
         paddingTop: 15,
         paddingBottom: 7
     },
-    login : {
-        //flex: 1,
+    login: {
         width: 260,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#556A5B',
     },
-    title : {
+    title: {
         paddingTop: 2,
         justifyContent: 'center',
         alignItems: 'center',
         fontSize: 25,
         color: "#FFFFFF",
     },
-    forgotPassword : {
+    forgotPassword: {
         fontSize: 12,
         color: "#FFFFFF",
-        justifyContent: 'center',
-        alignItems: 'center',
+        marginTop: 15
     },
     textInput: {
         color: "#FFFFFF",
@@ -309,5 +305,9 @@ const styles = StyleSheet.create({
     },
     space: {
         height: 15
+    },
+    inputBlock: {
+        marginBottom: 20,
+        marginTop: 20
     }
 });
