@@ -9,12 +9,13 @@ import {
     Text,
     View,
     FlatList,
-    Button,
     ActivityIndicator,
     TextInput,
-    Alert
+    Alert,
+    Dimensions
 } from 'react-native';
 
+import { Button } from 'react-native-elements';
 // Dashboard
 import Dashboard from './tabs/Dashboard/Dashboard';
 
@@ -41,6 +42,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import renderLoader from './modules/UI/renderLoader'
 import { List, ListItem, SearchBar } from "react-native-elements";
 
+const {height, width} = Dimensions.get('window');
 const Icons = require('react-native-vector-icons/Ionicons');
 
 var homeIcon // ios-home-outline
@@ -241,15 +243,14 @@ export default class Login extends Component {
             <View style = {styles.space}></View>
             {this.state.isLoggingIn ? renderLoader() :
               <View>
-                <View style = {styles.login}>
-                     <Button
+                  <Button
+                      small
+                      backgroundColor="#556A5B"
                       onPress={this.authenticate}
-                      title="Log in"
-                      color={Platform.OS === 'ios' ? "#FFFFFF" : "#556A5B"}
-                      accessibilityLabel="Click to log in after credentials are entered."
-                    />
-                </View>
-                <View style = {styles.space}></View>
+                      title='Log In'
+                      buttonStyle={{width: width * 0.8}}
+                  />
+
                   <Text onPress={this.forgotPassword} style = {styles.forgotPassword}>
                         Forgot your password?
                   </Text>
@@ -293,10 +294,10 @@ const styles = StyleSheet.create({
     forgotPassword : {
         fontSize: 12,
         color: "#FFFFFF",
-    },
-    textInput: {
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    textInput: {
         color: "#FFFFFF",
         width: 275,
         fontSize: 15,
