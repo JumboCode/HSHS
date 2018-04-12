@@ -92,7 +92,7 @@ class ActionItem_edit extends Component {
             if (event.id == 'save_interaction') { // this is the same id field from the static navigatorButtons definition
             	// Don't allow empty fields
             	if (this.state.title == "") {
-            		alert("Title cannot be empty");
+            		Alert.alert("Title cannot be empty");
             		return;
             	}
               this._save();;

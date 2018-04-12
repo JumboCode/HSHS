@@ -96,7 +96,7 @@ class ActionItem_edit extends Component {
             if (event.id == 'save_actionItem' && !this.state.disabled) { // this is the same id field from the static navigatorButtons definition
                 // Don't allow empty fields
                 if (this.state.title == "") {
-                    alert("Title cannot be empty");
+                    Alert.alert("Title cannot be empty");
                     return;
                 }
                 this.setState({disabled: true});
@@ -161,7 +161,7 @@ class ActionItem_edit extends Component {
     }
 
     _handleDelete() {
-        markActionItemAsDone(this.state.actionItemId);
+        deleteActionItem(this.state.actionItemId);
         this.props.navigator.popToRoot({
           animated: true, // does the pop have transition animation or does it happen immediately (optional)
           animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)

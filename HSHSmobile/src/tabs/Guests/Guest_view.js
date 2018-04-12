@@ -163,9 +163,9 @@ class GuestProfile extends Component {
     render_description = () => {
         return (
             <View style={styles.descriptionContainer}>
-                <Text style={styles.description}>
+                  <Text style={styles.descriptionScroll}>
                     {this.props.guest.description}
-                </Text>
+                  </Text>
             </View>
         );
     };
@@ -383,7 +383,7 @@ const styles = StyleSheet.create({
         borderTopColor: '#D3D3D3',
     },
     top: {
-        flex: 0.33,
+        flex: 0.38,
         flexDirection: "column",
         flexWrap: "nowrap",
         padding: 10,
@@ -406,10 +406,10 @@ const styles = StyleSheet.create({
         fontSize: 15,
     },
     name: {
-        fontSize: 35,
+        fontSize: 28,
         textDecorationColor:'#686868',
         fontFamily: 'Times New Roman',
-
+        textAlign: 'center',
     },
     profile_image: {
         flex: 0.55,
@@ -448,17 +448,22 @@ const styles = StyleSheet.create({
     age: {
         paddingLeft: 20,
     },
-    description: {
-        borderWidth: 0.3,
-        borderColor: "#000000",
-        borderRadius: 4,
-        marginTop: 10,
-        padding: 5
+    descriptionScroll: {
+      borderWidth: 0.3,
+      borderColor: "#000000",
+      borderRadius: 4,
+      marginTop: 10,
+      marginBottom: 5,
+      padding: 10,
+      width: '90%',
+      alignSelf: 'center',
     },
     descriptionContainer: {
         flexDirection: 'row',
         flex: 1,
-        paddingHorizontal: 10
+        marginTop: 5,
+        marginBottom: 5,
+        paddingHorizontal: 10,
     },
     historyContainer: {
         flexDirection: 'column',

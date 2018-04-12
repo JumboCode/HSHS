@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, TouchableOpacity, View, alert } from "react-native";
+import { Text, TouchableOpacity, View, Alert } from "react-native";
 import Modal from "react-native-modal";
 import renderSeperator from "../UI/renderSeperator"
 import Popup from "./popup"
@@ -41,7 +41,7 @@ export default class ChooseLocationPopup extends Component {
           }
         });
       }, (error) => {
-        alert(error.message);
+        Alert.alert(error.message);
       }, {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, distanceFilter: 50});
   };
 
@@ -88,7 +88,7 @@ export default class ChooseLocationPopup extends Component {
               });
           },
           error => {
-              alert(error);
+              Alert.alert(error);
           }
       );
       this.setState({locationCoord: coordinate})
