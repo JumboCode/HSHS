@@ -4,88 +4,123 @@ import {
     View,
     Text
 } from 'react-native';
-import {Icon} from "react-native-elements";
 import renderSeperator from "./UI/renderSeperator";
 import renderLoader from "./UI/renderLoader";
 import dupNavFix from "../dupNavFix";
 
+import Icon from 'react-native-vector-icons/Ionicons';
+
+
 // The time from start of day until lottery release
 const lotteryReleaseTimeInMillis = 77400000;
-
 class Lottery_module extends Component {
 	constructor(props) {
 		super(props);
-    this.state = {timeRemaining: "", seconds: 0 };
+    console.log(this.phoneIcon);
+
+    // Time indeces: 0 - Countdown, 1 - Lottery unentered, 2 - Lottery entered
+    this.state    = {timeIndex: 0, timeRemaining: "", seconds: 0};
 	}
 
+  // TODO: check database and see if data has been entered, set timeIndex
   componentWillMount() {
     let secs = this.getTimeRemaining();
-    this.setState({ seconds: secs });
+    this.setState ({ seconds: secs, timeIndex: secs >= 0 ? 0 : 1 });
   }
 
+  // Decrement counter every second
   componentDidMount() {
-      this.interval = setInterval(() => {
-        this.countDown();
-        console.log(this.state.seconds);
-      }, 1000);
+    this.interval = setInterval(() => {
+      this.countDown();
+    }, 1000);
   };
 
   componentWillUnmount() {
       clearInterval(this.interval);
   }
 
+  // Called once when dashboard is rendered
   getTimeRemaining = () => {
-    let now = new Date();
-		let releaseDate = new Date();
+    let now              = new Date();
+		let releaseDate      = new Date();
+
 		releaseDate.setHours(0);
 		releaseDate.setMinutes(0);
     releaseDate.setSeconds(0);
-		let releaseTimestamp = releaseDate.getTime() + lotteryReleaseTimeInMillis;
-    console.log("miliseconds " + (releaseTimestamp - now));
-    let seconds = ((releaseTimestamp - now) / 1000).toFixed(0);
-    console.log("seconds " + seconds);
+
+    let releaseTimestamp = releaseDate.getTime() + lotteryReleaseTimeInMillis;
+
+    let seconds          = ((releaseTimestamp - now) / 1000).toFixed(0);
+
     return seconds;
   }
 
+  // TODO: Check if page transition works smoothly
   countDown = () => {
-      let secs = this.state.seconds - 1;
+      let secs     = this.state.seconds - 1;
       let timeLeft = this.milisecondsToTime(secs);
-      this.setState({timeRemaining: timeLeft, seconds: secs});
+
+      this.setState({timeIndex: (secs >= 0 ? 0 : (this.state.timeIndex == 2 ? 2 : 1)), timeRemaining: timeLeft, seconds: secs});
   }
 
 	milisecondsToTime = (seconds) => {
     let minutes = Math.floor(seconds / 60);
-    let hours = "0";
+    let hours   = "0";
+
     if (minutes > 59) {
-      hours = Math.floor(minutes / 60);
-      minutes = minutes - (hours * 60);
-      minutes = (minutes > 10) ? minutes : "0" + minutes;
+      hours     = Math.floor(minutes / 60);
+      minutes   = minutes - (hours * 60);
+      minutes   = (minutes > 10) ? minutes : "0" + minutes;
     }
-    seconds = seconds % 60;
+    seconds     = seconds % 60;
+
 		return (hours >= 10 ? hours : ("0" + hours)) + ":" + minutes + ":" + ((seconds >= 10) ? seconds : "0" + seconds) ;
 	}
 
+  //TODO: change logic so that lotteryBlock can contain both timeIndex 1 and 2
 	render() {
 		return (
-      <View style={styles.countDownBlock}>
-        <View style={{margin: 30}}>
-          <Text style={{fontSize: 18, fontWeight: 'bold', marginBottom: "5%"}}>Status: Countdown till lottery</Text>
-  				<Text style={{fontSize: 18, textAlign: "center", letterSpacing: 1.5}}>{this.state.timeRemaining}</Text>
-        </View>
+
+      <View style={styles.lotteryBlock}>
+        <Icon name="alert" />
       </View>
+
+      // <View>
+      //   { this.state.timeIndex === 0 ?
+      //     (<View style={styles.countDownBlock}>
+      //       <View style={{margin: 30}}>
+      //         <Text style={{fontSize: 18, fontWeight: 'bold', marginBottom: "5%"}}>Status: Countdown till lottery</Text>
+      // 				<Text style={{fontSize: 18, textAlign: "center", letterSpacing: 1.5}}>{this.state.timeRemaining}</Text>
+      //       </View>
+      //     </View>) :
+      //     <View>
+      //       { this.state.timeIndex === 1 &&
+      //         <View>
+      //           <View style={{flexDirection: "row", justifyContent: "center"}}>
+      //             <Text>Same</Text>
+      //           </View>
+      //         </View>
+      //       }
+      //     </View>
+      //   }
+      // </View>
 		);
 	}
 }
 
 const styles = StyleSheet.create( {
-
     countDownBlock: {
       marginTop: "20%",
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-    }
+    },
 
+    lotteryBlock: {
+      marginTop: "10%",
+      flexDirection: 'column',
+      backgroundColor: 'green',
+    }
 });
 
 
