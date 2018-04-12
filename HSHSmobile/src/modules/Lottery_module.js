@@ -2,12 +2,15 @@ import React, {Component} from 'react';
 import {
     StyleSheet,
     View,
-    Text
+    Text,
+    TextInput,
+    Button,
 } from 'react-native';
 import {Icon} from "react-native-elements";
 import renderSeperator from "./UI/renderSeperator";
 import renderLoader from "./UI/renderLoader";
 import dupNavFix from "../dupNavFix";
+import PopupDialog, {DialogTitle, DialogButton} from 'react-native-popup-dialog';
 
 // The time from start of day until lottery release
 const lotteryReleaseTimeInMillis = 77400000;
@@ -15,7 +18,8 @@ const lotteryReleaseTimeInMillis = 77400000;
 class Lottery_module extends Component {
 	constructor(props) {
 		super(props);
-    this.state = {timeRemaining: "", seconds: 0 };
+    // timeIndex: 0 -> Countdown, 1 -> Winnder unentered, 2 -> winner entered
+    this.state = {timeIndex: 0, timeRemaining: "", seconds: 0 };
 	}
 
   componentWillMount() {
@@ -67,11 +71,43 @@ class Lottery_module extends Component {
 
 	render() {
 		return (
-      <View style={styles.countDownBlock}>
-        <View style={{margin: 30}}>
-          <Text style={{fontSize: 18, fontWeight: 'bold', marginBottom: "5%"}}>Status: Countdown till lottery</Text>
-  				<Text style={{fontSize: 18, textAlign: "center", letterSpacing: 1.5}}>{this.state.timeRemaining}</Text>
-        </View>
+      <View> {this.state.timeIndex === 0 ?
+        (<View style={styles.countDownBlock}>
+          <View style={{margin: 30}}>
+            <Text style={{fontSize: 18, fontWeight: 'bold', marginBottom: "5%"}}>Status: Countdown till lottery</Text>
+    				<Text style={{fontSize: 18, textAlign: "center", letterSpacing: 1.5}}>{this.state.timeRemaining}</Text>
+          </View>
+        </View>) :
+
+        (<View style={styles.lotteryBlock}>
+          <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center", marginTop: 20, marginBottom: 20}}>
+            <Icon name="phone" />
+            <Text style={{marginLeft: 10}}>Please call for lottery winners</Text>
+          </View>
+          <Button
+            color="#rgba(119, 11, 22, 1)"
+            onPress={ () => {this.popupDialog.show()} }
+            title="Enter Winner" />
+
+          <PopupDialog
+              dialogStyle={{ position: 'absolute', top: "40%", width: '80%', height: 100 }}
+              dialogTitle={<DialogTitle title="Enter Winners"/>}
+              ref={(popupDialog) => { this.popupDialog = popupDialog; }}
+          >
+              <View style={styles.container}>
+                <TextInput
+                  {...this.props}
+                  style={styles.textInput}
+                  onChangeText={(input) => this.setState({input})}
+                  value={this.state.input}
+                />
+                <View style={styles.buttonContainer}>
+                  <Button onPress={this.onCancel} title={"Cancel"}/>
+                  <Button onPress={this.onSubmit} title={"Submit"}/>
+                </View>
+              </View>
+          </PopupDialog>
+        </View>)}
       </View>
 		);
 	}
