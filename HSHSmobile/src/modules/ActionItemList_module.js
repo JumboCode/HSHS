@@ -141,11 +141,11 @@ class ActionItemList_module extends Component {
                                             name='people'/>
                                     </View>
                                     <View style={{flex: 3, justifyContent: 'center'}}>
-                                        <Text
+                                      <Text
                                             style={item.guestIds ? {} : {fontStyle: 'italic'}}
                                             numberOfLines={1}>
                                             {item.guestIds ? this.formatGuestNames(item.guestIds) : "No Tagged Guests"}
-                                        </Text>
+                                      </Text>
                                     </View>
                                 </View>
                                 <View style={{flex: 2, flexDirection: 'row'}}>

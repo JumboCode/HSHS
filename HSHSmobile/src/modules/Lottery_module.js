@@ -78,7 +78,7 @@ class Lottery_module extends Component {
   //TODO: change logic so that lotteryBlock can contain both timeIndex 1 and 2
 	render() {
 		return (
-      <View> {this.state.timeIndex === 0 ?
+      <View>{(this.state.timeIndex === 0) ?
         (<View style={styles.countDownBlock}>
           <View style={{margin: 30}}>
             <Text style={{fontSize: 18, fontWeight: 'bold', marginBottom: "5%"}}>Status: Countdown till lottery</Text>
@@ -117,29 +117,29 @@ class Lottery_module extends Component {
         </View>)}
       </View>
 
-      // <View>
-      //   { this.state.timeIndex === 0 ?
-      //     (<View style={styles.countDownBlock}>
-      //       <View style={{margin: 30}}>
-      //         <Text style={{fontSize: 18, fontWeight: 'bold', marginBottom: "5%"}}>Status: Countdown till lottery</Text>
-      // 				<Text style={{fontSize: 18, textAlign: "center", letterSpacing: 1.5}}>{this.state.timeRemaining}</Text>
-      //       </View>
-      //     </View>) :
-      //     <View>
-      //       { this.state.timeIndex === 1 &&
-      //         <View>
-      //           <View style={{flexDirection: "row", justifyContent: "center"}}>
-      //             <Text>Same</Text>
-      //           </View>
-      //         </View>
-      //       }
-      //     </View>
-      //   }
-      // </View>
+
 		);
 	}
 }
-
+// <View>
+//   { this.state.timeIndex === 0 ?
+//     (<View style={styles.countDownBlock}>
+//       <View style={{margin: 30}}>
+//         <Text style={{fontSize: 18, fontWeight: 'bold', marginBottom: "5%"}}>Status: Countdown till lottery</Text>
+// 				<Text style={{fontSize: 18, textAlign: "center", letterSpacing: 1.5}}>{this.state.timeRemaining}</Text>
+//       </View>
+//     </View>) :
+//     <View>
+//       { this.state.timeIndex === 1 &&
+//         <View>
+//           <View style={{flexDirection: "row", justifyContent: "center"}}>
+//             <Text>Same</Text>
+//           </View>
+//         </View>
+//       }
+//     </View>
+//   }
+// </View>
 const styles = StyleSheet.create( {
     countDownBlock: {
       marginTop: "20%",
