@@ -30,6 +30,7 @@ function mapStateToProps(state, ownProps) {
         allGuests: state.guests,
         loading: state.loading,
         actionItems: state.actionItems,
+        interactions: state.interactions,
         completedActionItems: state.completedActionItems,
         actionItemIds: state.guestActionItemIds[ownProps.Id]
     };
@@ -226,25 +227,28 @@ class GuestProfile extends Component {
     }
 
     _renderHistoryDetail = (rowData, _sectionID, _rowID) => {
-        let title = <Text>{rowData.date}</Text>
+        let title = (<Text>{rowData.date}</Text>);
         var desc = null
-        if(rowData.isActionItem) {
-          let completionText = (rowData.isDone ? "Complete Task" :
-                                                  "Incomplete Task");
-          desc = (
+        if (rowData.isActionItem) {
+            desc = (
             <View style={{flexDirection: 'column', marginLeft:10}}>
-              <Text style={{fontWeight: 'bold'}}>{completionText}</Text>
               <View style={{flexDirection: 'row'}}>
                 <TouchableOpacity
-                style={{flex:99, borderColor: '#464646', borderLeftColor: 'blue', padding: 5, borderWidth: 1, borderLeftWidth: 10, borderRightWidth: 0}}
+                style={{flex:99, borderLeftColor: rowData.color, padding: 5, borderWidth: 1, borderLeftWidth: 10, borderRightWidth: 0}}
                 onPress={() => this.view_actionitem_page(rowData.actionItemId)}
                 >
                   <Text>{rowData.title}</Text>
                 </TouchableOpacity>
               </View>
-            </View>
-          )
-        } //else if ()
+            </View>)
+        } else {
+            desc = (
+            <View style={{flexDirection: 'column', marginLeft:10}}>
+                <View style={{flexDirection: 'row'}}>
+                    <Text>{rowData.description}</Text>
+                </View>
+            </View>)
+        }
 
         return (
           <View style={{flex:1}}>
@@ -257,49 +261,50 @@ class GuestProfile extends Component {
     // Once interactions are added to Guest schema, interpolate w/ actionItems
     // and render in the list.
     renderHistory = () => {
+        // TODO restyle the date font, try and set dot colors correctly
+
         // Action items are stored in a weird list; ie 0: {item data}
         // extracts the objects into their own list
-        let incompleteActionItems = Object.values(this.props.actionItems);
         let completedActionItems = Object.values(this.props.completedActionItems);
-        let allActionItems = incompleteActionItems.concat(completedActionItems);
+        let allInteractions = Object.values(this.props.interactions);
+        // List of all possible history for the guest
+        let allHistory = completedActionItems.concat(allInteractions);
 
-        // Filter list to only include action items related to guest
-        let relatedActionItems = allActionItems.filter((actionItem) =>
+        // Filter list to include action items related to guest
+        let relatedHistory = allHistory.filter((item) =>
                      {
-                        console.log(actionItem.creationTimestamp)
-                        if (actionItem.guestIds != undefined) {
-                          return actionItem.guestIds.includes(this.props.guestId)
+                        if (item.guestIds != undefined) {
+                          return item.guestIds.includes(this.props.guestId)
                         }
                       });
 
-        // Guest has no history- render "No information to display"
-        if (relatedActionItems.length == 0) {
+        // If guest has no history, tell the user!
+        if (relatedHistory.length == 0) {
             return (
                 <View style={styles.historyContainer}>
                     <Text style={styles.historyHeader}>Guest History</Text>
-                    <Text>No action items or interactions to display!</Text>
+                    <Text>No history to display!</Text>
                 </View>
             );
         }
 
-
-
         // Reformat action items for display in timeline
-        let timelineData = relatedActionItems.map((i) =>
+        let timelineData = relatedHistory.map((i) =>
                       {
                         let date = new Date(i.creationTimestamp).toDateString();
+                        console.log(date)
                         // re add color
                         return ({timestamp: i.creationTimestamp,
+                                interactionTimestamp: i.interactionTimestamp,
                                 date: date,
                                 title: i.title,
                                 color: i.color,
                                 description: i.description,
-                                isActionItem: true,
-                                actionItemId: i.actionItemId,
-                                isDone: i.isDone})
+                                isActionItem: (i.actionItemId != undefined), // TODO really janky
+                                actionItemId: i.actionItemId})
                         })
 
-        // Sort timelineDate from most->least recent
+        // Sort timelineDate by date (most recent to least)
         timelineData.sort((x, y) => {
             let xDate = new Date(x.timestamp);
             let yDate = new Date(y.timestamp);
@@ -312,10 +317,9 @@ class GuestProfile extends Component {
             <Timeline
               data={timelineData}
               showTime={false}
-              lineColor='#808080'
-              circleColor='#808080'
+              lineColor='blue'
+              circleColor='grey'
               descriptionStyle={{color:'gray'}}
-              detailContainerStyle={styles.timelineDetailContainer}
               columnFormat='single-column-left'
               renderDetail={this._renderHistoryDetail}
               options={{
