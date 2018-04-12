@@ -2,21 +2,22 @@ import React, {Component} from 'react';
 import {
     StyleSheet,
     View,
-    Text
+    Text,
+    TextInput,
+    Button,
 } from 'react-native';
 import renderSeperator from "./UI/renderSeperator";
 import renderLoader from "./UI/renderLoader";
 import dupNavFix from "../dupNavFix";
-
-import Icon from 'react-native-vector-icons/Ionicons';
-
+import {Icon} from "react-native-elements";
+import PromptDialog from "./PromptDialog";
+import PopupDialog, {DialogTitle, DialogButton} from 'react-native-popup-dialog';
 
 // The time from start of day until lottery release
 const lotteryReleaseTimeInMillis = 77400000;
 class Lottery_module extends Component {
 	constructor(props) {
 		super(props);
-    console.log(this.phoneIcon);
 
     // Time indeces: 0 - Countdown, 1 - Lottery unentered, 2 - Lottery entered
     this.state    = {timeIndex: 0, timeRemaining: "", seconds: 0};
@@ -80,9 +81,34 @@ class Lottery_module extends Component {
   //TODO: change logic so that lotteryBlock can contain both timeIndex 1 and 2
 	render() {
 		return (
-
       <View style={styles.lotteryBlock}>
-        <Icon name="alert" />
+        <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center", marginTop: 20, marginBottom: 20}}>
+          <Icon name="phone" />
+          <Text style={{marginLeft: 10}}>Please call for lottery winners</Text>
+        </View>
+        <Button
+          color="#rgba(119, 11, 22, 1)"
+          onPress={ () => {this.popupDialog.show()} }
+          title="Enter Winner" />
+
+        <PopupDialog
+            dialogStyle={{ position: 'absolute', top: "40%", width: '80%', height: 100 }}
+            dialogTitle={<DialogTitle title="Enter Winners"/>}
+            ref={(popupDialog) => { this.popupDialog = popupDialog; }}
+        >
+            <View style={styles.container}>
+              <TextInput
+                {...this.props}
+                style={styles.textInput}
+                onChangeText={(input) => this.setState({input})}
+                value={this.state.input}
+              />
+              <View style={styles.buttonContainer}>
+                <Button onPress={this.onCancel} title={"Cancel"}/>
+                <Button onPress={this.onSubmit} title={"Submit"}/>
+              </View>
+            </View>
+        </PopupDialog>
       </View>
 
       // <View>
@@ -119,7 +145,6 @@ const styles = StyleSheet.create( {
     lotteryBlock: {
       marginTop: "10%",
       flexDirection: 'column',
-      backgroundColor: 'green',
     }
 });
 
