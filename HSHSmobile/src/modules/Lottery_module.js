@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {
+    StyleSheet,
     View,
     Text
 } from 'react-native';
@@ -18,7 +19,7 @@ class Lottery_module extends Component {
 	}
 
   componentWillMount() {
-    let secs = this.calcTimeRemaining();
+    let secs = this.getTimeRemaining();
     this.setState({ seconds: secs });
   }
 
@@ -33,13 +34,17 @@ class Lottery_module extends Component {
       clearInterval(this.interval);
   }
 
-  calcTimeRemaining = () => {
+  getTimeRemaining = () => {
     let now = new Date();
 		let releaseDate = new Date();
 		releaseDate.setHours(0);
 		releaseDate.setMinutes(0);
+    releaseDate.setSeconds(0);
 		let releaseTimestamp = releaseDate.getTime() + lotteryReleaseTimeInMillis;
-    return ((releaseTimestamp - now) / 1000).toFixed(0);
+    console.log("miliseconds " + (releaseTimestamp - now));
+    let seconds = ((releaseTimestamp - now) / 1000).toFixed(0);
+    console.log("seconds " + seconds);
+    return seconds;
   }
 
   countDown = () => {
@@ -62,15 +67,26 @@ class Lottery_module extends Component {
 
 	render() {
 		return (
-			<View style={{backgroundColor: 'green', flex: 1}}>
-				<Text>Countdown until lottery:</Text>
-				<Text>{this.state.timeRemaining}</Text>
-			</View>
+      <View style={styles.countDownBlock}>
+        <View style={{margin: 30}}>
+          <Text style={{fontSize: 18, fontWeight: 'bold', marginBottom: "5%"}}>Status: Countdown till lottery</Text>
+  				<Text style={{fontSize: 18, textAlign: "center", letterSpacing: 1.5}}>{this.state.timeRemaining}</Text>
+        </View>
+      </View>
 		);
 	}
-
-
 }
+
+const styles = StyleSheet.create( {
+
+    countDownBlock: {
+      marginTop: "20%",
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+    }
+
+});
 
 
 // TODO: do we need DupNavFix here?
