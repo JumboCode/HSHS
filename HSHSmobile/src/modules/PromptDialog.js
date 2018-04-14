@@ -39,10 +39,11 @@ import { List, ListItem, SearchBar, CheckBox } from "react-native-elements";
 import PopupDialog, {DialogTitle, DialogButton} from 'react-native-popup-dialog';
 
 
-export default class PromptDialog extends Component {
+class PromptDialog extends Component {
     constructor(props) {
         super(props);
         this.state = {input: ""}
+
     };
 
     // calls show() fn of PopupDialog
@@ -52,11 +53,11 @@ export default class PromptDialog extends Component {
 
     onSubmit = () => {
       this.popupDialog.dismiss();
-      this.props.onSubmit(this.state.input);
+      //this.props.onSubmit(this.state.input);
     }
     onCancel = () => {
       this.popupDialog.dismiss();
-      this.props.onCancel();
+      //this.props.onCancel();
     }
 
     render() {
@@ -88,11 +89,17 @@ const styles = StyleSheet.create({
     container: {
       flexDirection: 'column',
       justifyContent: 'center',
-      alignItems:'center'},
+      alignItems:'center',
+      backgroundColor: 'white',
+      borderRadius: 8
+    },
     buttonContainer: {
+      marginBottom: 5,
       flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems:'center'},
+      justifyContent: 'space-between',
+      alignItems:'center',
+      width: "80%",
+    },
     title: {
       fontWeight:'bold'
     },
@@ -100,10 +107,13 @@ const styles = StyleSheet.create({
       fontSize: 15,
     },
     textInput: {
-      marginTop: 3,
+      marginTop: 5,
+      marginBottom: 5,
       height: 40,
       width: "80%",
       borderColor: 'gray',
       borderWidth: 1
     },
 });
+
+export default PromptDialog;

@@ -3,6 +3,7 @@ import {
     Platform,
     StyleSheet,
     Text,
+    TextInput,
     View,
     FlatList,
     ActivityIndicator,
@@ -20,6 +21,8 @@ import ActionItemList_module from '../../modules/ActionItemList_module';
 import Lottery_module from '../../modules/Lottery_module';
 import {Icon} from 'react-native-elements'
 import renderSeperator from "../../modules/UI/renderSeperator";
+import PopupDialog, {DialogTitle, DialogButton} from 'react-native-popup-dialog';
+import PromptDialog from "../../modules/PromptDialog"
 
 const {UIManager} = NativeModules;
 
@@ -120,12 +123,19 @@ class Dashboard extends Component {
       this.setState({selectedInteraction: id});
     }
 
+    onPopupSubmit = () => {
+      return ;
+    }
+
+    onPopupCancel = () => {
+      return ;
+    }
+
     // I'm not sure if this is the best way to have logical statements within renders, but it's not the worst way!
     render() {
         return (
 
             (this.props.loading && <ActivityIndicator animating size="large"/>) ||
-
 
             (!this.props.loading &&
                 <View>
@@ -198,9 +208,34 @@ class Dashboard extends Component {
                                           navigator={this.props.navigator}/>
                     */}
 
-                    <Lottery_module />
 
+                    <Lottery_module
+                      popupDialog={this.promptDialog}/>
 
+                    <PromptDialog
+                      title="Please enter winners"
+                      ref={(popupDialog) => { this.promptDialog = popupDialog; }}/>
+                      
+                    {/*
+                    <PopupDialog
+                        dialogStyle={{ position: 'absolute', top: "40%", width: '80%', height: 100 }}
+                        dialogTitle={<DialogTitle title="Enter Winners"/>}
+                        ref={(popupDialog) => { this.popupDialog = popupDialog; }}
+                    >
+                        <View style={styles.container}>
+                          <TextInput
+                            {...this.props}
+                            style={styles.textInput}
+                            onChangeText={(input) => this.setState({input})}
+                            value={this.state.input}
+                          />
+                          <View style={styles.buttonContainer}>
+                            <Button onPress={this.onPopupCancel} title={"Cancel"}/>
+                            <Button onPress={this.onPopupSubmit} title={"Submit"}/>
+                          </View>
+                        </View>
+                    </PopupDialog> */
+                    }
                       {
                       /*
                       <View style={{flexDirection: 'column', alignItems: 'center'}}>
