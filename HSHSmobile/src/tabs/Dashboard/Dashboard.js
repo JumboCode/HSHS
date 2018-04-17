@@ -68,6 +68,7 @@ class Dashboard extends Component {
 
     };
 
+    //TODO: lotteryWinner isn't properly mapped to props fix please
     componentDidMount() {
         this.makeRemoteRequest();
         navigator.geolocation.watchPosition((pos) => {
@@ -78,7 +79,7 @@ class Dashboard extends Component {
         }, (error) => {
           Alert.alert(error.message);
         }, {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, distanceFilter: 50});
-        this.setState({lotteryState: (this.state.lotteryWinner != "null")});
+        this.setState({lotteryState: (this.props.lotteryWinner == "null")});
     };
 
     makeRemoteRequest = () => {

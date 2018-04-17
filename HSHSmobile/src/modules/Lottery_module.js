@@ -82,7 +82,7 @@ class Lottery_module extends Component {
   //       <View>{(this.state.seconds > 0) ?
 	render() {
 		return (
-      <View>{(this.state.seconds > 0) ?
+      <View>{(0 == 1) ?
         (<View style={styles.countDownBlock}>
           <View style={{margin: 30}}>
             <Text style={{fontSize: 18, fontWeight: 'bold', marginBottom: "5%"}}>Status: Countdown till lottery</Text>
