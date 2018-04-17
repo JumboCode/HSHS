@@ -3,6 +3,7 @@ import {
     Platform,
     StyleSheet,
     Text,
+    TextInput,
     View,
     FlatList,
     ActivityIndicator,
@@ -15,10 +16,13 @@ import {
 import {List, ListItem, SearchBar} from "react-native-elements";
 import {connect} from 'react-redux';
 import MapView from 'react-native-maps';
-import {getGuests, getInteractions, getActionItems, getCompletedActionItems} from '../../redux/actions.js';
+import {getGuests, getInteractions, getActionItems, getCompletedActionItems, getLotteryWinners} from '../../redux/actions.js';
 import ActionItemList_module from '../../modules/ActionItemList_module';
+import Lottery_module from '../../modules/Lottery_module';
 import {Icon} from 'react-native-elements'
 import renderSeperator from "../../modules/UI/renderSeperator";
+import PopupDialog, {DialogTitle, DialogButton} from 'react-native-popup-dialog';
+import PromptDialog from "../../modules/PromptDialog"
 
 const {UIManager} = NativeModules;
 
@@ -30,7 +34,8 @@ function mapStateToProps(state, ownProps) {
         actionItems: state.actionItems,
         guests: state.guests,
         loading: state.loading,
-        interactions: state.interactions
+        interactions: state.interactions,
+        lotteryWinner: state.lotteryWinner,
     };
 }
 
@@ -39,7 +44,8 @@ function mapDispatchToProps(dispatch, ownProps) {
         getGuests: getGuests,
         getInteractions: getInteractions,
         getActionItems: getActionItems,
-        getCompletedActionItems: getCompletedActionItems
+        getCompletedActionItems: getCompletedActionItems,
+        getLotteryWinners: getLotteryWinners,
     };
 }
 
@@ -51,7 +57,10 @@ class Dashboard extends Component {
         this.state = {
             isMapFullScreen: true,
             curLat: 42.371664,
-            curLong: -71.119837
+            curLong: -71.119837,
+            lotteryState: false,
+            lotteryWinner: "",
+            lotteryState: false,
         }
     };
 
@@ -69,6 +78,7 @@ class Dashboard extends Component {
         }, (error) => {
           Alert.alert(error.message);
         }, {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, distanceFilter: 50});
+        this.setState({lotteryState: (this.state.lotteryWinner != "null")});
     };
 
     makeRemoteRequest = () => {
@@ -76,6 +86,7 @@ class Dashboard extends Component {
         this.props.getGuests();
         this.props.getActionItems();
         this.props.getCompletedActionItems();
+        this.props.getLotteryWinners();
     };
 
     componentWillUpdate(nextProps, nextState) {
@@ -119,12 +130,15 @@ class Dashboard extends Component {
       this.setState({selectedInteraction: id});
     }
 
+    updateLotteryState = () => {
+      return ;
+    }
+
     // I'm not sure if this is the best way to have logical statements within renders, but it's not the worst way!
     render() {
         return (
 
             (this.props.loading && <ActivityIndicator animating size="large"/>) ||
-
 
             (!this.props.loading &&
                 <View>
@@ -187,7 +201,7 @@ class Dashboard extends Component {
                         />
                     </View>
 
-                    {!this.props.actionItems || this.props.actionItems.length <= 1
+                    {/*!this.props.actionItems || this.props.actionItems.length <= 1
                         ? <ActivityIndicator animating size="large"/>
 
                         : <ActionItemList_module actionItems={this.props.actionItems}
@@ -195,40 +209,49 @@ class Dashboard extends Component {
                                           dashboard={true}
                                           selectedInteraction={this.state.selectedInteraction}
                                           navigator={this.props.navigator}/>
+                    */}
+
+
+                    <Lottery_module
+                      popupDialog={this.promptDialog}
+                      winnerEntered={this.state.lotteryState}
+                      winners={this.state.lotteryWinner}
+                      />
+
+                    <PromptDialog
+                      title="Please enter winners"
+                      ref={(popupDialog) => { this.promptDialog = popupDialog; }}/>
+
+                      {
+                      /*
+                      <View style={{flexDirection: 'column', alignItems: 'center'}}>
+                      <View style={{margin: 30}}>
+                        <Text>Status: Countdown till lottery</Text>
+                      </View>
+                      Page displays lottery numbers after 9:30
+                      <View style={{flexDirection: 'row'}}>
+                          <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
+                          <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
+                          <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
+                      </View>
+
+                      <View style={{flexDirection: 'row'}}>
+                          <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
+                          <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
+                          <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
+                      </View>
+
+                      <Button
+                          title={"Call on Lottery"}
+                          color="#841584"
+                          accessibilityLabel="Learn more about this purple button"
+                          onPress={() => {
+                              Alert.alert("", "Call on Lottery Button Pressed");
+                          }}
+                      />
+                      </View>
+                      */
                     }
-
-
-                    {/* Commented out until we figure out lottery number implementation
-                    <View style={{flexDirection: 'column', alignItems: 'center'}}>
-
-                    <Text>
-                        Lottery Status: Number not given out
-                    </Text>
-
-                    <View style={{flexDirection: 'row'}}>
-                        <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
-                        <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
-                        <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
-                    </View>
-
-                    <View style={{flexDirection: 'row'}}>
-                        <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
-                        <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
-                        <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
-                    </View>
-
-                    <Button
-                        title={"Call on Lottery"}
-                        color="#841584"
-                        accessibilityLabel="Learn more about this purple button"
-                        onPress={() => {
-                            Alert.alert("", "Call on Lottery Button Pressed");
-                        }}
-                    />
-
-
-                </View> */}
-
                 </View>
             )
         );
