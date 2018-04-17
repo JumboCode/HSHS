@@ -16,7 +16,7 @@ import {
 import {List, ListItem, SearchBar} from "react-native-elements";
 import {connect} from 'react-redux';
 import MapView from 'react-native-maps';
-import {getGuests, getInteractions, getActionItems, getCompletedActionItems} from '../../redux/actions.js';
+import {getGuests, getInteractions, getActionItems, getCompletedActionItems, getLotteryWinners} from '../../redux/actions.js';
 import ActionItemList_module from '../../modules/ActionItemList_module';
 import Lottery_module from '../../modules/Lottery_module';
 import {Icon} from 'react-native-elements'
@@ -34,7 +34,8 @@ function mapStateToProps(state, ownProps) {
         actionItems: state.actionItems,
         guests: state.guests,
         loading: state.loading,
-        interactions: state.interactions
+        interactions: state.interactions,
+        lotteryWinner: state.lotteryWinner,
     };
 }
 
@@ -43,7 +44,8 @@ function mapDispatchToProps(dispatch, ownProps) {
         getGuests: getGuests,
         getInteractions: getInteractions,
         getActionItems: getActionItems,
-        getCompletedActionItems: getCompletedActionItems
+        getCompletedActionItems: getCompletedActionItems,
+        getLotteryWinners: getLotteryWinners,
     };
 }
 
@@ -55,7 +57,10 @@ class Dashboard extends Component {
         this.state = {
             isMapFullScreen: true,
             curLat: 42.371664,
-            curLong: -71.119837
+            curLong: -71.119837,
+            lotteryState: false,
+            lotteryWinner: "",
+            lotteryState: false,
         }
     };
 
@@ -73,6 +78,7 @@ class Dashboard extends Component {
         }, (error) => {
           Alert.alert(error.message);
         }, {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, distanceFilter: 50});
+        this.setState({lotteryState: this.state.lotteryWinner != "null"});
     };
 
     makeRemoteRequest = () => {
@@ -80,6 +86,7 @@ class Dashboard extends Component {
         this.props.getGuests();
         this.props.getActionItems();
         this.props.getCompletedActionItems();
+        this.props.getLotteryWinners();
     };
 
     componentWillUpdate(nextProps, nextState) {
@@ -123,11 +130,7 @@ class Dashboard extends Component {
       this.setState({selectedInteraction: id});
     }
 
-    onPopupSubmit = () => {
-      return ;
-    }
-
-    onPopupCancel = () => {
+    updateLotteryState = () => {
       return ;
     }
 
@@ -210,32 +213,15 @@ class Dashboard extends Component {
 
 
                     <Lottery_module
-                      popupDialog={this.promptDialog}/>
+                      popupDialog={this.promptDialog}
+                      winnerEntered={this.state.lotteryState}
+                      winnders={this.state.lotteryWinner}
+                      />
 
                     <PromptDialog
                       title="Please enter winners"
                       ref={(popupDialog) => { this.promptDialog = popupDialog; }}/>
-                      
-                    {/*
-                    <PopupDialog
-                        dialogStyle={{ position: 'absolute', top: "40%", width: '80%', height: 100 }}
-                        dialogTitle={<DialogTitle title="Enter Winners"/>}
-                        ref={(popupDialog) => { this.popupDialog = popupDialog; }}
-                    >
-                        <View style={styles.container}>
-                          <TextInput
-                            {...this.props}
-                            style={styles.textInput}
-                            onChangeText={(input) => this.setState({input})}
-                            value={this.state.input}
-                          />
-                          <View style={styles.buttonContainer}>
-                            <Button onPress={this.onPopupCancel} title={"Cancel"}/>
-                            <Button onPress={this.onPopupSubmit} title={"Submit"}/>
-                          </View>
-                        </View>
-                    </PopupDialog> */
-                    }
+
                       {
                       /*
                       <View style={{flexDirection: 'column', alignItems: 'center'}}>
