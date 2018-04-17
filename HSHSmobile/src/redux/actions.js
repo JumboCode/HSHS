@@ -277,3 +277,20 @@ export const markActionItemAsDone = (id) => {
 		});
 	})
 }
+
+export const resetWinners = () => {
+	let ref = firebase.database().ref('/');
+	ref.update({lotteryWinner: "null"});
+}
+
+export const enterWinners = (winners) => {
+	let ref = firebase.database().ref('/');
+	ref.update({lotteryWinner: winners});
+}
+
+export const getLotteryWinners = () => {
+	let ref = firebase.database().ref('/lotteryWinner');
+	ref.on('value', (snapshot) => {
+		return snapshot.val();
+	});
+}
