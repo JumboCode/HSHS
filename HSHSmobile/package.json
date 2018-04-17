@@ -11,6 +11,7 @@
     "firebase": "^4.5.0",
     "moment": "^2.20.1",
     "node-emoji": "^1.8.1",
+    "npm": "^5.8.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-moment": "^0.7.0",

@@ -57,7 +57,6 @@ class PromptDialog extends Component {
     }
     onCancel = () => {
       this.popupDialog.dismiss();
-      //this.props.onCancel();
     }
 
     render() {
