@@ -37,6 +37,7 @@ import {
 } from 'react-native';
 import { List, ListItem, SearchBar, CheckBox } from "react-native-elements";
 import PopupDialog, {DialogTitle, DialogButton} from 'react-native-popup-dialog';
+import {enterWinners} from '../../redux/actions.js';
 
 
 class PromptDialog extends Component {
