@@ -35,7 +35,8 @@ class Lottery_module extends Component {
 
   // TODO: check database and see if data has been entered, set timeIndex
   componentWillMount() {
-    let secs = this.getTimeRemaining();
+    //let secs = this.getTimeRemaining();
+    let secs = 3;
     this.setState ({ seconds: secs });
   }
 
@@ -82,8 +83,8 @@ class Lottery_module extends Component {
     if (minutes > 59) {
       hours     = Math.floor(minutes / 60);
       minutes   = minutes - (hours * 60);
-      minutes   = (minutes > 10) ? minutes : "0" + minutes;
     }
+    minutes   = (minutes > 10) ? minutes : "0" + minutes;
     seconds     = seconds % 60;
 
 		return (hours >= 10 ? hours : ("0" + hours)) + ":" + minutes + ":" + ((seconds >= 10) ? seconds : "0" + seconds) ;
@@ -93,29 +94,36 @@ class Lottery_module extends Component {
   //       <View>{(this.state.seconds > 0) ?
 	render() {
 		return (
-      <View>
-        <Text>{this.props.lotteryWinner}</Text>
-        <View>{(0 == 1) ?
-          (<View style={styles.countDownBlock}>
-            <View style={{margin: 30}}>
-              <Text style={{fontSize: 18, fontWeight: 'bold', marginBottom: "5%"}}>Status: Countdown till lottery</Text>
-      				<Text style={{fontSize: 18, textAlign: "center", letterSpacing: 1.5}}>{this.state.timeRemaining}</Text>
+      <View>{(this.state.seconds > 0) ?
+        (<View style={styles.countDownBlock}>
+          <View style={{margin: 30}}>
+            <Text style={{fontSize: 18, fontWeight: 'bold', marginBottom: "5%"}}>Status: Countdown till lottery</Text>
+    				<Text style={{fontSize: 18, textAlign: "center", letterSpacing: 1.5}}>{this.state.timeRemaining}</Text>
+          </View>
+        </View>) :
+        <View>{(this.props.lotteryWinner == "null") ?
+          (<View style={styles.lotteryBlock}>
+            <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center", marginTop: 20, marginBottom: 20}}>
+              <Icon name="phone" />
+              <Text style={{marginLeft: 10}}>Please call for lottery winners</Text>
             </View>
+            <Button
+              color="#rgba(119, 11, 22, 1)"
+              onPress={ () => {this.props.popupDialog.show()} }
+              title="Enter Winner" />
           </View>) :
-          <View>{(this.props.lotteryWinner == "null") ?
-            (<View style={styles.lotteryBlock}>
-              <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center", marginTop: 20, marginBottom: 20}}>
-                <Icon name="phone" />
-                <Text style={{marginLeft: 10}}>Please call for lottery winners</Text>
-              </View>
+          (<View style={{height: "50%", flexDirection: 'column', alignItems: 'center', justifyContent: "space-around", marginTop: "10%"}}>
+            <View>
+              <Text style={{fontSize: 15, letterSpacing: 10, textAlign: "center"}}>{this.props.lotteryWinner}</Text>
+            </View>
+            <View>
               <Button
                 color="#rgba(119, 11, 22, 1)"
                 onPress={ () => {this.props.popupDialog.show()} }
-                title="Enter Winner" />
-            </View>) :
-            (<View></View>)}
-          </View>}
-        </View>
+                title="Edit Winner" />
+              </View>
+           </View>)}
+        </View>}
       </View>
 		);
 	}

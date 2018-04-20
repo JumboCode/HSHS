@@ -16,7 +16,7 @@ import {
 import {List, ListItem, SearchBar} from "react-native-elements";
 import {connect} from 'react-redux';
 import MapView from 'react-native-maps';
-import {getGuests, getInteractions, getActionItems, getCompletedActionItems, getLotteryWinners} from '../../redux/actions.js';
+import {getGuests, getInteractions, getActionItems, getCompletedActionItems} from '../../redux/actions.js';
 import ActionItemList_module from '../../modules/ActionItemList_module';
 import Lottery_module from '../../modules/Lottery_module';
 import {Icon} from 'react-native-elements'
@@ -45,7 +45,6 @@ function mapDispatchToProps(dispatch, ownProps) {
         getInteractions: getInteractions,
         getActionItems: getActionItems,
         getCompletedActionItems: getCompletedActionItems,
-        getLotteryWinners: getLotteryWinners,
     };
 }
 
@@ -86,7 +85,6 @@ class Dashboard extends Component {
         this.props.getGuests();
         this.props.getActionItems();
         this.props.getCompletedActionItems();
-        this.props.getLotteryWinners();
     };
 
     componentWillUpdate(nextProps, nextState) {
@@ -213,7 +211,6 @@ class Dashboard extends Component {
 
                     <Lottery_module
                       popupDialog={this.promptDialog}
-                      winnerEntered={this.props.lotteryWinner != "null"}
                       winners={this.state.lotteryWinner}
                       />
 
