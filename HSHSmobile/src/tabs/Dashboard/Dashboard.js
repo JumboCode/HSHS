@@ -79,7 +79,6 @@ class Dashboard extends Component {
         }, (error) => {
           Alert.alert(error.message);
         }, {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, distanceFilter: 50});
-        this.setState({lotteryState: (this.props.lotteryWinner == "null")});
     };
 
     makeRemoteRequest = () => {
@@ -212,10 +211,9 @@ class Dashboard extends Component {
                                           navigator={this.props.navigator}/>
                     */}
 
-
                     <Lottery_module
                       popupDialog={this.promptDialog}
-                      winnerEntered={this.state.lotteryState}
+                      winnerEntered={this.props.lotteryWinner != "null"}
                       winners={this.state.lotteryWinner}
                       />
 

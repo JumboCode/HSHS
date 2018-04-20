@@ -6,20 +6,30 @@ import {
     TextInput,
     Button,
 } from 'react-native';
+import {connect} from 'react-redux';
 import renderSeperator from "./UI/renderSeperator";
 import renderLoader from "./UI/renderLoader";
 import dupNavFix from "../dupNavFix";
 import {List, ListItem, Icon} from "react-native-elements";
+import {getLotteryWinners} from '../redux/actions.js';
+
 // The time from start of day until lottery release
 const lotteryReleaseTimeInMillis = 77400000;
 
+function mapStateToProps(state, ownProps) {
+    return { lotteryWinner: state.lotteryWinner };
+}
+
+function mapDispatchToProps(dispatch, ownProps) {
+    return { getLotteryWinners: getLotteryWinners };
+}
 // Props:
 // winners: string
 // winnerEntered : true/false
 class Lottery_module extends Component {
 	constructor(props) {
 		super(props);
-    // timeIndex: 0 -> Countdown, 1 -> Winnder unentered, 2 -> winner entered
+
     this.state = { timeRemaining: "", seconds: 0 };
 	}
 
@@ -31,6 +41,7 @@ class Lottery_module extends Component {
 
   // Decrement counter every second
   componentDidMount() {
+    this.props.getLotteryWinners();
     this.interval = setInterval(() => {
       this.countDown();
     }, 1000);
@@ -82,26 +93,29 @@ class Lottery_module extends Component {
   //       <View>{(this.state.seconds > 0) ?
 	render() {
 		return (
-      <View>{(0 == 1) ?
-        (<View style={styles.countDownBlock}>
-          <View style={{margin: 30}}>
-            <Text style={{fontSize: 18, fontWeight: 'bold', marginBottom: "5%"}}>Status: Countdown till lottery</Text>
-    				<Text style={{fontSize: 18, textAlign: "center", letterSpacing: 1.5}}>{this.state.timeRemaining}</Text>
-          </View>
-        </View>) :
-        <View>{(this.props.winnerEntered === false) ?
-          (<View style={styles.lotteryBlock}>
-            <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center", marginTop: 20, marginBottom: 20}}>
-              <Icon name="phone" />
-              <Text style={{marginLeft: 10}}>Please call for lottery winners</Text>
+      <View>
+        <Text>{this.props.lotteryWinner}</Text>
+        <View>{(0 == 1) ?
+          (<View style={styles.countDownBlock}>
+            <View style={{margin: 30}}>
+              <Text style={{fontSize: 18, fontWeight: 'bold', marginBottom: "5%"}}>Status: Countdown till lottery</Text>
+      				<Text style={{fontSize: 18, textAlign: "center", letterSpacing: 1.5}}>{this.state.timeRemaining}</Text>
             </View>
-            <Button
-              color="#rgba(119, 11, 22, 1)"
-              onPress={ () => {this.props.popupDialog.show()} }
-              title="Enter Winner" />
           </View>) :
-          (<View></View>)}
-        </View>}
+          <View>{(this.props.lotteryWinner == "null") ?
+            (<View style={styles.lotteryBlock}>
+              <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center", marginTop: 20, marginBottom: 20}}>
+                <Icon name="phone" />
+                <Text style={{marginLeft: 10}}>Please call for lottery winners</Text>
+              </View>
+              <Button
+                color="#rgba(119, 11, 22, 1)"
+                onPress={ () => {this.props.popupDialog.show()} }
+                title="Enter Winner" />
+            </View>) :
+            (<View></View>)}
+          </View>}
+        </View>
       </View>
 		);
 	}
@@ -141,4 +155,4 @@ const styles = StyleSheet.create( {
 
 
 // TODO: do we need DupNavFix here?
-export default Lottery_module;
+export default connect(mapStateToProps, mapDispatchToProps)(Lottery_module);

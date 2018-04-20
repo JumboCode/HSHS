@@ -16,7 +16,7 @@ export function reducer(state, action) {
             return Object.assign({}, state, {
                 loading: false,
                 loaded: true,
-                guests: action.payload
+                guests: action.payload,
             });
 
         case 'GET_INTERACTIONS_START':
@@ -81,7 +81,7 @@ export function reducer(state, action) {
                 }, new Object())
             })};
 
-        case 'GET_COMPLETED_ACTION_ITEMS_SUCCESS': 
+        case 'GET_COMPLETED_ACTION_ITEMS_SUCCESS':
             console.log(action.payload)
             return Object.assign({}, state, {
                 completedActionItems: action.payload,
@@ -92,8 +92,19 @@ export function reducer(state, action) {
                   });
                   return guests;
                 }, new Object())
-            })
+            });
 
+        case 'GET_WINNERS_START':
+            return Object.assign({}, state, {
+                loading: true
+            });
+
+        case 'GET_WINNERS_SUCCESS':
+            return Object.assign({}, state, {
+              loading: false,
+              loaded: true,
+              lotteryWinner: action.payload,
+            });
 
         default:
             return state;

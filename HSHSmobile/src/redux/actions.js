@@ -278,6 +278,15 @@ export const markActionItemAsDone = (id) => {
 	})
 }
 
+export const getLotteryWinnersStart = () => ({
+		type: 'GET_WINNERS_START'
+})
+
+export const getLotteryWinnersSuccess = (data)=> ({
+		type: 'GET_WINNERS_SUCCESS',
+		payload: data
+})
+
 export const resetWinners = () => {
 	let ref = firebase.database().ref('/');
 	ref.update({lotteryWinner: "null"});
@@ -289,8 +298,10 @@ export const enterWinners = (winners) => {
 }
 
 export const getLotteryWinners = () => {
-	let ref = firebase.database().ref('/lotteryWinner');
-	ref.on('value', (snapshot) => {
-		return snapshot.val();
-	});
+	store.dispatch(getLotteryWinnersStart());
+	firebase.database()
+			.ref('lotteryWinner')
+			.on('value', (snapshot) => {
+				store.dispatch(getLotteryWinnersSuccess(snapshot.val()));
+			});
 }

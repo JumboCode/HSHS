@@ -37,6 +37,7 @@ import {
 } from 'react-native';
 import { List, ListItem, SearchBar, CheckBox } from "react-native-elements";
 import PopupDialog, {DialogTitle, DialogButton} from 'react-native-popup-dialog';
+import {enterWinners} from '../redux/actions.js';
 
 
 class PromptDialog extends Component {
@@ -53,6 +54,7 @@ class PromptDialog extends Component {
 
     onSubmit = () => {
       this.popupDialog.dismiss();
+      enterWinners(this.state.input);
       //this.props.onSubmit(this.state.input);
     }
     onCancel = () => {
@@ -70,7 +72,7 @@ class PromptDialog extends Component {
                   <TextInput
                     {...this.props}
                     style={styles.textInput}
-                    onChangeText={(input) => this.setState({input})}
+                    onChangeText={(winner) => this.setState({input: winner})}
                     value={this.state.input}
                   />
                   <View style={styles.buttonContainer}>
