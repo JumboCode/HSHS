@@ -2,7 +2,15 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  heigth: 100% !important;
+  height: 100% !important;
+}
+
+#root {
+  height : 100%;
+}
+
+html {
+  height: 100vh;
 }
 
 [data-reactroot]
