@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import * as firebase from 'firebase';
-import {auth} from '../firebase';
-import * as routes from '../constants/routes';
+import {auth} from '../../firebase';
+import * as routes from '../../constants/routes';
 import TextField from 'material-ui/TextField';
 import Card, { CardContent } from 'material-ui/Card';
 import Button from 'material-ui/Button';
@@ -51,12 +51,7 @@ class SignInCard extends Component {
     const {
       email,
       password,
-      error,
     } = this.state;
-
-    const isInvalid =
-      password === '' ||
-      email === '';
 
     return (
         <Card style = {this.props.style}>

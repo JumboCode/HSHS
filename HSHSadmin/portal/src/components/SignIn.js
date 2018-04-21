@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import {SignInCard} from './SignInCard'
+import {SignInCard} from './cards/SignInCard'
 
 const SignInPage = ({ history }) =>
     <div style={

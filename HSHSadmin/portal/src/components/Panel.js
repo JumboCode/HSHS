@@ -3,45 +3,20 @@ import { withRouter } from 'react-router-dom';
 import * as firebase from 'firebase';
 import * as routes from '../constants/routes';
 
-import {SignupKeyCard} from './SignUpKeyCard'
+import {SignupKeyCard} from './cards/SignupKeyCard'
+import {UserManagementCard} from './cards/UserManagementCard'
+import {DataExportCard} from './cards/DataExportCard'
 
 class PanelPage extends Component {
     constructor(props) {
         super(props);
         let self = this;
-        this.state = {
-          actionItems: null,
-          signupKeys: {
-            adminKey: "na",
-            userKey: "na"
-          }};
-        /*
         if (!firebase.auth().currentUser) {
             props.history.push(routes.SIGN_IN);
         }
-        */
-        var signupKeyRef = firebase.database().ref("/signUpKeys");
-        signupKeyRef.on('value', (snapshot) => {
-          console.log(snapshot.val());
-          self.setState(
-            {signupKeys: snapshot.val()}
-          )
-        })
-        var actionItemsRef = firebase.database().ref("/actionItems");
-        actionItemsRef.on('value', (snapshot) => {
-            console.log(snapshot.val());
-            self.setState(
-                {actionItems: snapshot.val()}
-            );
-        });
-    }
-
-    componentDidMount() {
-      let self = this;
     }
 
     render() {
-        let self = this;
         return (
             <div style = {{
               height: "100%",
@@ -53,11 +28,13 @@ class PanelPage extends Component {
               margin: "auto",
               }}>
                 <SignupKeyCard
-                  signupKey = {this.state.signupKeys.adminKey}
-                  label = "Admin Signup Key"/>
+                  label = "Admin Signup Key"
+                  keyRef = {firebase.database().ref("/signUpKeys/adminKey")}/>
                 <SignupKeyCard
-                  signupKey = {this.state.signupKeys.userKey}
-                  label = "User Signup Key"/>
+                  label = "User Signup Key"
+                  keyRef = {firebase.database().ref("/signUpKeys/userKey")}/>
+                <DataExportCard />
+                <UserManagementCard />
             </div>
         );
     }
@@ -67,17 +44,5 @@ class PanelPage extends Component {
             this.statePromises.forEach(p => p.cancel());
     }
 }
-
-/*
-{(() => {
-    if (firebase.auth().currentUser) {
-        //return firebase.auth().currentUser.uid;
-        return JSON.stringify(self.state.actionItems);
-    } else {
-        //return "NOTUSER";
-        return JSON.stringify(self.state.actionItems);
-    }
-})()}
-*/
 
 export default withRouter(PanelPage);
