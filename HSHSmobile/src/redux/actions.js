@@ -2,6 +2,8 @@ import firebase from "../firebase";
 import {store} from './store.js';
 import {Alert} from 'react-native';
 
+const lotteryExpiration = 9000000;	// Lottery numbers lifetime in ms
+
 export const getGuestsStart = () => ({
 	type: 'GET_GUESTS_START'
 });
@@ -289,19 +291,27 @@ export const getLotteryWinnersSuccess = (data)=> ({
 
 export const resetWinners = () => {
 	let ref = firebase.database().ref('/');
-	ref.update({lotteryWinner: "null"});
+	ref.update({lottery: null});
 }
 
-export const enterWinners = (winners) => {
-	let ref = firebase.database().ref('/');
-	ref.update({lotteryWinner: winners});
+export const enterWinners = (winners, timestamp) => {
+	let ref = firebase.database().ref('/lottery');
+	ref.update({lotteryWinners: winners, lastUpdated: timestamp});
 }
 
 export const getLotteryWinners = () => {
 	store.dispatch(getLotteryWinnersStart());
 	firebase.database()
-			.ref('lotteryWinner')
+			.ref('lottery')
 			.on('value', (snapshot) => {
-				store.dispatch(getLotteryWinnersSuccess(snapshot.val()));
+
+				let now = new Date();
+				let then = new Date(snapshot.child('lastUpdated').val());
+				if (now - then > lotteryExpiration) {
+					store.dispatch(getLotteryWinnersSuccess(null));
+				} else {
+					store.dispatch(getLotteryWinnersSuccess(snapshot.child('lotteryWinners').val()));
+				}
+
 			});
 }

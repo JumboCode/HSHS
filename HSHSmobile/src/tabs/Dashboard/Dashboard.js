@@ -22,7 +22,7 @@ import Lottery_module from '../../modules/Lottery_module';
 import {Icon} from 'react-native-elements'
 import renderSeperator from "../../modules/UI/renderSeperator";
 import PopupDialog, {DialogTitle, DialogButton} from 'react-native-popup-dialog';
-import PromptDialog from "../../modules/PromptDialog"
+import LotteryPromptDialog from "../../modules/LotteryPromptDialog"
 
 const {UIManager} = NativeModules;
 
@@ -210,13 +210,13 @@ class Dashboard extends Component {
                     */}
 
                     <Lottery_module
-                      popupDialog={this.promptDialog}
+                      popupDialog={this.LotteryPromptDialog}
                       winners={this.state.lotteryWinner}
                       />
 
-                    <PromptDialog
+                    <LotteryPromptDialog
                       title="Please enter winners"
-                      ref={(popupDialog) => { this.promptDialog = popupDialog; }}/>
+                      ref={(popupDialog) => { this.LotteryPromptDialog = popupDialog; }}/>
 
                       {
                       /*

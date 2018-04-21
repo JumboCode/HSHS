@@ -17,6 +17,7 @@ import {getLotteryWinners} from '../redux/actions.js';
 const lotteryReleaseTimeInMillis = 77400000;
 
 function mapStateToProps(state, ownProps) {
+    console.log(state)
     return { lotteryWinner: state.lotteryWinner };
 }
 
@@ -101,7 +102,7 @@ class Lottery_module extends Component {
     				<Text style={{fontSize: 18, textAlign: "center", letterSpacing: 1.5}}>{this.state.timeRemaining}</Text>
           </View>
         </View>) :
-        <View>{(this.props.lotteryWinner == "null") ?
+        <View>{(this.props.lotteryWinner == null) ?
           (<View style={styles.lotteryBlock}>
             <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center", marginTop: 20, marginBottom: 20}}>
               <Icon name="phone" />

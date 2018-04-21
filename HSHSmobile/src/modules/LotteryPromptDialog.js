@@ -53,8 +53,10 @@ class PromptDialog extends Component {
     }
 
     onSubmit = () => {
+      let timestamp = new Date();
+
       this.popupDialog.dismiss();
-      enterWinners(this.state.input);
+      enterWinners(this.state.input, timestamp);
       //this.props.onSubmit(this.state.input);
     }
     onCancel = () => {
