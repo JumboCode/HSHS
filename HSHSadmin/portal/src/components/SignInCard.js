@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import * as firebase from 'firebase';
 import {auth} from '../firebase';
 import * as routes from '../constants/routes';
 import TextField from 'material-ui/TextField';
@@ -31,7 +32,10 @@ class SignInCard extends Component {
       history,
     } = this.props;
 
-    auth.doSignInWithEmailAndPassword(email, password)
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+    .then(() => {
+        return firebase.auth().signInWithEmailAndPassword(email, password);
+      })
       .then(() => {
         this.setState(() => ({...INITIAL_STATE}));
         history.push(routes.PANEL);

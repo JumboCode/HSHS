@@ -15,27 +15,29 @@ class PanelPage extends Component {
             adminKey: "na",
             userKey: "na"
           }};
+        /*
         if (!firebase.auth().currentUser) {
             props.history.push(routes.SIGN_IN);
         }
+        */
+        var signupKeyRef = firebase.database().ref("/signUpKeys");
+        signupKeyRef.on('value', (snapshot) => {
+          console.log(snapshot.val());
+          self.setState(
+            {signupKeys: snapshot.val()}
+          )
+        })
+        var actionItemsRef = firebase.database().ref("/actionItems");
+        actionItemsRef.on('value', (snapshot) => {
+            console.log(snapshot.val());
+            self.setState(
+                {actionItems: snapshot.val()}
+            );
+        });
     }
 
     componentDidMount() {
       let self = this;
-      var signupKeyRef = firebase.database().ref("/signUpKeys");
-      signupKeyRef.on('value', (snapshot) => {
-        console.log(snapshot.val());
-        self.setState(
-          {signupKeys: snapshot.val()}
-        )
-      })
-      var actionItemsRef = firebase.database().ref("/actionItems");
-      actionItemsRef.on('value', (snapshot) => {
-          console.log(snapshot.val());
-          self.setState(
-              {actionItems: snapshot.val()}
-          );
-      });
     }
 
     render() {
