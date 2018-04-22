@@ -15,7 +15,7 @@ import {
     Dimensions,
     KeyboardAvoidingView
 } from 'react-native';
-
+import Prompt from 'rn-prompt';
 import {Button} from 'react-native-elements';
 // Dashboard
 import Dashboard from './tabs/Dashboard/Dashboard';
@@ -32,7 +32,6 @@ import ActionItem_list from './tabs/ActionItems/ActionItem_list';
 
 // Interaction
 import Interaction_new from './tabs/Interactions/Interaction_new';
-
 
 // Resources
 import Resources_menu from './tabs/Resources/Resources_menu';
@@ -60,7 +59,8 @@ export default class Login extends Component {
           username: '',
           password: '',
           user: null,
-          isLoggingIn: true
+          isLoggingIn: true,
+          promptVisible: false
         };
         this.autenticate = this.authenticate.bind(this);
     }
@@ -125,7 +125,7 @@ export default class Login extends Component {
     };
 
     forgotPassword = () => {
-        Alert.alert("We don't really have a way to help you with that but I wish you the best of luck in remembering!")
+        this.setState({promptVisible: true});
     };
 
     _populateIcons = function () {
@@ -273,9 +273,31 @@ export default class Login extends Component {
                             <Text onPress={this.forgotPassword} style={styles.forgotPassword}>
                                 Forgot your password?
                             </Text>
+                            <Text onPress={() => {
+                              this.props.navigator.push({
+                                  screen: 'Signup', // unique ID registered with Navigation.registerScreen
+                                  passProps: {}, // Object that will be passed as props to the pushed screen (optional)
+                                  animated: true, // does the push have transition animation or does it happen immediately (optional)
+                                  animationType: 'slide-horizontal', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
+                                  backButtonHidden: false, // hide the back button altogether (optional)
+                                  navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
+                                  navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
+                              });
+                            }} style={styles.forgotPassword}>
+                                Got a key? Sign up here.
+                            </Text>
                         </View>
                     </View>
                 }
+                <Prompt
+                  title="Reset your password"
+                  placeholder="Enter your email here."
+                  visible={ this.state.promptVisible }
+                  onCancel={ () => this.setState({promptVisible: false}) }
+                  onSubmit={ (value) => {
+                    this.setState({promptVisible: false});
+                    firebase.auth().sendPasswordResetEmail(value).then(() => {}).catch((err) => {console.log(err);})
+                  } }/>
             </KeyboardAvoidingView>
         );
     }
