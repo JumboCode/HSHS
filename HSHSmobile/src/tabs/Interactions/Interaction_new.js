@@ -67,7 +67,15 @@ class ActionItem_edit extends Component {
             date: Moment().format('YYYY-MM-DD'),
             interactionTimeStamp: Moment().format('YYYY-MM-DD'),
             description: "",
-            items: {}
+            items: [
+              {name: "Item 0", count: 0, id: 0},
+              {name: "Item 1", count: 0, id: 1},
+              {name: "Item 2", count: 0, id: 2},
+              {name: "Item 3", count: 0, id: 3},
+              {name: "Item 4", count: 0, id: 4},
+              {name: "Item 5", count: 0, id: 5},
+              {name: "Item 6", count: 0, id: 6},
+          ]
         };
     };
 
@@ -120,24 +128,47 @@ class ActionItem_edit extends Component {
         });
     };
 
-    _renderCounter = (_itemName) => {
+    _renderCounter = (itemId) => {
+      if (! (itemId in this.state.items)) {
+        return (
+          <View style={{flex: 1}}>
+          {}
+          </View>
+        );
+      }
       var self = this;
       return (
         <View style={{flex: 1}}>
           <Counter
-            itemName={_itemName}
+            itemName={this.state.items[itemId].name}
             count={0}
-            onValueChange= {(val) => {self._setItem(_itemName, val)}}
+            onValueChange= {(val) => {self._setItem(itemId, val)}}
             />
         </View>
       )
     };
 
-    _setItem = (itemName, count) => {
+    _setItem = (itemId, count) => {
       let items = this.state.items;
-      items[itemName] = count;
+      items[itemId].count = count;
       this.setState({items: items});
-      console.log(this.state.items);
+    }
+
+    _renderItems = () => {
+      var views = [];
+      for (var i = 0; i < this.state.items.length; i+=3) {
+        views[i] =
+          <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
+            {this._renderCounter(i)}
+            {this._renderCounter(i + 1)}
+            {this._renderCounter(i + 2)}
+          </View>
+      }
+      return (views);
+    }
+
+    _addItem = () => {
+      
     }
 
     render() {
@@ -225,21 +256,7 @@ class ActionItem_edit extends Component {
                         onChangeText={(description) => {this.setState({description: description})}}
                     />
                     {renderSeperator()}
-                      <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
-                        {this._renderCounter("Item 1")}
-                        {this._renderCounter("Item 2")}
-                        {this._renderCounter("Item 3")}
-                      </View>
-                      <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
-                        {this._renderCounter("Item 4")}
-                        {this._renderCounter("Item 5")}
-                        {this._renderCounter("Item 6")}
-                      </View>
-                      <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
-                        {this._renderCounter("Item 7")}
-                        {this._renderCounter("Item 8")}
-                        {this._renderCounter("Item 9")}
-                      </View>
+                    {this._renderItems()}
                 </View>
                 </ScrollView>
                 <ChooseLocationPopup
