@@ -66,17 +66,22 @@ export default class Login extends Component {
     }
 
     componentDidMount = () => {
+      this._isMounted = true;
       firebase.auth().onAuthStateChanged((user) => {
-        this.setState({isLoggingIn: false});
-        console.log("here");
-        if (user) {
-          console.log(user);
-          this.setState({user: user});
-          this.openApp();
-        } else {
-          console.log("not loggedIn");
+        // Check to make sure the component is mounted first, since
+        // we don't want to setState upon logout.
+        if (this._isMounted) {
+          this.setState({isLoggingIn: false});
+          if (user) {
+            this.setState({user: user});
+            this.openApp();
+          }
         }
-      })
+    });
+    }
+
+    componentWillUnmount() {
+      this._isMounted = false;
     }
 
     openApp () {
@@ -217,7 +222,7 @@ export default class Login extends Component {
                 navigationBarColor: '#000000',
                 navBarBackgroundColor: '#f6f7f5',
                 navBarButtonColor: '#000000',
-                navBarTextColor: '#2a2a2a',
+                navBarTextColor: '#2a2a2a'
             }
         })
     }
