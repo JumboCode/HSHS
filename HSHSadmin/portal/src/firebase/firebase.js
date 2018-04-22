@@ -1,4 +1,5 @@
 import * as firebase from 'firebase';
+require("firebase/functions");
 
 const config = {
     apiKey: "AIzaSyBv7bMYBUsPHR1MRvnSuhkeZ3HHqmvcp60",

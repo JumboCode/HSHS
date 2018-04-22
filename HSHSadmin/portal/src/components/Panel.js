@@ -6,6 +6,8 @@ import * as routes from '../constants/routes';
 import {SignupKeyCard} from './cards/SignupKeyCard'
 import {UserManagementCard} from './cards/UserManagementCard'
 import {DataExportCard} from './cards/DataExportCard'
+import {GetUserTagsCard} from './cards/GetUserTagsCard'
+import {CreateAccountCard} from './cards/CreateAccountCard'
 
 class PanelPage extends Component {
     constructor(props) {
@@ -26,6 +28,7 @@ class PanelPage extends Component {
               alignItems: "center",
               justifyContent: "space-evenly",
               margin: "auto",
+              flexWrap: "wrap",
               }}>
                 <SignupKeyCard
                   label = "Admin Signup Key"
@@ -33,6 +36,8 @@ class PanelPage extends Component {
                 <SignupKeyCard
                   label = "User Signup Key"
                   keyRef = {firebase.database().ref("/signUpKeys/userKey")}/>
+                <CreateAccountCard />
+                <GetUserTagsCard />
                 <DataExportCard />
                 <UserManagementCard />
             </div>
