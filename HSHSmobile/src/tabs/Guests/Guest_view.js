@@ -62,6 +62,7 @@ class GuestProfile extends Component {
             screen: 'ActionItem_view', // unique ID registered with Navigation.registerScreen
             passProps: {
                 actionItemId: actionItemId,
+                completed: true
             }, // Object that will be passed as props to the pushed screen (optional)
             animated: true, // does the push have transition animation or does it happen immediately (optional)
             animationType: 'slide-horizontal', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
