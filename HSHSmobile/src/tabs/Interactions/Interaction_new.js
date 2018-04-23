@@ -111,7 +111,7 @@ class Interaction_new extends Component {
     };
 
     _save = () => {
-        addInteractionItem(this.state.title, this.state.interactionTimeStamp,
+        addInteractionItem("", this.state.interactionTimeStamp,
           this.state.date, this.state.locationCoord,
           this.state.locationStr, this.state.description, this.state.taggedGuests,
           "[Volunteer ID: See Interaction_new.js]", this.state.items);
@@ -168,6 +168,25 @@ class Interaction_new extends Component {
         views[i].key;
       }
       return (views);
+    }
+
+    addItem = (value) => {
+      var items = this.state.items;
+      for (var i = 0; i < items.length; i++) {
+        // item already in list
+        if (items[i].name.toLowerCase() == value.toLowerCase()) {
+          return false;
+        }
+      }
+
+      var new_item = {
+        name: value,
+        id: items.length,
+        count: 0,
+      }
+
+      items.push(new_item);
+      return true;
     }
 
     render() {
@@ -250,8 +269,8 @@ class Interaction_new extends Component {
                     {this._renderItems()}
                     <View style={{margin:10}}>
                       <Button
-                      title = "Add Another Item">
-                      onPress = {() => {this.setState({promptVisible: true})}}
+                      title = "Add Another Item"
+                      onPress = {() => {this.setState({promptVisible: true})}}>
                       </Button>
                     </View>
                 </View>
@@ -274,12 +293,15 @@ class Interaction_new extends Component {
                     onConfirm={this._setTaggedGuests}
                 />
                 <Prompt
-                  title="Say something"
-                  placeholder="Start typing"
-                  defaultValue="Hello"
+                  title="Name your item"
+                  placeholder=""
                   visible={this.state.promptVisible}
                   onCancel={() => this.setState({ promptVisible: false })}
-                  onSubmit={(value) => this.setState({ promptVisible: false })}/>
+                  onSubmit={(value) => {
+                    let success = this.addItem(value);
+                    this.setState({ promptVisible: false });
+                  }}
+                  />
             </View>
         );
     }
