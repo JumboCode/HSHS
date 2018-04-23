@@ -95,8 +95,8 @@ class GuestList extends Component {
         this.props.loading = true;
         this.state = {
             searchInput    : '',
-            searchFilters  : {'Old': false, 'Middle': false, 'Young': false, 'M': false, 'F': false},
-            filterSelected : 0,
+            searchFilters  : {'age': {filter: {'Old': false, 'Middle': false, 'Young': false}, filterSelected: 0, colorScheme: 'rgba(119, 11, 22, 1)'},
+                              'gender': {filter: {'M': false, 'F': false, 'O': false}, filterSelected: 0, colorScheme: '#4E84C4'}}
         };
     };
 
@@ -178,18 +178,19 @@ class GuestList extends Component {
         );
     };
 
-    renderFilterButtons = (filterName) => {
+    renderFilterButtons = (filterGroup, filterName) => {
+        let filters = this.state.searchFilters[filterGroup];
         return (
           <View key={filterName} style={styles.buttonContainer}>
             <TouchableHighlight
-                style = {[styles.button, {backgroundColor: this.state.searchFilters[filterName] ? 'rgba(119, 11, 22, 1)' : 'transparent'}]}
-                underlayColor = {this.state.searchFilters[filterName] ? 'white' : 'rgba(119, 11, 22, 1)'}
-                onPress = {() => this.setFilter(filterName)}
+                style = {[styles.button, {backgroundColor: (filters[filterName] ? filters.colorScheme : 'transparent'), borderColor: filters.colorScheme}]}
+                underlayColor = {filters[filterName] ? 'white' : filters.colorScheme}
+                onPress = {() => this.setFilter(filterGroup, filterName)}
             >
                 <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                     <Text style = {
                           { textAlign: "center",
-                            color: this.state.searchFilters[filterName] ? 'white' : 'rgba(119, 11, 22, 1)',
+                            color: filters[filterName] ? 'white' : filters.colorScheme,
                             fontSize: 12 }}>
                        {filterName}
                     </Text>
@@ -199,11 +200,13 @@ class GuestList extends Component {
         );
     };
 
-    setFilter = (filterName) => {
+    setFilter = (filterGroup, filterName) => {
         this.setState(prevState => {
+          oldSearchFilters = prevState.searchFilters;
           newSearchFilters = prevState.searchFilters;
-          newSearchFilters[filterName] = !prevState.searchFilters[filterName];
-          return {searchFilters: newSearchFilters, filterSelected: newSearchFilters[filterName] ? prevState.filterSelected + 1 : prevState.filterSelected - 1};
+          newSearchFilters[filterGroup][filterName] = !oldSearchFilters[filterGroup][filterName];
+          newSearchFilters[filterGroup].filterSelected = newSearchFilters[filterGroup][filterName] ? oldSearchFilters[filterGroup].filterSelected + 1 : oldSearchFilters[filterGroup].filterSelected - 1;
+          return {searchFilters: newSearchFilters};
         }, () => {
             console.log(this.state);
         });
@@ -211,7 +214,8 @@ class GuestList extends Component {
 
     filterGuestData = (guests) => {
       return guests.filter(item => (item.name.toLowerCase().includes(this.state.searchInput) || item.description.toLowerCase().includes(this.state.searchInput))
-                                      && (this.state.filterSelected == 0 || this.state.searchFilters[item.age] || this.state.searchFilters[item.gender]));
+                                      && (this.state.searchFilters['age'].filterSelected == 0 || this.state.searchFilters['age'][item.age])
+                                        && (this.state.searchFilters['gender'].filterSelected == 0 || this.state.searchFilters['gender'][item.gender]));
     }
 
     render() {
@@ -229,7 +233,9 @@ class GuestList extends Component {
             )
         }
 
-        const filterButtons = Object.keys(this.state.searchFilters).map(filter => this.renderFilterButtons(filter));
+        const filterButtons = Object.keys(this.state.searchFilters).map(group =>
+                                Object.keys(this.state.searchFilters[group].filter).map(filter =>
+                                            this.renderFilterButtons(group, filter)));
 
         return (
             <View style={{flex: 1}}>
@@ -278,7 +284,7 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         height: 30,
-        width: 55,
+        width: 45,
         marginLeft: '1%',
         marginRight: '1%',
         alignSelf: 'center',
@@ -288,7 +294,6 @@ const styles = StyleSheet.create({
         borderStyle: "solid",
         borderWidth: 1,
         borderRadius: 40,
-        borderColor: 'rgba(119, 11, 22, 1)',
     }
 });
 
