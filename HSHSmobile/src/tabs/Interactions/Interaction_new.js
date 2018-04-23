@@ -12,7 +12,7 @@ import {
     TouchableOpacity,
     ScrollView
 } from 'react-native';
-import { Icon, List, ListItem, SearchBar, CheckBox } from "react-native-elements";
+import { Button, Icon, List, ListItem, SearchBar, CheckBox } from "react-native-elements";
 import {connect} from 'react-redux';
 import ChooseLocationPopup from '../../modules/popups/ChooseLocationPopup';
 
@@ -22,7 +22,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {addInteractionItem, getActionItems} from "../../redux/actions";
 import DatePicker from 'react-native-datepicker';
 import Moment from 'moment';
-import Counter from '../../modules/Counter'
+import Counter from '../../modules/Counter';
+
+import Prompt from 'rn-prompt';
 
 function mapStateToProps(state, ownProps) {
     var guests = guestObjectToArray(state.guests, state.interactions);
@@ -51,13 +53,13 @@ function guestObjectToArray(IdsToGuests, IdsToInteractions) {
     return guestList;
 }
 
-class ActionItem_edit extends Component {
+class Interaction_new extends Component {
     constructor(props) {
         super(props);
         this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
 
         this.state = {
-            title: '',
+            promptVisible: false,
             taggedGuests: [],
             locationCoord: this.props.locationCoord ? this.props.locationCoord : {
             	longitude: 0,
@@ -158,19 +160,14 @@ class ActionItem_edit extends Component {
       var views = [];
       for (var i = 0; i < this.state.items.length; i+=3) {
         views[i] =
-          <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
+          <View key = {i} style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
             {this._renderCounter(i)}
             {this._renderCounter(i + 1)}
             {this._renderCounter(i + 2)}
           </View>
+        views[i].key;
       }
       return (views);
-    }
-
-
-    // TODO! JACOB DO THIS 
-    _addItem = () => {
-
     }
 
     render() {
@@ -178,14 +175,6 @@ class ActionItem_edit extends Component {
             <View style = {styles.container}>
             <ScrollView style={{width: "100%"}}>
                 <View style = {styles.back}>
-                    <TextInput
-                        value = {this.state.title}
-                        editable = {true}
-                        placeholder = "Title"
-                        style = {styles.title}
-                        placeholderTextColor = '#d3d3d3'
-                        onChangeText={(title) => {this.setState({'title': title});}}
-                    />
                     <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
                         <View style = {styles.icon}>
                             <Icon
@@ -259,6 +248,12 @@ class ActionItem_edit extends Component {
                     />
                     {renderSeperator()}
                     {this._renderItems()}
+                    <View style={{margin:10}}>
+                      <Button
+                      title = "Add Another Item">
+                      onPress = {() => {this.setState({promptVisible: true})}}
+                      </Button>
+                    </View>
                 </View>
                 </ScrollView>
                 <ChooseLocationPopup
@@ -278,6 +273,13 @@ class ActionItem_edit extends Component {
                     loading={this.props.loading}
                     onConfirm={this._setTaggedGuests}
                 />
+                <Prompt
+                  title="Say something"
+                  placeholder="Start typing"
+                  defaultValue="Hello"
+                  visible={this.state.promptVisible}
+                  onCancel={() => this.setState({ promptVisible: false })}
+                  onSubmit={(value) => this.setState({ promptVisible: false })}/>
             </View>
         );
     }
@@ -365,4 +367,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ActionItem_edit );
+export default connect(mapStateToProps, mapDispatchToProps)(Interaction_new );
