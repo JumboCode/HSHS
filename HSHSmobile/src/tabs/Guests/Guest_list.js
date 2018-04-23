@@ -95,9 +95,12 @@ class GuestList extends Component {
         this.props.loading = true;
         this.state = {
             searchInput    : '',
-            searchFilters  : {'age': {filter: {'Old': false, 'Middle': false, 'Young': false}, filterSelected: 0, colorScheme: 'rgba(119, 11, 22, 1)'},
-                              'gender': {filter: {'M': false, 'F': false, 'O': false}, filterSelected: 0, colorScheme: '#4E84C4'}}
+            filterLists    : {'age': ['Old', 'Young', 'Middle'], 'gender': ['F', 'M', "O"]},
+            searchFilters  : {'age': {filter: "", colorScheme: 'rgba(119, 11, 22, 1)'},
+                              'gender': {filter: "", colorScheme: '#4E84C4'}}
         };
+        //  searchFilters  : {'age': {filter: {'Old': false, 'Middle': false, 'Young': false}, filterSelected: false, colorScheme: 'rgba(119, 11, 22, 1)'},
+          //                  'gender': {filter: {'M': false, 'F': false, 'O': false}, filterSelected: false, colorScheme: '#4E84C4'}}
     };
 
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
@@ -183,14 +186,14 @@ class GuestList extends Component {
         return (
           <View key={filterName} style={styles.buttonContainer}>
             <TouchableHighlight
-                style = {[styles.button, {backgroundColor: (filters[filterName] ? filters.colorScheme : 'transparent'), borderColor: filters.colorScheme}]}
-                underlayColor = {filters[filterName] ? 'white' : filters.colorScheme}
+                style = {[styles.button, {backgroundColor: (filters.filter == filterName ? filters.colorScheme : 'transparent'), borderColor: filters.colorScheme}]}
+                underlayColor = {filters.filter == filterName ? 'white' : filters.colorScheme}
                 onPress = {() => this.setFilter(filterGroup, filterName)}
             >
                 <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                     <Text style = {
                           { textAlign: "center",
-                            color: filters[filterName] ? 'white' : filters.colorScheme,
+                            color: filters.filter == filterName ? 'white' : filters.colorScheme,
                             fontSize: 12 }}>
                        {filterName}
                     </Text>
@@ -201,7 +204,7 @@ class GuestList extends Component {
     };
 
     setFilter = (filterGroup, filterName) => {
-        this.setState(prevState => {
+        /*this.setState(prevState => {
           oldSearchFilters = prevState.searchFilters;
           newSearchFilters = prevState.searchFilters;
           newSearchFilters[filterGroup][filterName] = !oldSearchFilters[filterGroup][filterName];
@@ -210,12 +213,22 @@ class GuestList extends Component {
         }, () => {
             console.log(this.state);
         });
+        */
+        this.setState(prevState => {
+          newSearchFilters = prevState.searchFilters;
+          if (prevState.searchFilters[filterGroup].filter == filterName)
+              newSearchFilters[filterGroup].filter = "";
+          else
+              newSearchFilters[filterGroup].filter = filterName;
+
+          return {searchFilters: newSearchFilters};
+        });
     }
 
     filterGuestData = (guests) => {
       return guests.filter(item => (item.name.toLowerCase().includes(this.state.searchInput) || item.description.toLowerCase().includes(this.state.searchInput))
-                                      && (this.state.searchFilters['age'].filterSelected == 0 || this.state.searchFilters['age'][item.age])
-                                        && (this.state.searchFilters['gender'].filterSelected == 0 || this.state.searchFilters['gender'][item.gender]));
+                                      && (this.state.searchFilters['age'].filter == "" ||this.state.searchFilters['age'].filter == item.age)
+                                        && (this.state.searchFilters['gender'].filter == "" || this.state.searchFilters['gender'].filter == item.gender));
     }
 
     render() {
@@ -233,8 +246,8 @@ class GuestList extends Component {
             )
         }
 
-        const filterButtons = Object.keys(this.state.searchFilters).map(group =>
-                                Object.keys(this.state.searchFilters[group].filter).map(filter =>
+        const filterButtons = Object.keys(this.state.filterLists).map(group =>
+                                this.state.filterLists[group].map(filter =>
                                             this.renderFilterButtons(group, filter)));
 
         return (
