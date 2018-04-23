@@ -11,7 +11,6 @@ import renderLoader from "./UI/renderLoader";
 import dupNavFix from "../dupNavFix";
 import Swipeout from 'react-native-swipeout';
 
-
 const oneDayInSeconds = 86400000;
 
 
@@ -21,7 +20,7 @@ class ActionItemList_module extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            searchInput: '',
+            searchInput: ''
         };
 
         this.Screen_ActionItem_view = this.Screen_ActionItem_view.bind(this);
@@ -39,7 +38,7 @@ class ActionItemList_module extends Component {
             backButtonHidden: false, // hide the back button altogether (optional)
             navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
             navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
-        })
+        });
     };
 
     formatGuestNames = (guestIds) => {

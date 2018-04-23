@@ -11,13 +11,13 @@ import renderSeperator from "./UI/renderSeperator";
 import renderLoader from "./UI/renderLoader";
 import dupNavFix from "../dupNavFix";
 import {List, ListItem, Icon} from "react-native-elements";
+import Prompt from 'rn-prompt';
 import {getLotteryWinners} from '../redux/actions.js';
 
 // The time from start of day until lottery release
 const lotteryReleaseTimeInMillis = 77400000;
 
 function mapStateToProps(state, ownProps) {
-    console.log(state)
     return { lotteryWinner: state.lotteryWinner };
 }
 
@@ -36,7 +36,7 @@ class Lottery_module extends Component {
 
   // TODO: check database and see if data has been entered, set timeIndex
   componentWillMount() {
-    //let secs = this.getTimeRemaining();
+    // let secs = this.getTimeRemaining();
     let secs = 3;
     this.setState ({ seconds: secs });
   }
@@ -102,7 +102,7 @@ class Lottery_module extends Component {
     				<Text style={{fontSize: 18, textAlign: "center", letterSpacing: 1.5}}>{this.state.timeRemaining}</Text>
           </View>
         </View>) :
-        <View>{(this.props.lotteryWinner == null) ?
+        <View>{(!this.props.lotteryWinner) ?
           (<View style={styles.lotteryBlock}>
             <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center", marginTop: 20, marginBottom: 20}}>
               <Icon name="phone" />
@@ -110,7 +110,7 @@ class Lottery_module extends Component {
             </View>
             <Button
               color="#rgba(119, 11, 22, 1)"
-              onPress={ () => {this.props.popupDialog.show()} }
+              onPress={ () => {this.props.showDialogCallback()} }
               title="Enter Winner" />
           </View>) :
           (<View style={{height: "50%", flexDirection: 'column', alignItems: 'center', justifyContent: "space-around", marginTop: "10%"}}>
@@ -120,7 +120,7 @@ class Lottery_module extends Component {
             <View>
               <Button
                 color="#rgba(119, 11, 22, 1)"
-                onPress={ () => {this.props.popupDialog.show()} }
+                onPress={ () => {this.props.showDialogCallback()} }
                 title="Edit Winner" />
               </View>
            </View>)}

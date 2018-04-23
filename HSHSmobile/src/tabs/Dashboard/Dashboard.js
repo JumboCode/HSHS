@@ -14,6 +14,7 @@ import {
     LayoutAnimation,
 } from 'react-native';
 import {List, ListItem, SearchBar} from "react-native-elements";
+import firebase from "firebase";
 import {connect} from 'react-redux';
 import MapView from 'react-native-maps';
 import {getGuests, getInteractions, getActionItems, getCompletedActionItems} from '../../redux/actions.js';
@@ -21,9 +22,11 @@ import ActionItemList_module from '../../modules/ActionItemList_module';
 import Lottery_module from '../../modules/Lottery_module';
 import {Icon} from 'react-native-elements'
 import renderSeperator from "../../modules/UI/renderSeperator";
-import PopupDialog, {DialogTitle, DialogButton} from 'react-native-popup-dialog';
-import LotteryPromptDialog from "../../modules/LotteryPromptDialog"
+import Prompt from 'rn-prompt';
+import dupNavFix from "../../dupNavFix";
+import {getLotteryWinners, enterWinners} from '../../redux/actions.js';
 
+const IonIcon = require('react-native-vector-icons/Ionicons');
 const {UIManager} = NativeModules;
 
 UIManager.setLayoutAnimationEnabledExperimental &&
@@ -60,15 +63,53 @@ class Dashboard extends Component {
             lotteryState: false,
             lotteryWinner: "",
             lotteryState: false,
+            promptVisible: false,
         }
     };
 
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
+        if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
+            if (event.id == 'logout') { // this is the same id field from the static navigatorButtons definition
+                firebase.auth().signOut()
+                    .then(() => {
+                        this.props.navigator.resetTo({
+                            title: 'Login',
+                            screen: 'Login', // unique ID registered with Navigation.registerScreen
+                            // No pass props because new default
+                            passProps: {
+                            }, // Object that will be passed as props to the pushed screen (optional)
+
+                            animated: true, // does the push have transition animation or does it happen immediately (optional)
+                            animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
+                            backButtonHidden: true, // hide the back button altogether (optional)
+                            navigatorStyle: {
+                                navBarHidden: true,
+                                tabBarHidden: true,
+                                statusBarHidden: true
+                            }, // override the navigator style for the pushed screen (optional)
+                            navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
+                        });
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            }
+        }
+    };
+
+    componentDidMount() {
 
     };
 
     //TODO: lotteryWinner isn't properly mapped to props fix please
     componentDidMount() {
+      IonIcon.getImageSource('ios-log-out', 36).then((icon) => {
+          this.props.navigator.setButtons({
+              rightButtons: [
+                  { id: 'logout', icon: icon },
+              ]
+          });
+      });
         this.makeRemoteRequest();
         navigator.geolocation.watchPosition((pos) => {
           this.setState({
@@ -78,6 +119,7 @@ class Dashboard extends Component {
         }, (error) => {
           Alert.alert(error.message);
         }, {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, distanceFilter: 50});
+
     };
 
     makeRemoteRequest = () => {
@@ -130,6 +172,10 @@ class Dashboard extends Component {
 
     updateLotteryState = () => {
       return ;
+    }
+
+    _showLotteryInputDialog() {
+      this.setState({promptVisible: true});
     }
 
     // I'm not sure if this is the best way to have logical statements within renders, but it's not the worst way!
@@ -210,14 +256,19 @@ class Dashboard extends Component {
                     */}
 
                     <Lottery_module
-                      popupDialog={this.LotteryPromptDialog}
+                      showDialogCallback={() => {this._showLotteryInputDialog()}}
                       winners={this.state.lotteryWinner}
                       />
-
-                    <LotteryPromptDialog
+                    
+                    <Prompt
                       title="Please enter winners"
-                      ref={(popupDialog) => { this.LotteryPromptDialog = popupDialog; }}/>
-
+                      visible={this.state.promptVisible}
+                      onCancel={ () => this.setState({promptVisible: false}) }
+                      onSubmit={ value => {
+                        enterWinners(value, new Date());
+                        this.setState({promptVisible: false})
+                      }}
+                    />
                       {
                       /*
                       <View style={{flexDirection: 'column', alignItems: 'center'}}>
@@ -256,4 +307,4 @@ class Dashboard extends Component {
 
 const styles = StyleSheet.create({});
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default connect(mapStateToProps, mapDispatchToProps)(dupNavFix(Dashboard));
