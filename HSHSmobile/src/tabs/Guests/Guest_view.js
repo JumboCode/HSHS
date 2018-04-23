@@ -44,6 +44,7 @@ class GuestProfile extends Component {
         // this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.view_crud_note_page = this.view_crud_note_page.bind(this);
         this.view_actionitem_page = this.view_actionitem_page.bind(this);
+        this.view_interaction_page = this.view_interaction_page.bind(this);
     };
 
     // matching receptivity to emojis {0-4} where 4 is the best and 0 is the worst
@@ -70,6 +71,23 @@ class GuestProfile extends Component {
             navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
             navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
         });
+    };
+
+    // @PHIL
+    view_interaction_page = (interactionId) => {
+        console.log(interactionId)
+        // this.props.navigator.push({
+        //     screen: 'ActionItem_view', // unique ID registered with Navigation.registerScreen
+        //     passProps: {
+        //         actionItemId: actionItemId,
+        //         completed: true
+        //     }, // Object that will be passed as props to the pushed screen (optional)
+        //     animated: true, // does the push have transition animation or does it happen immediately (optional)
+        //     animationType: 'slide-horizontal', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
+        //     backButtonHidden: false, // hide the back button altogether (optional)
+        //     navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
+        //     navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
+        // });
     };
 
     //
@@ -242,11 +260,16 @@ class GuestProfile extends Component {
                 </TouchableOpacity>
               </View>
             </View>)
-        } else {
+        } else { // Interaction timeline view
             desc = (
             <View style={{flexDirection: 'column', marginLeft:10}}>
                 <View style={{flexDirection: 'row'}}>
+                  <TouchableOpacity
+                  style={{flex:99, borderLeftColor: rowData.color, padding: 5, borderWidth: 1, borderLeftWidth: 10, borderRightWidth: 0}}
+                  onPress={() => this.view_interaction_page(rowData.interactionId)}
+                  >
                     <Text>{rowData.description}</Text>
+                  </TouchableOpacity>
                 </View>
             </View>)
         }
@@ -268,8 +291,15 @@ class GuestProfile extends Component {
         // extracts the objects into their own list
         let completedActionItems = Object.values(this.props.completedActionItems);
         let allInteractions = Object.values(this.props.interactions);
+        let interactionKeys = Object.keys(this.props.interactions);
+        console.log(interactionKeys)
+        interactionKeys.map((k, i) => {
+            allInteractions[i]['interactionId'] = k;
+        });
         // List of all possible history for the guest
         let allHistory = completedActionItems.concat(allInteractions);
+
+        console.log(allHistory)
 
         // Filter list to include action items related to guest
         let relatedHistory = allHistory.filter((item) =>
@@ -293,8 +323,8 @@ class GuestProfile extends Component {
         let timelineData = relatedHistory.map((i) =>
                       {
                         let date = new Date(i.creationTimestamp).toDateString();
-                        console.log(date)
-                        // re add color
+
+                        // TODO re add color
                         return ({timestamp: i.creationTimestamp,
                                 interactionTimestamp: i.interactionTimestamp,
                                 date: date,
@@ -302,7 +332,8 @@ class GuestProfile extends Component {
                                 color: i.color,
                                 description: i.description,
                                 isActionItem: (i.actionItemId != undefined), // TODO really janky
-                                actionItemId: i.actionItemId})
+                                actionItemId: i.actionItemId,
+                                interactionId: i.interactionId})
                         })
 
         // Sort timelineDate by date (most recent to least)
