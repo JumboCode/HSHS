@@ -75,19 +75,19 @@ class GuestProfile extends Component {
 
     // @PHIL
     view_interaction_page = (interactionId) => {
-        console.log(interactionId)
-        // this.props.navigator.push({
-        //     screen: 'ActionItem_view', // unique ID registered with Navigation.registerScreen
-        //     passProps: {
-        //         actionItemId: actionItemId,
-        //         completed: true
-        //     }, // Object that will be passed as props to the pushed screen (optional)
-        //     animated: true, // does the push have transition animation or does it happen immediately (optional)
-        //     animationType: 'slide-horizontal', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
-        //     backButtonHidden: false, // hide the back button altogether (optional)
-        //     navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
-        //     navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
-        // });
+        console.log(interactionId);
+        this.props.navigator.push({
+            screen: 'Interaction_view', // unique ID registered with Navigation.registerScreen
+            passProps: {
+                interactionId: interactionId,
+                completed: true
+            }, // Object that will be passed as props to the pushed screen (optional)
+            animated: true, // does the push have transition animation or does it happen immediately (optional)
+            animationType: 'slide-horizontal', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
+            backButtonHidden: false, // hide the back button altogether (optional)
+            navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
+            navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
+        });
     };
 
     //

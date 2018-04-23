@@ -32,6 +32,7 @@ import ActionItem_list from './tabs/ActionItems/ActionItem_list';
 
 // Interaction
 import Interaction_new from './tabs/Interactions/Interaction_new';
+import Interaction_view from './tabs/Interactions/Interaction_view';
 
 // Resources
 import Resources_menu from './tabs/Resources/Resources_menu';
@@ -167,6 +168,7 @@ export default class Login extends Component {
         Navigation.registerComponent('ActionItem_edit', () => ActionItem_edit, store, Provider);
         Navigation.registerComponent('ActionItem_view', () => ActionItem_view, store, Provider);
         Navigation.registerComponent('Interaction_new', () => Interaction_new, store, Provider);
+        Navigation.registerComponent('Interaction_view', () => Interaction_view, store, Provider);
 
         // TODO: make the tabs link to real pages
         Navigation.startTabBasedApp({
