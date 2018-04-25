@@ -256,7 +256,6 @@ class GuestList extends Component {
                   cancelButtonTitle="Cancel"
                   placeholder="Search (Ex. Phil Wang)"
                   containerStyle={{backgroundColor: 'transparent'}}
-                  onFocus={() => this.expandFilter()}
                   onChangeText={(str) => {this.setState({searchInput: str.toLowerCase()})}}
                   onClearText={() => this.setState({searchInput: ''})}
                   value={this.state.searchInput}
