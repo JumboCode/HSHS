@@ -52,7 +52,11 @@ export function reducer(state, action) {
             });
         case 'ADD_NEW_INTERACTIONS_SUCCESS':
             return Object.assign({}, state, {
-                addingInteraction: false
+                addNewInteractionSuccess: true,
+            });
+        case 'ADD_NEW_INTERACTIONS_FAILURE':
+            return Object.assign({}, state, {
+                addNewInteractionSuccess: false,
             });
         case 'DELETE_NEW_ACTION_ITEMS_START':
             return Object.assign({}, state, {
@@ -81,7 +85,7 @@ export function reducer(state, action) {
                 }, new Object())
             })};
 
-        case 'GET_COMPLETED_ACTION_ITEMS_SUCCESS': 
+        case 'GET_COMPLETED_ACTION_ITEMS_SUCCESS':
             console.log(action.payload)
             return Object.assign({}, state, {
                 completedActionItems: action.payload,

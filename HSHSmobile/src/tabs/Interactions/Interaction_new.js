@@ -17,7 +17,8 @@ import {connect} from 'react-redux';
 import ChooseLocationPopup from '../../modules/popups/ChooseLocationPopup';
 
 import TagGuestPopup from "../../modules/popups/TagGuestPopup"
-import renderSeperator from '../../modules/UI/renderSeperator'
+import renderLoader from "../../modules/UI/renderLoader";
+import renderSeperator from '../../modules/UI/renderSeperator';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {addInteractionItem, getActionItems} from "../../redux/actions";
 import DatePicker from 'react-native-datepicker';
@@ -28,10 +29,12 @@ import Prompt from 'rn-prompt';
 
 function mapStateToProps(state, ownProps) {
     var guests = guestObjectToArray(state.guests, state.interactions);
+    console.log(state);
     return {
         guests: guests,
         item: null, //state.actionItems[ownProps.id],
         loading: state.loading,
+        addInteractionSuccess: state.addNewInteractionSuccess ? state.addNewInteractionSuccess : false,
     };
 }
 
@@ -53,35 +56,48 @@ function guestObjectToArray(IdsToGuests, IdsToInteractions) {
     return guestList;
 }
 
+function getInitialState() {
+  return({
+    promptVisible: false,
+    taggedGuests: [],
+    locationCoord: {
+      longitude: 0,
+      latitude: 0,
+    },
+    locationStr: null,
+    date: Moment().format('YYYY-MM-DD'),
+    interactionTimeStamp: Moment().format('YYYY-MM-DD'),
+    description: "",
+    items: [
+      {name: "Item 0", count: 0, id: 0},
+      {name: "Item 1", count: 0, id: 1},
+      {name: "Item 2", count: 0, id: 2},
+      {name: "Item 3", count: 0, id: 3},
+      {name: "Item 4", count: 0, id: 4},
+      {name: "Item 5", count: 0, id: 5},
+      {name: "Item 6", count: 0, id: 6},
+  ],
+  addingInteraction: false,
+  })
+}
+
 class Interaction_new extends Component {
     constructor(props) {
         super(props);
         this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
-
-        this.state = {
-            promptVisible: false,
-            taggedGuests: [],
-            locationCoord: this.props.locationCoord ? this.props.locationCoord : {
-            	longitude: 0,
-            	latitude: 0,
-            },
-            locationStr: this.props.locationStr ? this.props.locationStr : null,
-            date: Moment().format('YYYY-MM-DD'),
-            interactionTimeStamp: Moment().format('YYYY-MM-DD'),
-            description: "",
-            items: [
-              {name: "Item 0", count: 0, id: 0},
-              {name: "Item 1", count: 0, id: 1},
-              {name: "Item 2", count: 0, id: 2},
-              {name: "Item 3", count: 0, id: 3},
-              {name: "Item 4", count: 0, id: 4},
-              {name: "Item 5", count: 0, id: 5},
-              {name: "Item 6", count: 0, id: 6},
-          ]
-        };
+        this.state = getInitialState();
     };
 
+    componentWillReceiveProps(props) {
+      if (this.state.addingInteraction) {
+        if (props.addInteractionSuccess) {
+          this._reset();
+        }
+      }
+    }
+
     componentDidMount() {
+
         this.props.navigator.setButtons({
             rightButtons: [
                 {
@@ -111,7 +127,8 @@ class Interaction_new extends Component {
     };
 
     _save = () => {
-        addInteractionItem("", this.state.interactionTimeStamp,
+      this.setState({addingInteraction: true});
+        addInteractionItem("TITLE HAS BEEN DEPRECATED: See Interaction_new.js", this.state.interactionTimeStamp,
           this.state.date, this.state.locationCoord,
           this.state.locationStr, this.state.description, this.state.taggedGuests,
           "[Volunteer ID: See Interaction_new.js]", this.state.items);
@@ -189,7 +206,18 @@ class Interaction_new extends Component {
       return true;
     }
 
+    _reset = () => {
+      this.setState(getInitialState());
+    }
+
     render() {
+        if (this.state.addingInteraction) {
+          return(
+            <View style = {styles.container}>
+              {renderLoader()}
+            </View>
+          );
+        }
         return (
             <View style = {styles.container}>
             <ScrollView style={{width: "100%"}}>
@@ -389,4 +417,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Interaction_new );
+export default connect(mapStateToProps, mapDispatchToProps)(Interaction_new);

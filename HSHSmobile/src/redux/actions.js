@@ -181,7 +181,7 @@ export const editActionItemSuccess = () => ({
 })
 
 export const editActionItem = (id, isDone, title, creationTimestamp, locationCoord, locationStr, shiftDate, description, guestIds, volunteerId, color) => {
-    store.dispatch(addNewActionItemStart);
+    store.dispatch(addNewActionItemStart());
     let ref = firebase.database().ref('actionItems/' + id);
     ref.update({
         isDone: isDone,
@@ -233,33 +233,51 @@ export const addNewInteractionSuccess = () => ({
         type: 'ADD_NEW_INTERACTIONS_SUCCESS'
 })
 
-export const addInteractionItem = (title, creationTimestamp, interactionTimeStamp, locationCoord, locationStr, description, guestIds, volunteerId, resources) => {
-			store.dispatch(addNewInteractionStart);
-			//var ref = firebase.database().ref('/');
-			let newInteractionKey = firebase.database().ref('actionItems').push().key;
-			let ref = firebase.database().ref('/interactions/' + newInteractionKey);
+export const addNewInteractionFailure = () => ({
+			type: 'ADD_NEW_INTERACTIONS_FAILURE'
+})
 
-			ref.update({
-				title: title,
-				creationTimestamp: creationTimestamp,
-				interactionTimeStamp: interactionTimeStamp,
-				locationCoord: {
-						lat: locationCoord.latitude,
-						lng: locationCoord.longitude,
-				},
-				locationStr: locationStr,
-				description: description,
-				volunteerId: volunteerId,
-				resources: resources,
-		  }, error => {
+// NOTE: title is not deprecated, but kept for schema.
+export const addInteractionItem = (title, creationTimestamp, interactionTimeStamp, locationCoord, locationStr, description, guestIds, volunteerId, resources) => {
+		store.dispatch(addNewInteractionStart());
+		//var ref = firebase.database().ref('/');
+		let newInteractionKey = firebase.database().ref('actionItems').push().key;
+		let ref = firebase.database().ref('/interactions/' + newInteractionKey);
+
+		ref.update(
+				{
+						title: title,
+						creationTimestamp: creationTimestamp,
+						interactionTimeStamp: interactionTimeStamp,
+						locationCoord: {
+								lat: locationCoord.latitude,
+								lng: locationCoord.longitude,
+						},
+						locationStr: locationStr,
+						description: description,
+						volunteerId: volunteerId,
+						resources: resources,
+		  	}, error =>
+				{
 					if (error) {
 							Alert.alert("Failed to save interaction. Please try again.");
 					} else if (guestIds && guestIds.length != 0) {
 							ref.update({guestIds: guestIds}, err => {
-									err && Alert.alert("Failed to tag guests in the interaction you just created. Please try again.")
+									if (err) {
+										store.dispatch(addNewInteractionFailure());
+										Alert.alert("Failed to tag guests in the interaction you just created. Please try again.");
+									} else {
+
+										// callback
+										store.dispatch(addNewInteractionSuccess())
+									}
 							})
+ 					}
+					// callback
+					else {
+						store.dispatch(addNewInteractionSuccess());
 					}
-			});
+				});
 };
 
 export const markActionItemAsDone = (id) => {
