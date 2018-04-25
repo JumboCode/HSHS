@@ -37,12 +37,13 @@ class ActionItem_view extends Component {
   constructor(props) {
       super(props);
       this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
-
+      console.log(this.props.actionItems[this.props.actionItemId])
       // TODO: geeze why is this longitude latitude and other places lat lng? cause google maps api sucks. please let's fix this later.
       var coords = this.props.actionItems[this.props.actionItemId].locationCoord ? {
           longitude: this.props.actionItems[this.props.actionItemId].locationCoord.lng,
           latitude: this.props.actionItems[this.props.actionItemId].locationCoord.lat,
       } : null;
+      console.log("past first use of coords")
       this.state = {
           title: this.props.actionItems[this.props.actionItemId].title,
 
