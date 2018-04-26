@@ -285,21 +285,28 @@ class GuestProfile extends Component {
     // Once interactions are added to Guest schema, interpolate w/ actionItems
     // and render in the list.
     renderHistory = () => {
-        // TODO restyle the date font, try and set dot colors correctly
+
+        let allHistory = [];
 
         // Action items are stored in a weird list; ie 0: {item data}
         // extracts the objects into their own list
-        let completedActionItems = Object.values(this.props.completedActionItems);
-        let allInteractions = Object.values(this.props.interactions);
-        let interactionKeys = Object.keys(this.props.interactions);
-        console.log(interactionKeys)
-        interactionKeys.map((k, i) => {
-            allInteractions[i]['interactionId'] = k;
-        });
-        // List of all possible history for the guest
-        let allHistory = completedActionItems.concat(allInteractions);
+        // If there are actionItems add to list of all
+        if (this.props.completedActionItems) {
+            let completedActionItems = Object.values(this.props.completedActionItems);
+            allHistory = completedActionItems;
+        }
 
-        console.log(allHistory)
+        if (this.props.interactions) {
+            let allInteractions = Object.values(this.props.interactions);
+            let interactionKeys = Object.keys(this.props.interactions);
+            // Add interactionID field to in all interactions
+            interactionKeys.map((k, i) => {
+                allInteractions[i]['interactionId'] = k;
+            });
+            allHistory = allHistory.concat(allInteractions);
+        }
+
+
 
         // Filter list to include action items related to guest
         let relatedHistory = allHistory.filter((item) =>
