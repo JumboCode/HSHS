@@ -42,7 +42,7 @@ function guestObjectToArray(IdsToGuests, IdsToInteractions) {
             "description": IdsToGuests[Id].description,
             "age" : IdsToGuests[Id].age,
             "gender": IdsToGuests[Id].gender,
-            "color": getRandomColor(),
+            "color": IdsToGuests[Id].color,
             "actionItems": IdsToGuests[Id].actionItems
         });
     }
@@ -308,14 +308,5 @@ const styles = StyleSheet.create({
         borderRadius: 40,
     }
 });
-
-function getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(dupNavFix(GuestList));

@@ -32,7 +32,7 @@ function mapStateToProps(state, ownProps) {
         actionItems: state.actionItems,
         interactions: state.interactions,
         completedActionItems: state.completedActionItems,
-        actionItemIds: state.guestActionItemIds[ownProps.Id]
+        actionItemIds: state.guestActionItemIds ? state.guestActionItemIds[ownProps.Id] : null
     };
 }
 

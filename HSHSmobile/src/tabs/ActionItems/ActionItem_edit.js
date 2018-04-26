@@ -14,7 +14,7 @@ import {
 import { Icon, List, ListItem, SearchBar, CheckBox } from "react-native-elements";
 import {connect} from 'react-redux';
 import ChooseLocationPopup from '../../modules/popups/ChooseLocationPopup';
-
+import ColorPicker from '../../modules/ColorPicker';
 import TagGuestPopup from "../../modules/popups/TagGuestPopup"
 import renderSeperator from '../../modules/UI/renderSeperator'
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -70,8 +70,7 @@ class ActionItem_edit extends Component {
             selectedDate: this.props.selectedDate ? this.props.selectedDate : Moment().format('YYYY-MM-DD'),
             description: this.props.description ? this.props.description : "",
             color: this.props.color ? this.props.color : null,
-            creationTimestamp: this.props.creationTimestamp ? this.props.creationTimestamp : Moment().format(),
-            disabled: false
+            creationTimestamp: this.props.creationTimestamp ? this.props.creationTimestamp : Moment().format()
         };
     };
 
@@ -93,18 +92,12 @@ class ActionItem_edit extends Component {
 
     onNavigatorEvent = (event) => { // this is the onPress handler for the two buttons together
         if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
-            if (event.id == 'save_actionItem' && !this.state.disabled) { // this is the same id field from the static navigatorButtons definition
+            if (event.id == 'save_actionItem') { // this is the same id field from the static navigatorButtons definition
                 // Don't allow empty fields
                 if (this.state.title == "") {
                     Alert.alert("Title cannot be empty");
                     return;
                 }
-                this.setState({disabled: true});
-                setTimeout(()=>{
-                    this.setState({
-                        disabled: false,
-                    });
-                }, 3000)
                 // It's new if there is no ID
                 if (!this.state.actionItemId) {
                 addNewActionItem(false, this.state.title, this.state.creationTimestamp, this.state.locationCoord, this.state.locationStr, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
@@ -132,21 +125,6 @@ class ActionItem_edit extends Component {
             locationCoord: locationCoord,
         });
     };
-
-    renderColorButton = (c) =>
-    (
-        <TouchableOpacity
-          onPress={() => {
-                let stateColor = this.state.color == c ? null : c;
-                this.setState({color: stateColor });
-            }
-          }
-          style={{flex: 1}}
-          >
-          <View style={this.state.color == c ? [styles.button, {backgroundColor: c}] : [styles.button, styles.disabled, {backgroundColor: c}]}>
-          </View>
-        </TouchableOpacity>
-    )
 
     _confirmDelete(){
       Alert.alert(
@@ -265,13 +243,7 @@ class ActionItem_edit extends Component {
                         multiline = {true}
                         onChangeText={(description) => {this.setState({description: description})}}
                     />
-                    <View style={{flexDirection: 'row', alignItems: 'stretch', justifyContent: 'space-between', zIndex: 0, paddingLeft: 15, paddingRight: 15}}>
-                      {this.renderColorButton('#659B7F')}
-                      {this.renderColorButton('#818DC7')}
-                      {this.renderColorButton('#B65E68')}
-                      {this.renderColorButton('#D0AF55')}
-                      {this.renderColorButton('#C19FC7')}
-                    </View>
+                    <ColorPicker color = {this.state.color} onChange = {(newC) => {this.setState({color: newC});}} />
                 </View>
                 {this._renderDeleteButton()}
                 <TagGuestPopup
