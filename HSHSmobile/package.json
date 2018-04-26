@@ -8,7 +8,7 @@
     "android-linux": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res && react-native run-android"
   },
   "dependencies": {
-    "firebase": "^4.5.0",
+    "firebase": "^4.12.1",
     "moment": "^2.20.1",
     "node-emoji": "^1.8.1",
     "react": "^16.2.0",

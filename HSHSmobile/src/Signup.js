@@ -7,6 +7,7 @@ import {
     TextInput, Dimensions, ScrollView
 } from 'react-native';
 import {connect} from 'react-redux';
+import * as firebase from 'firebase';
 import { FormLabel, FormInput, FormValidationMessage, Button } from 'react-native-elements';
 
 const errMsg = "This field cannot be empty";
@@ -48,9 +49,8 @@ class Signup extends Component {
             } else {
               this.setState({passwordErr: ""});
             }
-            fetch('https://us-central1-hshs-street-team.cloudfunctions.net/signUp', {
-              body: JSON.stringify({email: this.state.email, password: this.state.password}), // must match 'Content-Type' header
-              cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            fetch('https://us-central1-hshs-street-team.cloudfunctions.net/signUpPOST', {
+              body: JSON.stringify({email: this.state.email, password: this.state.password, signupKey: this.state.k}), // must match 'Content-Type' header
               method: 'POST', // *GET, POST, PUT, DELETE, etc.
             })
             .then(response => response.json()) // parses response to JSON
