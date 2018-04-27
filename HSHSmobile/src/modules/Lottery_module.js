@@ -36,8 +36,8 @@ class Lottery_module extends Component {
 
   // TODO: check database and see if data has been entered, set timeIndex
   componentWillMount() {
-    // let secs = this.getTimeRemaining();
-    let secs = 3;
+    let secs = this.getTimeRemaining();
+    secs = 3;
     this.setState ({ seconds: secs });
   }
 
@@ -72,12 +72,12 @@ class Lottery_module extends Component {
   // TODO: Check if page transition works smoothly
   countDown = () => {
       let secs     = this.state.seconds - 1;
-      let timeLeft = this.milisecondsToTime(secs);
+      let timeLeft = this.millisecondsToTime(secs);
 
       this.setState({timeRemaining: timeLeft, seconds: secs});
   }
 
-	milisecondsToTime = (seconds) => {
+	millisecondsToTime = (seconds) => {
     let minutes = Math.floor(seconds / 60);
     let hours   = "0";
 
@@ -91,40 +91,45 @@ class Lottery_module extends Component {
 		return (hours >= 10 ? hours : ("0" + hours)) + ":" + minutes + ":" + ((seconds >= 10) ? seconds : "0" + seconds) ;
 	}
 
-  //TODO: change Logic to match time change
-  //       <View>{(this.state.seconds > 0) ?
+  _renderLotteryWinners() {
+    var winners = []
+    if (this.props.lotteryWinner) {
+      winners = this.props.lotteryWinner.split(" ");
+    }
+
+    return (
+      <View style={{flexDirection: 'column'}}>
+        <View style={{flexDirection: 'row'}}>
+          <View style={styles.circle}><Text style={styles.text}>{winners[0] || '-'}</Text></View>
+          <View style={styles.circle}><Text style={styles.text}>{winners[1] || '-'}</Text></View>
+          <View style={styles.circle}><Text style={styles.text}>{winners[2] || '-'}</Text></View>
+        </View>
+
+        <View style={{flexDirection: 'row'}}>
+          <View style={styles.circle}><Text style={styles.text}>{winners[3] || '-'}</Text></View>
+          <View style={styles.circle}><Text style={styles.text}>{winners[4] || '-'}</Text></View>
+          <View style={styles.circle}><Text style={styles.text}>{winners[5] || '-'}</Text></View>
+        </View>
+      </View>
+    )
+  }
+
 	render() {
 		return (
-      <View>{(this.state.seconds > 0) ?
-        (<View style={styles.countDownBlock}>
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={[styles.block, {borderRightWidth: .5, borderColor: '#808080'}]}>
           <View style={{margin: 30}}>
-            <Text style={{fontSize: 18, fontWeight: 'bold', marginBottom: "5%"}}>Status: Countdown till lottery</Text>
-    				<Text style={{fontSize: 18, textAlign: "center", letterSpacing: 1.5}}>{this.state.timeRemaining}</Text>
+            <Text style={styles.countdownText}>Lottery countdown</Text>
+    				<Text style={styles.countdownNumbers}>{this.state.timeRemaining}</Text>
           </View>
-        </View>) :
-        <View>{(!this.props.lotteryWinner) ?
-          (<View style={styles.lotteryBlock}>
-            <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center", marginTop: 20, marginBottom: 20}}>
-              <Icon name="phone" />
-              <Text style={{marginLeft: 10}}>Please call for lottery winners</Text>
-            </View>
-            <Button
-              color="#rgba(119, 11, 22, 1)"
-              onPress={ () => {this.props.showDialogCallback()} }
-              title="Enter Winner" />
-          </View>) :
-          (<View style={{height: "50%", flexDirection: 'column', alignItems: 'center', justifyContent: "space-around", marginTop: "10%"}}>
-            <View>
-              <Text style={{fontSize: 15, letterSpacing: 10, textAlign: "center"}}>{this.props.lotteryWinner}</Text>
-            </View>
-            <View>
-              <Button
-                color="#rgba(119, 11, 22, 1)"
-                onPress={ () => {this.props.showDialogCallback()} }
-                title="Edit Winner" />
-              </View>
-           </View>)}
-        </View>}
+        </View>
+
+        <View style={styles.block}>
+          <View style={{margin: 30, alignItems: 'center'}}>
+            <Text style={styles.countdownText}>Today's lottery #s</Text>
+            {this._renderLotteryWinners()}
+          </View>
+        </View>
       </View>
 		);
 	}
@@ -149,16 +154,43 @@ class Lottery_module extends Component {
 //   }
 // </View>
 const styles = StyleSheet.create( {
-    countDownBlock: {
-      marginTop: "20%",
+    block: {
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
+      flex: 1
+    },
+
+    circle: {
+      height: 40,
+      width: 40,
+      borderRadius: 40/2,
+      backgroundColor: '#C8C8C8',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginHorizontal: 6,
+      marginVertical: 3
     },
 
     lotteryBlock: {
       marginTop: "10%",
       flexDirection: 'column',
+    },
+
+    countdownText: {
+      fontSize: 11, 
+      marginBottom: "5%",
+      color: '#404040'
+    },
+
+    countdownNumbers: {
+      fontSize: 18,  
+      letterSpacing: 1.5,
+      color: '#383838'
+    },
+
+    text: {
+      color: "#303030"
     }
 });
 
