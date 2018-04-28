@@ -51,6 +51,8 @@ function guestObjectToArray(IdsToGuests, IdsToInteractions) {
         guestList.push({
             "Id" : Id,
             "name" : IdsToGuests[Id].name,
+            "age": IdsToGuests[Id].age,
+            "gender": IdsToGuests[Id].gender
         });
     }
     return guestList;

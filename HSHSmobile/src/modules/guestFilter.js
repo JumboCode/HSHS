@@ -14,6 +14,7 @@ import {
 // Props: filterOptions: {age: {options: ['Old', 'Young', 'Middle'], color: 'rgba(119, 11, 22, 1)'}, gender: {options: ['F', 'M', "O"], color: '#4E84C4'}}
 //        selectedFilters: {age: '', gender: ''}
 //        onChange: newSelected => this.setState(newSelected)
+//        showFilterPrompt: true
 export default class GuestFilter extends Component {
   constructor(props) {
     super(props);
@@ -60,9 +61,9 @@ export default class GuestFilter extends Component {
         <View
           style={{flexDirection: 'row', marginLeft: '1%', height: 70, justifyContent: 'space-between'}}
         >
-          <View style={{justifyContent: 'center', alignItems: 'flex-start'}} >
+          {this.props.showFilterPrompt && <View style={{justifyContent: 'center', alignItems: 'flex-start'}} >
             <Text style={{color: 'rgba(119, 11, 22, 1)', fontSize: 12}}> Filters: </Text>
-          </View>
+          </View>}
           <View style={{flexDirection: 'row', flexWrap: 'nowrap', justifyContent: 'space-around'}}>
             {filterButtons}
           </View>

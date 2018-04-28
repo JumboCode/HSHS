@@ -37,12 +37,14 @@ import {
 } from 'react-native';
 import { List, ListItem, SearchBar, CheckBox } from "react-native-elements";
 import PopupDialog, {DialogTitle, DialogButton} from 'react-native-popup-dialog';
+import {enterWinners} from '../redux/actions.js';
 
 
-export default class PromptDialog extends Component {
+class PromptDialog extends Component {
     constructor(props) {
         super(props);
         this.state = {input: ""}
+
     };
 
     // calls show() fn of PopupDialog
@@ -51,12 +53,13 @@ export default class PromptDialog extends Component {
     }
 
     onSubmit = () => {
+      let timestamp = new Date();
       this.popupDialog.dismiss();
-      this.props.onSubmit(this.state.input);
+      enterWinners(this.state.input, timestamp);
+      //this.props.onSubmit(this.state.input);
     }
     onCancel = () => {
       this.popupDialog.dismiss();
-      this.props.onCancel();
     }
 
     render() {
@@ -70,7 +73,7 @@ export default class PromptDialog extends Component {
                   <TextInput
                     {...this.props}
                     style={styles.textInput}
-                    onChangeText={(input) => this.setState({input})}
+                    onChangeText={(winner) => this.setState({input: winner})}
                     value={this.state.input}
                   />
                   <View style={styles.buttonContainer}>
@@ -88,11 +91,17 @@ const styles = StyleSheet.create({
     container: {
       flexDirection: 'column',
       justifyContent: 'center',
-      alignItems:'center'},
+      alignItems:'center',
+      backgroundColor: 'white',
+      borderRadius: 8
+    },
     buttonContainer: {
+      marginBottom: 5,
       flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems:'center'},
+      justifyContent: 'space-between',
+      alignItems:'center',
+      width: "80%",
+    },
     title: {
       fontWeight:'bold'
     },
@@ -100,10 +109,13 @@ const styles = StyleSheet.create({
       fontSize: 15,
     },
     textInput: {
-      marginTop: 3,
+      marginTop: 5,
+      marginBottom: 5,
       height: 40,
       width: "80%",
       borderColor: 'gray',
       borderWidth: 1
     },
 });
+
+export default PromptDialog;

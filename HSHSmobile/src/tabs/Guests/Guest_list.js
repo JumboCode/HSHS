@@ -15,7 +15,7 @@ import {connect} from 'react-redux';
 import renderSeperator from "../../modules/UI/renderSeperator";
 import renderLoader from "../../modules/UI/renderLoader";
 import dupNavFix from "../../dupNavFix";
-import GuestFilter from "../../modules/guestFilter";
+import GuestFilter from "../../modules/GuestFilter";
 
 const Icon = require('react-native-vector-icons/Ionicons');
 
@@ -214,6 +214,7 @@ class GuestList extends Component {
             <GuestFilter
                 filterOptions={{age: {options: ['Old', 'Young', 'Middle'], color: 'rgba(119, 11, 22, 1)'}, gender: {options: ['F', 'M', "O"], color: '#4E84C4'}}}
                 selectedFilters={this.state}
+                showFilterPrompt={true}
                 onChange={newSelected => this.setState(newSelected)}
             />
               <View style={{flex: 1}}>

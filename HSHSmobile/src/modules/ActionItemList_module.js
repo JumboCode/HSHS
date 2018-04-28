@@ -109,23 +109,18 @@ class ActionItemList_module extends Component {
         )
     }
 
-    actionDone = (item) => {
-        // console.log(item);
-        // this.props.markActionItemAsDone(item.id)
-        // console.log(this.props);
-        this.props.doneFunction(item.actionItemId);
-        // console.log(item)
-    };
-
     renderListItem(item) {
-        let swipeoutBtns = [{
-            text: 'Done',
+        let swipeoutBtns = this.props.completed ?
+        [{
+            text: 'To-Do!',
+            backgroundColor: 'green',
+            onPress: () => this.props.doneFunction(item.actionItemId)
+        }] :
+        [{
+            text: 'Done!',
             backgroundColor: 'red',
-            onPress: () => {
-                this.actionDone(item)
-            }
+            onPress: () => this.props.doneFunction(item.actionItemId)
         }];
-
 
         return (
             <Swipeout left={swipeoutBtns}>
@@ -144,7 +139,7 @@ class ActionItemList_module extends Component {
                                         <Text
                                             style={item.guestIds ? {} : {fontStyle: 'italic'}}
                                             numberOfLines={1}>
-                                            {item.guestIds ? this.formatGuestNames(item.guestIds) : "No Tagged Guests"}
+                                            {item.guestIds ? this.formatGuestNames(item.guestIds) : "None"}
                                         </Text>
                                     </View>
                                 </View>
@@ -157,7 +152,7 @@ class ActionItemList_module extends Component {
                                         <Text
                                             style={item.locationStr ? {} : {fontStyle: 'italic'}}
                                             numberOfLines={1}>
-                                            {item.locationStr ? item.locationStr : "No Tagged Location"}
+                                            {item.locationStr ? item.locationStr : "None"}
                                         </Text>
                                     </View>
                                 </View>
