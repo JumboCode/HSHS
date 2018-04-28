@@ -106,43 +106,6 @@ export const addNewActionItem = (isDone, title, creationTimestamp, locationCoord
 	let newActionItemKey = firebase.database().ref('actionItems').push().key;
 	let ref = firebase.database().ref('/actionItems/' + newActionItemKey);
 
-
-    /* Attempt to use transactions, don't delete */
-    // let updates = {};
-	// let guestRef = firebase.database().ref('guests/');
-	// guestRef.transaction((cur) =>
-	// {
-	// 	this.guestIds = guestIds.filter(id => cur[id] !== null);
-	// 	return;
-	// 	// this.guestIds.map((id) => {
-	// 	// 	(!cur[id]["actionItems"]) && (cur[id]["actionItems"] = {})
-	// 	// 	cur[id]["actionItems"][newActionItemKey] = newActionItemKey;
-	// 	// });
-	// 	// return cur;
-	// }, (error) => {
-	// 	if (error) {
-	// 		Alert.alert(error);
-	// 	} else {
-	// 		// Create action item
-	// 		updates['actionItems/' + newActionItemKey] = {
-	// 				isDone: isDone,
-	// 				title: title,
-	// 				creationTimestamp: creationTimestamp,
-	// 				locationCoord: {
-	// 						lat: locationCoord.latitude,
-	// 						lng: locationCoord.longitude,
-	// 				},
-	// 				locationStr: locationStr,
-	// 				shiftDate: shiftDate,
-	// 				description: description,
-	// 				guestIds: this.guestIds,
-	// 				volunteerId: volunteerId,
-	// 				color: color,
-	// 		}
-	// 		ref.update(updates);
-	// 	}
-	// });
-
 	ref.update({
 		isDone: isDone,
 		title: title,

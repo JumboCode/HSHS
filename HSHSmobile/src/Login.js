@@ -100,7 +100,6 @@ export default class Login extends Component {
             isLoggingIn: true
         });
 
-        //const { email, password } = this.state;
         firebase.auth().signInWithEmailAndPassword(this.state.username, this.state.password)
             .then(() => {
                 //this.openApp();

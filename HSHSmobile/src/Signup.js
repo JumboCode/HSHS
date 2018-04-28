@@ -49,11 +49,13 @@ class Signup extends Component {
             } else {
               this.setState({passwordErr: ""});
             }
+            console.log(JSON.stringify({email: this.state.email, password: this.state.password, signupKey: this.state.k}));
             fetch('https://us-central1-hshs-street-team.cloudfunctions.net/signUpPOST', {
               body: JSON.stringify({email: this.state.email, password: this.state.password, signupKey: this.state.k}), // must match 'Content-Type' header
-              method: 'POST', // *GET, POST, PUT, DELETE, etc.
-            })
-            .then(response => response.json()) // parses response to JSON
+              method: 'POST',
+              headers: {'content-type': 'application/json'}
+            }).then(response => response.json()) // parses response to JSON
+            .then(response => console.log(response))
         }} title='Submit' />
       </View>
     )

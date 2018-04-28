@@ -15,6 +15,7 @@ import {connect} from 'react-redux';
 import renderSeperator from "../../modules/UI/renderSeperator";
 import renderLoader from "../../modules/UI/renderLoader";
 import dupNavFix from "../../dupNavFix";
+import GuestFilter from "../../modules/guestFilter";
 
 const Icon = require('react-native-vector-icons/Ionicons');
 
@@ -91,16 +92,12 @@ class GuestList extends Component {
         super(props);
         this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.Screen_GuestListProfile = this.Screen_GuestListProfile.bind(this);
-        this.filterGuestData = this.filterGuestData.bind(this);
         this.props.loading = true;
         this.state = {
-            searchInput    : '',
-            filterLists    : {'age': ['Old', 'Young', 'Middle'], 'gender': ['F', 'M', "O"]},
-            searchFilters  : {'age': {filter: "", colorScheme: 'rgba(119, 11, 22, 1)'},
-                              'gender': {filter: "", colorScheme: '#4E84C4'}}
+            searchInput: '',
+            age: '',
+            gender: ''
         };
-        //  searchFilters  : {'age': {filter: {'Old': false, 'Middle': false, 'Young': false}, filterSelected: false, colorScheme: 'rgba(119, 11, 22, 1)'},
-          //                  'gender': {filter: {'M': false, 'F': false, 'O': false}, filterSelected: false, colorScheme: '#4E84C4'}}
     };
 
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
@@ -181,54 +178,10 @@ class GuestList extends Component {
         );
     };
 
-    renderFilterButtons = (filterGroup, filterName) => {
-        let filters = this.state.searchFilters[filterGroup];
-        return (
-          <View key={filterName} style={styles.buttonContainer}>
-            <TouchableHighlight
-                style = {[styles.button, {backgroundColor: (filters.filter == filterName ? filters.colorScheme : 'transparent'), borderColor: filters.colorScheme}]}
-                underlayColor = {filters.filter == filterName ? 'white' : filters.colorScheme}
-                onPress = {() => this.setFilter(filterGroup, filterName)}
-            >
-                <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                    <Text style = {
-                          { textAlign: "center",
-                            color: filters.filter == filterName ? 'white' : filters.colorScheme,
-                            fontSize: 12 }}>
-                       {filterName}
-                    </Text>
-                </View>
-            </TouchableHighlight>
-          </View>
-        );
-    };
-
-    setFilter = (filterGroup, filterName) => {
-        /*this.setState(prevState => {
-          oldSearchFilters = prevState.searchFilters;
-          newSearchFilters = prevState.searchFilters;
-          newSearchFilters[filterGroup][filterName] = !oldSearchFilters[filterGroup][filterName];
-          newSearchFilters[filterGroup].filterSelected = newSearchFilters[filterGroup][filterName] ? oldSearchFilters[filterGroup].filterSelected + 1 : oldSearchFilters[filterGroup].filterSelected - 1;
-          return {searchFilters: newSearchFilters};
-        }, () => {
-            console.log(this.state);
-        });
-        */
-        this.setState(prevState => {
-          newSearchFilters = prevState.searchFilters;
-          if (prevState.searchFilters[filterGroup].filter == filterName)
-              newSearchFilters[filterGroup].filter = "";
-          else
-              newSearchFilters[filterGroup].filter = filterName;
-
-          return {searchFilters: newSearchFilters};
-        });
-    }
-
     filterGuestData = (guests) => {
       return guests.filter(item => (item.name.toLowerCase().includes(this.state.searchInput) || item.description.toLowerCase().includes(this.state.searchInput))
-                                      && (this.state.searchFilters['age'].filter == "" ||this.state.searchFilters['age'].filter == item.age)
-                                        && (this.state.searchFilters['gender'].filter == "" || this.state.searchFilters['gender'].filter == item.gender));
+                                      && (this.state.age == "" ||this.state.age == item.age)
+                                        && (this.state.gender == "" || this.state.gender == item.gender));
     }
 
     render() {
@@ -246,10 +199,6 @@ class GuestList extends Component {
             )
         }
 
-        const filterButtons = Object.keys(this.state.filterLists).map(group =>
-                                this.state.filterLists[group].map(filter =>
-                                            this.renderFilterButtons(group, filter)));
-
         return (
             <View style={{flex: 1}}>
               <SearchBar
@@ -262,16 +211,11 @@ class GuestList extends Component {
                   lightTheme
                   clearIcon={this.state.searchInput !== ''}
               />
-              <View
-                style={{flexDirection: 'row', marginLeft: '1%', height: 70, justifyContent: 'space-between'}}
-              >
-                <View style={{justifyContent: 'center', alignItems: 'flex-start'}} >
-                  <Text style={{color: 'rgba(119, 11, 22, 1)', fontSize: 12}}> Filters: </Text>
-                </View>
-                <View style={{flexDirection: 'row', flexWrap: 'nowrap', justifyContent: 'space-around'}}>
-                  {filterButtons}
-                </View>
-              </View>
+            <GuestFilter
+                filterOptions={{age: {options: ['Old', 'Young', 'Middle'], color: 'rgba(119, 11, 22, 1)'}, gender: {options: ['F', 'M', "O"], color: '#4E84C4'}}}
+                selectedFilters={this.state}
+                onChange={newSelected => this.setState(newSelected)}
+            />
               <View style={{flex: 1}}>
                   <FlatList
                       data = {this.filterGuestData(this.props.guests)}
