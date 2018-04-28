@@ -52,7 +52,11 @@ export function reducer(state, action) {
             });
         case 'ADD_NEW_INTERACTIONS_SUCCESS':
             return Object.assign({}, state, {
-                addingInteraction: false
+                addNewInteractionSuccess: true,
+            });
+        case 'ADD_NEW_INTERACTIONS_FAILURE':
+            return Object.assign({}, state, {
+                addNewInteractionSuccess: false,
             });
         case 'DELETE_NEW_ACTION_ITEMS_START':
             return Object.assign({}, state, {
@@ -72,26 +76,26 @@ export function reducer(state, action) {
                 loading: false,
                 loaded: true,
                 actionItems: action.payload,
-                guestActionItemIds: Object.keys(action.payload).reduce((guests, actionItemId) => {
+                guestActionItemIds: action.payload ? Object.keys(action.payload).reduce((guests, actionItemId) => {
                   action.payload[actionItemId].guestIds && action.payload[actionItemId].guestIds.map(guestId => {
                     !guests[guestId] && (guests[guestId] = []);
                     guests[guestId].push(actionItemId);
                   });
                   return guests;
-                }, new Object())
+                }, new Object()) : null
             })};
 
         case 'GET_COMPLETED_ACTION_ITEMS_SUCCESS':
             console.log(action.payload)
             return Object.assign({}, state, {
                 completedActionItems: action.payload,
-                guestCompletedActionItemIds: Object.keys(action.payload).reduce((guests, actionItemId) => {
+                guestCompletedActionItemIds: action.payload ? Object.keys(action.payload).reduce((guests, actionItemId) => {
                   action.payload[actionItemId].guestIds && action.payload[actionItemId].guestIds.map(guestId => {
                     !guests[guestId] && (guests[guestId] = []);
                     guests[guestId].push(actionItemId);
-                  });
+                  })
                   return guests;
-                }, new Object())
+                }, new Object()) : null
             });
 
         case 'GET_WINNERS_START':

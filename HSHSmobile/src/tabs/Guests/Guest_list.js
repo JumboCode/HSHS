@@ -42,7 +42,7 @@ function guestObjectToArray(IdsToGuests, IdsToInteractions) {
             "description": IdsToGuests[Id].description,
             "age" : IdsToGuests[Id].age,
             "gender": IdsToGuests[Id].gender,
-            "color": getRandomColor(),
+            "color": IdsToGuests[Id].color,
             "actionItems": IdsToGuests[Id].actionItems
         });
     }
@@ -95,9 +95,12 @@ class GuestList extends Component {
         this.props.loading = true;
         this.state = {
             searchInput    : '',
-            searchFilters  : {'Old': false, 'Middle': false, 'Young': false, 'M': false, 'F': false},
-            filterSelected : 0,
+            filterLists    : {'age': ['Old', 'Young', 'Middle'], 'gender': ['F', 'M', "O"]},
+            searchFilters  : {'age': {filter: "", colorScheme: 'rgba(119, 11, 22, 1)'},
+                              'gender': {filter: "", colorScheme: '#4E84C4'}}
         };
+        //  searchFilters  : {'age': {filter: {'Old': false, 'Middle': false, 'Young': false}, filterSelected: false, colorScheme: 'rgba(119, 11, 22, 1)'},
+          //                  'gender': {filter: {'M': false, 'F': false, 'O': false}, filterSelected: false, colorScheme: '#4E84C4'}}
     };
 
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
@@ -178,18 +181,19 @@ class GuestList extends Component {
         );
     };
 
-    renderFilterButtons = (filterName) => {
+    renderFilterButtons = (filterGroup, filterName) => {
+        let filters = this.state.searchFilters[filterGroup];
         return (
           <View key={filterName} style={styles.buttonContainer}>
             <TouchableHighlight
-                style = {[styles.button, {backgroundColor: this.state.searchFilters[filterName] ? 'rgba(119, 11, 22, 1)' : 'transparent'}]}
-                underlayColor = {this.state.searchFilters[filterName] ? 'white' : 'rgba(119, 11, 22, 1)'}
-                onPress = {() => this.setFilter(filterName)}
+                style = {[styles.button, {backgroundColor: (filters.filter == filterName ? filters.colorScheme : 'transparent'), borderColor: filters.colorScheme}]}
+                underlayColor = {filters.filter == filterName ? 'white' : filters.colorScheme}
+                onPress = {() => this.setFilter(filterGroup, filterName)}
             >
                 <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                     <Text style = {
                           { textAlign: "center",
-                            color: this.state.searchFilters[filterName] ? 'white' : 'rgba(119, 11, 22, 1)',
+                            color: filters.filter == filterName ? 'white' : filters.colorScheme,
                             fontSize: 12 }}>
                        {filterName}
                     </Text>
@@ -199,19 +203,32 @@ class GuestList extends Component {
         );
     };
 
-    setFilter = (filterName) => {
-        this.setState(prevState => {
+    setFilter = (filterGroup, filterName) => {
+        /*this.setState(prevState => {
+          oldSearchFilters = prevState.searchFilters;
           newSearchFilters = prevState.searchFilters;
-          newSearchFilters[filterName] = !prevState.searchFilters[filterName];
-          return {searchFilters: newSearchFilters, filterSelected: newSearchFilters[filterName] ? prevState.filterSelected + 1 : prevState.filterSelected - 1};
+          newSearchFilters[filterGroup][filterName] = !oldSearchFilters[filterGroup][filterName];
+          newSearchFilters[filterGroup].filterSelected = newSearchFilters[filterGroup][filterName] ? oldSearchFilters[filterGroup].filterSelected + 1 : oldSearchFilters[filterGroup].filterSelected - 1;
+          return {searchFilters: newSearchFilters};
         }, () => {
             console.log(this.state);
+        });
+        */
+        this.setState(prevState => {
+          newSearchFilters = prevState.searchFilters;
+          if (prevState.searchFilters[filterGroup].filter == filterName)
+              newSearchFilters[filterGroup].filter = "";
+          else
+              newSearchFilters[filterGroup].filter = filterName;
+
+          return {searchFilters: newSearchFilters};
         });
     }
 
     filterGuestData = (guests) => {
       return guests.filter(item => (item.name.toLowerCase().includes(this.state.searchInput) || item.description.toLowerCase().includes(this.state.searchInput))
-                                      && (this.state.filterSelected == 0 || this.state.searchFilters[item.age] || this.state.searchFilters[item.gender]));
+                                      && (this.state.searchFilters['age'].filter == "" ||this.state.searchFilters['age'].filter == item.age)
+                                        && (this.state.searchFilters['gender'].filter == "" || this.state.searchFilters['gender'].filter == item.gender));
     }
 
     render() {
@@ -229,7 +246,9 @@ class GuestList extends Component {
             )
         }
 
-        const filterButtons = Object.keys(this.state.searchFilters).map(filter => this.renderFilterButtons(filter));
+        const filterButtons = Object.keys(this.state.filterLists).map(group =>
+                                this.state.filterLists[group].map(filter =>
+                                            this.renderFilterButtons(group, filter)));
 
         return (
             <View style={{flex: 1}}>
@@ -237,7 +256,6 @@ class GuestList extends Component {
                   cancelButtonTitle="Cancel"
                   placeholder="Search (Ex. Phil Wang)"
                   containerStyle={{backgroundColor: 'transparent'}}
-                  onFocus={() => this.expandFilter()}
                   onChangeText={(str) => {this.setState({searchInput: str.toLowerCase()})}}
                   onClearText={() => this.setState({searchInput: ''})}
                   value={this.state.searchInput}
@@ -278,7 +296,7 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         height: 30,
-        width: 55,
+        width: 45,
         marginLeft: '1%',
         marginRight: '1%',
         alignSelf: 'center',
@@ -288,17 +306,7 @@ const styles = StyleSheet.create({
         borderStyle: "solid",
         borderWidth: 1,
         borderRadius: 40,
-        borderColor: 'rgba(119, 11, 22, 1)',
     }
 });
-
-function getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(dupNavFix(GuestList));
