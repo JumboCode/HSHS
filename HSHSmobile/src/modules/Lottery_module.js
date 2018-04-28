@@ -5,6 +5,8 @@ import {
     Text,
     TextInput,
     Button,
+    TouchableOpacity,
+    Linking
 } from 'react-native';
 import {connect} from 'react-redux';
 import renderSeperator from "./UI/renderSeperator";
@@ -37,7 +39,7 @@ class Lottery_module extends Component {
   // TODO: check database and see if data has been entered, set timeIndex
   componentWillMount() {
     let secs = this.getTimeRemaining();
-    secs = 3;
+    // secs = 3;
     this.setState ({ seconds: secs });
   }
 
@@ -72,8 +74,15 @@ class Lottery_module extends Component {
   // TODO: Check if page transition works smoothly
   countDown = () => {
       let secs     = this.state.seconds - 1;
-      let timeLeft = this.millisecondsToTime(secs);
+      let timeLeft;
 
+      if (secs < 0) {
+        timeLeft = this.millisecondsToTime(0);
+        this.setState({timeRemaining: timeLeft, seconds: 0});        
+        return;
+      } 
+
+      timeLeft = this.millisecondsToTime(secs);
       this.setState({timeRemaining: timeLeft, seconds: secs});
   }
 
@@ -116,11 +125,17 @@ class Lottery_module extends Component {
 
 	render() {
 		return (
+      <View>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <View style={[styles.block, {borderRightWidth: .5, borderColor: '#808080'}]}>
-          <View style={{margin: 30}}>
+          <View style={{margin: 30, alignItems: 'center'}}>
             <Text style={styles.countdownText}>Lottery countdown</Text>
     				<Text style={styles.countdownNumbers}>{this.state.timeRemaining}</Text>
+            {this.state.seconds === 0 ? 
+              (<Button
+                  color="#rgba(119, 11, 22, 1)"
+                  onPress={ () => {this.props.showDialogCallback()} }
+                  title="Enter Winner" />) : null}
           </View>
         </View>
 
@@ -130,6 +145,17 @@ class Lottery_module extends Component {
             {this._renderLotteryWinners()}
           </View>
         </View>
+      </View>
+
+      <TouchableOpacity
+        style={{flexDirection: "row", alignItems: "center", justifyContent: "center", marginTop: 20, marginBottom: 20}}
+        onPress={ () => {Linking.openURL('tel:16175472841')} }>
+          <Icon name="phone"/>
+          <Text style={{marginLeft: 10}}>Tap here to call HSHS</Text>
+      </TouchableOpacity>
+
+
+
       </View>
 		);
 	}
