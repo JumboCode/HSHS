@@ -12,8 +12,6 @@ const byPropKey = (propertyName, value) => () => ({
 
 const INITIAL_STATE = {
   email: '',
-  password: '',
-  key: '',
   error: null
 }
 
@@ -26,8 +24,6 @@ class GetUserTagsCard extends Component {
   submit = (event) => {
     const {
       email,
-      password,
-      key,
     } = this.state;
 
     const {
@@ -35,16 +31,15 @@ class GetUserTagsCard extends Component {
     } = this.props;
 
     let getTags = firebase.functions().httpsCallable("getUserTags");
-    getTags({email: email}).then((val) => {console.log(val);})
-    .catch(err => {console.error(err)});
+    getTags({email: email})
+    .then((val) => {console.log(val);})
+    .catch(err => {console.error(err);});
     event.preventDefault();
   }
 
   render() {
     const {
       email,
-      password,
-      key,
     } = this.state;
 
     return (

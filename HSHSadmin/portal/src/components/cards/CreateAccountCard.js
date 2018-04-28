@@ -38,8 +38,9 @@ class CreateAccountCard extends Component {
     let authKey = firebase.functions().httpsCallable("authAccountKey");
 
     signUp({email: email, password: password})
-    .then((uid) => {return authKey({signupKey : key, uid : uid})})
+    .then((res) => {return authKey({signupKey : key, uid : res.data})})
     .catch(err => {console.error(err);})
+    .then((res) => console.log(res))
     event.preventDefault();
   }
 

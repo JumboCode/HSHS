@@ -15,23 +15,38 @@ function deleteUser(uid) {
 }
 
 function mkAdmin(uid) {
- return admin.auth().setCustomUserClaims(uid, {user: true, admin: true}).then(() => {
+ admin.auth().setCustomUserClaims(uid, {user: true, admin: true}).then(() => {
    console.log("Promoted account", uid, "to Admin.");
    return null;
  }).catch(error => {
    console.error("Promotion of account", uid, "to Admin failed:", error);
-   return null;
+   return "ERROR : ACCOUNT TO ADMIN FAILED";
  })
 }
 
 function mkUser(uid) {
- return admin.auth().setCustomUserClaims(uid, {user: true, admin: false}).then(() => {
-   console.log("Demoted account", uid, "to User.");
+ admin.auth().setCustomUserClaims(uid, {user: true, admin: false}).then(() => {
+   console.log("Promoted account", uid, "to User.");
    return null;
  }).catch(error => {
-   console.error("Demotion of account", uid, "to User failed:", error);
-   return null;
+   console.error("Promotion of account", uid, "to User failed:", error);
+   return "ERROR : ACCOUNT TO USER FAILED";
  })
+}
+
+function authSignupKey(uid, signupKey) {
+  console.log(uid, signupKey);
+  let suKeys = admin.database().ref('/signUpKeys');
+  let keys = null;
+  suKeys.once('value',
+    snapshot => {keys = snapshot.val();},
+    err => {console.error(err)})
+  .then(() => {
+    if (signupKey === keys.userKey) {return mkUser(uid);}
+    else if (signupKey === keys.adminKey) {return mkAdmin(uid);}
+    else {console.error("INCORRECT SIGNUP KEY"); return "ERROR : INCORRECT SIGNUP KEY";}
+  })
+  .catch(err => {console.error(err); return "ERROR?";})
 }
 
 exports.getUserTags = functions.https.onCall((data, context) => {
@@ -64,19 +79,31 @@ exports.makeAdmin = functions.https.onCall((data, context) => {
   })
 })
 
-exports.authAccountKey = functions.https.onCall((data, context) => {
-  let suKeys = admin.database().ref('/signUpKeys');
-  return suKeys.once('value', (snapshot) => {
-    let keys = snapshot.val();
-    if (data.signupKey === keys.userKey) {
-      return mkUser(data.uid);
-    } else if (data.signupKey === keys.adminKey) {
-      return mkAdmin(data.uid);
-    } else {
-      console.error("INCORRECT SIGNUP KEY");
-      return "ERROR: INCORRECT SIGNUP KEY";
-    }
+exports.signUpPOST = functions.https.onRequest((req, res) => {
+  console.log(req.body.email, req.body.password, req.body.signupKey);
+  admin.auth().createUser({email: req.body.email, password: req.body.password})
+  .then((userRecord) => {res.status(200).send(authSignupKey(userRecord.uid, req.body.signupKey)); return null;})
+  .catch(err => {
+    console.error("Failed to create account.", err);
+    res.status(500).send("ERROR : FAILED TO CREATE ACCOUNT");
   })
+})
+
+exports.authAccountKey = functions.https.onCall((data, context) => {
+  return authSignupKey(data.uid, data.signupKey);
+  /*
+  let suKeys = admin.database().ref('/signUpKeys');
+  let keys = null;
+  suKeys.once('value',
+    (snapshot) => {keys = snapshot.val();},
+    (err) => {console.error("Failed to access signUpKeys.", err)})
+  .then(() => {
+    if (data.signupKey === keys.userKey) {return mkUser(data.uid);}
+    else if (data.signupKey === keys.adminKey) {return mkAdmin(data.uid);}
+    else {console.error("INCORRECT SIGNUP KEY"); return {res : "ERROR: INCORRECT SIGNUP KEY"};}
+  })
+  .catch((err) => {return err;})
+  */
 })
 
 exports.signUp = functions.https.onCall((data, context) => {

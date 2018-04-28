@@ -32,14 +32,16 @@ class PanelPage extends Component {
               }}>
                 <SignupKeyCard
                   label = "Admin Signup Key"
-                  keyRef = {firebase.database().ref("/signUpKeys/adminKey")}/>
+                  keyRef = {firebase.database().ref("/signUpKeys/adminKey")}
+                  style = {{flex: 1, margin: 10}}/>
                 <SignupKeyCard
                   label = "User Signup Key"
-                  keyRef = {firebase.database().ref("/signUpKeys/userKey")}/>
-                <CreateAccountCard />
-                <GetUserTagsCard />
-                <DataExportCard />
-                <UserManagementCard />
+                  keyRef = {firebase.database().ref("/signUpKeys/userKey")}
+                  style = {{flex: 1, margin: 10}}/>
+                <CreateAccountCard style = {{flex: 1, margin: 10}}/>
+                <GetUserTagsCard style = {{flex: 1, margin: 10}}/>
+                <DataExportCard style = {{flex: 1, margin: 10}}/>
+                <UserManagementCard style = {{flex: 1, margin: 10}}/>
             </div>
         );
     }
