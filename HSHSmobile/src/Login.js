@@ -60,7 +60,6 @@ export default class Login extends Component {
         this.state = {
           username: '',
           password: '',
-          user: null,
           isLoggingIn: true,
           promptVisible: false
         };
@@ -78,7 +77,6 @@ export default class Login extends Component {
         if (this._isMounted) {
           this.setState({isLoggingIn: false});
           if (user) {
-            this.setState({user: user});
             this.openApp();
           }
         }
@@ -173,7 +171,6 @@ export default class Login extends Component {
         Navigation.registerComponent('Interaction_new', () => Interaction_new, store, Provider);
         Navigation.registerComponent('Interaction_view', () => Interaction_view, store, Provider);
 
-        // TODO: make the tabs link to real pages
         Navigation.startTabBasedApp({
             tabs: [
                 {
@@ -233,7 +230,6 @@ export default class Login extends Component {
     }
 
     render() {
-        //console.log(this.props.data);
         return (
             <KeyboardAvoidingView style={styles.container} behavior="padding">
                     <Text style={styles.title}> Harvard Square </Text>
