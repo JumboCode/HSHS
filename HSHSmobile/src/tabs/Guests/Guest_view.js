@@ -30,7 +30,9 @@ function mapStateToProps(state, ownProps) {
         allGuests: state.guests,
         loading: state.loading,
         actionItems: state.actionItems,
-        actionItemIds: state.guestActionItemIds[ownProps.Id]
+        interactions: state.interactions,
+        completedActionItems: state.completedActionItems,
+        actionItemIds: state.guestActionItemIds ? state.guestActionItemIds[ownProps.Id] : null
     };
 }
 
@@ -42,6 +44,7 @@ class GuestProfile extends Component {
         // this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.view_crud_note_page = this.view_crud_note_page.bind(this);
         this.view_actionitem_page = this.view_actionitem_page.bind(this);
+        this.view_interaction_page = this.view_interaction_page.bind(this);
     };
 
     // matching receptivity to emojis {0-4} where 4 is the best and 0 is the worst
@@ -60,6 +63,24 @@ class GuestProfile extends Component {
             screen: 'ActionItem_view', // unique ID registered with Navigation.registerScreen
             passProps: {
                 actionItemId: actionItemId,
+                completed: true
+            }, // Object that will be passed as props to the pushed screen (optional)
+            animated: true, // does the push have transition animation or does it happen immediately (optional)
+            animationType: 'slide-horizontal', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
+            backButtonHidden: false, // hide the back button altogether (optional)
+            navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
+            navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
+        });
+    };
+
+    // @PHIL
+    view_interaction_page = (interactionId) => {
+        console.log(interactionId);
+        this.props.navigator.push({
+            screen: 'Interaction_view', // unique ID registered with Navigation.registerScreen
+            passProps: {
+                interactionId: interactionId,
+                completed: true
             }, // Object that will be passed as props to the pushed screen (optional)
             animated: true, // does the push have transition animation or does it happen immediately (optional)
             animationType: 'slide-horizontal', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
@@ -224,26 +245,34 @@ class GuestProfile extends Component {
         )
     }
 
-    renderDetail = (rowData, _sectionID, _rowID) => {
-        let title = <Text>{rowData.time}</Text>
+    _renderHistoryDetail = (rowData, _sectionID, _rowID) => {
+        let title = (<Text>{rowData.date}</Text>);
         var desc = null
-        if(rowData.isActionItem) {
-          let completionText = (rowData.isDone ? "Complete Task" :
-                                                  "Incomplete Task");
-          desc = (
+        if (rowData.isActionItem) {
+            desc = (
             <View style={{flexDirection: 'column', marginLeft:10}}>
-              <Text style={{fontWeight: 'bold'}}>{completionText}</Text>
               <View style={{flexDirection: 'row'}}>
                 <TouchableOpacity
-                style={{flex:99, borderColor: '#464646', borderLeftColor: 'blue', padding: 5, borderWidth: 1, borderLeftWidth: 10, borderRightWidth: 0}}
+                style={{flex:99, borderLeftColor: rowData.color, padding: 5, borderWidth: 1, borderLeftWidth: 10, borderRightWidth: 0}}
                 onPress={() => this.view_actionitem_page(rowData.actionItemId)}
                 >
                   <Text>{rowData.title}</Text>
                 </TouchableOpacity>
               </View>
-            </View>
-          )
-        } //else if ()
+            </View>)
+        } else { // Interaction timeline view
+            desc = (
+            <View style={{flexDirection: 'column', marginLeft:10}}>
+                <View style={{flexDirection: 'row'}}>
+                  <TouchableOpacity
+                  style={{flex:99, borderLeftColor: rowData.color, padding: 5, borderWidth: 1, borderLeftWidth: 10, borderRightWidth: 0}}
+                  onPress={() => this.view_interaction_page(rowData.interactionId)}
+                  >
+                    <Text>{rowData.description}</Text>
+                  </TouchableOpacity>
+                </View>
+            </View>)
+        }
 
         return (
           <View style={{flex:1}}>
@@ -256,54 +285,82 @@ class GuestProfile extends Component {
     // Once interactions are added to Guest schema, interpolate w/ actionItems
     // and render in the list.
     renderHistory = () => {
-        let allActionItems = Object.values(this.props.actionItems);
 
-        let relatedActionItems = allActionItems.filter((actionItem) =>
-                     { // Filter list to only include action items related to guest
-                        if (actionItem.guestIds != undefined) {
-                          return actionItem.guestIds.includes(this.props.guestId)
+        let allHistory = [];
+
+        // Action items are stored in a weird list; ie 0: {item data}
+        // extracts the objects into their own list
+        // If there are actionItems add to list of all
+        if (this.props.completedActionItems) {
+            let completedActionItems = Object.values(this.props.completedActionItems);
+            allHistory = completedActionItems;
+        }
+
+        if (this.props.interactions) {
+            let allInteractions = Object.values(this.props.interactions);
+            let interactionKeys = Object.keys(this.props.interactions);
+            // Add interactionID field to in all interactions
+            interactionKeys.map((k, i) => {
+                allInteractions[i]['interactionId'] = k;
+            });
+            allHistory = allHistory.concat(allInteractions);
+        }
+
+
+
+        // Filter list to include action items related to guest
+        let relatedHistory = allHistory.filter((item) =>
+                     {
+                        if (item.guestIds != undefined) {
+                          return item.guestIds.includes(this.props.guestId)
                         }
                       });
 
-        // background color - d7d7d7
-        // date color- 464646
-        // link color- 31a7f8
-
-        if (relatedActionItems.length == 0) {
+        // If guest has no history, tell the user!
+        if (relatedHistory.length == 0) {
             return (
                 <View style={styles.historyContainer}>
                     <Text style={styles.historyHeader}>Guest History</Text>
-                    <Text>No action items or interactions to display!</Text>
+                    <Text>No history to display!</Text>
                 </View>
             );
         }
-        let data = relatedActionItems.map((i) =>
-                      {
-                        // check date
-                        let date = new Date(i.creationTimestamp).toDateString();
-                        // re add color
 
-                        return ({time: date,
+        // Reformat action items for display in timeline
+        let timelineData = relatedHistory.map((i) =>
+                      {
+                        let date = new Date(i.creationTimestamp).toDateString();
+
+                        // TODO re add color
+                        return ({timestamp: i.creationTimestamp,
+                                interactionTimestamp: i.interactionTimestamp,
+                                date: date,
                                 title: i.title,
                                 color: i.color,
                                 description: i.description,
-                                isActionItem: true,
+                                isActionItem: (i.actionItemId != undefined), // TODO really janky
                                 actionItemId: i.actionItemId,
-                                isDone: i.isDone})
+                                interactionId: i.interactionId})
                         })
+
+        // Sort timelineDate by date (most recent to least)
+        timelineData.sort((x, y) => {
+            let xDate = new Date(x.timestamp);
+            let yDate = new Date(y.timestamp);
+            return xDate > yDate ? -1 : xDate < yDate ? 1 : 0;
+        })
 
         return (
           <View>
             <Text style={styles.historyHeader}>Guest History</Text>
             <Timeline
-              data={data}
+              data={timelineData}
               showTime={false}
-              lineColor='#808080'
-              circleColor='red'
+              lineColor='blue'
+              circleColor='grey'
               descriptionStyle={{color:'gray'}}
-              detailContainerStyle={styles.timelineDetailContainer}
               columnFormat='single-column-left'
-              renderDetail={this.renderDetail}
+              renderDetail={this._renderHistoryDetail}
               options={{
                 style:{paddingTop:10, flex:1}
               }}

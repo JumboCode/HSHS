@@ -18,6 +18,7 @@ import { Button } from 'react-native'
 import Popup from "./popup"
 import renderSeperator from "../UI/renderSeperator";
 import renderLoader from "../UI/renderLoader";
+import GuestFilter from "../GuestFilter";
 
 export default class TagGuestDialog extends Component {
     constructor(props) {
@@ -34,12 +35,20 @@ export default class TagGuestDialog extends Component {
           checkedNow: this.props.initialGuests ? this.props.initialGuests.slice() : [],
           checkedBefore: this.props.initialGuests ? this.props.initialGuests.slice() : [],
           searchInput: '',
+          age: '',
+          gender: ''
         }
     };
 
     // calls show() fn of PopupDialog
     show(onShown: ?Function) {
         this.Popup.show();
+    }
+
+    filterGuestData = (guests) => {
+      return guests.filter(item => (item.name.toLowerCase().includes(this.state.searchInput) || item.description.toLowerCase().includes(this.state.searchInput))
+                                      && (this.state.age == "" ||this.state.age == item.age)
+                                        && (this.state.gender == "" || this.state.gender == item.gender));
     }
 
     renderContent = () => {
@@ -49,16 +58,24 @@ export default class TagGuestDialog extends Component {
           width: "100%",
         }}>
           <SearchBar
-            placeholder="Search"
+            placeholder="Search (Ex. Phil Wang)"
             onChangeText={(str) => {this.setState({searchInput: str.toLowerCase()})}}
             onClearText={() => this.setState({searchInput: ''})}
+            containerStyle={{backgroundColor: 'transparent'}}
             lightTheme
             clearIcon={this.state.searchInput !== ''}
             value={this.state.searchInput}
-            round
+          />
+          <GuestFilter
+              filterOptions={{age: {options: ['Old', 'Young', 'Middle'], color: 'rgba(119, 11, 22, 1)'}, gender: {options: ['F', 'M', "O"], color: '#4E84C4'}}}
+              selectedFilters={(() => {
+                  const {checkedNow, checkedBefore, searchInput, ...filterInfo} = this.state;
+                  return filterInfo;
+              })()}
+              onChange={newSelected => this.setState(newSelected)}
           />
           <FlatList
-              data = {this.props.guests.filter(item => item.name.toLowerCase().includes(this.state.searchInput)) }
+              data = {this.filterGuestData(this.props.guests) }
               renderItem={({ item }) => (
                   <CheckBox
                       title={`${item.name}`}

@@ -2,6 +2,7 @@ import {Navigation} from 'react-native-navigation';
 import {Provider} from 'react-redux';
 import {store} from './src/redux/store.js';
 import Login from './src/Login';
+import Signup from './src/Signup';
 
 export default () => {
     return new App()
@@ -16,6 +17,7 @@ class App {
         // this will start our app
 
         Navigation.registerComponent('Login', () => Login, store, Provider);
+        Navigation.registerComponent('Signup', () => Signup);
 
         // Navigation.registerComponent('Login', () => GuestListNew, store, Provider);
 

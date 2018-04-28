@@ -15,6 +15,8 @@ import { Icon } from 'react-native-elements'
 import renderLoader from "../../modules/UI/renderLoader";
 import dupNavFix from "../../dupNavFix";
 import {markActionItemAsDone} from "../../redux/actions";
+import {markActionItemAsTodo} from "../../redux/actions";
+
 // for navigation
 const IonIcon = require('react-native-vector-icons/Ionicons');
 
@@ -41,7 +43,8 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispath, ownProps) {
     return {
-        markActionItemAsDone: markActionItemAsDone
+        markActionItemAsDone: markActionItemAsDone,
+        markActionItemAsTodo: markActionItemAsTodo
     };
 }
 
@@ -55,21 +58,6 @@ class ActionItem_list extends Component {
             selectedIndex: 0,
             buttons: ["To do", "Completed"]
         }
-    };
-
-    static navigatorButtons = {
-        rightButtons: [
-          {
-            title: 'Add', // for a textual button, provide the button title (label)
-            id: 'new_actionItem', // id for this button, given in onNavigatorEvent(event) to help understand which button was clicked
-            disabled: false, // optional, used to disable the button (appears faded and doesn't interact)
-            disableIconTint: true, // optional, by default the image colors are overridden and tinted to navBarButtonColor, set to true to keep the original image colors
-            showAsAction: 'ifRoom', // optional, Android only. Control how the button is displayed in the Toolbar. Accepted valued: 'ifRoom' (default) - Show this item as a button in an Action Bar if the system decides there is room for it. 'always' - Always show this item as a button in an Action Bar. 'withText' - When this item is in the action bar, always show it with a text label even if it also has an icon specified. 'never' - Never show this item as a button in an Action Bar.
-            buttonColor: 'blue', // Optional, iOS only. Set color for the button (can also be used in setButtons function to set different button style programatically)
-            buttonFontSize: 14, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
-            buttonFontWeight: '600', // Set font weight for the button (can also be used in setButtons function to set different button style programatically)
-          }
-        ]
     };
 
     onNavigatorEvent = (event) => { // this is the onPress handler for the two buttons together
@@ -101,8 +89,6 @@ class ActionItem_list extends Component {
                 ]
             });
         });
-
-        console.log(this.props.markActionItemAsDone);
     };
 
     render() {
@@ -127,9 +113,10 @@ class ActionItem_list extends Component {
                     completed={true}    // needed so ActionItem_view knows where to pull data from
                     guests={this.props.guests}
                     navigator={this.props.navigator}
-                    doneFunction={this.props.markActionItemAsDone}/>) :
+                    doneFunction={this.props.markActionItemAsTodo}/>) :
                 (<ActionItemList_module
                     actionItems={this.props.actionItems}
+                    completed={false}
                     guests={this.props.guests}
                     navigator={this.props.navigator}
                     doneFunction={ this.props.markActionItemAsDone}/>)}

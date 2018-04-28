@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {store} from './redux/store.js';
 import {Provider} from 'react-redux';
 import {Navigation} from 'react-native-navigation';
@@ -9,12 +9,14 @@ import {
     Text,
     View,
     FlatList,
-    Button,
     ActivityIndicator,
     TextInput,
-    Alert
+    Alert,
+    Dimensions,
+    KeyboardAvoidingView
 } from 'react-native';
-
+import Prompt from 'rn-prompt';
+import {Button} from 'react-native-elements';
 // Dashboard
 import Dashboard from './tabs/Dashboard/Dashboard';
 
@@ -30,7 +32,7 @@ import ActionItem_list from './tabs/ActionItems/ActionItem_list';
 
 // Interaction
 import Interaction_new from './tabs/Interactions/Interaction_new';
-
+import Interaction_view from './tabs/Interactions/Interaction_view';
 
 // Resources
 import Resources_menu from './tabs/Resources/Resources_menu';
@@ -39,8 +41,9 @@ import Resources_search from './tabs/Resources/Resources_search';
 // UI
 import Icon from 'react-native-vector-icons/Ionicons';
 import renderLoader from './modules/UI/renderLoader'
-import { List, ListItem, SearchBar } from "react-native-elements";
+import {List, ListItem, SearchBar} from "react-native-elements";
 
+const {height, width} = Dimensions.get('window');
 const Icons = require('react-native-vector-icons/Ionicons');
 
 var homeIcon // ios-home-outline
@@ -56,14 +59,35 @@ export default class Login extends Component {
         this.state = {
           username: '',
           password: '',
-          isLoggingIn: false,
+          user: null,
+          isLoggingIn: true,
+          promptVisible: false
         };
         this.autenticate = this.authenticate.bind(this);
     }
 
+    componentDidMount = () => {
+      this._isMounted = true;
+      firebase.auth().onAuthStateChanged((user) => {
+        // Check to make sure the component is mounted first, since
+        // we don't want to setState upon logout.
+        if (this._isMounted) {
+          this.setState({isLoggingIn: false});
+          if (user) {
+            this.setState({user: user});
+            this.openApp();
+          }
+        }
+    });
+    }
+
+    componentWillUnmount() {
+      this._isMounted = false;
+    }
+
     openApp () {
         this._populateIcons().then(() => {
-        // Start app only if all icons are loaded
+            // Start app only if all icons are loaded
             this.startApp();
         }).catch((error) => {
             console.error(error);
@@ -73,61 +97,60 @@ export default class Login extends Component {
     authenticate = () => {
         //console.log(this.state.username + " " + this.state.password);
         this.setState({
-          isLoggingIn: true
+            isLoggingIn: true
         });
 
-        //const { email, password } = this.state;
         firebase.auth().signInWithEmailAndPassword(this.state.username, this.state.password)
             .then(() => {
-                this.openApp();
+                //this.openApp();
                 this.setState({
-                  isLoggingIn: false
+                    isLoggingIn: false
                 });
             })
             .catch(() => {
                 // TODO: IMPORTANT! ALERT!
                 // This is just so we don't have to login every time------ DO NOT SHIP THIS
-                if (this.state.username == "" && this.state.password == "") {
-                  this.openApp();
-                } else {
+                //if (this.state.username == "" && this.state.password == "") {
+                //  this.openApp();
+                //} else {
                   Alert.alert(
                     'Login failed',
                     'Unable to login. Username or password is incorrect',
                   );
-                }
+                //}
                 this.setState({
-                  isLoggingIn: false
+                    isLoggingIn: false
                 });
             });
     };
 
     forgotPassword = () => {
-        Alert.alert("We don't really have a way to help you with that but I wish you the best of luck in remembering!")
+        this.setState({promptVisible: true});
     };
 
     _populateIcons = function () {
         return new Promise(function (resolve, reject) {
-          Promise.all(
-            [
-                Icons.getImageSource('ios-home-outline', 30),
-                Icons.getImageSource('ios-checkbox-outline', 30),
-                Icons.getImageSource('ios-add-circle', 30),
-                Icons.getImageSource('ios-people-outline', 30),
-                Icons.getImageSource('ios-help-circle-outline', 30),
-                Icons.getImageSource('ios-add-circle-outline', 30),
-            ]
-          ).then((values) => {
-            homeIcon = values[0];
-            actionItemIcon = values[1];
-            checkinIcon = values[2];
-            guestsIcon = values[3];
-            resourcesIcon = values[4];
-            addIcon = values[5];
-            resolve(true);
-          }).catch((error) => {
-            console.log(error);
-            reject(error);
-          }).done();
+            Promise.all(
+                [
+                    Icons.getImageSource('ios-home-outline', 30),
+                    Icons.getImageSource('ios-checkbox-outline', 30),
+                    Icons.getImageSource('ios-add-circle', 30),
+                    Icons.getImageSource('ios-people-outline', 30),
+                    Icons.getImageSource('ios-help-circle-outline', 30),
+                    Icons.getImageSource('ios-add-circle-outline', 30),
+                ]
+            ).then((values) => {
+                homeIcon = values[0];
+                actionItemIcon = values[1];
+                checkinIcon = values[2];
+                guestsIcon = values[3];
+                resourcesIcon = values[4];
+                addIcon = values[5];
+                resolve(true);
+            }).catch((error) => {
+                console.log(error);
+                reject(error);
+            }).done();
         });
     };
 
@@ -144,12 +167,13 @@ export default class Login extends Component {
         Navigation.registerComponent('ActionItem_edit', () => ActionItem_edit, store, Provider);
         Navigation.registerComponent('ActionItem_view', () => ActionItem_view, store, Provider);
         Navigation.registerComponent('Interaction_new', () => Interaction_new, store, Provider);
+        Navigation.registerComponent('Interaction_view', () => Interaction_view, store, Provider);
 
         // TODO: make the tabs link to real pages
         Navigation.startTabBasedApp({
             tabs: [
                 {
-                    label:'dashboard',
+                    label: 'dashboard',
                     screen: 'Dashboard',
                     title: 'Dashboard',
                     icon: homeIcon
@@ -199,63 +223,83 @@ export default class Login extends Component {
                 navigationBarColor: '#000000',
                 navBarBackgroundColor: '#f6f7f5',
                 navBarButtonColor: '#000000',
-                navBarTextColor: '#2a2a2a',
-              }
+                navBarTextColor: '#2a2a2a'
+            }
         })
     }
 
     render() {
         //console.log(this.props.data);
         return (
-            <View style = {styles.container}>
-            <Text style = {styles.title}> Harvard Square </Text>
-            <Text style = {styles.title}> Homeless Shelter </Text>
-            <Text style = {styles.title}> Volunteer App </Text>
-            <View style = {styles.space}></View>
-            <View style = {styles.space}></View>
-            <View style = {styles.row} >
-                <Icon style = {styles.icon}
-                      name="ios-mail-outline"
-                      size={25}
-                      color="#FFFFFF"
-                />
-                <TextInput
-                    style={styles.textInput}
-                    placeholder='Username'
-                    placeholderTextColor = "#FFFFFF"
-                    onChangeText= {(text) => this.state.username = text}
-                />
-            </View>
-            <View style = {styles.row} >
-                <Icon style = {styles.icon}
-                    name="ios-lock-outline"
-                    size={25} color="#FFFFFF" />
-                <TextInput style={styles.textInput}
-                    placeholder='Password'
-                    secureTextEntry = {true}
-                    placeholderTextColor = "#FFFFFF"
-                    onChangeText= {(text) => this.state.password = text}
-                />
-            </View>
-            <View style = {styles.space}></View>
-            <View style = {styles.space}></View>
-            {this.state.isLoggingIn ? renderLoader() :
-              <View>
-                <View style = {styles.login}>
-                     <Button
-                      onPress={this.authenticate}
-                      title="Log in"
-                      color={Platform.OS === 'ios' ? "#FFFFFF" : "#556A5B"}
-                      accessibilityLabel="Click to log in after credentials are entered."
-                    />
+            <KeyboardAvoidingView style={styles.container} behavior="padding">
+                    <Text style={styles.title}> Harvard Square </Text>
+                    <Text style={styles.title}> Homeless Shelter </Text>
+                    <Text style={styles.title}> Volunteer App </Text>
+                <View style={styles.inputBlock}>
+                    <View style={styles.row}>
+                        <Icon style={styles.icon}
+                              name="ios-mail-outline"
+                              size={25}
+                              color="#FFFFFF"
+                        />
+                        <TextInput
+                            style={styles.textInput}
+                            placeholder='Username'
+                            placeholderTextColor="#FFFFFF"
+                            onChangeText={(text) => this.state.username = text}
+                        />
+                    </View>
+                    <View style={styles.row}>
+                        <Icon style={styles.icon}
+                              name="ios-lock-outline"
+                              size={25} color="#FFFFFF"/>
+                        <TextInput style={styles.textInput}
+                                   placeholder='Password'
+                                   secureTextEntry={true}
+                                   placeholderTextColor="#FFFFFF"
+                                   onChangeText={(text) => this.state.password = text}
+                        />
+                    </View>
                 </View>
-                <View style = {styles.space}></View>
-                  <Text onPress={this.forgotPassword} style = {styles.forgotPassword}>
-                        Forgot your password?
-                  </Text>
-                </View>
-              }
-              </View>
+                {this.state.isLoggingIn ? renderLoader() :
+                    <View>
+                        <Button
+                            small
+                            backgroundColor="#556A5B"
+                            onPress={this.authenticate}
+                            title='Log In'
+                            buttonStyle={{width: width * 0.8}}
+                        />
+                        <View style={styles.forgetView}>
+                            <Text onPress={this.forgotPassword} style={styles.forgotPassword}>
+                                Forgot your password?
+                            </Text>
+                            <Text onPress={() => {
+                              this.props.navigator.push({
+                                  screen: 'Signup', // unique ID registered with Navigation.registerScreen
+                                  passProps: {}, // Object that will be passed as props to the pushed screen (optional)
+                                  animated: true, // does the push have transition animation or does it happen immediately (optional)
+                                  animationType: 'slide-horizontal', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
+                                  backButtonHidden: false, // hide the back button altogether (optional)
+                                  navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
+                                  navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
+                              });
+                            }} style={styles.forgotPassword}>
+                                Got a key? Sign up here.
+                            </Text>
+                        </View>
+                    </View>
+                }
+                <Prompt
+                  title="Reset your password"
+                  placeholder="Enter your email here."
+                  visible={ this.state.promptVisible }
+                  onCancel={ () => this.setState({promptVisible: false}) }
+                  onSubmit={ (value) => {
+                    this.setState({promptVisible: false});
+                    firebase.auth().sendPasswordResetEmail(value).then(() => {}).catch((err) => {console.log(err);})
+                  } }/>
+            </KeyboardAvoidingView>
         );
     }
 }
@@ -276,27 +320,25 @@ const styles = StyleSheet.create({
         paddingTop: 15,
         paddingBottom: 7
     },
-    login : {
-        //flex: 1,
+    login: {
         width: 260,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#556A5B',
     },
-    title : {
+    title: {
         paddingTop: 2,
         justifyContent: 'center',
         alignItems: 'center',
         fontSize: 25,
         color: "#FFFFFF",
     },
-    forgotPassword : {
+    forgotPassword: {
         fontSize: 12,
         color: "#FFFFFF",
+        marginTop: 15,
     },
     textInput: {
-        justifyContent: 'center',
-        alignItems: 'center',
         color: "#FFFFFF",
         width: 275,
         fontSize: 15,
@@ -308,5 +350,13 @@ const styles = StyleSheet.create({
     },
     space: {
         height: 15
+    },
+    inputBlock: {
+        marginBottom: 20,
+        marginTop: 20
+    },
+    forgetView: {
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 });
