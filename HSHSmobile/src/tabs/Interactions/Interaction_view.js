@@ -24,10 +24,15 @@ import DatePicker from 'react-native-datepicker';
 import Moment from 'moment';
 import Counter from '../../modules/Counter'
 
-const id = "-L9MxRxn3-j3KMEOMuGL";
 
 function mapStateToProps(state, ownProps) {
+    var guests = guestObjectToArray(state.guests, state.interactions);
+    console.log(state);
     return {
+        guests: guests,
+        item: null, //state.actionItems[ownProps.id],
+        loading: state.loading,
+        addInteractionSuccess: state.addNewInteractionSuccess ? state.addNewInteractionSuccess : false,
         interactions: state.interactions
     };
 }
@@ -45,40 +50,35 @@ function guestObjectToArray(IdsToGuests, IdsToInteractions) {
         guestList.push({
             "Id" : Id,
             "name" : IdsToGuests[Id].name,
+            "age": IdsToGuests[Id].age,
+            "gender": IdsToGuests[Id].gender
         });
     }
     return guestList;
 }
 
+
 class Interaction_view extends Component {
     constructor(props) {
         super(props);
         this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
-        let test = this.props.getInteractions();
         console.log(this.props.interactions);
-        console.log(test);
-
-        // this.state = {
-        //     title: '',
-        //     taggedGuests: [],
-        //     locationCoord: this.props.locationCoord ? this.props.locationCoord : {
-        //         longitude: 0,
-        //         latitude: 0,
-        //     },
-        //     locationStr: this.props.locationStr ? this.props.locationStr : null,
-        //     date: Moment().format('YYYY-MM-DD'),
-        //     interactionTimeStamp: Moment().format('YYYY-MM-DD'),
-        //     description: "",
-        //     items: [
-        //         {name: "Item 0", count: 0, id: 0},
-        //         {name: "Item 1", count: 0, id: 1},
-        //         {name: "Item 2", count: 0, id: 2},
-        //         {name: "Item 3", count: 0, id: 3},
-        //         {name: "Item 4", count: 0, id: 4},
-        //         {name: "Item 5", count: 0, id: 5},
-        //         {name: "Item 6", count: 0, id: 6},
-        //     ]
-        // };
+        console.log(this.props.interactionId);
+        let tempID = this.props.interactionId;
+        let interaciton = this.props.interactions[tempID];
+        this.state = {
+            title: interaciton.title,
+            taggedGuests: interaciton.guestIds,
+            locationCoord: {
+                longitude: interaciton.locationCoord.lng,
+                latitude: interaciton.locationCoord.lat,
+            },
+            locationStr: interaciton.locationStr,
+            date: interaciton.creationTimestamp,
+            interactionTimeStamp: interaciton.creationTimestamp,
+            description: interaciton.description,
+            items: interaciton.resources
+        };
     };
 
     componentDidMount() {
@@ -111,10 +111,17 @@ class Interaction_view extends Component {
     };
 
     _save = () => {
+        // alert(JSON.stringify(this.state.locationCoord));
+        // let tempLocaitonCoord = {latitude: this.state.locationCoord.lat, longitude: this.state.locationCoord.lng};
         addInteractionItem(this.state.title, this.state.interactionTimeStamp,
             this.state.date, this.state.locationCoord,
             this.state.locationStr, this.state.description, this.state.taggedGuests,
             "[Volunteer ID: See Interaction_new.js]", this.state.items);
+
+        this.props.navigator.pop({
+            animated: true, // does the pop have transition animation or does it happen immediately (optional)
+            animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
+        });
     }
 
     _setTaggedGuests = (guests) => {
@@ -154,7 +161,7 @@ class Interaction_view extends Component {
         let items = this.state.items;
         items[itemId].count = count;
         this.setState({items: items});
-    }
+    };
 
     _renderItems = () => {
         var views = [];
@@ -178,108 +185,109 @@ class Interaction_view extends Component {
     render() {
         return (
             <View style = {styles.container}>
-                {/*<ScrollView style={{width: "100%"}}>*/}
-                    {/*<View style = {styles.back}>*/}
-                        {/*<TextInput*/}
-                            {/*value = {this.state.title}*/}
-                            {/*editable = {true}*/}
-                            {/*placeholder = "Title"*/}
-                            {/*style = {styles.title}*/}
-                            {/*placeholderTextColor = '#d3d3d3'*/}
-                            {/*onChangeText={(title) => {this.setState({'title': title});}}*/}
-                        {/*/>*/}
-                        {/*<View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>*/}
-                            {/*<View style = {styles.icon}>*/}
-                                {/*<Icon*/}
-                                    {/*raised*/}
-                                    {/*color='#770B16'*/}
-                                    {/*name='person'*/}
-                                    {/*size={16}*/}
-                                    {/*onPress={() => {*/}
-                                        {/*this.tagGuestDialog.show();*/}
-                                    {/*}}*/}
-                                {/*/>*/}
-                            {/*</View>*/}
-                            {/*<View style={{flex: 1}}>*/}
-                                {/*<Text numberOfLines={1} style={{textAlign: 'right', margin: 10}}>{this.state.taggedGuests.length +  " Tagged Guests"}</Text>*/}
-                            {/*</View>*/}
-                        {/*</View>*/}
-                        {/*<View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>*/}
-                            {/*<View style = {styles.icon}>*/}
-                                {/*<Icon*/}
-                                    {/*raised*/}
-                                    {/*color='#770B16'*/}
-                                    {/*name='location-on'*/}
-                                    {/*size={16}*/}
-                                    {/*onPress={() => {*/}
-                                        {/*this.ChooseLocationPopup.show()*/}
-                                    {/*}}/>*/}
-                            {/*</View>*/}
-                            {/*<View style={{flex: 1}}>*/}
-                                {/*<Text numberOfLines={1}*/}
-                                      {/*style={{textAlign: 'right', margin: 10}}>{this.state.locationStr ? this.state.locationStr : "No Tagged Location"}</Text>*/}
+                <ScrollView style={{width: "100%"}}>
+                    <View style = {styles.back}>
 
-                            {/*</View>*/}
-                        {/*</View>*/}
-                        {/*<View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>*/}
-                            {/*<View style = {styles.icon}>*/}
-                                {/*<DatePicker*/}
-                                    {/*date={this.state.date}*/}
-                                    {/*mode="date"*/}
-                                    {/*placeholder="select date"*/}
-                                    {/*format="YYYY-MM-DD"*/}
-                                    {/*confirmBtnText="Confirm"*/}
-                                    {/*cancelBtnText="Cancel"*/}
-                                    {/*hideText*/}
-                                    {/*iconComponent={<Icon*/}
-                                        {/*raised*/}
-                                        {/*color='#770B16'*/}
-                                        {/*name='timer'*/}
-                                        {/*size={16}*/}
-                                    {/*/>}*/}
-                                    {/*customStyles={{*/}
-                                        {/*dateTouchBody: {*/}
-                                            {/*width: 50*/}
-                                        {/*}*/}
-                                    {/*}}*/}
-                                    {/*onDateChange={(date) => {this.setState({date: date})}}*/}
-                                {/*/>*/}
-                            {/*</View>*/}
-                            {/*<View style={{flex: 1}}>*/}
-                                {/*<Text numberOfLines={1}*/}
-                                      {/*style={{textAlign: 'right', margin: 10}}>Date: {this.state.date}</Text>*/}
+                        <TextInput
+                            value = {this.state.title}
+                            editable = {true}
+                            placeholder = "Title"
+                            style = {styles.title}
+                            placeholderTextColor = '#d3d3d3'
+                            onChangeText={(title) => {this.setState({'title': title});}}
+                        />
+                        <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
+                            <View style = {styles.icon}>
+                                <Icon
+                                    raised
+                                    color='#770B16'
+                                    name='person'
+                                    size={16}
+                                    onPress={() => {
+                                        this.tagGuestDialog.show();
+                                    }}
+                                />
+                            </View>
+                            <View style={{flex: 1}}>
+                                <Text numberOfLines={1} style={{textAlign: 'right', margin: 10}}>{this.state.taggedGuests.length +  " Tagged Guests"}</Text>
+                            </View>
+                        </View>
+                        <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
+                            <View style = {styles.icon}>
+                                <Icon
+                                    raised
+                                    color='#770B16'
+                                    name='location-on'
+                                    size={16}
+                                    onPress={() => {
+                                        this.ChooseLocationPopup.show()
+                                    }}/>
+                            </View>
+                            <View style={{flex: 1}}>
+                                <Text numberOfLines={1}
+                                      style={{textAlign: 'right', margin: 10}}>{this.state.locationStr ? this.state.locationStr : "No Tagged Location"}</Text>
 
-                            {/*</View>*/}
-                        {/*</View>*/}
-                        {/*<TextInput*/}
-                            {/*editable = {true}*/}
-                            {/*placeholder = "Description"*/}
-                            {/*value = {this.state.description}*/}
-                            {/*style = {styles.description}*/}
-                            {/*multiline = {true}*/}
-                            {/*onChangeText={(description) => {this.setState({description: description})}}*/}
-                        {/*/>*/}
-                        {/*{renderSeperator()}*/}
-                        {/*{this._renderItems()}*/}
-                    {/*</View>*/}
-                {/*</ScrollView>*/}
-                {/*<ChooseLocationPopup*/}
-                    {/*ref={(map) => {*/}
-                        {/*this.ChooseLocationPopup = map;*/}
-                    {/*}}*/}
-                    {/*onConfirm={this._setChosenLocation}*/}
-                    {/*locationStr={this.props.locationStr}*/}
-                    {/*locationCoord={this.props.locationCoord}*/}
-                {/*/>*/}
-                {/*<TagGuestPopup*/}
-                    {/*ref={(dialog) => {*/}
-                        {/*this.tagGuestDialog = dialog;*/}
-                    {/*}}*/}
-                    {/*initialGuests={this.state.taggedGuests}*/}
-                    {/*guests={this.props.guests}*/}
-                    {/*loading={this.props.loading}*/}
-                    {/*onConfirm={this._setTaggedGuests}*/}
-                {/*/>*/}
+                            </View>
+                        </View>
+                        <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
+                            <View style = {styles.icon}>
+                                <DatePicker
+                                    date={this.state.date}
+                                    mode="date"
+                                    placeholder="select date"
+                                    format="YYYY-MM-DD"
+                                    confirmBtnText="Confirm"
+                                    cancelBtnText="Cancel"
+                                    hideText
+                                    iconComponent={<Icon
+                                        raised
+                                        color='#770B16'
+                                        name='timer'
+                                        size={16}
+                                    />}
+                                    customStyles={{
+                                        dateTouchBody: {
+                                            width: 50
+                                        }
+                                    }}
+                                    onDateChange={(date) => {this.setState({date: date})}}
+                                />
+                            </View>
+                            <View style={{flex: 1}}>
+                                <Text numberOfLines={1}
+                                      style={{textAlign: 'right', margin: 10}}>Date: {this.state.date}</Text>
+
+                            </View>
+                        </View>
+                        <TextInput
+                            editable = {true}
+                            placeholder = "Description"
+                            value = {this.state.description}
+                            style = {styles.description}
+                            multiline = {true}
+                            onChangeText={(description) => {this.setState({description: description})}}
+                        />
+                        {renderSeperator()}
+                        {this._renderItems()}
+                    </View>
+                </ScrollView>
+                <ChooseLocationPopup
+                    ref={(map) => {
+                        this.ChooseLocationPopup = map;
+                    }}
+                    onConfirm={this._setChosenLocation}
+                    locationStr={this.props.locationStr}
+                    locationCoord={this.props.locationCoord}
+                />
+                <TagGuestPopup
+                    ref={(dialog) => {
+                        this.tagGuestDialog = dialog;
+                    }}
+                    initialGuests={this.state.taggedGuests}
+                    guests={this.props.guests}
+                    loading={this.props.loading}
+                    onConfirm={this._setTaggedGuests}
+                />
             </View>
         );
     }
