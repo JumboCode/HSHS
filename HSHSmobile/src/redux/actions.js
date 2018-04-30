@@ -204,10 +204,10 @@ export const addNewInteractionFailure = () => ({
 })
 
 // NOTE: title is not deprecated, but kept for schema.
-export const addInteractionItem = (title, creationTimestamp, interactionTimeStamp, locationCoord, locationStr, description, guestIds, volunteerId, resources) => {
+// key is an optional param, in case you want to edit instead of create
+export const addInteractionItem = (title, creationTimestamp, interactionTimeStamp, locationCoord, locationStr, description, guestIds, volunteerId, resources, key) => {
 		store.dispatch(addNewInteractionStart());
-		//var ref = firebase.database().ref('/');
-		let newInteractionKey = firebase.database().ref('actionItems').push().key;
+		let newInteractionKey = key || firebase.database().ref('actionItems').push().key;
 		let ref = firebase.database().ref('/interactions/' + newInteractionKey);
 
 		ref.update(
