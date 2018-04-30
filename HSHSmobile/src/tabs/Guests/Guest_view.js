@@ -18,7 +18,7 @@ import { List, ListItem } from "react-native-elements";
 import nodeEmoji from 'node-emoji';
 import {connect} from 'react-redux';
 import ActionItemList_module from '../../modules/ActionItemList_module';
-import GuestHistoryModule from '../../modules/GuestHistory';
+import GuestHistoryModule from '../../modules/GuestHistoryModule';
 import Icon from 'react-native-vector-icons/Feather';
 
 const Timestamp = require('react-timestamp');
@@ -233,6 +233,7 @@ class GuestProfile extends Component {
                     completedActionItems={this.props.completedActionItems}
                     guestId={this.props.guestId}
                     navigator={this.props.navigator}
+                    allGuests={this.props.allGuests}
                 />
             </ScrollView>
         );
