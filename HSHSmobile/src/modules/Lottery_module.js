@@ -16,8 +16,10 @@ import {List, ListItem, Icon} from "react-native-elements";
 import Prompt from 'rn-prompt';
 import {getLotteryWinners} from '../redux/actions.js';
 
-// The time from start of day until lottery release
+// Time from start of day until lottery release
 const lotteryReleaseTimeInMillis = 77400000;
+// Time before lottery release to begin countdown 
+const timeBeforeCountdownInMillis = 3600000;
 
 function mapStateToProps(state, ownProps) {
     return { lotteryWinner: state.lotteryWinner };
@@ -67,7 +69,7 @@ class Lottery_module extends Component {
     let releaseTimestamp = releaseDate.getTime() + lotteryReleaseTimeInMillis;
 
     let seconds          = ((releaseTimestamp - now) / 1000).toFixed(0);
-
+    return 100000000;
     return seconds;
   }
 
@@ -124,40 +126,50 @@ class Lottery_module extends Component {
   }
 
 	render() {
-		return (
-      <View>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <View style={[styles.block, {borderRightWidth: .5, borderColor: '#808080'}]}>
-          <View style={{margin: 30, alignItems: 'center'}}>
-            <Text style={styles.countdownText}>Lottery countdown</Text>
-    				<Text style={styles.countdownNumbers}>{this.state.timeRemaining}</Text>
-            {this.state.seconds === 0 ? 
-              (<Button
-                  color="#rgba(119, 11, 22, 1)"
-                  onPress={ () => {this.props.showDialogCallback()} }
-                  title="Enter Winner" />) : null}
+    if (this.state.seconds < timeBeforeCountdownInMillis) {
+      return (
+        <View>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View style={[styles.block, {borderRightWidth: .5, borderColor: '#808080'}]}>
+              <View style={{margin: 30, alignItems: 'center'}}>
+                <Text style={styles.countdownText}>Lottery countdown</Text>
+                <Text style={styles.countdownNumbers}>{this.state.timeRemaining}</Text>
+                {this.state.seconds <= 0 ? 
+                  (<Button
+                      color="#rgba(119, 11, 22, 1)"
+                      onPress={ () => {this.props.showDialogCallback()} }
+                      title="Enter Winner" />) : null}
+              </View>
+            </View>
+
+            <View style={styles.block}>
+              <View style={{margin: 30, alignItems: 'center'}}>
+                <Text style={styles.countdownText}>Today's lottery #s</Text>
+                {this._renderLotteryWinners()}
+              </View>
+            </View>
           </View>
+
+          {this.state.seconds <= 0 ? 
+            (<TouchableOpacity
+                style={{flexDirection: "row", alignItems: "center", justifyContent: "center", marginTop: 20, marginBottom: 20}}
+                onPress={ () => {Linking.openURL('tel:16175472841')} }>
+                  <Icon name="phone"/>
+                  <Text style={{marginLeft: 10}}>Tap here to call HSHS</Text>
+             </TouchableOpacity>) : null}
+          
         </View>
-
-        <View style={styles.block}>
-          <View style={{margin: 30, alignItems: 'center'}}>
-            <Text style={styles.countdownText}>Today's lottery #s</Text>
-            {this._renderLotteryWinners()}
-          </View>
-        </View>
+      );
+    }
+		
+    // TODO Fix the styling to center this
+    return (
+      <View style={styles.block}>
+        <Text>
+          Lottery will begin at 9 PM
+        </Text>
       </View>
-
-      <TouchableOpacity
-        style={{flexDirection: "row", alignItems: "center", justifyContent: "center", marginTop: 20, marginBottom: 20}}
-        onPress={ () => {Linking.openURL('tel:16175472841')} }>
-          <Icon name="phone"/>
-          <Text style={{marginLeft: 10}}>Tap here to call HSHS</Text>
-      </TouchableOpacity>
-
-
-
-      </View>
-		);
+    );
 	}
 }
 // <View>
