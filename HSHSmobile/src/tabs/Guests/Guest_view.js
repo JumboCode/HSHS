@@ -18,6 +18,7 @@ import { List, ListItem } from "react-native-elements";
 import nodeEmoji from 'node-emoji';
 import {connect} from 'react-redux';
 import ActionItemList_module from '../../modules/ActionItemList_module';
+import GuestHistoryModule from '../../modules/GuestHistoryModule';
 import Icon from 'react-native-vector-icons/Feather';
 import Timeline from 'react-native-timeline-listview';
 

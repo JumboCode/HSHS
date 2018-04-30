@@ -33,8 +33,11 @@ import {
     ScrollView
 } from 'react-native';
 import Timeline from 'react-native-timeline-listview';
+import {Icon} from 'react-native-elements'
 
 const Timestamp = require('react-timestamp');
+
+const DESC_LIMIT = 14;
 
 export default class GuestHistoryModule extends Component {
     constructor(props) {
@@ -65,7 +68,7 @@ export default class GuestHistoryModule extends Component {
     // navigator stack
     view_interaction_page = (interactionId) => {
         this.props.navigator.push({
-            screen: 'Interaction_view', // unique ID registered with Navigation.registerScreen
+            screen: 'Interaction_new', // unique ID registered with Navigation.registerScreen
             passProps: {
                 interactionId: interactionId,
             }, // Object that will be passed as props to the pushed screen (optional)
@@ -77,6 +80,7 @@ export default class GuestHistoryModule extends Component {
         });
     };
 
+    // TODO add ICONS
     _generateInteractionView = (data) => {
       return (
         <View style={{flexDirection: 'column'}}>
@@ -85,19 +89,27 @@ export default class GuestHistoryModule extends Component {
             </View>
 
             <View style={{flexDirection: 'row'}}>
-              <Text style={styles.underDescription}>
-                {(data.locationStr == undefined) ? "Add Location" : data.locationStr}
-              </Text>
-              <Text style={styles.underDescription}>
-                {(data.locationStr == undefined) ? "Add Location" : data.locationStr}
-              </Text>
+              <View style={styles.underDescription}>
+                <Icon style={styles.underDescIcon} name='location-on'/>
+                <Text style={styles.underDescription}>
+                  {(data.locationStr == undefined) ?
+                    "Add Location" :
+                    data.locationStr.slice(0, DESC_LIMIT)}
+                </Text>
+              </View>
+              <View style={styles.underDescription}>
+                <Icon style={styles.underDescIcon} name='people'/>
+                <Text style={styles.underDescription}>
+                  {data.otherGuests.join(", ").slice(0, DESC_LIMIT)}
+                </Text>
+              </View>
               <TouchableOpacity
               onPress={() => this.view_interaction_page(data.interactionId)}
               >
-                <Text style={styles.underDescription}>See More</Text>
+                <Text>See More</Text>
               </TouchableOpacity>
             </View>
-        </View>)
+        </View>
       );
     }
 
@@ -120,19 +132,7 @@ export default class GuestHistoryModule extends Component {
               </View>
             </View>)
         } else { // Interaction timeline view
-            desc = (
-            <View style={{flexDirection: 'column', marginLeft:10}}>
-                <View style={{flexDirection: 'row'}}>
-                  <TouchableOpacity
-                  style={{flex:99, borderLeftColor: rowData.color, padding: 5, borderWidth: 1, borderLeftWidth: 10, borderRightWidth: 0}}
-                  onPress={() => this.view_interaction_page(rowData.interactionId)}
-                  >
-                    <Text>{rowData.description}</Text>
-                  </TouchableOpacity>
-                </View>
-                <View style={{flexDirection: 'row'}}>
-                </View>
-            </View>)
+          desc = this._generateInteractionView(rowData)
         }
 
         return (
@@ -176,6 +176,11 @@ export default class GuestHistoryModule extends Component {
     _formatHistoryForTimeline = (relatedHistory) => {
         let reformattedHistory = relatedHistory.map((i) => {
                       let date = new Date(i.creationTimestamp).toDateString();
+                      let otherGuests = [];
+                      if (this.props.allGuests != undefined)
+                      otherGuests = i.guestIds.filter((j) => (j != this.props.guestId)
+                                                      ).map((id) => this.props.allGuests[id].name);
+
                       return ({timestamp: i.creationTimestamp,
                               interactionTimestamp: i.interactionTimestamp,
                               date: date,
@@ -185,18 +190,14 @@ export default class GuestHistoryModule extends Component {
                               isActionItem: (i.actionItemId != undefined),
                               actionItemId: i.actionItemId,
                               interactionId: i.interactionId,
-                              locationStr: i.locationStr})});
+                              locationStr: i.locationStr,
+                              otherGuests: otherGuests})});
         return reformattedHistory;
     }
 
     // Gets all history related to the guest, renders timeline based on history
     render() {
         let relatedHistory = this._getRelatedHistory();
-
-        let otherGuestsIds = relatedHistory.map(
-          (item) => item.guestIds.filter(
-            (j) => (j != this.props.guestId)).map((k) => {this.props.allGuests[k].name}))
-        console.log(otherGuestsIds)
 
         // If guest has no history, tell the user!
         if (relatedHistory.length == 0) {
@@ -245,17 +246,18 @@ const styles = StyleSheet.create({
         padding: 10
     },
     historyHeader: {
-        marginLeft: 15,
-        marginBottom: 10,
-        fontWeight: 'bold',
-        fontSize: 15
+        marginBottom: 5,
+        paddingTop: 5,
+        paddingLeft: 10,
+        fontWeight: '400',
+        fontSize: 16,
+        color: 'gray'
     },
     timelineDetailContainer: {
       marginTop: -5,
       marginBottom: 20,
       paddingLeft: 5,
       paddingRight: 5,
-      backgroundColor: "#D3D3D3",
       borderRadius: 3,
       shadowColor: '#000111',
       shadowOffset: {
@@ -266,4 +268,22 @@ const styles = StyleSheet.create({
       elevation: 1,
       marginRight: 10,
   },
+  underDescription: {
+    color: 'blue',
+    flex: 33,
+    textDecorationLine: 'underline',
+    margin: 5,
+    flexDirection: 'row',
+    alignSelf: 'center'
+  },
+  underDescIcon: {
+    shadowColor: '#000111',
+    shadowOffset: {
+      width: 1,
+      height: 1 },
+    shadowOpacity: 1,
+    shadowRadius: 3,
+    elevation: 1,
+    marginRight: 2,
+  }
 });
