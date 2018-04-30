@@ -44,7 +44,7 @@ class Signup extends Component {
           const upperCaseCheck = /[A-Z]/.test(text);
           const lowerCaseCheck = /[a-z]/.test(text);
           const numCheck = /\d/.test(text);
-          this.setState({password: text, lengthCheck, upperCaseCheck, numCheck});
+          this.setState({password: text, lengthCheck, upperCaseCheck, lowerCaseCheck, numCheck});
 
         }}/>
         <FormValidationMessage><Text style={{color: "black"}}>Your password must contain the following:</Text></FormValidationMessage>

@@ -215,7 +215,7 @@ export default class Login extends Component {
                                             // however, we would need to change our git pipeline slightly,
                                             // so let's make this a TODO!
                 tabBarLabelColor: '#999999',
-                tabBarSelectedLabelColor: '#000000',
+                tabBarSelectedLabelColor: '#770B16',
             },
             appStyle: {
                 tabBarBackgroundColor: '#f6f7f5',

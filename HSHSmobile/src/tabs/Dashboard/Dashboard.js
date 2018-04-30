@@ -70,29 +70,29 @@ class Dashboard extends Component {
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
         if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
             if (event.id == 'logout') { // this is the same id field from the static navigatorButtons definition
-                firebase.auth().signOut()
-                    .then(() => {
-                        this.props.navigator.resetTo({
-                            title: 'Login',
-                            screen: 'Login', // unique ID registered with Navigation.registerScreen
-                            // No pass props because new default
-                            passProps: {
-                            }, // Object that will be passed as props to the pushed screen (optional)
+              this.props.navigator.resetTo({
+                  title: 'Login',
+                  screen: 'Login', // unique ID registered with Navigation.registerScreen
+                  // No pass props because new default
+                  passProps: {
+                  }, // Object that will be passed as props to the pushed screen (optional)
 
-                            animated: true, // does the push have transition animation or does it happen immediately (optional)
-                            animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
-                            backButtonHidden: true, // hide the back button altogether (optional)
-                            navigatorStyle: {
-                                navBarHidden: true,
-                                tabBarHidden: true,
-                                statusBarHidden: true
-                            }, // override the navigator style for the pushed screen (optional)
-                            navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
-                        });
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
+                  animated: true, // does the push have transition animation or does it happen immediately (optional)
+                  animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
+                  backButtonHidden: true, // hide the back button altogether (optional)
+                  navigatorStyle: {
+                      navBarHidden: true,
+                      tabBarHidden: true,
+                      statusBarHidden: true
+                  }, // override the navigator style for the pushed screen (optional)
+                  navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
+              });
+              firebase.auth().signOut()
+                  .then(() => {
+                  })
+                  .catch((error) => {
+                      console.log(error);
+                  });
             }
         }
     };
