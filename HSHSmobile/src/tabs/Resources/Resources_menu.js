@@ -21,6 +21,14 @@ class Resources_menu extends Component {
     constructor(props) {
         super(props);
         this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+        this.catIcons =
+          {"Emergency Shelters" : "home", "Transportation" : "home", "Crisis Hotlines" : "home",
+           "Domestic Violence" : "home", "Housing" : "home", "Employment" : "home",
+           "Food Resources" : "home", "Public Benefits" : "home", "Drop-in Centers" : "home",
+           "Clothing" : "home", "Drop-in Laundry" : "home", "Education" : "home",
+           "Healthcare" : "home", "Identification" : "home", "Legal Services" : "home",
+           "Mailing" : "home", "Miscellaneous" : "home", "Phones & Voicemail" : "home",
+           "Temporary Financial Assistance" : "home", "Veteran Services" : "home", "Work Contract" : "home"};
         this.linkData = [
             {name: "Dry Men's shelter",description: "dummy information about link",
                 link: "www.google.com", category: "Emergency Shelters"},
@@ -40,7 +48,7 @@ class Resources_menu extends Component {
                 link: "https://google.com", category: "Housing"},
             {name: "DUMMY", description: "dummy info about link",
                 link: "https://google.com", category: "Employment"},
-            {name: "DUMMY", description: "dummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about dummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaalinkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about dummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaalinkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about dummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaalinkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about dummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaalinkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaadummy info about linkaaa",
+            {name: "DUMMY", description: "dummy info about link",
                 link: "https://google.com", category: "Food Resources"},
             {name: "DUMMY", description: "dummy info about link",
                 link: "https://google.com", category: "Public Benefits"},
@@ -105,7 +113,8 @@ class Resources_menu extends Component {
             passProps : {
                 linkData : this.linkData,
                 categories : this.categoriesMain,
-                searchInit : catString
+                searchInit : catString,
+                catIcons : this.catIcons
             },
             animated : true,
             animationType : 'slide-horizontal',

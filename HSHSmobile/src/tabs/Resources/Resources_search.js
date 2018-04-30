@@ -5,7 +5,6 @@ import Accordion from 'react-native-collapsible/Accordion';
 import {connect} from 'react-redux';
 import renderLoader from "../../modules/UI/renderLoader";
 import dupNavFix from '../../dupNavFix';
-const Icon = require('react-native-vector-icons/Ionicons');
 
 class Resources_search extends Component {
     constructor(props) {
@@ -23,16 +22,6 @@ class Resources_search extends Component {
       });
     }
 
-    renderListItem(link) {
-        return (
-            <ListItem
-                title = {link.item.name}
-                subtitle = {link.item.category}
-                onPress = {() => {Linking.openURL("https://" + link.item.link)}}
-            />
-        );
-    }
-
     renderAccordionHeader(link) {
         return (
             <View>
@@ -40,6 +29,7 @@ class Resources_search extends Component {
                     title = {link.name}
                     subtitle = {link.category}
                     rightIcon={{name: "chevron-down", type: "material-community"}}
+                    leftIcon={{name: this.props.catIcons[link.category], type: "material-community"}}
                 />
             </View>
         )
@@ -56,21 +46,6 @@ class Resources_search extends Component {
             />
         );
     }
-
-/*
-<View>
-    <View>
-        <Text>{link.description}</Text>
-    </View>
-    <View>
-        <Text
-            onPress={() => {this.goToURL(link.link)}}
-        >
-            {link.link}
-        </Text>
-    </View>
-</View>
-*/
 
     renderSearchBar = () => {
         if(this.props.searchInit != "") {
