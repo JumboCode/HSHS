@@ -161,9 +161,13 @@ export default class GuestHistoryModule extends Component {
         }
         // If there are interactions, add to list
         if (this.props.interactions) {
-            let allInteractions = Object.values(this.props.interactions);
-            allHistory = allHistory.concat(allInteractions);
-            console.log(this.props.interactions)
+          let allInteractions = Object.values(this.props.interactions);
+          let interactionKeys = Object.keys(this.props.interactions);
+          // Add interactionID field to in all interactions
+          interactionKeys.map((k, i) => {
+              allInteractions[i]['interactionId'] = k;
+          });
+          allHistory = allHistory.concat(allInteractions);
         }
 
         // Filter list to include action items related to guestId
