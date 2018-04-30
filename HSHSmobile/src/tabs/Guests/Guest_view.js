@@ -43,8 +43,6 @@ class GuestProfile extends Component {
         super(props);
         // this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.view_crud_note_page = this.view_crud_note_page.bind(this);
-        this.view_actionitem_page = this.view_actionitem_page.bind(this);
-        this.view_interaction_page = this.view_interaction_page.bind(this);
     };
 
     // matching receptivity to emojis {0-4} where 4 is the best and 0 is the worst
