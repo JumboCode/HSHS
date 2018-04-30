@@ -347,9 +347,14 @@ class GuestProfile extends Component {
                     {this._renderActionItems()}
                     {this._renderButtons()}
                 </View>
-                <View style={{flex: .2}}>
-                  {this.renderHistory()}
-                </View>
+                <GuestHistoryModule
+                    style={{flex: .2}}
+                    interactions={this.props.interactions}
+                    completedActionItems={this.props.completedActionItems}
+                    guestId={this.props.guestId}
+                    navigator={this.props.navigator}
+                    allGuests={this.props.allGuests}
+                />
             </ScrollView>
         );
     }
