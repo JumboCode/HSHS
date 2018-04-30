@@ -15,6 +15,7 @@ import {
     Dimensions,
     KeyboardAvoidingView
 } from 'react-native';
+import Toast from 'react-native-root-toast';
 import Prompt from 'rn-prompt';
 import {Button} from 'react-native-elements';
 // Dashboard
@@ -32,6 +33,7 @@ import ActionItem_list from './tabs/ActionItems/ActionItem_list';
 
 // Interaction
 import Interaction_new from './tabs/Interactions/Interaction_new';
+import Interaction_view from './tabs/Interactions/Interaction_view';
 
 // Resources
 import Resources_menu from './tabs/Resources/Resources_menu';
@@ -58,7 +60,6 @@ export default class Login extends Component {
         this.state = {
           username: '',
           password: '',
-          user: null,
           isLoggingIn: true,
           promptVisible: false
         };
@@ -67,17 +68,19 @@ export default class Login extends Component {
 
     componentDidMount = () => {
       this._isMounted = true;
+      console.log("start loging");
+      //this.setState({isLoggingIn: false});
       firebase.auth().onAuthStateChanged((user) => {
+          console.log("end loging");
         // Check to make sure the component is mounted first, since
         // we don't want to setState upon logout.
         if (this._isMounted) {
           this.setState({isLoggingIn: false});
           if (user) {
-            this.setState({user: user});
             this.openApp();
           }
         }
-    });
+      });
     }
 
     componentWillUnmount() {
@@ -99,7 +102,6 @@ export default class Login extends Component {
             isLoggingIn: true
         });
 
-        //const { email, password } = this.state;
         firebase.auth().signInWithEmailAndPassword(this.state.username, this.state.password)
             .then(() => {
                 //this.openApp();
@@ -167,8 +169,8 @@ export default class Login extends Component {
         Navigation.registerComponent('ActionItem_edit', () => ActionItem_edit, store, Provider);
         Navigation.registerComponent('ActionItem_view', () => ActionItem_view, store, Provider);
         Navigation.registerComponent('Interaction_new', () => Interaction_new, store, Provider);
+        Navigation.registerComponent('Interaction_view', () => Interaction_view, store, Provider);
 
-        // TODO: make the tabs link to real pages
         Navigation.startTabBasedApp({
             tabs: [
                 {
@@ -228,39 +230,47 @@ export default class Login extends Component {
     }
 
     render() {
-        //console.log(this.props.data);
         return (
             <KeyboardAvoidingView style={styles.container} behavior="padding">
                     <Text style={styles.title}> Harvard Square </Text>
                     <Text style={styles.title}> Homeless Shelter </Text>
                     <Text style={styles.title}> Volunteer App </Text>
-                <View style={styles.inputBlock}>
-                    <View style={styles.row}>
-                        <Icon style={styles.icon}
-                              name="ios-mail-outline"
-                              size={25}
-                              color="#FFFFFF"
-                        />
-                        <TextInput
-                            style={styles.textInput}
-                            placeholder='Username'
-                            placeholderTextColor="#FFFFFF"
-                            onChangeText={(text) => this.state.username = text}
-                        />
-                    </View>
-                    <View style={styles.row}>
-                        <Icon style={styles.icon}
-                              name="ios-lock-outline"
-                              size={25} color="#FFFFFF"/>
-                        <TextInput style={styles.textInput}
-                                   placeholder='Password'
-                                   secureTextEntry={true}
-                                   placeholderTextColor="#FFFFFF"
-                                   onChangeText={(text) => this.state.password = text}
-                        />
-                    </View>
-                </View>
                 {this.state.isLoggingIn ? renderLoader() :
+                  <View>
+                    <View style={styles.inputBlock}>
+                        <View style={styles.row}>
+                            <Icon style={styles.icon}
+                                  name="ios-mail-outline"
+                                  size={25}
+                                  color="#FFFFFF"
+                            />
+                            <TextInput
+                                style={styles.textInput}
+                                placeholder='Username'
+                                placeholderTextColor="#FFFFFF"
+                                onChangeText={(text) => this.state.username = text}
+                            />
+                        </View>
+                        <View style={styles.row}>
+                            <Icon style={styles.icon}
+                                  name="ios-lock-outline"
+                                  size={25} color="#FFFFFF"/>
+                            <TextInput style={styles.textInput}
+                                       placeholder='Password'
+                                       secureTextEntry={true}
+                                       placeholderTextColor="#FFFFFF"
+                                       onFocus={() => Toast.show('Hint: Your password must be at least 8 characters long and contain a mix of numbers, lowercase, and uppercase letters.', {
+                                         duration: Toast.durations.LONG,
+                                         position: Toast.positions.TOP,
+                                         shadow: true,
+                                         animation: true,
+                                         hideOnPress: true,
+                                         delay: 0
+                                       })}
+                                       onChangeText={(text) => this.state.password = text}
+                            />
+                        </View>
+                    </View>
                     <View>
                         <Button
                             small
@@ -288,6 +298,7 @@ export default class Login extends Component {
                             </Text>
                         </View>
                     </View>
+                  </View>
                 }
                 <Prompt
                   title="Reset your password"

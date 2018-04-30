@@ -2,6 +2,8 @@ import firebase from "../firebase";
 import {store} from './store.js';
 import {Alert} from 'react-native';
 
+const lotteryExpiration = 9000000;	// Lottery numbers lifetime in ms
+
 export const getGuestsStart = () => ({
 	type: 'GET_GUESTS_START'
 });
@@ -81,13 +83,14 @@ export const addNewGuestSuccess = () => ({
 	type: 'ADD_NEW_GUEST_SUCCESS'
 })
 
-export const addNewGuest = (name, age, gender, description, interactions, actionItems) => {
+export const addNewGuest = (name, age, gender, description, color) => {
 	store.dispatch(addNewGuestStart);
 	firebase.database().ref('guests').push().set({
 		name: name,
 		age: age,
 		gender : gender,
-        description: description
+    description: description,
+		color: color
   });
 }
 
@@ -104,43 +107,6 @@ export const addNewActionItem = (isDone, title, creationTimestamp, locationCoord
 	//var ref = firebase.database().ref('/');
 	let newActionItemKey = firebase.database().ref('actionItems').push().key;
 	let ref = firebase.database().ref('/actionItems/' + newActionItemKey);
-
-
-    /* Attempt to use transactions, don't delete */
-    // let updates = {};
-	// let guestRef = firebase.database().ref('guests/');
-	// guestRef.transaction((cur) =>
-	// {
-	// 	this.guestIds = guestIds.filter(id => cur[id] !== null);
-	// 	return;
-	// 	// this.guestIds.map((id) => {
-	// 	// 	(!cur[id]["actionItems"]) && (cur[id]["actionItems"] = {})
-	// 	// 	cur[id]["actionItems"][newActionItemKey] = newActionItemKey;
-	// 	// });
-	// 	// return cur;
-	// }, (error) => {
-	// 	if (error) {
-	// 		Alert.alert(error);
-	// 	} else {
-	// 		// Create action item
-	// 		updates['actionItems/' + newActionItemKey] = {
-	// 				isDone: isDone,
-	// 				title: title,
-	// 				creationTimestamp: creationTimestamp,
-	// 				locationCoord: {
-	// 						lat: locationCoord.latitude,
-	// 						lng: locationCoord.longitude,
-	// 				},
-	// 				locationStr: locationStr,
-	// 				shiftDate: shiftDate,
-	// 				description: description,
-	// 				guestIds: this.guestIds,
-	// 				volunteerId: volunteerId,
-	// 				color: color,
-	// 		}
-	// 		ref.update(updates);
-	// 	}
-	// });
 
 	ref.update({
 		isDone: isDone,
@@ -181,7 +147,7 @@ export const editActionItemSuccess = () => ({
 })
 
 export const editActionItem = (id, isDone, title, creationTimestamp, locationCoord, locationStr, shiftDate, description, guestIds, volunteerId, color) => {
-    store.dispatch(addNewActionItemStart);
+    store.dispatch(addNewActionItemStart());
     let ref = firebase.database().ref('actionItems/' + id);
     ref.update({
         isDone: isDone,
@@ -233,33 +199,51 @@ export const addNewInteractionSuccess = () => ({
         type: 'ADD_NEW_INTERACTIONS_SUCCESS'
 })
 
-export const addInteractionItem = (title, creationTimestamp, interactionTimeStamp, locationCoord, locationStr, description, guestIds, volunteerId, resources) => {
-			store.dispatch(addNewInteractionStart);
-			//var ref = firebase.database().ref('/');
-			let newInteractionKey = firebase.database().ref('actionItems').push().key;
-			let ref = firebase.database().ref('/interactions/' + newInteractionKey);
+export const addNewInteractionFailure = () => ({
+			type: 'ADD_NEW_INTERACTIONS_FAILURE'
+})
 
-			ref.update({
-				title: title,
-				creationTimestamp: creationTimestamp,
-				interactionTimeStamp: interactionTimeStamp,
-				locationCoord: {
-						lat: locationCoord.latitude,
-						lng: locationCoord.longitude,
-				},
-				locationStr: locationStr,
-				description: description,
-				volunteerId: volunteerId,
-				resources: resources,
-		  }, error => {
+// NOTE: title is not deprecated, but kept for schema.
+export const addInteractionItem = (title, creationTimestamp, interactionTimeStamp, locationCoord, locationStr, description, guestIds, volunteerId, resources) => {
+		store.dispatch(addNewInteractionStart());
+		//var ref = firebase.database().ref('/');
+		let newInteractionKey = firebase.database().ref('actionItems').push().key;
+		let ref = firebase.database().ref('/interactions/' + newInteractionKey);
+
+		ref.update(
+				{
+						title: title,
+						creationTimestamp: creationTimestamp,
+						interactionTimeStamp: interactionTimeStamp,
+						locationCoord: {
+								lat: locationCoord.latitude,
+								lng: locationCoord.longitude,
+						},
+						locationStr: locationStr,
+						description: description,
+						volunteerId: volunteerId,
+						resources: resources,
+		  	}, error =>
+				{
 					if (error) {
 							Alert.alert("Failed to save interaction. Please try again.");
 					} else if (guestIds && guestIds.length != 0) {
 							ref.update({guestIds: guestIds}, err => {
-									err && Alert.alert("Failed to tag guests in the interaction you just created. Please try again.")
+									if (err) {
+										store.dispatch(addNewInteractionFailure());
+										Alert.alert("Failed to tag guests in the interaction you just created. Please try again.");
+									} else {
+
+										// callback
+										store.dispatch(addNewInteractionSuccess())
+									}
 							})
+ 					}
+					// callback
+					else {
+						store.dispatch(addNewInteractionSuccess());
 					}
-			});
+				});
 };
 
 export const markActionItemAsDone = (id) => {
@@ -276,4 +260,56 @@ export const markActionItemAsDone = (id) => {
 			})
 		});
 	})
+}
+
+export const markActionItemAsTodo = (id) => {
+	firebase.database().ref('completedActionItems').child(id).once('value', snapshot => {
+		firebase.database().ref('actionItems').child(id).set(snapshot.val(), error => {
+			if (error) {
+				Alert.alert("Error marking item as done. Please try again.")
+			}
+
+			firebase.database().ref('completedActionItems').child(id).remove(error => {
+				if (error) {
+					Alert.alert("Error deleting action item.")
+				}
+			})
+		});
+	})
+}
+
+export const getLotteryWinnersStart = () => ({
+		type: 'GET_WINNERS_START'
+})
+
+export const getLotteryWinnersSuccess = (data)=> ({
+		type: 'GET_WINNERS_SUCCESS',
+		payload: data
+})
+
+export const resetWinners = () => {
+	let ref = firebase.database().ref('/');
+	ref.update({lottery: null});
+}
+
+export const enterWinners = (winners, timestamp) => {
+	let ref = firebase.database().ref('/lottery');
+	ref.update({lotteryWinners: winners, lastUpdated: timestamp});
+}
+
+export const getLotteryWinners = () => {
+	store.dispatch(getLotteryWinnersStart());
+	firebase.database()
+			.ref('lottery')
+			.on('value', (snapshot) => {
+
+				let now = new Date();
+				let then = new Date(snapshot.child('lastUpdated').val());
+				if (now - then > lotteryExpiration) {
+					store.dispatch(getLotteryWinnersSuccess(null));
+				} else {
+					store.dispatch(getLotteryWinnersSuccess(snapshot.child('lotteryWinners').val()));
+				}
+
+			});
 }

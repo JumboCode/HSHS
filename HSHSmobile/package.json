@@ -8,7 +8,7 @@
     "android-linux": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res && react-native run-android"
   },
   "dependencies": {
-    "firebase": "^4.5.0",
+    "firebase": "^4.12.1",
     "moment": "^2.20.1",
     "node-emoji": "^1.8.1",
     "react": "^16.2.0",
@@ -27,6 +27,7 @@
     "react-native-modal-dropdown": "^0.5.0",
     "react-native-navigation": "latest",
     "react-native-popup-dialog": "^0.9.41",
+    "react-native-root-toast": "^3.0.1",
     "react-native-swipeout": "^2.3.3",
     "react-native-timeline-listview": "^0.2.3",
     "react-native-vector-icons": "^4.4.2",

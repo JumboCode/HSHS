@@ -67,8 +67,9 @@ export default class GuestHistoryModule extends Component {
     // When interactions are clicked, add the interaction's view to the
     // navigator stack
     view_interaction_page = (interactionId) => {
+        console.log(interactionId)
         this.props.navigator.push({
-            screen: 'Interaction_new', // unique ID registered with Navigation.registerScreen
+            screen: 'Interaction_view', // unique ID registered with Navigation.registerScreen
             passProps: {
                 interactionId: interactionId,
             }, // Object that will be passed as props to the pushed screen (optional)
@@ -82,6 +83,8 @@ export default class GuestHistoryModule extends Component {
 
     // TODO add ICONS
     _generateInteractionView = (data) => {
+      // console.log("Generating interaction description from ")
+      // console.log(data)
       return (
         <View style={{flexDirection: 'column'}}>
             <View style={{marginLeft: 15}}>
@@ -154,11 +157,13 @@ export default class GuestHistoryModule extends Component {
             // ie instead of -FDSFDS: {actionItem}, gets just {actionItem}
             let completedActionItems = Object.values(this.props.completedActionItems);
             allHistory = completedActionItems;
+
         }
         // If there are interactions, add to list
         if (this.props.interactions) {
             let allInteractions = Object.values(this.props.interactions);
             allHistory = allHistory.concat(allInteractions);
+            console.log(this.props.interactions)
         }
 
         // Filter list to include action items related to guestId
@@ -177,10 +182,10 @@ export default class GuestHistoryModule extends Component {
         let reformattedHistory = relatedHistory.map((i) => {
                       let date = new Date(i.creationTimestamp).toDateString();
                       let otherGuests = [];
-                      if (this.props.allGuests != undefined)
-                      otherGuests = i.guestIds.filter((j) => (j != this.props.guestId)
+                      if (this.props.allGuests != undefined) {
+                        otherGuests = i.guestIds.filter((j) => (j != this.props.guestId)
                                                       ).map((id) => this.props.allGuests[id].name);
-
+                      }
                       return ({timestamp: i.creationTimestamp,
                               interactionTimestamp: i.interactionTimestamp,
                               date: date,

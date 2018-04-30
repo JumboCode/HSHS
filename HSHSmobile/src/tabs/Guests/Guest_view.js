@@ -20,7 +20,6 @@ import {connect} from 'react-redux';
 import ActionItemList_module from '../../modules/ActionItemList_module';
 import GuestHistoryModule from '../../modules/GuestHistoryModule';
 import Icon from 'react-native-vector-icons/Feather';
-import Timeline from 'react-native-timeline-listview';
 
 const Timestamp = require('react-timestamp');
 
@@ -33,7 +32,7 @@ function mapStateToProps(state, ownProps) {
         actionItems: state.actionItems,
         interactions: state.interactions,
         completedActionItems: state.completedActionItems,
-        actionItemIds: state.guestActionItemIds[ownProps.Id]
+        actionItemIds: state.guestActionItemIds ? state.guestActionItemIds[ownProps.Id] : null
     };
 }
 
@@ -44,7 +43,6 @@ class GuestProfile extends Component {
         super(props);
         // this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.view_crud_note_page = this.view_crud_note_page.bind(this);
-        this.view_actionitem_page = this.view_actionitem_page.bind(this);
     };
 
     // matching receptivity to emojis {0-4} where 4 is the best and 0 is the worst
@@ -55,21 +53,6 @@ class GuestProfile extends Component {
     // gets emoji from receptive value
     get_receptive = () => {
         return(nodeEmoji.get(this.id_to_emoji[this.profile_data.receptive]));
-    };
-
-
-    view_actionitem_page = (actionItemId) => {
-        this.props.navigator.push({
-            screen: 'ActionItem_view', // unique ID registered with Navigation.registerScreen
-            passProps: {
-                actionItemId: actionItemId,
-            }, // Object that will be passed as props to the pushed screen (optional)
-            animated: true, // does the push have transition animation or does it happen immediately (optional)
-            animationType: 'slide-horizontal', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
-            backButtonHidden: false, // hide the back button altogether (optional)
-            navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
-            navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
-        });
     };
 
     //
@@ -227,110 +210,6 @@ class GuestProfile extends Component {
         )
     }
 
-    _renderHistoryDetail = (rowData, _sectionID, _rowID) => {
-        let title = (<Text>{rowData.date}</Text>);
-        var desc = null
-        if (rowData.isActionItem) {
-            desc = (
-            <View style={{flexDirection: 'column', marginLeft:10}}>
-              <View style={{flexDirection: 'row'}}>
-                <TouchableOpacity
-                style={{flex:99, borderLeftColor: rowData.color, padding: 5, borderWidth: 1, borderLeftWidth: 10, borderRightWidth: 0}}
-                onPress={() => this.view_actionitem_page(rowData.actionItemId)}
-                >
-                  <Text>{rowData.title}</Text>
-                </TouchableOpacity>
-              </View>
-            </View>)
-        } else {
-            desc = (
-            <View style={{flexDirection: 'column', marginLeft:10}}>
-                <View style={{flexDirection: 'row'}}>
-                    <Text>{rowData.description}</Text>
-                </View>
-            </View>)
-        }
-
-        return (
-          <View style={{flex:1}}>
-            {title}
-            {desc}
-          </View>
-        )
-      }
-
-    // Once interactions are added to Guest schema, interpolate w/ actionItems
-    // and render in the list.
-    renderHistory = () => {
-        // TODO restyle the date font, try and set dot colors correctly
-
-        // Action items are stored in a weird list; ie 0: {item data}
-        // extracts the objects into their own list
-        let completedActionItems = Object.values(this.props.completedActionItems);
-        let allInteractions = Object.values(this.props.interactions);
-        // List of all possible history for the guest
-        let allHistory = completedActionItems.concat(allInteractions);
-
-        // Filter list to include action items related to guest
-        let relatedHistory = allHistory.filter((item) =>
-                     {
-                        if (item.guestIds != undefined) {
-                          return item.guestIds.includes(this.props.guestId)
-                        }
-                      });
-
-        // If guest has no history, tell the user!
-        if (relatedHistory.length == 0) {
-            return (
-                <View style={styles.historyContainer}>
-                    <Text style={styles.historyHeader}>Guest History</Text>
-                    <Text>No history to display!</Text>
-                </View>
-            );
-        }
-
-        // Reformat action items for display in timeline
-        let timelineData = relatedHistory.map((i) =>
-                      {
-                        let date = new Date(i.creationTimestamp).toDateString();
-                        console.log(date)
-                        // re add color
-                        return ({timestamp: i.creationTimestamp,
-                                interactionTimestamp: i.interactionTimestamp,
-                                date: date,
-                                title: i.title,
-                                color: i.color,
-                                description: i.description,
-                                isActionItem: (i.actionItemId != undefined), // TODO really janky
-                                actionItemId: i.actionItemId})
-                        })
-
-        // Sort timelineDate by date (most recent to least)
-        timelineData.sort((x, y) => {
-            let xDate = new Date(x.timestamp);
-            let yDate = new Date(y.timestamp);
-            return xDate > yDate ? -1 : xDate < yDate ? 1 : 0;
-        })
-
-        return (
-          <View>
-            <Text style={styles.historyHeader}>Guest History</Text>
-            <Timeline
-              data={timelineData}
-              showTime={false}
-              lineColor='blue'
-              circleColor='grey'
-              descriptionStyle={{color:'gray'}}
-              columnFormat='single-column-left'
-              renderDetail={this._renderHistoryDetail}
-              options={{
-                style:{paddingTop:10, flex:1}
-              }}
-            />
-          </View>
-        );
-
-    }
 
     render() {
         return (
@@ -470,32 +349,7 @@ const styles = StyleSheet.create({
         marginTop: 5,
         marginBottom: 5,
         paddingHorizontal: 10,
-    },
-    historyContainer: {
-        flexDirection: 'column',
-        padding: 10
-    },
-    historyHeader: {
-        marginLeft: 15,
-        marginBottom: 10,
-        fontWeight: 'bold',
-        fontSize: 15
-    },
-    timelineDetailContainer: {
-      marginBottom: 20,
-      paddingLeft: 5,
-      paddingRight: 5,
-      backgroundColor: "#D3D3D3",
-      borderRadius: 3,
-      shadowColor: '#000111',
-      shadowOffset: {
-        width: 0,
-        height: 1 },
-      shadowOpacity: 0.5,
-      shadowRadius: 2,
-      elevation: 1,
-      marginRight: 10,
-  }
+    }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GuestProfile);

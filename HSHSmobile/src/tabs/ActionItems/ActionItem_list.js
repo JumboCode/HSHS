@@ -15,6 +15,7 @@ import { Icon } from 'react-native-elements'
 import renderLoader from "../../modules/UI/renderLoader";
 import dupNavFix from "../../dupNavFix";
 import {markActionItemAsDone} from "../../redux/actions";
+import {markActionItemAsTodo} from "../../redux/actions";
 
 // for navigation
 const IonIcon = require('react-native-vector-icons/Ionicons');
@@ -42,7 +43,8 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispath, ownProps) {
     return {
-        markActionItemAsDone: markActionItemAsDone
+        markActionItemAsDone: markActionItemAsDone,
+        markActionItemAsTodo: markActionItemAsTodo
     };
 }
 
@@ -111,9 +113,10 @@ class ActionItem_list extends Component {
                     completed={true}    // needed so ActionItem_view knows where to pull data from
                     guests={this.props.guests}
                     navigator={this.props.navigator}
-                    doneFunction={this.props.markActionItemAsDone}/>) :
+                    doneFunction={this.props.markActionItemAsTodo}/>) :
                 (<ActionItemList_module
                     actionItems={this.props.actionItems}
+                    completed={false}
                     guests={this.props.guests}
                     navigator={this.props.navigator}
                     doneFunction={ this.props.markActionItemAsDone}/>)}

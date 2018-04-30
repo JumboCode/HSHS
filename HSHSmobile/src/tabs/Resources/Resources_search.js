@@ -5,6 +5,7 @@ import Accordion from 'react-native-collapsible/Accordion';
 import {connect} from 'react-redux';
 import renderLoader from "../../modules/UI/renderLoader";
 import dupNavFix from '../../dupNavFix';
+const Icon = require('react-native-vector-icons/Ionicons');
 
 class Resources_search extends Component {
     constructor(props) {
@@ -32,22 +33,44 @@ class Resources_search extends Component {
         );
     }
 
-    renderAccordionContent(link) {
+    renderAccordionHeader(link) {
         return (
             <View>
-                <View>
-                    <Text>{link.description}</Text>
-                </View>
-                <View>
-                    <Text
-                        onPress={() => {this.goToURL(link.link)}}
-                    >
-                        {link.link}
-                    </Text>
-                </View>
+                <ListItem
+                    title = {link.name}
+                    subtitle = {link.category}
+                    rightIcon={{name: "chevron-down", type: "material-community"}}
+                />
             </View>
+        )
+    }
+
+    renderAccordionContent(link) {
+        return (
+            <ListItem
+                title = {link.description}
+                subtitle = {link.link}
+                onPress = {() => {this.goToURL(link.link)}}
+                hideChevron
+                titleNumberOfLines = {10}
+            />
         );
     }
+
+/*
+<View>
+    <View>
+        <Text>{link.description}</Text>
+    </View>
+    <View>
+        <Text
+            onPress={() => {this.goToURL(link.link)}}
+        >
+            {link.link}
+        </Text>
+    </View>
+</View>
+*/
 
     renderSearchBar = () => {
         if(this.props.searchInit != "") {
@@ -77,8 +100,8 @@ class Resources_search extends Component {
         return (
             <View style = {{backgroundColor : "#F7F7F7", height : "100%"}}>
                 {this.renderSearchBar()}
-                <FlatList
-                    data = {this.props.linkData.filter(
+                <Accordion
+                    sections = {this.props.linkData.filter(
                         (link) => {
                             return(
                                 link.category.toLowerCase().includes(this.state.searchInput.toLowerCase()) ||
@@ -86,8 +109,9 @@ class Resources_search extends Component {
                             )
                         }
                     )}
-                    renderItem = {(link) => this.renderListItem(link)}
-                    keyExtractor = {(link) => this._keyExtractor(link)}
+                    renderHeader = {(link) => this.renderAccordionHeader(link)}
+                    renderContent = {(link) => this.renderAccordionContent(link)}
+                    underlayColor = "white"
                 />
             </View>
         );
