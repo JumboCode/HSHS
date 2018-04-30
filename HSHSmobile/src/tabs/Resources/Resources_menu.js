@@ -22,13 +22,13 @@ class Resources_menu extends Component {
         super(props);
         this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.catIcons =
-          {"Emergency Shelters" : "home", "Transportation" : "home", "Crisis Hotlines" : "home",
-           "Domestic Violence" : "home", "Housing" : "home", "Employment" : "home",
-           "Food Resources" : "home", "Public Benefits" : "home", "Drop-in Centers" : "home",
-           "Clothing" : "home", "Drop-in Laundry" : "home", "Education" : "home",
-           "Healthcare" : "home", "Identification" : "home", "Legal Services" : "home",
-           "Mailing" : "home", "Miscellaneous" : "home", "Phones & Voicemail" : "home",
-           "Temporary Financial Assistance" : "home", "Veteran Services" : "home", "Work Contract" : "home"};
+          {"Emergency Shelters" : "tent", "Transportation" : "train", "Crisis Hotlines" : "lifebuoy",
+           "Domestic Violence" : "home", "Housing" : "home", "Employment" : "worker",
+           "Food Resources" : "food", "Public Benefits" : "domain", "Drop-in Centers" : "home",
+           "Clothing" : "tshirt-crew", "Drop-in Laundry" : "washing-machine", "Education" : "school",
+           "Healthcare" : "hospital", "Identification" : "account-card-details", "Legal Services" : "briefcase",
+           "Mailing" : "email", "Miscellaneous" : "star", "Phones & Voicemail" : "phone",
+           "Temporary Financial Assistance" : "currency-usd", "Veteran Services" : "home-heart", "Work Contract" : "worker"};
         this.linkData = [
             {name: "Dry Men's shelter",description: "dummy information about link",
                 link: "www.google.com", category: "Emergency Shelters"},
