@@ -165,7 +165,7 @@ class Lottery_module extends Component {
     // TODO Fix the styling to center this
     return (
         <View style={{height: '50%', flexDirection: "row", alignItems: 'center', justifyContent: 'center'}}>
-          <Text>
+          <Text style={[styles.text, {fontSize: 15}]}>
             Lottery will begin at 9 PM
           </Text>
         </View>
