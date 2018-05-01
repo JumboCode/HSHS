@@ -55,7 +55,7 @@ class ActionItem_view extends Component {
           selectedDate: this.props.actionItems[this.props.actionItemId].shiftDate,
           dateName: this.props.actionItems[this.props.actionItemId].dateName,
           description: this.props.actionItems[this.props.actionItemId].description,
-          color: this.props.actionItems[this.props.actionItemId].color,
+          color: this.props.actionItems[this.props.actionItemId].color || '#E9E9E9',
       };
   };
 
@@ -147,8 +147,8 @@ class ActionItem_view extends Component {
 
     render() {
         return (
-            <ScrollView style = {styles.container}>
-                <View style = {styles.back}>
+            <ScrollView style={styles.container}>
+                <View style={[styles.back, {borderColor: this.state.color}]}>
                     <TextInput
                         value = {this.state.title}
                         editable = {false}
@@ -157,45 +157,7 @@ class ActionItem_view extends Component {
                         placeholderTextColor = '#d3d3d3'
                         onChangeText={(title) => {this.setState({'title': title});}}
                     />
-                    {renderSeperator()}
-                    <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
-                        <View style={{flex: 1}}>
-                            <Text numberOfLines={this.state.taggedGuests ? this.state.taggedGuests.length : 0} style={{textAlign: 'right', margin: 10}}>{this.state.taggedGuests ? this.formatGuestNames(this.state.taggedGuests) : "No Tagged Guests"}</Text>
-                        </View>
-                    </View>
-                    {renderSeperator()}
-                    {(!this.state.locationCoord || (this.state.locationCoord.longitude == 0 && this.state.locationCoord.longitude == 0)) &&
-                    <Text style={{margin: 10, textAlign: 'right'}}>No Selected Location</Text>
-                    }
-                    {(this.state.locationCoord && (this.state.locationCoord.longitude != 0 && this.state.locationCoord.longitude != 0)) &&
-                    <MapView
-                        showsUserLocation={true}
-
-                        onRegionChangeComplete={() => this.marker.showCallout()}
-                        region={{
-                            latitude: this.state.locationCoord.latitude,
-                            longitude: this.state.locationCoord.longitude,
-                            latitudeDelta: 0.02,
-                            longitudeDelta: 0.01
-                        }}
-                        style={{
-                            height: Dimensions.get('window').height * 0.4,
-                            width: Dimensions.get('window').width,
-                            margin: 0
-                        }}
-                    >
-                        {
-                        this.props.actionItems && this.renderMarkers()
-                    }
-                    </MapView>}
-                    {renderSeperator()}
-                    <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
-                        <View style={{flex: 1}}>
-                            <Text numberOfLines={1}
-                                  style={{textAlign: 'right', margin: 10}}>Due on: {this.state.selectedDate}</Text>
-
-                        </View>
-                    </View>
+                    
                     <TextInput
                         editable = {false}
                         placeholder = "No Description"
@@ -204,6 +166,44 @@ class ActionItem_view extends Component {
                         multiline = {true}
                         onChangeText={(description) => {this.setState({description: description})}}
                     />
+
+                    {(!this.state.locationCoord || (this.state.locationCoord.longitude == 0 && this.state.locationCoord.longitude == 0)) && 
+                      <Text style={styles.text}>No location provided</Text>}
+                    {(this.state.locationCoord && (this.state.locationCoord.longitude != 0 && this.state.locationCoord.longitude != 0)) &&
+                    <View style={styles.mapContainer}>
+                      <MapView
+                          showsUserLocation={true}
+                          userLocationAnnotationTitle={""}
+
+                          onRegionChangeComplete={() => this.marker.showCallout()}
+                          region={{
+                              latitude: this.state.locationCoord.latitude,
+                              longitude: this.state.locationCoord.longitude,
+                              latitudeDelta: 0.02,
+                              longitudeDelta: 0.01
+                          }}
+                          style={styles.map}
+                      >
+                          {
+                          this.props.actionItems && this.renderMarkers()
+                      }
+                      </MapView>
+                    </View>}
+
+                    <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
+                        <View style={{flex: 1}}>
+                            <Text numberOfLines={this.state.taggedGuests ? this.state.taggedGuests.length : 0} style={styles.text}>{this.state.taggedGuests ? this.formatGuestNames(this.state.taggedGuests) : "No Tagged Guests"}</Text>
+                        </View>
+                    </View>
+
+                    <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
+                        <View style={{flex: 1}}>
+                            <Text numberOfLines={1}
+                                  style={styles.text}>Due on: {this.state.selectedDate}</Text>
+
+                        </View>
+                    </View>
+                    
                 </View>
             </ScrollView>
 
@@ -220,6 +220,8 @@ const styles = StyleSheet.create({
     back: {
         backgroundColor: '#FFFFFF',
         alignSelf: "stretch",
+        borderLeftWidth: 10,
+        borderColor: 'transparent'
     },
     title: {
         paddingTop: 20,
@@ -267,15 +269,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     description: {
-        borderWidth: 0.5,
-        marginTop: 15,
+        // borderWidth: 0.5,
+        // marginTop: 15,
         marginLeft: 30,
         marginRight: 30,
-        borderRadius: 5,
-        height: 100,
+        // borderRadius: 5,
         padding: 5,
         fontSize: 15,
         marginBottom: 15,
+        color: "#696969"
     },
     button: {
         backgroundColor: "lightblue",
@@ -288,6 +290,22 @@ const styles = StyleSheet.create({
     },
     disabled: {
         opacity: 0.3
+    },
+
+    map: {
+        height: Dimensions.get('window').height * 0.35,
+        width: Dimensions.get('window').width * 0.9,
+        borderRadius: 10
+    },
+
+    mapContainer: {
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+
+    text: {
+      color: '#696969',
+      margin: 10, textAlign: 'right'
     }
 });
 
