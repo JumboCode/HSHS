@@ -62,12 +62,9 @@ class Interaction_view extends Component {
     constructor(props) {
         super(props);
         this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
-        console.log(this.props.interactions);
-        console.log(this.props.interactionId);
         let tempID = this.props.interactionId;
         let interaciton = this.props.interactions[tempID];
         this.state = {
-            title: interaciton.title,
             taggedGuests: interaciton.guestIds,
             locationCoord: {
                 longitude: interaciton.locationCoord.lng,
@@ -101,10 +98,6 @@ class Interaction_view extends Component {
         if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
             if (event.id == 'save_interaction') { // this is the same id field from the static navigatorButtons definition
                 // Don't allow empty fields
-                if (this.state.title == "") {
-                    Alert.alert("Title cannot be empty");
-                    return;
-                }
                 this._save();;
             }
         }
@@ -113,10 +106,10 @@ class Interaction_view extends Component {
     _save = () => {
         // alert(JSON.stringify(this.state.locationCoord));
         // let tempLocaitonCoord = {latitude: this.state.locationCoord.lat, longitude: this.state.locationCoord.lng};
-        addInteractionItem(this.state.title, this.state.interactionTimeStamp,
+        addInteractionItem(this.state.interactionTimeStamp,
             this.state.date, this.state.locationCoord,
             this.state.locationStr, this.state.description, this.state.taggedGuests,
-            "[Volunteer ID: See Interaction_new.js]", this.state.items);
+            "[Volunteer ID: See Interaction_new.js]", this.state.items, this.props.interactionId);
 
         this.props.navigator.pop({
             animated: true, // does the pop have transition animation or does it happen immediately (optional)
@@ -187,15 +180,6 @@ class Interaction_view extends Component {
             <View style = {styles.container}>
                 <ScrollView style={{width: "100%"}}>
                     <View style = {styles.back}>
-
-                        <TextInput
-                            value = {this.state.title}
-                            editable = {true}
-                            placeholder = "Title"
-                            style = {styles.title}
-                            placeholderTextColor = '#d3d3d3'
-                            onChangeText={(title) => {this.setState({'title': title});}}
-                        />
                         <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
                             <View style = {styles.icon}>
                                 <Icon

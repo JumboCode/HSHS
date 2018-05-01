@@ -13,6 +13,7 @@ import {
     TextInput,
     Alert,
     Dimensions,
+    Image,
     KeyboardAvoidingView
 } from 'react-native';
 import Toast from 'react-native-root-toast';
@@ -58,36 +59,36 @@ export default class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          username: '',
-          password: '',
-          isLoggingIn: true,
-          promptVisible: false
+            username: '',
+            password: '',
+            isLoggingIn: true,
+            promptVisible: false
         };
         this.autenticate = this.authenticate.bind(this);
     }
 
     componentDidMount = () => {
-      this._isMounted = true;
-      console.log("start loging");
-      //this.setState({isLoggingIn: false});
-      firebase.auth().onAuthStateChanged((user) => {
-          console.log("end loging");
-        // Check to make sure the component is mounted first, since
-        // we don't want to setState upon logout.
-        if (this._isMounted) {
-          this.setState({isLoggingIn: false});
-          if (user) {
-            this.openApp();
-          }
-        }
-      });
+        this._isMounted = true;
+        console.log("start loging");
+        //this.setState({isLoggingIn: false});
+        firebase.auth().onAuthStateChanged((user) => {
+            console.log("end loging");
+            // Check to make sure the component is mounted first, since
+            // we don't want to setState upon logout.
+            if (this._isMounted) {
+                this.setState({isLoggingIn: false});
+                if (user) {
+                    this.openApp();
+                }
+            }
+        });
     }
 
     componentWillUnmount() {
-      this._isMounted = false;
+        this._isMounted = false;
     }
 
-    openApp () {
+    openApp() {
         this._populateIcons().then(() => {
             // Start app only if all icons are loaded
             this.startApp();
@@ -115,10 +116,10 @@ export default class Login extends Component {
                 //if (this.state.username == "" && this.state.password == "") {
                 //  this.openApp();
                 //} else {
-                  Alert.alert(
+                Alert.alert(
                     'Login failed',
                     'Unable to login. Username or password is incorrect',
-                  );
+                );
                 //}
                 this.setState({
                     isLoggingIn: false
@@ -229,83 +230,88 @@ export default class Login extends Component {
     render() {
         return (
             <KeyboardAvoidingView style={styles.container} behavior="padding">
-                    <Text style={styles.title}> Harvard Square </Text>
-                    <Text style={styles.title}> Homeless Shelter </Text>
-                    <Text style={styles.title}> Volunteer App </Text>
+                <View style={styles.logoContainer}>
+                    <Image style={styles.logo} resizeMode="contain" source={require('../hshsLogo.png')}/>
+                </View>
+                <Text style={styles.title}> Harvard Square Homeless </Text>
+                <Text style={styles.title}> Shelter Volunteer App </Text>
                 {this.state.isLoggingIn ? renderLoader() :
-                  <View>
-                    <View style={styles.inputBlock}>
-                        <View style={styles.row}>
-                            <Icon style={styles.icon}
-                                  name="ios-mail-outline"
-                                  size={25}
-                                  color="#FFFFFF"
-                            />
-                            <TextInput
-                                style={styles.textInput}
-                                placeholder='Username'
-                                placeholderTextColor="#FFFFFF"
-                                onChangeText={(text) => this.state.username = text}
-                            />
-                        </View>
-                        <View style={styles.row}>
-                            <Icon style={styles.icon}
-                                  name="ios-lock-outline"
-                                  size={25} color="#FFFFFF"/>
-                            <TextInput style={styles.textInput}
-                                       placeholder='Password'
-                                       secureTextEntry={true}
-                                       placeholderTextColor="#FFFFFF"
-                                       onFocus={() => Toast.show('Hint: Your password must be at least 8 characters long and contain a mix of numbers, lowercase, and uppercase letters.', {
-                                         duration: Toast.durations.LONG,
-                                         position: Toast.positions.TOP,
-                                         shadow: true,
-                                         animation: true,
-                                         hideOnPress: true,
-                                         delay: 0
-                                       })}
-                                       onChangeText={(text) => this.state.password = text}
-                            />
-                        </View>
-                    </View>
                     <View>
-                        <Button
-                            small
-                            backgroundColor="#556A5B"
-                            onPress={this.authenticate}
-                            title='Log In'
-                            buttonStyle={{width: width * 0.8}}
-                        />
-                        <View style={styles.forgetView}>
-                            <Text onPress={this.forgotPassword} style={styles.forgotPassword}>
-                                Forgot your password?
-                            </Text>
-                            <Text onPress={() => {
-                              this.props.navigator.push({
-                                  screen: 'Signup', // unique ID registered with Navigation.registerScreen
-                                  passProps: {}, // Object that will be passed as props to the pushed screen (optional)
-                                  animated: true, // does the push have transition animation or does it happen immediately (optional)
-                                  animationType: 'slide-horizontal', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
-                                  backButtonHidden: false, // hide the back button altogether (optional)
-                                  navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
-                                  navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
-                              });
-                            }} style={styles.forgotPassword}>
-                                Got a key? Sign up here.
-                            </Text>
+                        <View style={styles.inputBlock}>
+                            <View style={styles.row}>
+                                <Icon style={styles.icon}
+                                      name="ios-mail-outline"
+                                      size={25}
+                                      color="#770B16"
+                                />
+                                <TextInput
+                                    style={styles.textInput}
+                                    placeholder='Username'
+                                    placeholderTextColor="#770B16"
+                                    onChangeText={(text) => this.state.username = text}
+                                />
+                            </View>
+                            <View style={styles.row}>
+                                <Icon style={styles.icon}
+                                      name="ios-lock-outline"
+                                      size={25} color="#770B16"/>
+                                <TextInput style={styles.textInput}
+                                           placeholder='Password'
+                                           secureTextEntry={true}
+                                           placeholderTextColor="#770B16"
+                                           onFocus={() => Toast.show('Hint: Your password must be at least 8 characters long and contain a mix of numbers, lowercase, and uppercase letters.', {
+                                               duration: Toast.durations.LONG,
+                                               position: Toast.positions.TOP,
+                                               shadow: true,
+                                               animation: true,
+                                               hideOnPress: true,
+                                               delay: 0
+                                           })}
+                                           onChangeText={(text) => this.state.password = text}
+                                />
+                            </View>
+                        </View>
+                        <View>
+                            <Button
+                                small
+                                backgroundColor="#556A5B"
+                                onPress={this.authenticate}
+                                title='Log In'
+                                buttonStyle={{width: width * 0.8}}
+                            />
+                            <View style={styles.forgetView}>
+                                <Text onPress={this.forgotPassword} style={styles.forgotPassword}>
+                                    Forgot your password?
+                                </Text>
+                                <Text onPress={() => {
+                                    this.props.navigator.push({
+                                        screen: 'Signup', // unique ID registered with Navigation.registerScreen
+                                        passProps: {}, // Object that will be passed as props to the pushed screen (optional)
+                                        animated: true, // does the push have transition animation or does it happen immediately (optional)
+                                        animationType: 'slide-horizontal', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
+                                        backButtonHidden: false, // hide the back button altogether (optional)
+                                        navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
+                                        navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
+                                    });
+                                }} style={styles.forgotPassword}>
+                                    Got a key? Sign up here.
+                                </Text>
+                            </View>
                         </View>
                     </View>
-                  </View>
                 }
                 <Prompt
-                  title="Reset your password"
-                  placeholder="Enter your email here."
-                  visible={ this.state.promptVisible }
-                  onCancel={ () => this.setState({promptVisible: false}) }
-                  onSubmit={ (value) => {
-                    this.setState({promptVisible: false});
-                    firebase.auth().sendPasswordResetEmail(value).then(() => {}).catch((err) => {console.log(err);})
-                  } }/>
+                    title="Reset your password"
+                    placeholder="Enter your email here."
+                    visible={this.state.promptVisible}
+                    onCancel={() => this.setState({promptVisible: false})}
+                    onSubmit={(value) => {
+                        this.setState({promptVisible: false});
+                        firebase.auth().sendPasswordResetEmail(value).then(() => {
+                        }).catch((err) => {
+                            console.log(err);
+                        })
+                    }}/>
             </KeyboardAvoidingView>
         );
     }
@@ -316,13 +322,13 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#770B16',
+        backgroundColor: 'rgb(247, 247, 247)',
     },
     row: {
         flexDirection: "row",
         justifyContent: 'center',
         alignItems: 'center',
-        borderBottomColor: 'white',
+        borderBottomColor: '#770B16',
         borderBottomWidth: 1,
         paddingTop: 15,
         paddingBottom: 7
@@ -338,18 +344,18 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         fontSize: 25,
-        color: "#FFFFFF",
+        color: "#770B16",
     },
     forgotPassword: {
         fontSize: 12,
-        color: "#FFFFFF",
+        color: "#770B16",
         marginTop: 15,
     },
     textInput: {
-        color: "#FFFFFF",
+        color: "#770B16",
         width: 275,
         fontSize: 15,
-        backgroundColor: '#770B16',
+        backgroundColor: 'rgb(247, 247, 247)',
     },
     icon: {
         paddingRight: 10,
@@ -365,5 +371,14 @@ const styles = StyleSheet.create({
     forgetView: {
         justifyContent: 'center',
         alignItems: 'center',
-    }
+    },
+    logoContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 20
+    },
+    logo: {
+        height: 70,
+        width: 70
+    },
 });
