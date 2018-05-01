@@ -16,6 +16,7 @@ import {connect} from 'react-redux';
 import dupNavFix from '../../dupNavFix';
 import renderSeperator from "../../modules/UI/renderSeperator";
 import MapView from 'react-native-maps';
+import {Icon} from 'react-native-elements'
 
 
 function mapStateToProps(state, ownProps) {
@@ -191,13 +192,14 @@ class ActionItem_view extends Component {
                     </View>}
 
                     <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
-                        <View style={{flex: 1}}>
+                        <View style={{flexDirection: 'row', flex: 1, justifyContent: 'flex-end'}}>
+                            <Icon name='people'/>
                             <Text numberOfLines={this.state.taggedGuests ? this.state.taggedGuests.length : 0} style={styles.text}>{this.state.taggedGuests ? this.formatGuestNames(this.state.taggedGuests) : "No Tagged Guests"}</Text>
                         </View>
                     </View>
 
                     <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
-                        <View style={{flex: 1}}>
+                        <View style={{flexDirection: 'row', flex: 1, justifyContent: 'flex-end'}}>
                             <Text numberOfLines={1}
                                   style={styles.text}>Due on: {this.state.selectedDate}</Text>
 
