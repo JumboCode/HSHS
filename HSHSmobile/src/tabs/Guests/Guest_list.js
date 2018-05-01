@@ -171,7 +171,7 @@ class GuestList extends Component {
                         </View>
                       </View>
                     }
-                    containerStyle = {{ borderBottomWidth: 0, marginLeft: 10, backgroundColor:"#F5FCFF" }}
+                    containerStyle = {{ borderBottomWidth: 0, marginLeft: 10, backgroundColor:"white" }}
                     onPress = {() => this.Screen_GuestListProfile(item)}
                 />
             </View>
@@ -200,7 +200,7 @@ class GuestList extends Component {
         }
 
         return (
-            <View style={{flex: 1}}>
+            <View style={{flex: 1, backgroundColor: '#F7F7F7'}}>
               <SearchBar
                   cancelButtonTitle="Cancel"
                   placeholder="Search (Ex. Phil Wang)"
@@ -238,6 +238,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: '#F7F7F7'
     },
     buttonContainer: {
         height: 30,

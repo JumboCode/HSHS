@@ -250,6 +250,7 @@ class Dashboard extends Component {
                             size={28}
                             underlayColor='transparent'
                             name='my-location'
+                            color='#0579f9'
                             onPress={() => {
                                 navigator.geolocation.getCurrentPosition((pos) => {
                                   this.setState({

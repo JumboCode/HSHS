@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
       borderRadius: 45/2,
       borderWidth: 1.5,
       borderColor: '#90CAF9',
+      backgroundColor: 'white'
     },
     text: {
       fontSize: 12,

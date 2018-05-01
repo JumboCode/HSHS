@@ -199,7 +199,7 @@ class Resources_menu extends Component {
 
     render(){
         return(
-            <View>
+            <View style={{backgroundColor: '#F7F7F7'}}>
                 {this.renderHeader()}
                 {this.renderButtons()}
             </View>
@@ -276,6 +276,7 @@ const styles = StyleSheet.create({
         marginLeft: "2%",
         marginRight: "2%",
         borderStyle: "solid",
+        backgroundColor: "white"
     },
 
     button: {

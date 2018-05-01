@@ -50,7 +50,7 @@ export default class ColorPicker extends Component {
 
 const styles = StyleSheet.create({
     button: {
-      backgroundColor: "lightblue",
+      backgroundColor: "white",
       height: 25,
       margin: 5,
       justifyContent: "center",

@@ -278,7 +278,7 @@ class ActionItem_edit extends Component {
             paddingTop: 10,
             paddingLeft: 20,
             color: "#770B16",
-            backgroundColor: "#F7F7F7",
+            backgroundColor: "white",
             fontSize: 24,
             paddingBottom: 5
         },
@@ -331,7 +331,8 @@ class ActionItem_edit extends Component {
             padding: 5,
             fontSize: 15,
             marginBottom: 15,
-            borderColor: "#3a4548"
+            borderColor: "#3a4548",
+            backgroundColor: "white"
         },
         button: {
             backgroundColor: "lightblue",
