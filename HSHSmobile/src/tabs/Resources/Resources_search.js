@@ -55,7 +55,7 @@ class Resources_search extends Component {
     }
 
     renderAccordionContent(link) {
-        let website = (link.link == undefined)    ? <View></View> : (<Text style={styles.link} onPress={() => {this.goToURL(link.link)}}>See Website</Text>);
+        let website = (link.link == undefined)    ? <View></View> : (<Text style={styles.link} onPress={() => {this.goToURL(link.link)}}>Website</Text>);
         let phones  = (link.phone == undefined)   ? <View></View> : Object.keys(link.phone).map(title => this.renderPhones(title, link.phone[title]));
         let address = (link.address == undefined) ? <View></View> : (<Text>{link.address}</Text>)
         return (
@@ -160,8 +160,8 @@ const styles = StyleSheet.create({
   headerContainer: {
     borderBottomColor: '#808080',
     borderBottomWidth: 1,
-    paddingBottom: 2,
-    paddingRight: '5%'
+    paddingBottom: 5,
+    paddingRight: '10%'
   },
 
   contentHeader: {
@@ -172,6 +172,9 @@ const styles = StyleSheet.create({
     textShadowOffset: {width: 2, height: 2}
   },
   link: {
+    paddingTop: 5,
+    paddingBottom: 8,
+    fontSize: 14,
     color: "#0080FF",
   }
 
