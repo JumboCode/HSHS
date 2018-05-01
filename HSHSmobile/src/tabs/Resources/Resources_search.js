@@ -24,7 +24,7 @@ class Resources_search extends Component {
 
     renderAccordionHeader(link) {
         return (
-            <View>
+            <View style={{backgroundColor: "white"}}>
                 <ListItem
                     title = {link.name}
                     subtitle = {link.category}
@@ -37,7 +37,7 @@ class Resources_search extends Component {
 
     renderPhones = (title, number) => {
       return (
-        <View>
+        <View key={number[0]}>
           <Text>{title}:</Text>
           <Text onPress={() => {this.goToURL("tel:1" + number[0])}}style={styles.link}>{number[1]}</Text>
         </View>
@@ -45,13 +45,13 @@ class Resources_search extends Component {
     }
 
     renderAccordionContent(link) {
-        let website = (link.link == undefined)    ? <View></View> : (<Text style={styles.link} onPress={() => {this.goToURL(link.link)}}>See Website</Text>);
+        let website = (link.link == undefined)    ? <View></View> : (<Text style={styles.link} onPress={() => {this.goToURL(link.link)}}>Website</Text>);
         let phones  = (link.phone == undefined)   ? <View></View> : Object.keys(link.phone).map(title => this.renderPhones(title, link.phone[title]));
         let address = (link.address == undefined) ? <View></View> : (<Text>{link.address}</Text>)
         return (
-            <View style={{marginTop: 10, marginHorizontal: 5, flexDirection: "row", justifyContent: "space-around", alignItems: "flex-start"}}>
+            <View style={{paddingTop: 15, paddingBottom: 15, paddingHorizontal: 5, flexDirection: "row", justifyContent: "space-around", alignItems: "flex-start", borderBottomColor: "#D3D3D3", borderBottomWidth: 1}}>
               <View style={{width: "50%", }}>
-                <View style={{borderBottomColor: 'black', borderBottomWidth: 1, bottomPadding: 2}}>
+                <View style={styles.headerContainer}>
                   <Text style={styles.contentHeader}>Contact Information</Text>
                 </View>
                 <View style={{marginTop: 5}}>
@@ -60,7 +60,9 @@ class Resources_search extends Component {
                 </View>
               </View>
               <View style={{width: "40%"}}>
-                <Text style={styles.contentHeader}>Address</Text>
+                <View style={styles.headerContainer}>
+                  <Text style={styles.contentHeader}>Address</Text>
+                </View>
                 <View style={{marginTop: 5}}>
                   {address}
                 </View>
@@ -130,6 +132,13 @@ class Resources_search extends Component {
 />
 */
 const styles = StyleSheet.create({
+  headerContainer: {
+    borderBottomColor: '#808080',
+    borderBottomWidth: 1,
+    paddingBottom: 5,
+    paddingRight: '10%'
+  },
+
   contentHeader: {
     fontSize: 16,
     color: "#808080",
@@ -138,6 +147,9 @@ const styles = StyleSheet.create({
     textShadowOffset: {width: 2, height: 2}
   },
   link: {
+    paddingTop: 5,
+    paddingBottom: 8,
+    fontSize: 14,
     color: "#0080FF",
   }
 
