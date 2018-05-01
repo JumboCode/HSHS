@@ -97,14 +97,6 @@ class ActionItem_list extends Component {
             return renderLoader();
         }
 
-        if (!this.props.actionItems || this.props.actionItems.length <= 1) {
-            return (
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                    <Text style={{color: '#808080'}}>There are no action items</Text>
-                </View>
-            );
-        }
-
         return (
           <View
           style={{height: '100%'}}>

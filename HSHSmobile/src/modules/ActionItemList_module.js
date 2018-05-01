@@ -60,7 +60,7 @@ class ActionItemList_module extends Component {
 
     render() {
         var actionItems = getActionItems(this.props.actionItems, this.props.guestActionItemIds);
-     
+        
         if (this.props.selectedActionItem) {
             return (
                 <View>
@@ -92,20 +92,25 @@ class ActionItemList_module extends Component {
                     onClearText={() => this.setState({searchInput: ''})}
                     placeholder='Search'
                 />
-                <View style={{flex: 1}}>
-                    <FlatList
-                        data={getActionItems(actionItems).filter(item => item.title.toLowerCase().includes(this.state.searchInput))}
-                        renderItem={({item}) => this.renderListItem(item)}
-                        keyExtractor={item => item.actionItemId}
-                        ItemSeparatorComponent={() => {
-                            return (renderSeperator())
-                        }}
-                        ListHeaderComponent={this.renderHeader}
-                        refreshing={this.props.refreshing}
-                        onEndReached={this.handleLoadMore}
-                        onEndReachedThreshold={50}
-                    />
-                </View>
+
+                {(!this.props.actionItems || this.props.actionItems.length <= 1) ? 
+                    (<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                        <Text style={{color: '#808080'}}>There are no action items</Text>
+                    </View>) : 
+                    (<View style={{flex: 1}}>
+                        <FlatList
+                            data={getActionItems(actionItems).filter(item => item.title.toLowerCase().includes(this.state.searchInput))}
+                            renderItem={({item}) => this.renderListItem(item)}
+                            keyExtractor={item => item.actionItemId}
+                            ItemSeparatorComponent={() => {
+                                return (renderSeperator())
+                            }}
+                            ListHeaderComponent={this.renderHeader}
+                            refreshing={this.props.refreshing}
+                            onEndReached={this.handleLoadMore}
+                            onEndReachedThreshold={50}
+                        />
+                    </View>)}
             </View>
         )
     }
