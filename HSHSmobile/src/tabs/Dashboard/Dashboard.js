@@ -206,6 +206,7 @@ class Dashboard extends Component {
                 {renderSeperator()}
                     <MapView
                         showsUserLocation={true}
+                        userLocationAnnotationTitle={""}
                         region={{
                             latitude: this.state.curLat,
                             longitude: this.state.curLong,
