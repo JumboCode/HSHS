@@ -93,8 +93,16 @@ class ActionItem_list extends Component {
 
     render() {
         // TODO : make it actually check if the action items are of a valid type
-        if (this.props.loading == true || !this.props.actionItems || this.props.actionItems.length <= 1) {
+        if (this.props.loading == true) {
             return renderLoader();
+        }
+
+        if (!this.props.actionItems || this.props.actionItems.length <= 1) {
+            return (
+                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style={{color: '#808080'}}>There are no action items</Text>
+                </View>
+            );
         }
 
         return (

@@ -169,7 +169,7 @@ class Lottery_module extends Component {
 		
     return (
         <View style={{flex: 1, flexDirection: "row", alignItems: 'center', justifyContent: 'center'}}>
-          <Text style={[styles.text, {fontSize: 15}]}>
+          <Text style={{fontSize: 15, color: '#808080'}}>
             Lottery will begin at 9 PM
           </Text>
         </View>
