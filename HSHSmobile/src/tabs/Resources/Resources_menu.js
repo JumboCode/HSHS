@@ -89,7 +89,7 @@ class Resources_menu extends Component {
     }
 
     componentDidMount() {
-        Icon.getImageSource('ios-search', 36).then((add) => {
+        Icon.getImageSource('ios-search-outline', 36).then((add) => {
             this.props.navigator.setButtons({
                 rightButtons: [
                     { id: 'searchResources', icon: add },

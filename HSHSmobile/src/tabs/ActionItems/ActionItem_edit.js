@@ -121,13 +121,6 @@ class ActionItem_edit extends Component {
       });
     }
 
-    setChosenLocation = (locationStr, locationCoord) => {
-        this.setState({
-            locationStr: locationStr,
-            locationCoord: locationCoord,
-        });
-    };
-
     _confirmDelete(){
       Alert.alert(
         'Really Delete this Action Item?',
@@ -257,11 +250,13 @@ class ActionItem_edit extends Component {
                     loading={this.props.loading}
                     onConfirm={this.setSelectedGuests}
                 />
-                <ChooseLocationPopup
-                  ref={(map) => {
-                      this.ChooseLocationPopup = map;
-                  }}
-                  onConfirm={this.setChosenLocation}
+                <ChooseLocation
+                  onConfirm={(locationStr, locationCoord) =>
+                      this.setState({
+                          locationStr: locationStr,
+                          locationCoord: locationCoord,
+                      })
+                  }
                   locationStr={this.props.locationStr}
                   locationCoord={this.props.locationCoord}
                 />

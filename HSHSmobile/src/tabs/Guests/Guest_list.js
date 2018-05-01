@@ -137,7 +137,7 @@ class GuestList extends Component {
     };
 
     componentDidMount() {
-        Icon.getImageSource('ios-person-add', 36).then((add) => {
+        Icon.getImageSource('ios-person-add-outline', 36).then((add) => {
             this.props.navigator.setButtons({
                 rightButtons: [
                     { id: 'add_guest', icon: add },
