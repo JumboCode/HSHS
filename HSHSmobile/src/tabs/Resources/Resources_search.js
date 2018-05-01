@@ -105,7 +105,7 @@ class Resources_search extends Component {
                 )});
 
         return (
-          <View>{(data.length == 0) ? (<View style={{flex: 1}}><Text style={{textAlign: 'center', marginTop: '50%', fontSize: 18, fontWeight: 'bold'}}>No resources available</Text></View>) :
+          <View>{(data.length == 0) ? (<View style={{flex: 1}}><Text style={{textAlign: 'center', marginTop: '50%', fontSize: 18, fontWeight: 'bold', color: 'gray'}}>No resources available</Text></View>) :
             (<View style = {{backgroundColor : "#F7F7F7", height : "100%"}}>
                 {this.renderSearchBar()}
                 <Accordion
