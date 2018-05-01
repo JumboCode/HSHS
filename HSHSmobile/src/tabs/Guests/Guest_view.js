@@ -225,7 +225,7 @@ class GuestProfile extends Component {
                 </View>
                 <View style={{flex: .3}}>
                     {this._renderActionItems()}
-                    {this._renderButtons()}
+                    {/* {this._renderButtons()} */}
                 </View>
                 <GuestHistoryModule
                     style={{flex: .2}}

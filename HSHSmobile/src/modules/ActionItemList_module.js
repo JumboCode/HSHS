@@ -60,7 +60,7 @@ class ActionItemList_module extends Component {
 
     render() {
         var actionItems = getActionItems(this.props.actionItems, this.props.guestActionItemIds);
-        
+
         if (this.props.selectedActionItem) {
             return (
                 <View>
@@ -74,7 +74,7 @@ class ActionItemList_module extends Component {
                         scrollEnabled={false}
                     />
                     {renderSeperator()}
-                </View> 
+                </View>
             );
         }
 
@@ -83,20 +83,19 @@ class ActionItemList_module extends Component {
                 <SearchBar
                     containerStyle={{backgroundColor: 'transparent'}}
                     lightTheme
-                    round
                     clearIcon={this.state.searchInput !== ''}
                     onChangeText={(str) => {
                         this.setState({searchInput: str.toLowerCase()})
                     }}
                     value={this.state.searchInput}
                     onClearText={() => this.setState({searchInput: ''})}
-                    placeholder='Search'
+                    placeholder='Search (Ex. Restock closet)'
                 />
 
-                {(!this.props.actionItems || this.props.actionItems.length <= 1) ? 
+                {(!this.props.actionItems || this.props.actionItems.length <= 1) ?
                     (<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                         <Text style={{color: '#808080'}}>There are no action items</Text>
-                    </View>) : 
+                    </View>) :
                     (<View style={{flex: 1}}>
                         <FlatList
                             data={getActionItems(actionItems).filter(item => item.title.toLowerCase().includes(this.state.searchInput))}
@@ -139,7 +138,8 @@ class ActionItemList_module extends Component {
                                 <View style={{flex: 2, flexDirection: 'row'}}>
                                     <View style={{flex: 1}}>
                                         <Icon
-                                            name='people'/>
+                                            color='#3a4548'
+                                            name='people-outline'/>
                                     </View>
                                     <View style={{flex: 3, justifyContent: 'center'}}>
                                         <Text
@@ -152,11 +152,12 @@ class ActionItemList_module extends Component {
                                 <View style={{flex: 2, flexDirection: 'row'}}>
                                     <View style={{flex: 1}}>
                                         <Icon
+                                            color={item.locationStr === "Shelter" ? "#770B16" : '#3a4548'}
                                             name={'location-on'}/>
                                     </View>
                                     <View style={{flex: 3, justifyContent: 'center'}}>
                                         <Text
-                                            style={item.locationStr ? {} : {fontStyle: 'italic'}}
+                                            style={item.locationStr === "Shelter" ? {color: "#770B16"} : {}}
                                             numberOfLines={1}>
                                             {item.locationStr ? item.locationStr : "None"}
                                         </Text>
@@ -165,7 +166,7 @@ class ActionItemList_module extends Component {
                             </View>
                         } // TODO: fix that without an extra space, the last character is cut off
                         subtitleStyle={{textAlign: 'right'}}
-                        containerStyle={{borderBottomWidth: 0, marginLeft: 10, backgroundColor: "#F5FCFF"}}
+                        containerStyle={{borderBottomWidth: 0, marginLeft: 10, backgroundColor: "white"}}
                         onPress={() => this.Screen_ActionItem_view(item)}
                     />
                 </View>

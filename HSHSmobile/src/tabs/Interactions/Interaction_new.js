@@ -102,7 +102,6 @@ class Interaction_new extends Component {
     }
 
     componentDidMount() {
-
         this.props.navigator.setButtons({
             rightButtons: [
                 {

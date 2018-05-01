@@ -114,7 +114,7 @@ export default class GuestHistoryModule extends Component {
 
         if (rowData.isActionItem) { // Action item timeline view
             // used to navigate to item's view on detail card press
-            navigatorFunction = () => {this.view_interaction_page(rowData.actionItemId)};
+            // navigatorFunction = () => {this.view_actionitem_page(rowData.actionItemId)};
             // renders item-dependent description part of each card
             actionItemView = (
               <View
@@ -129,7 +129,7 @@ export default class GuestHistoryModule extends Component {
               </View>)
             desc = this._generateDescription(rowData, actionItemView)
         } else { // Interaction timeline view
-          navigatorFunction = () => {this.view_interaction_page(rowData.interactionId)}
+          // navigatorFunction = () => {this.view_interaction_page(rowData.interactionId)}
           interactionView = (
             <View style={{marginLeft: 15}}>
               <Text>

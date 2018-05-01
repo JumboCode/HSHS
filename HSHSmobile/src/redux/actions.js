@@ -189,6 +189,11 @@ export const deleteActionItem = (id) => {
             Alert.alert("Failed to delete action item. Please try again.");
         }
     });
+		firebase.database().ref('completedActionItems').child(id).remove(error => {
+				if (error) {
+						Alert.alert("Failed to delete action item. Please try again.");
+				}
+		});
 
 }
 

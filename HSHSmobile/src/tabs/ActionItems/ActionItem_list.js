@@ -56,7 +56,6 @@ class ActionItem_list extends Component {
 
         this.state = {
             selectedIndex: 0,
-            buttons: ["To do", "Completed"]
         }
     };
 
@@ -99,11 +98,11 @@ class ActionItem_list extends Component {
 
         return (
           <View
-          style={{height: '100%'}}>
+          style={{height: '100%', backgroundColor: '#F7F7F7'}}>
             <ButtonGroup
                 onPress={(i) => {this.setState({selectedIndex: i})}}
                 selectedIndex={this.state.selectedIndex}
-                buttons={this.state.buttons}
+                buttons={["To do", "Completed"]}
                 selectedTextStyle={{color: '#770B16'}}
             />
 

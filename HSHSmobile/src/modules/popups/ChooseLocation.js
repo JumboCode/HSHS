@@ -80,7 +80,7 @@ export default class ChooseLocation extends Component {
                 this.map = map }
               }
               style={{
-                height: this.state.isMapFullScreen ? Dimensions.get('window').height * 0.3 : Dimensions.get('window').height,
+                height: this.state.isMapFullScreen ? Dimensions.get('window').height * 0.3 : Dimensions.get('window').height*0.8,
                 width: Dimensions.get('window').width * 0.9,
                 margin: 0,
                 borderRadius: 20
@@ -90,8 +90,8 @@ export default class ChooseLocation extends Component {
               region={{
                   latitude: this.state.locationCoord.latitude,
                   longitude: this.state.locationCoord.longitude,
-                  latitudeDelta: 0.02,
-                  longitudeDelta: 0.01,
+                  latitudeDelta: 0.002,
+                  longitudeDelta: 0.005,
               }}>
               <MapView.Marker draggable
                               coordinate={this.state.locationCoord}

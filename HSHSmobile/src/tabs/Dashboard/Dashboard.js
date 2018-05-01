@@ -182,7 +182,7 @@ class Dashboard extends Component {
     _renderSelectedActionItem() {
       if (this.state.selectedActionItem) {
         return (
-          <ActionItemList_module 
+          <ActionItemList_module
             style={{flex: 1}}
             actionItems={this.props.actionItems}
             guests={this.props.guests}
@@ -210,8 +210,8 @@ class Dashboard extends Component {
                         region={{
                             latitude: this.state.curLat,
                             longitude: this.state.curLong,
-                            latitudeDelta: 0.02,
-                            longitudeDelta: 0.01
+                            latitudeDelta: 0.002,
+                            longitudeDelta: 0.005
                         }}
                         style={{
                             height: this.state.isMapFullScreen ? Dimensions.get('window').height * 0.4 : Dimensions.get('window').height,
