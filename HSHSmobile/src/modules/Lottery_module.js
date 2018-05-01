@@ -17,9 +17,9 @@ import Prompt from 'rn-prompt';
 import {getLotteryWinners} from '../redux/actions.js';
 
 // Time from start of day until lottery release
-const lotteryReleaseTimeInMillis = 77400000;
+const lotteryReleaseTimeInMillis = 77400000;    // 9 PM
 // Time before lottery release to begin countdown 
-const timeBeforeCountdownInMillis = 3600000;
+const timeBeforeCountdownInMillis = 3600000;    // 1 hour
 
 function mapStateToProps(state, ownProps) {
     return { lotteryWinner: state.lotteryWinner };
@@ -38,10 +38,8 @@ class Lottery_module extends Component {
     this.state = { timeRemaining: "", seconds: 0 };
 	}
 
-  // TODO: check database and see if data has been entered, set timeIndex
   componentWillMount() {
     let secs = this.getTimeRemaining();
-    // secs = 3;
     this.setState ({ seconds: secs });
   }
 
@@ -69,11 +67,9 @@ class Lottery_module extends Component {
     let releaseTimestamp = releaseDate.getTime() + lotteryReleaseTimeInMillis;
 
     let seconds          = ((releaseTimestamp - now) / 1000).toFixed(0);
-    return 100000000;
     return seconds;
   }
 
-  // TODO: Check if page transition works smoothly
   countDown = () => {
       let secs     = this.state.seconds - 1;
       let timeLeft;
@@ -126,24 +122,28 @@ class Lottery_module extends Component {
   }
 
 	render() {
-    if (this.state.seconds < timeBeforeCountdownInMillis) {
+    if (this.state.seconds * 1000 < timeBeforeCountdownInMillis) {
       return (
-        <View>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <View style={[styles.block, {borderRightWidth: .5, borderColor: '#808080'}]}>
-              <View style={{margin: 30, alignItems: 'center'}}>
+        <View style={{flex: 1}}>
+          <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+            <View style={[styles.block, {flex: 1}]}>
+              <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                 <Text style={styles.countdownText}>Lottery countdown</Text>
                 <Text style={styles.countdownNumbers}>{this.state.timeRemaining}</Text>
                 {this.state.seconds <= 0 ? 
-                  (<Button
-                      color="#rgba(119, 11, 22, 1)"
-                      onPress={ () => {this.props.showDialogCallback()} }
-                      title="Enter Winner" />) : null}
+                  (<TouchableOpacity
+                      style={styles.enterWinningNumbersButton}
+                      onPress={ () => {this.props.showDialogCallback()} }>
+                      <Text style={{color: 'white'}}>Enter Winners</Text>
+                  </TouchableOpacity>
+                      ) : null}
               </View>
             </View>
 
+            <View style={styles.verticalDivider}/>
+
             <View style={styles.block}>
-              <View style={{margin: 30, alignItems: 'center'}}>
+              <View style={{alignItems: 'center'}}>
                 <Text style={styles.countdownText}>Today's lottery #s</Text>
                 {this._renderLotteryWinners()}
               </View>
@@ -152,19 +152,23 @@ class Lottery_module extends Component {
 
           {this.state.seconds <= 0 ? 
             (<TouchableOpacity
-                style={{flexDirection: "row", alignItems: "center", justifyContent: "center", marginTop: 20, marginBottom: 20}}
+                style={{
+                  flexDirection: "row", 
+                  alignItems: "center", 
+                  justifyContent: "center", 
+                  marginTop: 20, marginBottom: 20
+                }}
                 onPress={ () => {Linking.openURL('tel:16175472841')} }>
                   <Icon name="phone"/>
-                  <Text style={{marginLeft: 10}}>Tap here to call HSHS</Text>
+                  <Text style={{marginLeft: 10, color: '#770b16'}}>Tap here to call HSHS</Text>
              </TouchableOpacity>) : null}
           
         </View>
       );
     }
 		
-    // TODO Fix the styling to center this
     return (
-        <View style={{height: '50%', flexDirection: "row", alignItems: 'center', justifyContent: 'center'}}>
+        <View style={{flex: 1, flexDirection: "row", alignItems: 'center', justifyContent: 'center'}}>
           <Text style={[styles.text, {fontSize: 15}]}>
             Lottery will begin at 9 PM
           </Text>
@@ -172,25 +176,7 @@ class Lottery_module extends Component {
     );
 	}
 }
-// <View>
-//   { this.state.timeIndex === 0 ?
-//     (<View style={styles.countDownBlock}>
-//       <View style={{margin: 30}}>
-//         <Text style={{fontSize: 18, fontWeight: 'bold', marginBottom: "5%"}}>Status: Countdown till lottery</Text>
-// 				<Text style={{fontSize: 18, textAlign: "center", letterSpacing: 1.5}}>{this.state.timeRemaining}</Text>
-//       </View>
-//     </View>) :
-//     <View>
-//       { this.state.timeIndex === 1 &&
-//         <View>
-//           <View style={{flexDirection: "row", justifyContent: "center"}}>
-//             <Text>Same</Text>
-//           </View>
-//         </View>
-//       }
-//     </View>
-//   }
-// </View>
+
 const styles = StyleSheet.create( {
     block: {
       flexDirection: 'column',
@@ -224,14 +210,19 @@ const styles = StyleSheet.create( {
     countdownNumbers: {
       fontSize: 18,  
       letterSpacing: 1.5,
-      color: '#383838'
+      color: '#383838',
+      marginBottom: '5%'
     },
 
     text: {
-      color: "#303030"
-    }
+      color: "#404040"
+    },
+
+    enterWinningNumbersButton: {
+      backgroundColor: '#866c92', padding: 10, paddingHorizontal: 15, borderRadius: 5
+    },
+
+    verticalDivider: {width: .25, height: '65%', backgroundColor: '#808080'}
 });
 
-
-// TODO: do we need DupNavFix here?
 export default connect(mapStateToProps, mapDispatchToProps)(Lottery_module);

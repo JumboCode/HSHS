@@ -265,7 +265,7 @@ class Dashboard extends Component {
                     <View style={{flex: 1}}>
                       {this._renderSelectedActionItem()}
 
-                      <View style={styles.centeredContainer}>
+                      <View style={{flex: 1, backgroundColor: '#f7f7f7'}}>
                         <Lottery_module
                           style={{flex: 1}}
                           showDialogCallback={() => {this._showLotteryInputDialog()}}
@@ -289,13 +289,6 @@ class Dashboard extends Component {
     }
 }
 
-const styles = StyleSheet.create({
-  centeredContainer: {
-    flex: 1, 
-    justifyContent: 'center', 
-    alignItems: 'center',
-  },
-
-});
+const styles = StyleSheet.create({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(dupNavFix(Dashboard));
