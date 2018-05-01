@@ -385,8 +385,8 @@ const styles = StyleSheet.create({
     description: {
         borderWidth: 0.5,
         marginTop: 15,
-        marginLeft: 30,
-        marginRight: 30,
+        marginLeft: '5%',
+        marginRight: '5%',
         borderRadius: 5,
         height: 100,
         padding: 5,
