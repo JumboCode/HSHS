@@ -37,7 +37,7 @@ import {Icon} from 'react-native-elements'
 
 const Timestamp = require('react-timestamp');
 
-const DESC_LIMIT = 14;
+const DESC_LIMIT = 17;
 
 export default class GuestHistoryModule extends Component {
     constructor(props) {
@@ -81,36 +81,26 @@ export default class GuestHistoryModule extends Component {
         });
     };
 
-    // TODO add ICONS
-    _generateInteractionView = (data) => {
-      // console.log("Generating interaction description from ")
-      // console.log(data)
+    // Generates the general description for each card
+    _generateDescription = (data, itemView) => {
       return (
         <View style={{flexDirection: 'column'}}>
-            <View style={{marginLeft: 15}}>
-                <Text>{"Note: " + data.description}</Text>
-            </View>
-
-            <View style={{flexDirection: 'row'}}>
-              <View style={styles.underDescription}>
-                <Icon style={styles.underDescIcon} name='location-on'/>
-                <Text style={styles.underDescription}>
-                  {(data.locationStr == undefined) ?
-                    "Add Location" :
-                    data.locationStr.slice(0, DESC_LIMIT)}
-                </Text>
-              </View>
+            {itemView}
+            <View style={{flexDirection: 'row', marginLeft: 5}}>
               <View style={styles.underDescription}>
                 <Icon style={styles.underDescIcon} name='people'/>
-                <Text style={styles.underDescription}>
-                  {data.otherGuests.join(", ").slice(0, DESC_LIMIT)}
+                <Text style={styles.underDescText}>
+                  {(data.otherGuests.length == 0) ?
+                   "No guests" : data.otherGuests.join(", ")}
                 </Text>
               </View>
-              <TouchableOpacity
-              onPress={() => this.view_interaction_page(data.interactionId)}
-              >
-                <Text>See More</Text>
-              </TouchableOpacity>
+              <View style={styles.underDescription}>
+                <Icon style={styles.underDescIcon} name='location-on'/>
+                <Text style={styles.underDescText}>
+                  {(data.locationStr == undefined) ?
+                    "Add Location" : data.locationStr}
+                </Text>
+              </View>
             </View>
         </View>
       );
@@ -119,30 +109,48 @@ export default class GuestHistoryModule extends Component {
     // Generates the views for each item in the timeline based on the type of
     // item. Returns detail view for each item
     _renderHistoryDetail = (rowData, _, __) => {
-        let date = (<Text style={styles.historyHeader}>{rowData.date}</Text>);
+        let navigatorFunction = null;
+        let desc = null;
 
-        var desc = null
         if (rowData.isActionItem) { // Action item timeline view
-            desc = (
-            <View style={{flexDirection: 'column', marginLeft:10}}>
-              <View style={{flexDirection: 'row'}}>
-                <TouchableOpacity
-                style={{flex:99, borderLeftColor: rowData.color, padding: 5, borderWidth: 1, borderLeftWidth: 10, borderRightWidth: 0}}
-                onPress={() => this.view_actionitem_page(rowData.actionItemId)}
-                >
-                  <Text>{rowData.title}</Text>
-                </TouchableOpacity>
-              </View>
-            </View>)
+            // used to navigate to item's view on detail card press
+            navigatorFunction = () => {this.view_interaction_page(rowData.actionItemId)};
+            // renders item-dependent description part of each card
+            actionItemView = (
+              <View
+              style={styles.actionItemDesc}
+              >
+                <View style={styles.actionItemColorBar} />
+                <View style={{flex:95}}>
+                  <Text>
+                  <Text style={{fontWeight: 'bold'}}>Completed: </Text>
+                  <Text>{rowData.title}</Text></Text>
+                </View>
+              </View>)
+            desc = this._generateDescription(rowData, actionItemView)
         } else { // Interaction timeline view
-          desc = this._generateInteractionView(rowData)
+          navigatorFunction = () => {this.view_interaction_page(rowData.interactionId)}
+          interactionView = (
+            <View style={{marginLeft: 15}}>
+              <Text>
+              <Text style={{fontWeight: 'bold'}}>Note: </Text>
+              <Text>{rowData.description}</Text></Text>
+            </View>)
+          desc = this._generateDescription(rowData, interactionView)
         }
 
+        let date = (<Text style={styles.historyHeader}>{rowData.date}</Text>);
+
+        // Entire card is touchable opacity w/ date header and description
+        // as generated above
         return (
-          <View style={styles.timelineDetailContainer}>
+          <TouchableOpacity
+          onPress={navigatorFunction}
+          style={styles.timelineDetailContainer}
+          >
             {date}
             {desc}
-          </View>
+          </TouchableOpacity>
         )
     }
 
@@ -212,7 +220,6 @@ export default class GuestHistoryModule extends Component {
         if (relatedHistory.length == 0) {
             return (
                 <View style={styles.historyContainer}>
-                  {/* <Text style={styles.historyHeader}>Guest History</Text>*/}
                   <Text>No history to display!</Text>
                 </View>
             );
@@ -231,18 +238,14 @@ export default class GuestHistoryModule extends Component {
 
         return (
           <View>
-            {/* <Text style={styles.historyHeader}>Guest History</Text>*/}
             <Timeline
               data={timelineData}
               showTime={false}
               lineColor='grey'
-              circleColor='black'
-              descriptionStyle={{color:'grey'}}
+              lineWidth={1.5}
+              circleColor='#6b0f1a'
               columnFormat='single-column-left'
               renderDetail={this._renderHistoryDetail}
-              options={{
-                style:{paddingTop:10, flex:1}
-              }}
             />
           </View>
         );
@@ -260,7 +263,7 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         fontWeight: '400',
         fontSize: 16,
-        color: 'gray'
+        color: '#2e3c40'
     },
     timelineDetailContainer: {
       marginTop: -5,
@@ -278,12 +281,16 @@ const styles = StyleSheet.create({
       marginRight: 10,
   },
   underDescription: {
-    color: 'blue',
-    flex: 33,
-    textDecorationLine: 'underline',
+    flex: 40,
+    paddingLeft: 3,
     margin: 5,
     flexDirection: 'row',
     alignSelf: 'center'
+  },
+  underDescText: {
+    color: 'blue',
+    textDecorationLine: 'underline',
+    paddingLeft: 3
   },
   underDescIcon: {
     shadowColor: '#000111',
@@ -294,5 +301,14 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 1,
     marginRight: 2,
+  },
+  actionItemDesc: {
+    marginLeft: 15,
+    flexDirection: 'row'
+  },
+  actionItemColorBar: {
+    backgroundColor: 'green',
+    flex: 1,
+    marginRight: 5
   }
 });
