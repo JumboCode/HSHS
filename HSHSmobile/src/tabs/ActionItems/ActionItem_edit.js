@@ -64,8 +64,8 @@ class ActionItem_edit extends Component {
             title: this.props.title ? this.props.title : '',
             taggedGuests: this.props.taggedGuests ? this.props.taggedGuests : [],
             locationCoord: this.props.locationCoord ? this.props.locationCoord : {
-                longitude: 0,
-                latitude: 0,
+              latitude: 42.3717,
+              longitude: -71.1199,
             },
             selectedIndex: this.props.locationCoord ? 1 : 0,
             locationStr: this.props.locationStr ? this.props.locationStr : "Shelter",
@@ -99,9 +99,6 @@ class ActionItem_edit extends Component {
                 if (this.state.title == "") {
                     Alert.alert("Title cannot be empty");
                     return;
-                }
-                if (this.state.description == "") {
-
                 }
                 // It's new if there is no ID
                 if (!this.state.actionItemId) {
@@ -137,7 +134,6 @@ class ActionItem_edit extends Component {
     }
 
     _handleDelete() {
-        console.log(this.state.actionItemId);
         deleteActionItem(this.state.actionItemId);
         this.props.navigator.popToRoot({
             animated: true, // does the pop have transition animation or does it happen immediately (optional)
@@ -184,7 +180,6 @@ class ActionItem_edit extends Component {
                             editable = {true}
                             placeholder = "Title"
                             style = {styles.title}
-                            placeholderTextColor = '#bababa'
                             onChangeText={(title) => {this.setState({'title': title});}}
                         />
                         <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#F7F7F7'}}>
@@ -272,15 +267,18 @@ class ActionItem_edit extends Component {
             flex: 1,
             backgroundColor: '#F7F7F7',
             alignSelf: "stretch",
-            zIndex: 0
+            zIndex: 0,
+            justifyContent: 'center',
+            alignItems: 'center'
         },
         title: {
-            paddingTop: 10,
-            paddingLeft: 20,
+            marginTop: '2%',
+            paddingTop: 5,
             color: "#770B16",
             backgroundColor: "white",
             fontSize: 24,
-            paddingBottom: 5
+            paddingBottom: 5,
+            width: '90%'
         },
         icon: {
             //paddingRight: 10,
@@ -324,8 +322,7 @@ class ActionItem_edit extends Component {
         description: {
             borderWidth: 0.5,
             marginTop: 15,
-            marginLeft: '5%',
-            marginRight: '5%',
+            width: '90%',
             borderRadius: 5,
             height: 100,
             padding: 5,

@@ -188,6 +188,7 @@ class GuestProfile extends Component {
                             guestActionItemIds={this.props.actionItemIds}
                             selectedGuestId={this.props.guestId}
                             guests={this.props.allGuests}
+                            hideSearch={true}
                             navigator={this.props.navigator} />
         )
     }
@@ -223,18 +224,27 @@ class GuestProfile extends Component {
                         {/*{this.render_receptive()}*/}
                     </View>
                 </View>
-                <View style={{flex: .3}}>
+                <View style={{
+                    flex: .3,
+                    marginBottom: "5%",
+                    marginLeft:"5%",
+                    marginRight:"5%",
+                    marginTop: "2%",
+                    borderWidth: StyleSheet.hairlineWidth,
+                    borderColor: '#3a4548'
+                 }}>
                     {this._renderActionItems()}
                     {/* {this._renderButtons()} */}
                 </View>
-                <GuestHistoryModule
-                    style={{flex: .2}}
-                    interactions={this.props.interactions}
-                    completedActionItems={this.props.completedActionItems}
-                    guestId={this.props.guestId}
-                    navigator={this.props.navigator}
-                    allGuests={this.props.allGuests}
-                />
+                <View style={{flex: .2, paddingRight: "2%", paddingLeft: "2%"}}>
+                    <GuestHistoryModule
+                        interactions={this.props.interactions}
+                        completedActionItems={this.props.completedActionItems}
+                        guestId={this.props.guestId}
+                        navigator={this.props.navigator}
+                        allGuests={this.props.allGuests}
+                    />
+                </View>
             </ScrollView>
         );
     }
@@ -244,7 +254,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#F7F7F7',
     },
     buttonText: {
         color: 'white'
@@ -263,9 +273,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 15,
         borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: '#D3D3D3',
+        borderBottomColor: '#3a4548',
         borderTopWidth: StyleSheet.hairlineWidth,
-        borderTopColor: '#D3D3D3',
+        borderTopColor: '#3a4548',
     },
     top: {
         flex: 0.38,
@@ -274,7 +284,7 @@ const styles = StyleSheet.create({
         padding: 10,
         alignItems: "stretch",
         justifyContent: "flex-end",
-        backgroundColor: "#E5DEDE",
+        backgroundColor: "#F7F7F7",
     },
     note_section: {
         flex: 5,
@@ -295,6 +305,7 @@ const styles = StyleSheet.create({
         textDecorationColor:'#686868',
         fontFamily: 'Times New Roman',
         textAlign: 'center',
+        color: '#770B16'
     },
     profile_image: {
         flex: 0.55,
@@ -310,12 +321,19 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         padding: 10,
-        marginLeft: 20,
-        marginRight: 20,
+        marginLeft: '5%',
+        marginRight: '5%',
         alignItems: "center",
         backgroundColor: "#FFFFFF",
         justifyContent: "flex-start",
-        borderRadius: 12,
+        borderRadius: 5,
+        shadowColor: '#000111',
+        shadowOffset: {
+          width: 0,
+          height: 1 },
+        shadowOpacity: 0.5,
+        shadowRadius: 2,
+        elevation: 1,
     },
     instructions: {
         textAlign: 'center',
@@ -334,21 +352,20 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
     },
     descriptionScroll: {
-      borderWidth: 0.3,
-      borderColor: "#000000",
-      borderRadius: 4,
+      alignSelf: 'center',
+      textAlign: 'center',
       marginTop: 10,
       marginBottom: 5,
-      padding: 10,
-      width: '90%',
+      padding: 5,
       alignSelf: 'center',
     },
     descriptionContainer: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         flex: 1,
         marginTop: 5,
         marginBottom: 5,
         paddingHorizontal: 10,
+        justifyContent: 'center'
     }
 });
 

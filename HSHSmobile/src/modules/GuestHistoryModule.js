@@ -67,7 +67,6 @@ export default class GuestHistoryModule extends Component {
     // When interactions are clicked, add the interaction's view to the
     // navigator stack
     view_interaction_page = (interactionId) => {
-        console.log(interactionId)
         this.props.navigator.push({
             screen: 'Interaction_view', // unique ID registered with Navigation.registerScreen
             passProps: {
@@ -87,18 +86,20 @@ export default class GuestHistoryModule extends Component {
         <View style={{flexDirection: 'column'}}>
             {itemView}
             <View style={{flexDirection: 'row', marginLeft: 5}}>
+              {(data.otherGuests.length != 0) ?
+                  <View style={styles.underDescription}>
+                    <Icon style={styles.underDescIcon} name='people-outline' color='#3a4548'/>
+                    <Text style={styles.underDescText}>
+                      {(data.otherGuests.length == 0) ?
+                       "No others." : data.otherGuests.join(", ")}
+                    </Text>
+                </View> :
+                <View style={styles.underDescription}></View>
+              }
               <View style={styles.underDescription}>
-                <Icon style={styles.underDescIcon} name='people'/>
-                <Text style={styles.underDescText}>
-                  {(data.otherGuests.length == 0) ?
-                   "No guests" : data.otherGuests.join(", ")}
-                </Text>
-              </View>
-              <View style={styles.underDescription}>
-                <Icon style={styles.underDescIcon} name='location-on'/>
-                <Text style={styles.underDescText}>
-                  {(data.locationStr == undefined) ?
-                    "Add Location" : data.locationStr}
+                <Icon style={styles.underDescIcon} name='location-on' color={data.locationStr === "Shelter" ? "#770B16" : '#3a4548'}/>
+                <Text style={data.locationStr === "Shelter" ? {color: "#770B16"} : styles.underDescText}>
+                  {data.locationStr}
                 </Text>
               </View>
             </View>
@@ -220,7 +221,7 @@ export default class GuestHistoryModule extends Component {
         if (relatedHistory.length == 0) {
             return (
                 <View style={styles.historyContainer}>
-                  <Text>No history to display!</Text>
+                  <Text>No history to display.</Text>
                 </View>
             );
         }
@@ -243,7 +244,7 @@ export default class GuestHistoryModule extends Component {
               showTime={false}
               lineColor='grey'
               lineWidth={1.5}
-              circleColor='#6b0f1a'
+              circleColor='rgb(136, 173, 214)'
               columnFormat='single-column-left'
               renderDetail={this._renderHistoryDetail}
             />
@@ -288,8 +289,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   underDescText: {
-    color: 'blue',
-    textDecorationLine: 'underline',
+    // color: 'blue',
+    // textDecorationLine: 'underline',
     paddingLeft: 3
   },
   underDescIcon: {

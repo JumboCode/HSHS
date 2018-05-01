@@ -18,8 +18,8 @@ const LONGITUDE_DELTA = 0.01;
 
 // Before Geolocation gets current location, or incase geolocation fails
 const initiallocationCoord = {
-  latitude: 42.3736,
-  longitude: -71.1190,
+  latitude: 42.3717,
+  longitude: -71.1199,
 }
 
 // Needs an onSave function passed, that takes (coordinate, address) as parameters
@@ -36,6 +36,7 @@ export default class ChooseLocation extends Component {
       locationStr: this.props.locationStr ? this.props.locationStr : null,
       isMapFullScreen: true
     };
+    this.props.onChangeLocation("Shelter", initiallocationCoord)
     Geocoder.setApiKey('AIzaSyBk97FJAbAoOnu1liyLAGAne9dcYAiJ8Co');
   }
 

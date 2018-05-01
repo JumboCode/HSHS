@@ -80,7 +80,7 @@ class ActionItemList_module extends Component {
 
         return (
             <View style={{flex: 1}}>
-                <SearchBar
+                {!this.props.hideSearch && <SearchBar
                     containerStyle={{backgroundColor: 'transparent'}}
                     lightTheme
                     clearIcon={this.state.searchInput !== ''}
@@ -90,7 +90,7 @@ class ActionItemList_module extends Component {
                     value={this.state.searchInput}
                     onClearText={() => this.setState({searchInput: ''})}
                     placeholder='Search (Ex. Restock closet)'
-                />
+                />}
 
                 {(!this.props.actionItems || this.props.actionItems.length <= 1) ?
                     (<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>

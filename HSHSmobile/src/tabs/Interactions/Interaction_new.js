@@ -62,10 +62,10 @@ function getInitialState() {
     promptVisible: false,
     taggedGuests: [],
     locationCoord: {
-      longitude: 0,
-      latitude: 0,
+      latitude: 42.3717,
+      longitude: -71.1199,
     },
-    locationStr: null,
+    locationStr: "Shelter",
     date: Moment().format('YYYY-MM-DD'),
     interactionTimeStamp: Moment().format('YYYY-MM-DD'),
     description: "",

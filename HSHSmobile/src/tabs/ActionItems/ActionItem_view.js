@@ -158,7 +158,7 @@ class ActionItem_view extends Component {
                         placeholderTextColor = '#d3d3d3'
                         onChangeText={(title) => {this.setState({'title': title});}}
                     />
-                    
+
                     <TextInput
                         editable = {false}
                         placeholder = "No Description"
@@ -168,7 +168,7 @@ class ActionItem_view extends Component {
                         onChangeText={(description) => {this.setState({description: description})}}
                     />
 
-                    {(!this.state.locationCoord || (this.state.locationCoord.longitude == 0 && this.state.locationCoord.longitude == 0)) && 
+                    {(!this.state.locationCoord || (this.state.locationCoord.longitude == 0 && this.state.locationCoord.longitude == 0)) &&
                       <Text style={styles.text}>No location provided</Text>}
                     {(this.state.locationCoord && (this.state.locationCoord.longitude != 0 && this.state.locationCoord.longitude != 0)) &&
                     <View style={styles.mapContainer}>
@@ -193,7 +193,7 @@ class ActionItem_view extends Component {
 
                     <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
                         <View style={{flexDirection: 'row', flex: 1, justifyContent: 'flex-end'}}>
-                            <Icon name='people'/>
+                            <Icon name='people-outline' color='#3a4548'/>
                             <Text numberOfLines={this.state.taggedGuests ? this.state.taggedGuests.length : 0} style={styles.text}>{this.state.taggedGuests ? this.formatGuestNames(this.state.taggedGuests) : "No Tagged Guests"}</Text>
                         </View>
                     </View>
@@ -205,7 +205,7 @@ class ActionItem_view extends Component {
 
                         </View>
                     </View>
-                    
+
                 </View>
             </ScrollView>
 
