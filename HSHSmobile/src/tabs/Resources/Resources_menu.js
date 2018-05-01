@@ -30,6 +30,7 @@ class Resources_menu extends Component {
            "Mailing" : "email", "Miscellaneous" : "star", "Phones & Voicemail" : "phone",
            "Temporary Financial Assistance" : "currency-usd", "Veteran Services" : "home-heart", "Work Contract" : "worker"};
         this.linkData = [
+<<<<<<< HEAD
             {name: "Dry Men's shelter",description: "dummy information about link",
                 link: "www.google.com", category: "Emergency Shelters"},
             {name: "Dry Womens's shelter",description: "dummy information about link",
@@ -78,13 +79,68 @@ class Resources_menu extends Component {
                 link: "https://google.com", category: "Veteran Services"},
             {name: "DUMMY", description: "dummy info about link",
                 link: "https://google.com", category: "Work Contract"},
+=======
+          {category: "Emergency Shelters", name: "Salvation Army (Dry, Men)",
+          address: "402 Massachusetts Avenue, Cambridge MA, 02138", phone: {"Phone": [6175473400, "(617) 547-3400 (Dial 1 for men's beds)"]}},
+>>>>>>> info-card
 
+          {category: "Emergency Shelters", name: "Cambridge Winter Warming Shelter",
+          address: "806 Massachusetts Avenue, Cambridge MA, 02139", link: "https://www.cambridgema.gov/Services/winterwarmingcenter"},
 
+          {category: "Emergency Shelters", name: "CASPAR (Wet)",
+          address: "240 Albany Street, Cambridge, MA, 02139", link: "http://www.casparinc.org/", phone: {"Phone": [6176610600, "(617) 661-0600 (Dial 10)"]}},
+
+          {category: "Emergency Shelters", name: "Pine Street Inn (Wet)", address: "444 Harrison Avenue, Boston MA, 02118",
+          link: "http://www.pinestreetinn.org/our_programs/shelter/obtaining_services", phone: {"Phone": [6178929100, "(617) 892-9100 (Dial 0)"]}},
+
+          {category: "Emergency Shelters", name: "Y2Y (Damp, Youth)", address: "1 Church Street (Middle Entrance), Cambridge MA, 02138",
+          link: "https://www.y2yharvardsquare.org/", phone: {"Phone": [6178640795, "(617) 864-0795"]}},
+
+          {category: "Housing", name: "Cambridge Multi-Service Center", address: "362 Green Street, Cambridge MA, 02139",
+          link: "http://www.cambridgema.gov/DHSP/programsforadults/cambridgemultiservicecenter", phone: {"Phone": [6173496340, "(617) 349-6340"]}},
+
+          {category: "Housing", name: "C-CAN", address: "362 Green Street, Cambridge MA, 02139",
+          link: "http://cambridgecoc.org/cambridgeCAN/", phone: {"Phone": [6173497715, "(617) 349-7715"]}},
+
+          {category: "Transportation", name: "MBTA Reduced Fares", link: "https://www.mbta.com/fares/reduced"},
+
+          {category: "Transportation", name: "CASPAR Emergency Van Service", phone: {"Phone": [6176610600, "(617) 661-0600"]}},
+
+          {category: "Crisis Hotlines", name: "Samaritans (Suicide Prevention)",
+          phone: {"Teen Statewide Hotline": [8778704673, "(877) 870-4673"], "Boston Hotline": [6175362460, "(617) 536-2460"]}},
+
+          {category: "Crisis Hotlines", name: "Trevor Project (LGBT Youth Suicide Prevention)", phone: {"Phone": [8664887386, "(866) 488-7386"]}},
+
+          {category: "Crisis Hotlines", name: "MA Substance Abuse Helpline", phone: {"Phone": [8003275050, "(800) 327-5050"]}},
+
+          {category: "Domestic Violence", name: "Boston Area Rape Crisis Center", address: "99 Bishop Allen Drive, Cambridge MA, 02139",
+          phone: {"Hotline": [8008418371, "(800) 841-8371"], "Phone": [6174928306, "(617) 492-8306"], "TTY": [6174926434, "(617) 492-6434"]}},
+
+          {category: "Domestic Violence", name: "Safelink",
+          phone: {"Hotline": [8777852020, "(877) 785-2020"], "TTY": [8775212601, "(877) 521-2601"]}},
+
+          {category: "Employment", name: "Massachusetts Rehabilitation Coalition", address: "27 Wormwood Street, Boston MA, 02210",
+          link: "http://cambridgecoc.org/cambridgeCAN/", phone: {"Main Information": [8002456543, "(800) 245-6543"]}},
+
+          {category: "Employment", name: "Career Collaborative", address: "77 Summer Street, 11th Floor, Boston MA, 02111",
+          phone: {"Phone": [6174246616, "(617) 424-6616"]}},
+
+          {category: "Food Resources", name: "SNAP/Food Stamps", link: "http://www.cambridgepublichealth.org/services/school-health/how_to_apply_for_food_stamps.php"},
+
+          {category: "Food Resources", name: "Lunch at Salvation Army", address: "402 Massachusetts Avenue, Cambridge MA, 02138",
+          phone: {"Phone": [6175473400, "(617) 547-3400"]}},
+
+          {category: "Public Benefits", name: "Mass.gov", link: "https://www.mass.gov/economic-assistance-cash-benefits"},
+
+          {category: "Public Benefits", name: "Transitional Aid to Families with Dependent Children (TAFDC)", link: "https://www.mass.gov/service-details/check-tafdc-eligibility-and-how-to-apply"},
+
+          {category: "Public Benefits", name: "Emergency Aid to the Elderly, Disabled, and Children (EAEDC)", link: "https://www.mass.gov/service-details/check-eaedc-eligibility-and-how-to-apply"},
         ];
-        this.categoriesMain = ["Emergency Shelters", "Transportation",
+
+        this.categoriesMain = ["Emergency Shelters", "Housing", "Transportation",
                             "Crisis Hotline", "Domestic Violence",
-                            "Housing", "Employment", "Food Resources",
-                            "Public Benefits", "Drop-in Centers"]
+                             "Employment", "Food Resources",
+                            "Public Benefits", "Others"]
         this.state = {searchInput: '', loaded: false};
     }
 
@@ -124,6 +180,16 @@ class Resources_menu extends Component {
         });
     };
 
+    goToURL(url) {
+      Linking.canOpenURL(url).then(supported => {
+        if (supported) {
+          Linking.openURL(url);
+        } else {
+          console.log('Don\'t know how to open URI: ' + url);
+        }
+      });
+    }
+
     renderHeader = () => {
         return (
             <View style = {styles.headerContainer}>
@@ -136,7 +202,7 @@ class Resources_menu extends Component {
                             <Text style={styles.address}>66 Winthrop Street</Text>
                             <View style={{flexDirection: "row"}}>
                                 <Text style={styles.lastAddress}>Cambridge, MA, 02138</Text>
-                                <Text style={styles.phoneNum} onPress = {() => Linking.openURL("tel:1-857-364-2228")}>857-364-2228</Text>
+                                <Text style={styles.phoneNum} onPress = {() => this.goToURL("tel:18573642228")}>857-364-2228</Text>
                             </View>
                           </View>
                       </View>

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {FlatList, View, Text, Linking} from 'react-native';
+import {FlatList, View, Text, Linking, StyleSheet} from 'react-native';
 import {SearchBar, ListItem} from 'react-native-elements';
 import Accordion from 'react-native-collapsible/Accordion';
 import {connect} from 'react-redux';
@@ -15,7 +15,7 @@ class Resources_search extends Component {
     goToURL(url) {
       Linking.canOpenURL(url).then(supported => {
         if (supported) {
-          Linking.openURL('https://' + url);
+          Linking.openURL(url);
         } else {
           console.log('Don\'t know how to open URI: ' + url);
         }
@@ -35,15 +35,37 @@ class Resources_search extends Component {
         )
     }
 
+    renderPhones = (title, number) => {
+      return (
+        <View>
+          <Text>{title}:</Text>
+          <Text onPress={() => {this.goToURL("tel:1" + number[0])}}style={styles.link}>{number[1]}</Text>
+        </View>
+      );
+    }
+
     renderAccordionContent(link) {
+        let website = (link.link == undefined)    ? <View></View> : (<Text style={styles.link} onPress={() => {this.goToURL(link.link)}}>See Website</Text>);
+        let phones  = (link.phone == undefined)   ? <View></View> : Object.keys(link.phone).map(title => this.renderPhones(title, link.phone[title]));
+        let address = (link.address == undefined) ? <View></View> : (<Text>{link.address}</Text>)
         return (
-            <ListItem
-                title = {link.description}
-                subtitle = {link.link}
-                onPress = {() => {this.goToURL(link.link)}}
-                hideChevron
-                titleNumberOfLines = {10}
-            />
+            <View style={{marginTop: 10, marginHorizontal: 5, flexDirection: "row", justifyContent: "space-around", alignItems: "flex-start"}}>
+              <View style={{width: "50%", }}>
+                <View style={{borderBottomColor: 'black', borderBottomWidth: 1, bottomPadding: 2}}>
+                  <Text style={styles.contentHeader}>Contact Information</Text>
+                </View>
+                <View style={{marginTop: 5}}>
+                  {website}
+                  {phones}
+                </View>
+              </View>
+              <View style={{width: "40%"}}>
+                <Text style={styles.contentHeader}>Address</Text>
+                <View style={{marginTop: 5}}>
+                  {address}
+                </View>
+              </View>
+            </View>
         );
     }
 
@@ -107,5 +129,18 @@ class Resources_search extends Component {
     renderContent = {(link) => {this.renderAccordionContent(link)}}
 />
 */
+const styles = StyleSheet.create({
+  contentHeader: {
+    fontSize: 16,
+    color: "#808080",
+    textShadowColor: '#D3D3D3',
+    textShadowRadius: 1,
+    textShadowOffset: {width: 2, height: 2}
+  },
+  link: {
+    color: "#0080FF",
+  }
+
+});
 
 export default dupNavFix(Resources_search)
