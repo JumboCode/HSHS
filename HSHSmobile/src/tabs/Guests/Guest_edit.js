@@ -132,7 +132,8 @@ class NewGuest extends Component<{}> {
                             onPress={(index) => this.updateAgeIndex(index)}
                             selectedIndex={ageIndex}
                             buttons={ageButtons}
-                            containerStyle={{backgroundColor: "#770B16", height: 100}}
+                            buttonStyle={{height: 40}}
+                            containerStyle={{backgroundColor: "#770B16", height: 40}}
                             selectedButtonStyle={styles.selectedButton}
                             underlayColor="#770B16"
                             selectedTextStyle={styles.selectedText}
@@ -145,10 +146,11 @@ class NewGuest extends Component<{}> {
                             onPress={(index) => this.updateGenderIndex(index)}
                             selectedIndex={genderIndex}
                             buttons={genderButtons}
-                            containerStyle={{backgroundColor: "#770B16", height: 100}}
-                            selectedButtonStyle={styles.selectedButton}
+                            buttonStyle={{height: 40}}
+                            containerStyle={{backgroundColor: "rgb(81, 133, 194)", height: 40}}
+                            selectedButtonStyle={styles.selectedButtonL}
                             underlayColor="#770B16"
-                            selectedTextStyle={styles.selectedText}
+                            selectedTextStyle={styles.selectedTextL}
                             textStyle={{color: "#FFFFFF"}}
                         />
                     </View>
@@ -170,7 +172,7 @@ class NewGuest extends Component<{}> {
                     <View style={{marginTop: 20, marginBottom: 20}}>
                         <Button
                             small
-                            backgroundColor="#770B16"
+                            backgroundColor="rgb(86, 95, 98)"
                             onPress={this.submit}
                             title='Submit'/>
                     </View>
@@ -242,13 +244,23 @@ const styles = StyleSheet.create({
         color:"#770B16",
         fontSize: 16,
     },
+    textStyleL: {
+        color: "rgb(81, 133, 194)",
+        fontSize: 16
+    },
     selectedButton: {
-        backgroundColor: "#770B16",
+        backgroundColor: "#ffffff",
         borderColor: "#770B16",
-
-
+    },
+    selectedButtonL: {
+        backgroundColor: "#ffffff",
+        borderColor: "rgb(81, 133, 194)",
     },
     selectedText: {
         color: "#770B16"
+    },
+    selectedTextL: {
+        color: "rgb(81, 133, 194)"
     }
+
 });
