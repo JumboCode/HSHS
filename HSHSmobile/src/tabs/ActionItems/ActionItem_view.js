@@ -38,19 +38,17 @@ class ActionItem_view extends Component {
   constructor(props) {
       super(props);
       this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
-      console.log(this.props.actionItems[this.props.actionItemId])
+      
       // TODO: geeze why is this longitude latitude and other places lat lng? cause google maps api sucks. please let's fix this later.
       var coords = this.props.actionItems[this.props.actionItemId].locationCoord ? {
           longitude: this.props.actionItems[this.props.actionItemId].locationCoord.lng,
           latitude: this.props.actionItems[this.props.actionItemId].locationCoord.lat,
       } : null;
-      console.log("past first use of coords")
+      
       this.state = {
           title: this.props.actionItems[this.props.actionItemId].title,
-
           // make a copy
           taggedGuests: this.props.actionItems[this.props.actionItemId].guestIds ? this.props.actionItems[this.props.actionItemId].guestIds.slice() : null,
-
           locationCoord: coords,
           locationStr: this.props.actionItems[this.props.actionItemId].locationStr,
           selectedDate: this.props.actionItems[this.props.actionItemId].shiftDate,
@@ -73,9 +71,7 @@ class ActionItem_view extends Component {
                         actionItemId: this.props.actionItemId,
                         title: this.state.title,
 
-                        // make a copy
                         taggedGuests: this.state.taggedGuests,
-
                         locationCoord: this.state.locationCoord,
                         locationStr: this.state.locationStr,
                         selectedDate: this.state.selectedDate,
@@ -85,7 +81,7 @@ class ActionItem_view extends Component {
                       },
 
                       animated: true, // does the push have transition animation or does it happen immediately (optional)
-                      animationType: 'fade', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
+                      animationType: 'slide-horizontal', // ‘fade’ (for both) / ‘slide-horizontal’ (for android) does the push have different transition animation (optional)
                       backButtonHidden: false, // hide the back button altogether (optional)
                       navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
                       navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
@@ -147,11 +143,15 @@ class ActionItem_view extends Component {
     };
 
     render() {
+        // Need to create these variables to ensure component updates in real time
+        let taggedGuests = this.props.actionItems[this.props.actionItemId].guestIds ? this.props.actionItems[this.props.actionItemId].guestIds.slice() : null;
+        let selectedDate = this.props.actionItems[this.props.actionItemId].shiftDate;
+
         return (
             <ScrollView style={styles.container}>
-                <View style={[styles.back, {borderColor: this.state.color}]}>
+                <View style={[styles.back, {borderColor: this.props.actionItems[this.props.actionItemId].color}]}>
                     <TextInput
-                        value = {this.state.title}
+                        value = {this.props.actionItems[this.props.actionItemId].title}
                         editable = {false}
                         placeholder = "Title"
                         style = {styles.title}
@@ -162,20 +162,23 @@ class ActionItem_view extends Component {
                     <TextInput
                         editable = {false}
                         placeholder = "No Description"
-                        value = {this.state.description}
+                        value = {this.props.actionItems[this.props.actionItemId].description}
                         style = {styles.description}
                         multiline = {true}
                         onChangeText={(description) => {this.setState({description: description})}}
                     />
 
-                    {(!this.state.locationCoord || (this.state.locationCoord.longitude == 0 && this.state.locationCoord.longitude == 0)) &&
+                    {(!this.props.actionItems[this.props.actionItemId].locationCoord || 
+                      (this.props.actionItems[this.props.actionItemId].locationCoord.longitude == 0 &&
+                       this.props.actionItems[this.props.actionItemId].locationCoord.longitude == 0)) &&
                       <Text style={styles.text}>No location provided</Text>}
-                    {(this.state.locationCoord && (this.state.locationCoord.longitude != 0 && this.state.locationCoord.longitude != 0)) &&
+                    {(this.props.actionItems[this.props.actionItemId].locationCoord && 
+                      (this.props.actionItems[this.props.actionItemId].locationCoord.longitude != 0 && 
+                        this.props.actionItems[this.props.actionItemId].locationCoord.longitude != 0)) &&
                     <View style={styles.mapContainer}>
                       <MapView
                           showsUserLocation={true}
                           userLocationAnnotationTitle={""}
-
                           onRegionChangeComplete={() => this.marker.showCallout()}
                           region={{
                               latitude: this.state.locationCoord.latitude,
@@ -194,14 +197,23 @@ class ActionItem_view extends Component {
                     <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
                         <View style={{flexDirection: 'row', flex: 1, justifyContent: 'flex-end'}}>
                             <Icon name='people-outline' color='#3a4548'/>
-                            <Text numberOfLines={this.state.taggedGuests ? this.state.taggedGuests.length : 0} style={styles.text}>{this.state.taggedGuests ? this.formatGuestNames(this.state.taggedGuests) : "No Tagged Guests"}</Text>
+                            <Text numberOfLines={
+                                    (taggedGuests) ? 
+                                    taggedGuests.length : 0 } 
+                                  style={styles.text}>
+                                {
+                                  (taggedGuests) ? 
+                                    this.formatGuestNames(taggedGuests) :
+                                    "No Tagged Guests"
+                                }
+                            </Text>
                         </View>
                     </View>
 
                     <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
                         <View style={{flexDirection: 'row', flex: 1, justifyContent: 'flex-end'}}>
                             <Text numberOfLines={1}
-                                  style={styles.text}>Due on: {this.state.selectedDate}</Text>
+                                  style={styles.text}>Due on: {selectedDate}</Text>
 
                         </View>
                     </View>
