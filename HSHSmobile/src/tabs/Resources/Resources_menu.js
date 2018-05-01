@@ -22,14 +22,14 @@ class Resources_menu extends Component {
         super(props);
         this.props.navigator.addOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.catIcons =
-          {"Emergency Shelters" : "tent", "Transportation" : "train", "Crisis Hotlines" : "lifebuoy",
+          {"Emergency Shelters" : "tent", "Transportation" : "train", "Crisis Hotlines" : "microphone",
            "Domestic Violence" : "home", "Housing" : "home", "Employment" : "worker",
            "Food Resources" : "food", "Public Benefits" : "domain", "Drop-in Centers" : "home",
            "Clothing" : "tshirt-crew", "Drop-in Laundry" : "washing-machine", "Education" : "school",
            "Healthcare" : "hospital", "Identification" : "account-card-details", "Legal Services" : "briefcase",
            "Mailing" : "email", "Miscellaneous" : "star", "Phones & Voicemail" : "phone",
            "Temporary Financial Assistance" : "currency-usd", "Veteran Services" : "home-heart", "Work Contract" : "worker"};
-           
+
         this.linkData = [
           {category: "Emergency Shelters", name: "Salvation Army (Dry, Men)",
           address: "402 Massachusetts Avenue, Cambridge MA, 02138", phone: {"Phone": [6175473400, "(617) 547-3400 (Dial 1 for men's beds)"]}},

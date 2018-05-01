@@ -47,10 +47,18 @@ class Resources_search extends Component {
     renderAccordionContent(link) {
         let website = (link.link == undefined)    ? <View></View> : (<Text style={styles.link} onPress={() => {this.goToURL(link.link)}}>Website</Text>);
         let phones  = (link.phone == undefined)   ? <View></View> : Object.keys(link.phone).map(title => this.renderPhones(title, link.phone[title]));
-        let address = (link.address == undefined) ? <View></View> : (<Text>{link.address}</Text>)
+        let address = (link.address == undefined) ? <View></View> :
+                                                                     (<View style={{width: "40%", paddingRight: 10}}>
+                                                                        <View style={styles.headerContainer}>
+                                                                          <Text style={styles.contentHeader}>Address</Text>
+                                                                        </View>
+                                                                        <View style={{marginTop: 10}}>
+                                                                          <Text>{link.address}</Text>
+                                                                        </View>
+                                                                      </View>)
         return (
-            <View style={{paddingTop: 15, paddingBottom: 15, paddingHorizontal: 5, flexDirection: "row", justifyContent: "space-around", alignItems: "flex-start", borderBottomColor: "#D3D3D3", borderBottomWidth: 1}}>
-              <View style={{width: "50%", }}>
+            <View style={{paddingTop: 15, paddingBottom: 15, paddingHorizontal: 5, flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", borderBottomColor: "#D3D3D3", borderBottomWidth: 1}}>
+              <View style={{width: "50%", paddingLeft: 10 }}>
                 <View style={styles.headerContainer}>
                   <Text style={styles.contentHeader}>Contact Information</Text>
                 </View>
@@ -59,14 +67,7 @@ class Resources_search extends Component {
                   {phones}
                 </View>
               </View>
-              <View style={{width: "40%"}}>
-                <View style={styles.headerContainer}>
-                  <Text style={styles.contentHeader}>Address</Text>
-                </View>
-                <View style={{marginTop: 5}}>
-                  {address}
-                </View>
-              </View>
+              {address}
             </View>
         );
     }
@@ -96,23 +97,25 @@ class Resources_search extends Component {
     }
 
     render() {
+        let data = this.props.linkData.filter(
+            (link) => {
+                return(
+                    link.category.toLowerCase().includes(this.state.searchInput.toLowerCase()) ||
+                    link.name.toLowerCase().includes(this.state.searchInput.toLowerCase())
+                )});
+
         return (
-            <View style = {{backgroundColor : "#F7F7F7", height : "100%"}}>
+          <View>{(data.length == 0) ? (<View style={{flex: 1}}><Text style={{textAlign: 'center', marginTop: '50%', fontSize: 18, fontWeight: 'bold'}}>No resources available</Text></View>) :
+            (<View style = {{backgroundColor : "#F7F7F7", height : "100%"}}>
                 {this.renderSearchBar()}
                 <Accordion
-                    sections = {this.props.linkData.filter(
-                        (link) => {
-                            return(
-                                link.category.toLowerCase().includes(this.state.searchInput.toLowerCase()) ||
-                                link.name.toLowerCase().includes(this.state.searchInput.toLowerCase())
-                            )
-                        }
-                    )}
-                    renderHeader = {(link) => this.renderAccordionHeader(link)}
-                    renderContent = {(link) => this.renderAccordionContent(link)}
-                    underlayColor = "white"
+                  sections = {data}
+                  renderHeader = {(link) => this.renderAccordionHeader(link)}
+                  renderContent = {(link) => this.renderAccordionContent(link)}
+                  underlayColor = "white"
                 />
-            </View>
+              </View>)}
+          </View>
         );
     }
 }
