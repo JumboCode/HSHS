@@ -248,6 +248,7 @@ export default class Login extends Component {
                                     style={styles.textInput}
                                     placeholder='Username'
                                     placeholderTextColor="#770B16"
+                                    underlineColorAndroid='rgb(247, 247, 247)'
                                     onChangeText={(text) => this.state.username = text}
                                 />
                             </View>
@@ -259,6 +260,7 @@ export default class Login extends Component {
                                            placeholder='Password'
                                            secureTextEntry={true}
                                            placeholderTextColor="#770B16"
+                                           underlineColorAndroid='rgb(247, 247, 247)'
                                            onFocus={() => Toast.show('Hint: Your password must be at least 8 characters long and contain a mix of numbers, lowercase, and uppercase letters.', {
                                                duration: Toast.durations.LONG,
                                                position: Toast.positions.TOP,

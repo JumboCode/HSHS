@@ -65,8 +65,8 @@ class ActionItem_edit extends Component {
 
             // TODO: geeze why is this longitude latitude and other places lat lng? cause google maps api sucks. please let's fix this later.
             locationCoord: this.props.locationCoord ? this.props.locationCoord : {
-            	longitude: 0,
-            	latitude: 0,
+                longitude: 0,
+                latitude: 0,
             },
             locationStr: this.props.locationStr ? this.props.locationStr : null,
             selectedDate: this.props.selectedDate ? this.props.selectedDate : Moment().format('YYYY-MM-DD'),
@@ -102,42 +102,42 @@ class ActionItem_edit extends Component {
                 }
                 // It's new if there is no ID
                 if (!this.state.actionItemId) {
-                addNewActionItem(false, this.state.title, this.state.creationTimestamp, this.state.locationCoord, this.state.locationStr, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
-              } else {
-                editActionItem(this.state.actionItemId, false, this.state.title, this.state.creationTimestamp, this.state.locationCoord, this.state.locationStr, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
-              }
+                    addNewActionItem(false, this.state.title, this.state.creationTimestamp, this.state.locationCoord, this.state.locationStr, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
+                } else {
+                    editActionItem(this.state.actionItemId, false, this.state.title, this.state.creationTimestamp, this.state.locationCoord, this.state.locationStr, this.state.selectedDate, this.state.description, this.state.taggedGuests, "volunteerId", this.state.color);
+                }
                 getActionItems();
                 this.props.navigator.pop({
-                  animated: true, // does the pop have transition animation or does it happen immediately (optional)
-                  animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
+                    animated: true, // does the pop have transition animation or does it happen immediately (optional)
+                    animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
                 });
             }
         }
     };
 
     setSelectedGuests = (guests) => {
-      this.setState({
-        taggedGuests: guests
-      });
+        this.setState({
+            taggedGuests: guests
+        });
     }
 
     _confirmDelete(){
-      Alert.alert(
-        'Really Delete this Action Item?',
-        'This will remove this Action Item from history; consider marking the item as completed',
-        [
-          {text: 'Cancel', onPress: () => {style: 'cancel'}},
-          {text: 'Okay', onPress: () => {this._handleDelete();}},
-        ],
-        { cancelable: true }
-      );
+        Alert.alert(
+            'Really Delete this Action Item?',
+            'This will remove this Action Item from history; consider marking the item as completed',
+            [
+                {text: 'Cancel', onPress: () => {style: 'cancel'}},
+                {text: 'Okay', onPress: () => {this._handleDelete();}},
+            ],
+            { cancelable: true }
+        );
     }
 
     _handleDelete() {
         deleteActionItem(this.state.actionItemId);
         this.props.navigator.popToRoot({
-          animated: true, // does the pop have transition animation or does it happen immediately (optional)
-          animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
+            animated: true, // does the pop have transition animation or does it happen immediately (optional)
+            animationType: 'slide-horizontal', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
         });
     }
 
@@ -157,6 +157,17 @@ class ActionItem_edit extends Component {
     render() {
         return (
             <View style = {styles.container}>
+                <View style={{marginTop: '5%', backgroundColor: '#F7f7f7', flex: 0.5}}>
+                  <ChooseLocation
+                    onChangeLocation={(locationStr, locationCoord) =>
+                        this.setState({
+                            locationStr: locationStr,
+                            locationCoord: locationCoord,
+                        })}
+                    locationStr={this.props.locationStr}
+                    locationCoord={this.props.locationCoord}
+                  />
+                </View>
                 <View style = {styles.back}>
                     <TextInput
                         value = {this.state.title}
@@ -166,185 +177,174 @@ class ActionItem_edit extends Component {
                         placeholderTextColor = '#d3d3d3'
                         onChangeText={(title) => {this.setState({'title': title});}}
                     />
-                    <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
-                        <View style = {styles.icon}>
-                            <Icon
-                                raised
-                                color='#770B16'
-                                name='person'
-                                size={16}
-                                onPress={() => {
-                                    this.tagGuestDialog.show();
-                                }}
-                            />
-                        </View>
-                        <View style={{flex: 1}}>
-                            <Text numberOfLines={1} style={{textAlign: 'right', margin: 10}}>{this.state.taggedGuests.length +  " Tagged Guests"}</Text>
-                        </View>
-                    </View>
-                    <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
-                        <View style = {styles.icon}>
-                            <Icon
-                                raised
-                                color='#770B16'
-                                name='location-on'
-                                size={16}
-                                onPress={() => {
-                                    this.ChooseLocationPopup.show()
-                                }}/>
-                        </View>
-                        <View style={{flex: 1}}>
-                            <Text numberOfLines={1}
-                                  style={{textAlign: 'right', margin: 10}}>{this.state.locationStr ? this.state.locationStr : "No Tagged Location"}</Text>
-
-                        </View>
-                    </View>
-                    <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
-                        <View style = {styles.icon}>
-
-                                <DatePicker
-                                    date={this.state.selectedDate}
-                                    mode="date"
-                                    placeholder="select date"
-                                    format="YYYY-MM-DD"
-                                    confirmBtnText="Confirm"
-                                    cancelBtnText="Cancel"
-                                    hideText
-                                    iconComponent={<Icon
-                                        raised
-                                        color='#770B16'
-                                        name='timer'
-                                        size={16}
-                                        />}
-                                    customStyles={{
-                                      dateTouchBody: {
-                                        width: 50
-                                      }
+                        <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
+                            <View style = {styles.icon}>
+                                <Icon
+                                    raised
+                                    color='#770B16'
+                                    name='person'
+                                    size={16}
+                                    onPress={() => {
+                                        this.tagGuestDialog.show();
                                     }}
-                                    onDateChange={(date) => {this.setState({selectedDate: date})}}
-                                  />
+                                />
+                            </View>
+                            <View style={{flex: 1}}>
+                                <Text numberOfLines={1} style={{textAlign: 'right', margin: 10}}>{this.state.taggedGuests.length +  " Tagged Guests"}</Text>
+                            </View>
                         </View>
-                        <View style={{flex: 1}}>
-                            <Text numberOfLines={1}
-                                  style={{textAlign: 'right', margin: 10}}>Due on: {this.state.selectedDate}</Text>
+                        <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
+                            <View style = {styles.icon}>
+                                <Icon
+                                    raised
+                                    color='#770B16'
+                                    name='location-on'
+                                    size={16}
+                                    onPress={() => this.ChooseLocationPopup.show()}
+                                />
+                                </View>
+                                <View style={{flex: 1}}>
+                                    <Text numberOfLines={1}
+                                        style={{textAlign: 'right', margin: 10}}>{this.state.locationStr ? this.state.locationStr : "No Tagged Location"}</Text>
 
-                        </View>
-                    </View>
-                    <TextInput
-                        editable = {true}
-                        placeholder = "Description"
-                        value = {this.state.description}
-                        style = {styles.description}
-                        multiline = {true}
-                        onChangeText={(description) => {this.setState({description: description})}}
-                    />
-                    <ColorPicker color = {this.state.color} onChange = {(newC) => {this.setState({color: newC});}} />
-                </View>
-                {this._renderDeleteButton()}
-                <TagGuestPopup
-                    ref={(dialog) => {
-                        this.tagGuestDialog = dialog;
-                    }}
-                    initialGuests={this.state.taggedGuests}
-                    guests={this.props.guests}
-                    loading={this.props.loading}
-                    onConfirm={this.setSelectedGuests}
-                />
-                <ChooseLocation
-                  onConfirm={(locationStr, locationCoord) =>
-                      this.setState({
-                          locationStr: locationStr,
-                          locationCoord: locationCoord,
-                      })
-                  }
-                  locationStr={this.props.locationStr}
-                  locationCoord={this.props.locationCoord}
-                />
-            </View>
-        );
-    }
-}
+                                    </View>
+                                </View>
+                                <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
+                                    <View style = {styles.icon}>
+                                        <DatePicker
+                                            date={this.state.selectedDate}
+                                            mode="date"
+                                            placeholder="select date"
+                                            format="YYYY-MM-DD"
+                                            confirmBtnText="Confirm"
+                                            cancelBtnText="Cancel"
+                                            hideText
+                                            iconComponent={<Icon
+                                                raised
+                                                color='#770B16'
+                                                name='timer'
+                                                size={16}
+                                            />}
+                                            customStyles={{
+                                                dateTouchBody: {
+                                                    width: 50
+                                                }
+                                            }}
+                                            onDateChange={(date) => {this.setState({selectedDate: date})}}
+                                        />
+                                    </View>
+                                    <View style={{flex: 1}}>
+                                        <Text numberOfLines={1}
+                                            style={{textAlign: 'right', margin: 10}}>Due on: {this.state.selectedDate}</Text>
+
+                                        </View>
+                                    </View>
+                                    <TextInput
+                                        editable = {true}
+                                        placeholder = "Description"
+                                        value = {this.state.description}
+                                        style = {styles.description}
+                                        multiline = {true}
+                                        onChangeText={(description) => {this.setState({description: description})}}
+                                    />
+                                    <ColorPicker color = {this.state.color} onChange = {(newC) => {this.setState({color: newC});}} />
+                                </View>
+                                {this._renderDeleteButton()}
+                                <TagGuestPopup
+                                    ref={(dialog) => {
+                                        this.tagGuestDialog = dialog;
+                                    }}
+                                    initialGuests={this.state.taggedGuests}
+                                    guests={this.props.guests}
+                                    loading={this.props.loading}
+                                    onConfirm={this.setSelectedGuests}
+                                />
+                            </View>
+                        );
+                    }
+                }
 
 
-const styles = StyleSheet.create({
-    container : {
-        flex: 1,
-        backgroundColor: '#E9E9E9',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    back: {
-        backgroundColor: '#FFFFFF',
-        alignSelf: "stretch",
-    },
-    title: {
-        paddingTop: 20,
-        paddingLeft: 20,
-        color: "#000000",
-        fontSize: 30,
-        paddingBottom: 5
-    },
-    icon: {
-        //paddingRight: 10,
-        paddingLeft: 15
-    },
-    row: {
-        flexDirection: "row",
-        paddingTop: 5,
-        paddingLeft: 20
-    },
-    daterow: {
-        flexDirection: "row",
-        paddingTop: 5,
-        paddingLeft: 18
-    },
-    add: {
-        paddingLeft: 2,
-        color: '#0645AD',
-        textDecorationLine: 'underline'
-    },
-    dateadd: {
-        color: '#0645AD',
-        textDecorationLine: 'underline'
-    },
-    deleteButtonContainer: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    deleteButton: {
-        backgroundColor: 'red',
-        borderRadius: 4,
-        margin: 10,
-        paddingHorizontal: 60,
-        paddingVertical: 15,
-        height: 30,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    description: {
-        borderWidth: 0.5,
-        marginTop: 15,
-        marginLeft: 30,
-        marginRight: 30,
-        borderRadius: 5,
-        height: 100,
-        padding: 5,
-        fontSize: 15,
-        marginBottom: 15,
-    },
-    button: {
-      backgroundColor: "lightblue",
-      height: 25,
-      margin: 5,
-      justifyContent: "center",
-      alignItems: "center",
-      borderRadius: 4,
-      borderColor: "rgba(0, 0, 0, 0.1)",
-    },
-    disabled: {
-      opacity: 0.3
-    }
-});
+                const styles = StyleSheet.create({
+                    container : {
+                        flex: 1,
+                        backgroundColor: '#F7F7F7',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    },
+                    back: {
+                        flex: 0.5,
+                        backgroundColor: '#FFFFFF',
+                        alignSelf: "stretch",
+                    },
+                    title: {
+                        paddingTop: 20,
+                        paddingLeft: 20,
+                        color: "#000000",
+                        fontSize: 30,
+                        paddingBottom: 5
+                    },
+                    icon: {
+                        //paddingRight: 10,
+                        paddingLeft: 15
+                    },
+                    row: {
+                        flexDirection: "row",
+                        paddingTop: 5,
+                        paddingLeft: 20
+                    },
+                    daterow: {
+                        flexDirection: "row",
+                        paddingTop: 5,
+                        paddingLeft: 18
+                    },
+                    add: {
+                        paddingLeft: 2,
+                        color: '#0645AD',
+                        textDecorationLine: 'underline'
+                    },
+                    dateadd: {
+                        color: '#0645AD',
+                        textDecorationLine: 'underline'
+                    },
+                    deleteButtonContainer: {
+                        flex: 1,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    },
+                    deleteButton: {
+                        backgroundColor: 'red',
+                        borderRadius: 4,
+                        margin: 10,
+                        paddingHorizontal: 60,
+                        paddingVertical: 15,
+                        height: 30,
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    },
+                    description: {
+                        borderWidth: 0.5,
+                        marginTop: 15,
+                        marginLeft: 30,
+                        marginRight: 30,
+                        borderRadius: 5,
+                        height: 100,
+                        padding: 5,
+                        fontSize: 15,
+                        marginBottom: 15,
+                    },
+                    button: {
+                        backgroundColor: "lightblue",
+                        height: 25,
+                        margin: 5,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        borderRadius: 4,
+                        borderColor: "rgba(0, 0, 0, 0.1)",
+                    },
+                    disabled: {
+                        opacity: 0.3
+                    }
+                });
 
-export default connect(mapStateToProps, mapDispatchToProps)(dupNavFix(ActionItem_edit) );
+                export default connect(mapStateToProps, mapDispatchToProps)(dupNavFix(ActionItem_edit) );

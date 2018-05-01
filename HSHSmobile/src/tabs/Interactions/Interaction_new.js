@@ -286,6 +286,7 @@ class Interaction_new extends Component {
                         value = {this.state.description}
                         style = {styles.description}
                         multiline = {true}
+                        textAlignVertical = 'top'
                         onChangeText={(description) => {this.setState({description: description})}}
                     />
                     {renderSeperator()}
