@@ -86,6 +86,7 @@ export default class ChooseLocation extends Component {
                 borderRadius: 20
               }}
               showsUserLocation={true}
+              userLocationAnnotationTitle={""}
               region={{
                   latitude: this.state.locationCoord.latitude,
                   longitude: this.state.locationCoord.longitude,

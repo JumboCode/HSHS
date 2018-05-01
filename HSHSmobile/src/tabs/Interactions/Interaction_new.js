@@ -122,10 +122,14 @@ class Interaction_new extends Component {
         if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
             if (event.id == 'save_interaction') { // this is the same id field from the static navigatorButtons definition
             	// Don't allow empty fields
-            	if (this.state.title == "") {
-            		Alert.alert("Title cannot be empty");
-            		return;
-            	}
+              if (this.state.taggedGuests.length === 0) {
+                Alert.alert("Interaction must have a tagged guest.")
+                return;
+              } else if (this.state.description == "") {
+                Alert.alert("Description cannot be empty. Please detail your interaction.")
+                return;
+              }
+
               this._save();;
             }
         }
@@ -133,7 +137,7 @@ class Interaction_new extends Component {
 
     _save = () => {
       this.setState({addingInteraction: true});
-        addInteractionItem("TITLE HAS BEEN DEPRECATED: See Interaction_new.js", this.state.interactionTimeStamp,
+      addInteractionItem(this.state.interactionTimeStamp,
           this.state.date, this.state.locationCoord,
           this.state.locationStr, this.state.description, this.state.taggedGuests,
           "[Volunteer ID: See Interaction_new.js]", this.state.items);
@@ -336,13 +340,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#F7F7F7',
         alignSelf: "stretch"
-    },
-    title: {
-        paddingTop: 20,
-        paddingLeft: 20,
-        color: "#000000",
-        fontSize: 30,
-        paddingBottom: 5
     },
     icon: {
         //paddingRight: 10,
