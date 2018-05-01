@@ -72,7 +72,7 @@ export default class ChooseLocation extends Component {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'white'
+        backgroundColor: '#F7F7F7'
       }}>
         <View>
           <MapView
@@ -106,6 +106,7 @@ export default class ChooseLocation extends Component {
                   size={36}
                   underlayColor='transparent'
                   name={this.state.isMapFullScreen ? 'fullscreen' : 'fullscreen-exit'}
+                  color='#3a4548'
                   onPress={() => {
                       this.setState(previousState => {
                           return {isMapFullScreen: !previousState.isMapFullScreen};

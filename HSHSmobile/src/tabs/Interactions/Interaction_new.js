@@ -218,51 +218,37 @@ class Interaction_new extends Component {
         }
         return (
             <View style = {styles.container}>
-            <ScrollView style={{width: "100%"}}>
-              <ChooseLocation
-                onChangeLocation={(locationStr, locationCoord) =>
-                    this.setState({
-                        locationStr: locationStr,
-                        locationCoord: locationCoord,
-                    })}
-                locationStr={this.props.locationStr}
-                locationCoord={this.props.locationCoord}
-              />
+              <ScrollView style={{width: "100%"}}>
+                <View style={{marginTop: '5%', backgroundColor: '#F7f7f7'}}>
+                  <ChooseLocation
+                    onChangeLocation={(locationStr, locationCoord) =>
+                        this.setState({
+                            locationStr: locationStr,
+                            locationCoord: locationCoord,
+                        })}
+                    locationStr={this.props.locationStr}
+                    locationCoord={this.props.locationCoord}
+                  />
+                </View>
                 <View style = {styles.back}>
-                    <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
+                    <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                      <View style={{flex: 0.5, flexDirection: 'row'}}>
                         <View style = {styles.icon}>
                             <Icon
                                 raised
                                 color='#770B16'
-                                name='person'
+                                name='person-outline'
                                 size={16}
                                 onPress={() => {
                                     this.tagGuestDialog.show();
                                 }}
                             />
                         </View>
-                        <View style={{flex: 1}}>
-                            <Text numberOfLines={1} style={{textAlign: 'right', margin: 10}}>{this.state.taggedGuests.length +  " Tagged Guests"}</Text>
+                        <View style={{flex: 1, paddingLeft: 15, flexDirection: 'row'}}>
+                            <Text numberOfLines={1} style={{textAlign: 'center', alignSelf: 'center', color: '#3a4548'}}>{this.state.taggedGuests.length +  " Tagged Guests"}</Text>
                         </View>
-                    </View>
-                    <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
-                        <View style = {styles.icon}>
-                            <Icon
-                                raised
-                                color='#770B16'
-                                name='location-on'
-                                size={16}
-                                onPress={() => {
-                                    this.ChooseLocationPopup.show()
-                                }}/>
-                        </View>
-                        <View style={{flex: 1}}>
-                            <Text numberOfLines={1}
-                                  style={{textAlign: 'right', margin: 10}}>{this.state.locationStr ? this.state.locationStr : "No Tagged Location"}</Text>
-
-                        </View>
-                    </View>
-                    <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
+                      </View>
+                      <View style={{flex: 0.5, flexDirection: 'row'}}>
                         <View style = {styles.icon}>
                                 <DatePicker
                                     date={this.state.date}
@@ -286,11 +272,13 @@ class Interaction_new extends Component {
                                     onDateChange={(date) => {this.setState({date: date})}}
                                   />
                         </View>
-                        <View style={{flex: 1}}>
-                            <Text numberOfLines={1}
-                                  style={{textAlign: 'right', margin: 10}}>Date: {this.state.date}</Text>
+                        <View style={{flex: 1, paddingLeft: 15, flexDirection: 'row'}}>
+                            <Text numberOfLines={1} style={{textAlign: 'center', alignSelf: 'center', color: '#3a4548'}}>Date: {this.state.date}</Text>
 
                         </View>
+                      </View>
+                    </View>
+                    <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
                     </View>
                     <TextInput
                         editable = {true}
@@ -302,12 +290,13 @@ class Interaction_new extends Component {
                     />
                     {renderSeperator()}
                     {this._renderItems()}
-                    <View style={{margin:10}}>
                       <Button
-                      title = "Add Another Item"
-                      onPress = {() => {this.setState({promptVisible: true})}}>
+                        title = "Add Another Item"
+                        onPress = {() => {this.setState({promptVisible: true})}}
+                        backgroundColor = '#3a4548'
+                        style={{marginTop: '3%', marginBottom: '3%'}}
+                        >
                       </Button>
-                    </View>
                 </View>
                 </ScrollView>
                 <TagGuestPopup
@@ -338,13 +327,14 @@ class Interaction_new extends Component {
 const styles = StyleSheet.create({
     container : {
         flex: 1,
-        backgroundColor: '#E9E9E9',
+        backgroundColor: '#F7F7F7',
         justifyContent: 'center',
         alignItems: 'center',
     },
     back: {
-        backgroundColor: '#FFFFFF',
-        alignSelf: "stretch",
+        flex: 1,
+        backgroundColor: '#F7F7F7',
+        alignSelf: "stretch"
     },
     title: {
         paddingTop: 20,
@@ -355,7 +345,8 @@ const styles = StyleSheet.create({
     },
     icon: {
         //paddingRight: 10,
-        paddingLeft: 15
+        paddingLeft: 10,
+        flex: 0.25
     },
     row: {
         flexDirection: "row",
@@ -401,7 +392,7 @@ const styles = StyleSheet.create({
         padding: 5,
         fontSize: 15,
         marginBottom: 15,
-        borderColor: "#757575"
+        borderColor: "#3a4548"
     },
     button: {
       backgroundColor: "lightblue",
