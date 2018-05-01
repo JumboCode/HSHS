@@ -158,6 +158,7 @@ class Dashboard extends Component {
                           key={id}
                           pinColor = {actionItem.color}
                           onPress={()=>{self.setSelectActionItem(id)}}
+                          onDeselect={() => {self.setSelectActionItem(null)}}
                       />
                   )
               })(actionItemId, this)
@@ -167,7 +168,7 @@ class Dashboard extends Component {
     };
 
     setSelectActionItem = (id) => {
-      this.setState({selectedInteraction: id});
+      this.setState({selectedActionItem: id});
     }
 
     updateLotteryState = () => {
@@ -178,6 +179,22 @@ class Dashboard extends Component {
       this.setState({promptVisible: true});
     }
 
+    _renderSelectedActionItem() {
+      if (this.state.selectedActionItem) {
+        return (
+          <ActionItemList_module 
+            style={{flex: 1}}
+            actionItems={this.props.actionItems}
+            guests={this.props.guests}
+            navigator={this.props.navigator}
+            selectedActionItem={this.state.selectedActionItem}
+          />
+        );
+      }
+
+      return null;
+    }
+
     // I'm not sure if this is the best way to have logical statements within renders, but it's not the worst way!
     render() {
         return (
@@ -185,7 +202,7 @@ class Dashboard extends Component {
             (this.props.loading && <ActivityIndicator animating size="large"/>) ||
 
             (!this.props.loading &&
-                <View>
+                <View style={{flex: 1}}>
                 {renderSeperator()}
                     <MapView
                         showsUserLocation={true}
@@ -245,60 +262,27 @@ class Dashboard extends Component {
                         />
                     </View>
 
-                    {!this.props.actionItems || this.props.actionItems.length <= 1
-                        ? <ActivityIndicator animating size="large"/>
+                    <View style={{flex: 1}}>
+                      {this._renderSelectedActionItem()}
 
-                        : <ActionItemList_module actionItems={this.props.actionItems}
-                                          guests={this.props.guests}
-                                          dashboard={true}
-                                          selectedInteraction={this.state.selectedInteraction}
-                                          navigator={this.props.navigator}/>
-                    }
+                      <View style={{flex: 1, backgroundColor: '#f7f7f7'}}>
+                        <Lottery_module
+                          style={{flex: 1}}
+                          showDialogCallback={() => {this._showLotteryInputDialog()}}
+                          winners={this.state.lotteryWinner}
+                        />
 
-                    <Lottery_module
-                      showDialogCallback={() => {this._showLotteryInputDialog()}}
-                      winners={this.state.lotteryWinner}
-                      />
-
-                    <Prompt
-                      title="Please enter winners"
-                      visible={this.state.promptVisible}
-                      onCancel={ () => this.setState({promptVisible: false}) }
-                      onSubmit={ value => {
-                        enterWinners(value, new Date());
-                        this.setState({promptVisible: false})
-                      }}
-                    />
-                      {
-                      /*
-                      <View style={{flexDirection: 'column', alignItems: 'center'}}>
-                      <View style={{margin: 30}}>
-                        <Text>Status: Countdown till lottery</Text>
-                      </View>
-                      Page displays lottery numbers after 9:30
-                      <View style={{flexDirection: 'row'}}>
-                          <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
-                          <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
-                          <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
-                      </View>
-
-                      <View style={{flexDirection: 'row'}}>
-                          <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
-                          <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
-                          <View style={{width: 50, height: 50, backgroundColor: 'powderblue', borderWidth: 1, borderColor: 'black', alignItems: 'center', justifyContent: 'center'}}><Text>0</Text></View>
-                      </View>
-
-                      <Button
-                          title={"Call on Lottery"}
-                          color="#841584"
-                          accessibilityLabel="Learn more about this purple button"
-                          onPress={() => {
-                              Alert.alert("", "Call on Lottery Button Pressed");
+                        <Prompt
+                          title="Please enter winners"
+                          visible={this.state.promptVisible}
+                          onCancel={ () => this.setState({promptVisible: false}) }
+                          onSubmit={ value => {
+                            enterWinners(value, new Date());
+                            this.setState({promptVisible: false})
                           }}
-                      />
+                        />
                       </View>
-                      */
-                    }
+                    </View>
                 </View>
             )
         );

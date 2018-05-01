@@ -60,22 +60,26 @@ class ActionItemList_module extends Component {
 
     render() {
         var actionItems = getActionItems(this.props.actionItems, this.props.guestActionItemIds);
-        if (this.props.showDueSoon) {		// Show only actionItems due in 24 hours
-            let now = Date.now();
-            var dueSoon = [];
-
-            for (let i in actionItems) {
-                for (let j in actionItems[i].shiftDate) {
-                    let timeUntilDue = actionItems[i].shiftDate[j] - now;
-                    if (timeUntilDue > 0 && timeUntilDue < oneDayInSeconds) dueSoon.push(actionItems[i])
-                }
-            }
-            actionItems = dueSoon;
+     
+        if (this.props.selectedActionItem) {
+            return (
+                <View>
+                    <FlatList
+                        data={[this.props.actionItems[this.props.selectedActionItem]]}
+                        renderItem={({item}) => this.renderListItem(item)}
+                        keyExtractor={item => item.actionItemId}
+                        ItemSeparatorComponent={() => {
+                            return (renderSeperator())
+                        }}
+                        scrollEnabled={false}
+                    />
+                    {renderSeperator()}
+                </View> 
+            );
         }
 
         return (
             <View style={{flex: 1}}>
-                {!this.props.showDueSoon && !this.props.dashboard &&
                 <SearchBar
                     containerStyle={{backgroundColor: 'transparent'}}
                     lightTheme
@@ -88,12 +92,9 @@ class ActionItemList_module extends Component {
                     onClearText={() => this.setState({searchInput: ''})}
                     placeholder='Search'
                 />
-                }
                 <View style={{flex: 1}}>
                     <FlatList
-                        data={this.props.dashboard
-                            ? (this.props.selectedInteraction ? [this.props.actionItems[this.props.selectedInteraction]] : null)
-                            : getActionItems(actionItems).filter(item => item.title.toLowerCase().includes(this.state.searchInput))}
+                        data={getActionItems(actionItems).filter(item => item.title.toLowerCase().includes(this.state.searchInput))}
                         renderItem={({item}) => this.renderListItem(item)}
                         keyExtractor={item => item.actionItemId}
                         ItemSeparatorComponent={() => {
