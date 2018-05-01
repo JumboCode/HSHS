@@ -1,6 +1,7 @@
 import firebase from "../firebase";
 import {store} from './store.js';
 import {Alert} from 'react-native';
+import Toast from 'react-native-root-toast';
 
 const lotteryExpiration = 9000000;	// Lottery numbers lifetime in ms
 
@@ -195,9 +196,10 @@ export const addNewInteractionStart = () => ({
         type: 'ADD_NEW_INTERACTIONS_START'
 })
 
-export const addNewInteractionSuccess = () => ({
-        type: 'ADD_NEW_INTERACTIONS_SUCCESS'
-})
+export const addNewInteractionSuccess = () => {
+	Toast.show("Interaction generated successfully")
+    return {type: 'ADD_NEW_INTERACTIONS_SUCCESS'};
+}
 
 export const addNewInteractionFailure = () => ({
 			type: 'ADD_NEW_INTERACTIONS_FAILURE'
