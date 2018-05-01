@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import { Icon, List, ListItem, SearchBar, CheckBox } from "react-native-elements";
 import {connect} from 'react-redux';
-import ChooseLocationPopup from '../../modules/popups/ChooseLocationPopup';
+import ChooseLocation from '../../modules/popups/ChooseLocation';
 
 import TagGuestPopup from "../../modules/popups/TagGuestPopup"
 import renderSeperator from '../../modules/UI/renderSeperator'

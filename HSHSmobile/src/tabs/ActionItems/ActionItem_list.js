@@ -82,7 +82,7 @@ class ActionItem_list extends Component {
        };
 
     componentDidMount() {
-        IonIcon.getImageSource('md-create', 36).then((icon) => {
+        IonIcon.getImageSource('ios-create-outline', 36).then((icon) => {
             this.props.navigator.setButtons({
                 rightButtons: [
                     { id: 'new_actionItem', icon: icon },

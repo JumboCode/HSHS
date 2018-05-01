@@ -205,27 +205,24 @@ export default class Login extends Component {
                 }
             ],
             tabsStyle: { // optional, **iOS Only** add this if you want to style the tab bar beyond the defaults
-                tabBarButtonColor: '#999999',
-                tabBarBackgroundColor: '#f6f7f5',
-                tabBarSelectedButtonColor: '#770B16',
+                tabBarButtonColor: 'white',
+                tabBarBackgroundColor: '#3a4548',
+                tabBarSelectedButtonColor: '#d37272',
                 tabBarShowLabels: 'hidden', // "Hey Jacob, why did you add this, this code doesn't wire up to anything!"
                                             // -- "Well, eventually we could follow
                                             // https://github.com/wix/react-native-navigation/issues/676 ,
                                             // and manually edit the npm package!
                                             // however, we would need to change our git pipeline slightly,
                                             // so let's make this a TODO!
-                tabBarLabelColor: '#999999',
-                tabBarSelectedLabelColor: '#770B16',
+                tabBarLabelColor: 'white',
+                tabBarSelectedLabelColor: '#d37272',
             },
             appStyle: {
-                tabBarBackgroundColor: '#f6f7f5',
-                tabBarButtonColor: '#000000',
-                tabBarSelectedButtonColor: '#000000',
                 navigationBarColor: '#000000',
-                navBarBackgroundColor: '#f6f7f5',
+                navBarBackgroundColor: '#F7f7f7',
                 navBarButtonColor: '#000000',
                 navBarTextColor: '#2a2a2a'
-            }
+            },
         })
     }
 

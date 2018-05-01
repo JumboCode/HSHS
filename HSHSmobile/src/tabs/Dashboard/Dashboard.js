@@ -20,7 +20,7 @@ import MapView from 'react-native-maps';
 import {getGuests, getInteractions, getActionItems, getCompletedActionItems} from '../../redux/actions.js';
 import ActionItemList_module from '../../modules/ActionItemList_module';
 import Lottery_module from '../../modules/Lottery_module';
-import {Icon} from 'react-native-elements'
+import {Icon} from 'react-native-elements';
 import renderSeperator from "../../modules/UI/renderSeperator";
 import Prompt from 'rn-prompt';
 import dupNavFix from "../../dupNavFix";

@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import { Button, Icon, List, ListItem, SearchBar, CheckBox } from "react-native-elements";
 import {connect} from 'react-redux';
-import ChooseLocationPopup from '../../modules/popups/ChooseLocationPopup';
+import ChooseLocation from '../../modules/popups/ChooseLocation';
 
 import TagGuestPopup from "../../modules/popups/TagGuestPopup"
 import renderLoader from "../../modules/UI/renderLoader";
@@ -29,7 +29,6 @@ import Prompt from 'rn-prompt';
 
 function mapStateToProps(state, ownProps) {
     var guests = guestObjectToArray(state.guests, state.interactions);
-    console.log(state);
     return {
         guests: guests,
         item: null, //state.actionItems[ownProps.id],
@@ -74,7 +73,7 @@ function getInitialState() {
       {name: "PB&J sandwiches", count: 0, id: 0},
       {name: "Tuna sandwiches", count: 0, id: 1},
       {name: "Water bottles", count: 0, id: 2},
-      {name: "V8s", count: 0, id: 3},
+      {name: "V8's", count: 0, id: 3},
       {name: "Hot chocolates", count: 0, id: 4},
       {name: "Granola bars", count: 0, id: 5},
       {name: "Handwarmers", count: 0, id: 6},
@@ -145,13 +144,6 @@ class Interaction_new extends Component {
         taggedGuests: guests
       });
     }
-
-    _setChosenLocation = (locationStr, locationCoord) => {
-        this.setState({
-            locationStr: locationStr,
-            locationCoord: locationCoord,
-        });
-    };
 
     _renderCounter = (itemId) => {
       if (! (itemId in this.state.items)) {
@@ -227,6 +219,15 @@ class Interaction_new extends Component {
         return (
             <View style = {styles.container}>
             <ScrollView style={{width: "100%"}}>
+              <ChooseLocation
+                onChangeLocation={(locationStr, locationCoord) =>
+                    this.setState({
+                        locationStr: locationStr,
+                        locationCoord: locationCoord,
+                    })}
+                locationStr={this.props.locationStr}
+                locationCoord={this.props.locationCoord}
+              />
                 <View style = {styles.back}>
                     <View style={{flexDirection: 'row', alignItems: 'center', zIndex: 0}}>
                         <View style = {styles.icon}>
@@ -309,14 +310,6 @@ class Interaction_new extends Component {
                     </View>
                 </View>
                 </ScrollView>
-                <ChooseLocationPopup
-                  ref={(map) => {
-                      this.ChooseLocationPopup = map;
-                  }}
-                  onConfirm={this._setChosenLocation}
-                  locationStr={this.props.locationStr}
-                  locationCoord={this.props.locationCoord}
-                />
                 <TagGuestPopup
                     ref={(dialog) => {
                         this.tagGuestDialog = dialog;
@@ -408,6 +401,7 @@ const styles = StyleSheet.create({
         padding: 5,
         fontSize: 15,
         marginBottom: 15,
+        borderColor: "#757575"
     },
     button: {
       backgroundColor: "lightblue",
