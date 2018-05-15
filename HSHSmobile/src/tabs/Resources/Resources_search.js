@@ -5,11 +5,13 @@ import Accordion from 'react-native-collapsible/Accordion';
 import {connect} from 'react-redux';
 import renderLoader from "../../modules/UI/renderLoader";
 import dupNavFix from '../../dupNavFix';
+import Geocoder from 'react-native-geocoding';
 
 class Resources_search extends Component {
     constructor(props) {
         super(props);
         this.state = {searchInput: this.props.searchInit, loaded: false};
+        Geocoder.setApiKey('AIzaSyBk97FJAbAoOnu1liyLAGAne9dcYAiJ8Co');
     }
 
     goToURL(url) {
@@ -47,29 +49,45 @@ class Resources_search extends Component {
     renderAccordionContent(link) {
         let website = (link.link == undefined)    ? <View></View> : (<Text style={styles.link} onPress={() => {this.goToURL(link.link)}}>Website</Text>);
         let phones  = (link.phone == undefined)   ? <View></View> : Object.keys(link.phone).map(title => this.renderPhones(title, link.phone[title]));
-        let address = (link.address == undefined) ? <View></View> :
-                                                                     (<View style={{width: "40%", paddingRight: 10}}>
-                                                                        <View style={styles.headerContainer}>
-                                                                          <Text style={styles.contentHeader}>Address</Text>
-                                                                        </View>
-                                                                        <View style={{marginTop: 10}}>
-                                                                          <Text>{link.address}</Text>
-                                                                        </View>
-                                                                      </View>)
-        return (
-            <View style={{paddingTop: 15, paddingBottom: 15, paddingHorizontal: 5, flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", borderBottomColor: "#D3D3D3", borderBottomWidth: 1}}>
-              <View style={{width: "50%", paddingLeft: 10 }}>
-                <View style={styles.headerContainer}>
-                  <Text style={styles.contentHeader}>Contact Information</Text>
-                </View>
-                <View style={{marginTop: 5}}>
-                  {website}
-                  {phones}
-                </View>
+        let content =
+                      (<View style={{width: "50%", paddingLeft: 10 }}>
+                        <View style={styles.headerContainer}>
+                          <Text style={styles.contentHeader}>Contact Information</Text>
+                        </View>
+                        <View style={{marginTop: 5}}>
+                          {website}
+                          {phones}
+                        </View>
+                      </View>);
+
+        Geocoder.getFromLocation(link.address).then(response => {
+          console.log(response);
+          console.log("ok");
+          let address =
+            (<View style={{width: "40%", paddingRight: 10}}>
+               <View style={styles.headerContainer}>
+                 <Text style={styles.contentHeader}>Address</Text>
+               </View>
+               <View style={{marginTop: 10}}>
+                 <Text>{link.address}</Text>
+               </View>
+             </View>);
+            return (
+              <View style={styles.contentContainer}>
+                {content}
+                {address}
               </View>
-              {address}
-            </View>
-        );
+            );
+          }) .catch(error => {
+            console.log(error);
+            let address = (<View></View>);
+            return (
+              <View style={styles.contentContainer}>
+                {content}
+                {address}
+              </View>
+            );
+          });
     }
 
     renderSearchBar = () => {
@@ -148,6 +166,16 @@ const styles = StyleSheet.create({
     textShadowColor: '#D3D3D3',
     textShadowRadius: 1,
     textShadowOffset: {width: 2, height: 2}
+  },
+  contentContainer: {
+    paddingTop: 15,
+    paddingBottom: 15,
+    paddingHorizontal: 5,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    borderBottomColor: "#D3D3D3",
+    borderBottomWidth: 1
   },
   link: {
     paddingTop: 5,
