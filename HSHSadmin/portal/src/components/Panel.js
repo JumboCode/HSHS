@@ -9,6 +9,17 @@ import {DataExportCard} from './cards/DataExportCard'
 import {GetUserTagsCard} from './cards/GetUserTagsCard'
 import {CreateAccountCard} from './cards/CreateAccountCard'
 
+const rowStyle = {
+  width: "100%",
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "center",
+  flexWrap: "wrap"
+};
+
+const Row = (props) => <div style = {rowStyle}> {props.children} </div>;
+
 class PanelPage extends Component {
     constructor(props) {
         super(props);
@@ -19,28 +30,29 @@ class PanelPage extends Component {
 
     render() {
         return (
-            <div style = {{
-              height: "100%",
-              width: "100%",
-              flexDirection: "row",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-evenly",
-              margin: "auto",
-              flexWrap: "wrap",
-              }}>
+            <div style ={{
+              height: "100%", width: "100%", display: "flex",
+              flexDirection: "column", alignItems: "center", justifyContent: "center",
+              margin: "auto"
+            }}>
+              <Row>
                 <SignupKeyCard
                   label = "Admin Signup Key"
                   keyRef = {firebase.database().ref("/signUpKeys/adminKey")}
-                  style = {{flex: 1, margin: 10}}/>
+                  style = {{width: "15em", height: "10em", margin: 10}}/>
                 <SignupKeyCard
                   label = "User Signup Key"
                   keyRef = {firebase.database().ref("/signUpKeys/userKey")}
-                  style = {{flex: 1, margin: 10}}/>
-                <CreateAccountCard style = {{flex: 1, margin: 10}}/>
-                <GetUserTagsCard style = {{flex: 1, margin: 10}}/>
-                <DataExportCard style = {{flex: 1, margin: 10}}/>
-                <UserManagementCard style = {{flex: 1, margin: 10}}/>
+                  style = {{width: "15em", height: "10em", margin: 10}}/>
+                <GetUserTagsCard style = {{width: "15em", height: "10em", margin: 10}}/>
+              </Row>
+              <Row>
+                <CreateAccountCard style = {{margin: 10, width: "20em"}}/>
+              </Row>
+              <Row>
+                <DataExportCard style = {{width: "15em", height: "10em", margin: 10}}/>
+                <UserManagementCard style = {{width: "15em", height: "10em", margin: 10}}/>
+              </Row>
             </div>
         );
     }
