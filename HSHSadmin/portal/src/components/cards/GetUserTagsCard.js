@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import * as firebase from 'firebase';
-import {auth} from '../../firebase';
-import * as routes from '../../constants/routes';
-import TextField from 'material-ui/TextField';
-import Card, { CardContent, CardActions } from 'material-ui/Card';
-import Button from 'material-ui/Button';
+import TextField from '@material-ui/core/TextField';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
 
 const byPropKey = (propertyName, value) => () => ({
   [propertyName]: value,
@@ -25,10 +25,6 @@ class GetUserTagsCard extends Component {
     const {
       email,
     } = this.state;
-
-    const {
-      history,
-    } = this.props;
 
     let getTags = firebase.functions().httpsCallable("getUserTags");
     getTags({email: email})
@@ -59,7 +55,7 @@ class GetUserTagsCard extends Component {
             <CardActions>
               <Button
                   label="Log Keys"
-                  variant="raised"
+                  variant="contained"
                   color="secondary"
                   onClick={this.submit}>
                   Log Keys

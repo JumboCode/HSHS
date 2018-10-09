@@ -12,7 +12,6 @@ import {CreateAccountCard} from './cards/CreateAccountCard'
 class PanelPage extends Component {
     constructor(props) {
         super(props);
-        let self = this;
         if (!firebase.auth().currentUser) {
             props.history.push(routes.SIGN_IN);
         }

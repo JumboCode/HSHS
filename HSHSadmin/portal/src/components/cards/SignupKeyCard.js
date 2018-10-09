@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
-import Card, {CardContent, CardActions} from 'material-ui/Card';
-import Button from 'material-ui/Button';
-import TextField from 'material-ui/TextField';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 
 class SignupKeyCard extends Component {
   constructor(props) {
@@ -38,7 +40,7 @@ class SignupKeyCard extends Component {
         <CardActions>
           <Button
             label="chgKey"
-            variant="raised"
+            variant="contained"
             color="secondary"
             onClick={this.submit}>
             Change Key

@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import Card, {CardContent, CardActions} from 'material-ui/Card';
-import Button from 'material-ui/Button';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
 
 class DataExportCard extends Component {
   constructor(props) {
@@ -8,7 +10,7 @@ class DataExportCard extends Component {
   }
 
   exportData = () => {
-    
+
   }
 
   render() {
@@ -17,7 +19,7 @@ class DataExportCard extends Component {
         <CardActions>
           <Button
             label="export_data"
-            variant="raised"
+            variant="contained"
             color="secondary"
             onClick={this.exportData}>
             Export Data
